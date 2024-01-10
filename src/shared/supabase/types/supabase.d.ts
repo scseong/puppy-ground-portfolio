@@ -116,41 +116,6 @@ export interface Database {
           }
         ];
       };
-      location: {
-        Row: {
-          address: string;
-          id: number;
-          latitude: string;
-          longitude: string;
-          place_name: string;
-          post_id: number;
-        };
-        Insert: {
-          address: string;
-          id?: number;
-          latitude: string;
-          longitude: string;
-          place_name: string;
-          post_id: number;
-        };
-        Update: {
-          address?: string;
-          id?: number;
-          latitude?: string;
-          longitude?: string;
-          place_name?: string;
-          post_id?: number;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'location_post_id_fkey';
-            columns: ['post_id'];
-            isOneToOne: false;
-            referencedRelation: 'used_item';
-            referencedColumns: ['id'];
-          }
-        ];
-      };
       main_category: {
         Row: {
           id: number;
@@ -272,36 +237,48 @@ export interface Database {
       };
       used_item: {
         Row: {
+          address: string;
           content: string;
           created_at: string;
           id: number;
+          latitude: string;
+          longitude: string;
           main_category_id: number;
           photo_url: string[];
-          price: string;
+          place_name: string;
+          price: number;
           sold_out: boolean;
           sub_category_id: number;
           title: string;
           user_id: string;
         };
         Insert: {
+          address: string;
           content: string;
           created_at?: string;
           id?: number;
+          latitude: string;
+          longitude: string;
           main_category_id: number;
           photo_url: string[];
-          price?: string;
+          place_name: string;
+          price: number;
           sold_out?: boolean;
           sub_category_id: number;
           title: string;
           user_id: string;
         };
         Update: {
+          address?: string;
           content?: string;
           created_at?: string;
           id?: number;
+          latitude?: string;
+          longitude?: string;
           main_category_id?: number;
           photo_url?: string[];
-          price?: string;
+          place_name?: string;
+          price?: number;
           sold_out?: boolean;
           sub_category_id?: number;
           title?: string;
@@ -395,8 +372,10 @@ export type Tables<
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (Database['public']['Tables'] & Database['public']['Views'])
-    ? (Database['public']['Tables'] & Database['public']['Views'])[PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof (Database['public']['Tables'] &
+        Database['public']['Views'])
+    ? (Database['public']['Tables'] &
+        Database['public']['Views'])[PublicTableNameOrOptions] extends {
         Row: infer R;
       }
       ? R
