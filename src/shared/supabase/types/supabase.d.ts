@@ -7,29 +7,29 @@ export interface Database {
         Row: {
           created_at: string;
           id: number;
-          message: string | null;
-          status: boolean | null;
-          target_id: string | null;
-          type: string | null;
-          user_id: string | null;
+          message: string;
+          status: boolean;
+          target_id: string;
+          type: string;
+          user_id: string;
         };
         Insert: {
           created_at?: string;
           id?: number;
-          message?: string | null;
-          status?: boolean | null;
-          target_id?: string | null;
-          type?: string | null;
-          user_id?: string | null;
+          message: string;
+          status?: boolean;
+          target_id: string;
+          type: string;
+          user_id: string;
         };
         Update: {
           created_at?: string;
           id?: number;
-          message?: string | null;
-          status?: boolean | null;
-          target_id?: string | null;
-          type?: string | null;
-          user_id?: string | null;
+          message?: string;
+          status?: boolean;
+          target_id?: string;
+          type?: string;
+          user_id?: string;
         };
         Relationships: [
           {
@@ -43,28 +43,28 @@ export interface Database {
       };
       chat: {
         Row: {
-          chat_list_id: number | null;
-          content: string | null;
+          chat_list_id: number;
+          content: string;
           created_at: string;
           id: number;
-          read_status: boolean | null;
-          user_id: string | null;
+          read_status: boolean;
+          user_id: string;
         };
         Insert: {
-          chat_list_id?: number | null;
-          content?: string | null;
+          chat_list_id: number;
+          content: string;
           created_at?: string;
           id?: number;
-          read_status?: boolean | null;
-          user_id?: string | null;
+          read_status?: boolean;
+          user_id: string;
         };
         Update: {
-          chat_list_id?: number | null;
-          content?: string | null;
+          chat_list_id?: number;
+          content?: string;
           created_at?: string;
           id?: number;
-          read_status?: boolean | null;
-          user_id?: string | null;
+          read_status?: boolean;
+          user_id?: string;
         };
         Relationships: [
           {
@@ -87,14 +87,17 @@ export interface Database {
         Row: {
           id: number;
           post_id: number;
+          user_id: string;
         };
         Insert: {
           id?: number;
           post_id: number;
+          user_id: string;
         };
         Update: {
           id?: number;
           post_id?: number;
+          user_id?: string;
         };
         Relationships: [
           {
@@ -103,40 +106,12 @@ export interface Database {
             isOneToOne: false;
             referencedRelation: 'used_item';
             referencedColumns: ['id'];
-          }
-        ];
-      };
-      location: {
-        Row: {
-          address: string | null;
-          id: number;
-          latitude: string | null;
-          longitude: string | null;
-          place_name: string;
-          post_id: number | null;
-        };
-        Insert: {
-          address?: string | null;
-          id?: number;
-          latitude?: string | null;
-          longitude?: string | null;
-          place_name: string;
-          post_id?: number | null;
-        };
-        Update: {
-          address?: string | null;
-          id?: number;
-          latitude?: string | null;
-          longitude?: string | null;
-          place_name?: string;
-          post_id?: number | null;
-        };
-        Relationships: [
+          },
           {
-            foreignKeyName: 'location_post_id_fkey';
-            columns: ['post_id'];
+            foreignKeyName: 'chat_list_user_id_fkey';
+            columns: ['user_id'];
             isOneToOne: false;
-            referencedRelation: 'used_item';
+            referencedRelation: 'profiles';
             referencedColumns: ['id'];
           }
         ];
@@ -144,42 +119,42 @@ export interface Database {
       main_category: {
         Row: {
           id: number;
-          name: string | null;
+          name: string;
         };
         Insert: {
           id?: number;
-          name?: string | null;
+          name: string;
         };
         Update: {
           id?: number;
-          name?: string | null;
+          name?: string;
         };
         Relationships: [];
       };
       mung_stagram: {
         Row: {
-          content: string | null;
+          content: string;
           created_at: string;
           id: number;
-          photo_url: string[] | null;
-          title: string | null;
-          user_id: string | null;
+          photo_url: string[];
+          title: string;
+          user_id: string;
         };
         Insert: {
-          content?: string | null;
+          content: string;
           created_at?: string;
           id?: number;
-          photo_url?: string[] | null;
-          title?: string | null;
-          user_id?: string | null;
+          photo_url: string[];
+          title: string;
+          user_id: string;
         };
         Update: {
-          content?: string | null;
+          content?: string;
           created_at?: string;
           id?: number;
-          photo_url?: string[] | null;
-          title?: string | null;
-          user_id?: string | null;
+          photo_url?: string[];
+          title?: string;
+          user_id?: string;
         };
         Relationships: [
           {
@@ -195,17 +170,17 @@ export interface Database {
         Row: {
           id: number;
           target_id: number;
-          user_id: string | null;
+          user_id: string;
         };
         Insert: {
           id?: number;
           target_id: number;
-          user_id?: string | null;
+          user_id: string;
         };
         Update: {
           id?: number;
           target_id?: number;
-          user_id?: string | null;
+          user_id?: string;
         };
         Relationships: [
           {
@@ -226,20 +201,20 @@ export interface Database {
       };
       profiles: {
         Row: {
-          avatar_url: string | null;
-          email: string | null;
+          avatar_url: string;
+          email: string;
           id: string;
           user_name: string;
         };
         Insert: {
-          avatar_url?: string | null;
-          email?: string | null;
+          avatar_url: string;
+          email: string;
           id?: string;
           user_name: string;
         };
         Update: {
-          avatar_url?: string | null;
-          email?: string | null;
+          avatar_url?: string;
+          email?: string;
           id?: string;
           user_name?: string;
         };
@@ -262,40 +237,52 @@ export interface Database {
       };
       used_item: {
         Row: {
-          content: string | null;
+          address: string;
+          content: string;
           created_at: string;
           id: number;
-          main_category_id: number | null;
-          photo_url: string[] | null;
-          price: string | null;
-          sold_out: boolean | null;
-          sub_category_id: number | null;
-          title: string | null;
-          user_id: string | null;
+          latitude: string;
+          longitude: string;
+          main_category_id: number;
+          photo_url: string[];
+          place_name: string;
+          price: number;
+          sold_out: boolean;
+          sub_category_id: number;
+          title: string;
+          user_id: string;
         };
         Insert: {
-          content?: string | null;
+          address: string;
+          content: string;
           created_at?: string;
           id?: number;
-          main_category_id?: number | null;
-          photo_url?: string[] | null;
-          price?: string | null;
-          sold_out?: boolean | null;
-          sub_category_id?: number | null;
-          title?: string | null;
-          user_id?: string | null;
+          latitude: string;
+          longitude: string;
+          main_category_id: number;
+          photo_url: string[];
+          place_name: string;
+          price: number;
+          sold_out?: boolean;
+          sub_category_id: number;
+          title: string;
+          user_id: string;
         };
         Update: {
-          content?: string | null;
+          address?: string;
+          content?: string;
           created_at?: string;
           id?: number;
-          main_category_id?: number | null;
-          photo_url?: string[] | null;
-          price?: string | null;
-          sold_out?: boolean | null;
-          sub_category_id?: number | null;
-          title?: string | null;
-          user_id?: string | null;
+          latitude?: string;
+          longitude?: string;
+          main_category_id?: number;
+          photo_url?: string[];
+          place_name?: string;
+          price?: number;
+          sold_out?: boolean;
+          sub_category_id?: number;
+          title?: string;
+          user_id?: string;
         };
         Relationships: [
           {
@@ -325,17 +312,17 @@ export interface Database {
         Row: {
           id: number;
           target_id: number;
-          user_id: string | null;
+          user_id: string;
         };
         Insert: {
           id?: number;
           target_id: number;
-          user_id?: string | null;
+          user_id: string;
         };
         Update: {
           id?: number;
           target_id?: number;
-          user_id?: string | null;
+          user_id?: string;
         };
         Relationships: [
           {
@@ -385,8 +372,10 @@ export type Tables<
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (Database['public']['Tables'] & Database['public']['Views'])
-    ? (Database['public']['Tables'] & Database['public']['Views'])[PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof (Database['public']['Tables'] &
+        Database['public']['Views'])
+    ? (Database['public']['Tables'] &
+        Database['public']['Views'])[PublicTableNameOrOptions] extends {
         Row: infer R;
       }
       ? R
@@ -441,3 +430,4 @@ export type Enums<
   : PublicEnumNameOrOptions extends keyof Database['public']['Enums']
     ? Database['public']['Enums'][PublicEnumNameOrOptions]
     : never;
+
