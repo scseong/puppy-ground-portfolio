@@ -1,0 +1,42 @@
+.navbarBox {
+  display: flex;
+  align-items: center;
+  padding: 0 30px;
+  height: 80px;
+  background-color: #f5f5f5;
+  flex-direction: row;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+}
+
+.logoBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  letter-spacing: 1px;
+}
+
+.logoText {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.menuBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-direction: row;
+}
+
+.menuItem {
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: red;
+  }
+}
