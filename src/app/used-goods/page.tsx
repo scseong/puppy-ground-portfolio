@@ -1,7 +1,12 @@
+import KakaoMapMarker from '../_components/kakaoMap/KakaoMapMarker';
+
 const page = () => {
   return (
-    <div>page</div>
-  )
-}
+    <div>
+      <KakaoMapMarker />
+    </div>
+  );
+};
 
-export default page
+export default page;
+
