@@ -108,6 +108,7 @@ const Chat = ({ isOpen, onClose, ariaHideApp }: ModalProps) => {
       userId: 'cf215d96-16ce-494f-96df-1f7e42c58c6a',
       userName
     });
+    setChatContent('');
   };
 
   const chatContents = async () => {
