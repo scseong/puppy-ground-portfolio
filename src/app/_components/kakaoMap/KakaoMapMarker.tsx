@@ -36,7 +36,7 @@ const KakaoMap = () => {
     const callback = (result: any, status: any) => {
       if (status === kakao.maps.services.Status.OK) {
         setAddress(result[0].address.address_name);
-        console.log(result);
+        console.log('결과', result);
       }
     };
 
