@@ -27,13 +27,16 @@ const SingUp = () => {
   const passwordOnchangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
-  const imageOnchangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setPreviewImg(e.target.files![0]);
-  };
+  // const imageOnchangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+  //   setPreviewImg(e.target.files![0]);
+  // };
 
   // const passwordCheckOnchangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
   //   setCheck(e.target.value);
   // };
+
+  //  path? 어떻게 넣을거?
+  // 저장된 이미지 url을 어떻게 불러올 건가
 
   const singUpOnSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
