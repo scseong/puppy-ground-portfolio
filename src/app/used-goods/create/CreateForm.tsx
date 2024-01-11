@@ -11,9 +11,10 @@ import { v4 as uuidv4 } from 'uuid';
 import styles from './create.module.scss';
 
 const bucketName = 'used_goods';
+const mainCategory = ['대형견', '중형견', '소형견'];
+const subCategory = ['장난감', '식품', '의류', '기타'];
 
 const CreateForm = () => {
-  const [image, setImage] = useState<string[]>([]);
   const [inputForm, setInputForm] = useState<TablesInsert<'used_item'>>({
     title: '',
     address: '',
@@ -22,18 +23,18 @@ const CreateForm = () => {
     longitude: '',
     main_category_id: 0,
     sub_category_id: 0,
-    photo_url: image,
+    photo_url: [],
     place_name: '',
     price: 0,
     sold_out: false,
-    user_id: ''
+    user_id: '740bdd1e-8d81-45f6-938f-9ea2deba8d9e'
   });
 
   async function uploadImage(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.length ? e.target.files[0] : null;
     if (!file) return;
 
-    if (image.length >= 4) {
+    if (inputForm.photo_url.length >= 4) {
       // 토스티파이 변경 예정
       alert('이미지는 4개까지만 등록 가능합니다.');
       return;
@@ -47,10 +48,13 @@ const CreateForm = () => {
     const { data, error } = await supabase.storage.from('used_goods').upload(uuidv4(), file);
 
     if (data) {
-      setImage((prev) => [
+      setInputForm((prev) => ({
         ...prev,
-        `${process.env.NEXT_PUBLIC_IMAGE_PREFIX}/${bucketName}/${data.path}`
-      ]);
+        photo_url: [
+          ...prev.photo_url,
+          `${process.env.NEXT_PUBLIC_IMAGE_PREFIX}/${bucketName}/${data.path}`
+        ]
+      }));
     } else {
       console.log(error);
     }
@@ -62,7 +66,10 @@ const CreateForm = () => {
   };
 
   const removeImage = (index: number) => {
-    setImage((prev) => prev.filter((_, i) => i !== index));
+    setInputForm((prev) => ({
+      ...prev,
+      photo_url: prev.photo_url.filter((_, i) => i !== index)
+    }));
   };
 
   return (
@@ -71,13 +78,18 @@ const CreateForm = () => {
         <div className={styles.imageBox}>
           {Array.from({ length: 4 }).map((_, index) => (
             <div className={styles.imageInput} key={index}>
-              {image[index] ? (
+              {inputForm.photo_url[index] ? (
                 <>
                   {index === 0 ? <div className={styles.mainImage}>대표</div> : null}
                   <div className={styles.cancelIcon} onClick={() => removeImage(index)}>
                     <MdOutlineCancel size={20} />
                   </div>
-                  <Image src={image[index] || ''} alt="image" width={200} height={200} />
+                  <Image
+                    src={inputForm.photo_url[index] || ''}
+                    alt="image"
+                    width={200}
+                    height={200}
+                  />
                 </>
               ) : (
                 <>
@@ -113,36 +125,30 @@ const CreateForm = () => {
             onChange={handleFormChange}
           />
           <div className={styles.category}>
-            <div className={styles.radio}>
-              <input type="radio" name="main_category_id" value="1" />
-              <label htmlFor="main_category_id">대형견</label>
-            </div>
-            <div className={styles.radio}>
-              <input type="radio" name="main_category_id" value="2" />
-              <label htmlFor="main_category_id">중형견</label>
-            </div>
-            <div className={styles.radio}>
-              <input type="radio" name="main_category_id" value="3" />
-              <label htmlFor="main_category_id">소형견</label>
-            </div>
+            {mainCategory.map((category, index) => (
+              <div className={styles.radio} key={index}>
+                <input
+                  type="radio"
+                  name="main_category_id"
+                  value={index + 1}
+                  onChange={handleFormChange}
+                />
+                <label htmlFor="main_category_id">{category}</label>
+              </div>
+            ))}
           </div>
           <div className={styles.category}>
-            <div className={styles.radio}>
-              <input type="radio" name="sub_category_id" value="1" />
-              <label htmlFor="sub_category_id">장난감</label>
-            </div>
-            <div className={styles.radio}>
-              <input type="radio" name="sub_category_id" value="2" />
-              <label htmlFor="sub_category_id">식품</label>
-            </div>
-            <div className={styles.radio}>
-              <input type="radio" name="sub_category_id" value="3" />
-              <label htmlFor="sub_category_id">의류</label>
-            </div>
-            <div className={styles.radio}>
-              <input type="radio" name="sub_category_id" value="4" />
-              <label htmlFor="sub_category_id">기타</label>
-            </div>
+            {subCategory.map((category, index) => (
+              <div className={styles.radio} key={index}>
+                <input
+                  type="radio"
+                  name="sub_category_id"
+                  value={index + 1}
+                  onChange={handleFormChange}
+                />
+                <label htmlFor="sub_category_id">{category}</label>
+              </div>
+            ))}
           </div>
           <div className={styles.location}>
             <input
