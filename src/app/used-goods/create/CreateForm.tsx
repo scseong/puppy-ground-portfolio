@@ -61,6 +61,10 @@ const CreateForm = () => {
     setInputForm({ ...inputForm, [name]: value });
   };
 
+  const removeImage = (index: number) => {
+    setImage((prev) => prev.filter((_, i) => i !== index));
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.containerLeft}>
@@ -70,7 +74,7 @@ const CreateForm = () => {
               {image[index] ? (
                 <>
                   {index === 0 ? <div className={styles.mainImage}>대표</div> : null}
-                  <div className={styles.cancelIcon}>
+                  <div className={styles.cancelIcon} onClick={() => removeImage(index)}>
                     <MdOutlineCancel size={20} />
                   </div>
                   <Image src={image[index] || ''} alt="image" width={200} height={200} />
