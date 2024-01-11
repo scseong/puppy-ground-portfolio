@@ -1,8 +1,13 @@
+'use client';
 import Link from 'next/link';
 import styles from './header.module.scss';
 import Image from 'next/image';
+import { useState } from 'react';
+import Chat from '../chatting/Chat';
 
 const Header = () => {
+  const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
+
   return (
     <div className={styles.navbarBox}>
       <div className={styles.logoBox}>
@@ -24,7 +29,10 @@ const Header = () => {
         <Link className={styles.menuItem} href="/mungstagram">
           멍스타그램
         </Link>
-        <div className={styles.menuItem}>채팅</div>
+        <div className={styles.menuItem}>
+          <button onClick={() => setModalIsOpen(true)}>채팅</button>
+          <Chat isOpen={isModalOpen} onClose={() => setModalIsOpen(false)} ariaHideApp={false} />
+        </div>
         <div className={styles.menuItem}>알람</div>
         <Link className={styles.menuItem} href="/profile">
           마이페이지
