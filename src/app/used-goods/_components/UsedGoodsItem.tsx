@@ -3,14 +3,7 @@ import Link from 'next/link';
 import styled from './usedGoodsItem.module.scss';
 import { UsedItemsWithCategoryAndCount } from '../page';
 import { getStringFromNow } from '@/utils/time';
-
-export function getCountFromTable(column: unknown) {
-  const _column = (Array.isArray(column) ? column[0] : column) as {
-    count?: number;
-  };
-
-  return _column.count ?? null;
-}
+import { getCountFromTable } from '@/utils/table';
 
 const UsedGoodsItem = ({ goods }: { goods: UsedItemsWithCategoryAndCount[number] }) => {
   const { id, created_at, title, photo_url, sold_out, address, price, used_item_wish, chat_list } =
