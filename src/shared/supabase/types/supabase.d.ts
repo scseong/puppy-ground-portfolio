@@ -107,44 +107,6 @@ export interface Database {
             referencedRelation: 'used_item';
             referencedColumns: ['id'];
           },
-<<<<<<< HEAD
-=======
-          {
-            foreignKeyName: 'chat_list_user_id_fkey';
-            columns: ['user_id'];
-            isOneToOne: false;
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
-          }
-        ];
-      };
-      location: {
-        Row: {
-          address: string;
-          id: number;
-          latitude: string;
-          longitude: string;
-          place_name: string;
-          post_id: number;
-        };
-        Insert: {
-          address: string;
-          id?: number;
-          latitude: string;
-          longitude: string;
-          place_name: string;
-          post_id: number;
-        };
-        Update: {
-          address?: string;
-          id?: number;
-          latitude?: string;
-          longitude?: string;
-          place_name?: string;
-          post_id?: number;
-        };
-        Relationships: [
->>>>>>> 6cffd49ce0514cb5c926f1b33b5512ea9d20b254
           {
             foreignKeyName: 'chat_list_user_id_fkey';
             columns: ['user_id'];
@@ -275,7 +237,6 @@ export interface Database {
       };
       used_item: {
         Row: {
-<<<<<<< HEAD
           address: string;
           content: string;
           created_at: string;
@@ -286,21 +247,12 @@ export interface Database {
           photo_url: string[];
           place_name: string;
           price: number;
-=======
-          content: string;
-          created_at: string;
-          id: number;
-          main_category_id: number;
-          photo_url: string[];
-          price: string;
->>>>>>> 6cffd49ce0514cb5c926f1b33b5512ea9d20b254
           sold_out: boolean;
           sub_category_id: number;
           title: string;
           user_id: string;
         };
         Insert: {
-<<<<<<< HEAD
           address: string;
           content: string;
           created_at?: string;
@@ -311,21 +263,12 @@ export interface Database {
           photo_url: string[];
           place_name: string;
           price: number;
-=======
-          content: string;
-          created_at?: string;
-          id?: number;
-          main_category_id: number;
-          photo_url: string[];
-          price?: string;
->>>>>>> 6cffd49ce0514cb5c926f1b33b5512ea9d20b254
           sold_out?: boolean;
           sub_category_id: number;
           title: string;
           user_id: string;
         };
         Update: {
-<<<<<<< HEAD
           address?: string;
           content?: string;
           created_at?: string;
@@ -336,14 +279,6 @@ export interface Database {
           photo_url?: string[];
           place_name?: string;
           price?: number;
-=======
-          content?: string;
-          created_at?: string;
-          id?: number;
-          main_category_id?: number;
-          photo_url?: string[];
-          price?: string;
->>>>>>> 6cffd49ce0514cb5c926f1b33b5512ea9d20b254
           sold_out?: boolean;
           sub_category_id?: number;
           title?: string;
