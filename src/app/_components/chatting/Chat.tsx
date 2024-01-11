@@ -51,6 +51,7 @@ const sendChat = async ({
 }) => {
   await supabase
     .from('chat')
+    //나중에 고쳐야함
     .insert([{ content, chat_list_id: id, user_id: userId, user_name: userName }])
     .select();
 };
@@ -80,17 +81,19 @@ const Chat = ({ isOpen, onClose, ariaHideApp }: ModalProps) => {
   });
 
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+  const [chat, setChat] = useState<Tables<'chat'>[]>(getChatData?.getChatData!);
   const [chatItem, setChatItem] = useState<Tables<'chat'>[]>([]);
   const [chatListId, setChatListId] = useState<number>(0);
   const [chatContent, setChatContent] = useState<string>('');
   const onChangeChatContent = (e: React.ChangeEvent<HTMLInputElement>) =>
     setChatContent(e.target.value);
 
+  //임의로 설정해둔 이름(로그인한 사람)
   const userName = '오늘은치킨이닭';
 
   // 클릭 시 채팅방 입장
   const clickChatRoom = (id: number) => {
-    const chatHistory = getChatData?.getChatData?.filter((chat) => chat.chat_list_id === id);
+    const chatHistory = chat.filter((chat) => chat.chat_list_id === id);
     setChatItem(chatHistory!);
     setChatListId(id);
     setIsChatOpen(true);
@@ -107,16 +110,36 @@ const Chat = ({ isOpen, onClose, ariaHideApp }: ModalProps) => {
     });
   };
 
+  const chatContents = async () => {
+    try {
+      const { data: chat, error } = await supabase.from('chat').select('*');
+      setChat(chat!);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     const chat = supabase
       .channel('custom-all-channel')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'chat' }, (payload) => {})
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'chat' }, (payload) => {
+        // payload.new에 chat_list_id 속성이 있는지 확인 후 업데이트
+        if (payload.new && 'chat_list_id' in payload.new) {
+          setChat((prev) => [...prev, payload.new as Tables<'chat'>]);
+          // 특정 채팅방의 채팅 내용 업데이트
+          if (payload.new.chat_list_id === chatListId) {
+            setChatItem((prev) => [...prev, payload.new as Tables<'chat'>]);
+          }
+        }
+      })
       .subscribe();
+
+    chatContents();
 
     return () => {
       chat.unsubscribe();
     };
-  }, []);
+  }, [chatListId]);
 
   return (
     <div>
