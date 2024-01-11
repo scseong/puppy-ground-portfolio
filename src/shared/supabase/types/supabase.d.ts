@@ -49,6 +49,7 @@ export interface Database {
           id: number;
           read_status: boolean;
           user_id: string;
+          user_name: string;
         };
         Insert: {
           chat_list_id: number;
@@ -57,6 +58,7 @@ export interface Database {
           id?: number;
           read_status?: boolean;
           user_id: string;
+          user_name: string;
         };
         Update: {
           chat_list_id?: number;
@@ -65,6 +67,7 @@ export interface Database {
           id?: number;
           read_status?: boolean;
           user_id?: string;
+          user_name?: string;
         };
         Relationships: [
           {
@@ -88,16 +91,19 @@ export interface Database {
           id: number;
           post_id: number;
           user_id: string;
+          used_item: Tables<'used_item'>;
         };
         Insert: {
           id?: number;
           post_id: number;
           user_id: string;
+          used_item?: Tables<'used_item'>;
         };
         Update: {
           id?: number;
           post_id?: number;
           user_id?: string;
+          used_item?: Tables<'used_item'>;
         };
         Relationships: [
           {
@@ -395,8 +401,10 @@ export type Tables<
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (Database['public']['Tables'] & Database['public']['Views'])
-    ? (Database['public']['Tables'] & Database['public']['Views'])[PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof (Database['public']['Tables'] &
+        Database['public']['Views'])
+    ? (Database['public']['Tables'] &
+        Database['public']['Views'])[PublicTableNameOrOptions] extends {
         Row: infer R;
       }
       ? R
