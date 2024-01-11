@@ -3,7 +3,7 @@
 import style from './kakaoMapMarker.module.scss';
 import Script from 'next/script';
 import { Map, MapMarker, MapTypeControl, ZoomControl } from 'react-kakao-maps-sdk';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
 declare global {
   interface Window {
@@ -102,3 +102,4 @@ const KakaoMap = () => {
 };
 
 export default KakaoMap;
+

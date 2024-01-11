@@ -91,19 +91,16 @@ export interface Database {
           id: number;
           post_id: number;
           user_id: string;
-          used_item: Tables<'used_item'>;
         };
         Insert: {
           id?: number;
           post_id: number;
           user_id: string;
-          used_item?: Tables<'used_item'>;
         };
         Update: {
           id?: number;
           post_id?: number;
           user_id?: string;
-          used_item?: Tables<'used_item'>;
         };
         Relationships: [
           {
@@ -121,6 +118,48 @@ export interface Database {
             referencedColumns: ['id'];
           }
         ];
+      };
+      facilities: {
+        Row: {
+          address: string;
+          category: string;
+          county: string;
+          explanation: string;
+          facilities_name: string;
+          holiday: string;
+          id: number;
+          latitude: string;
+          longitude: string;
+          open_time: string;
+          url: string;
+        };
+        Insert: {
+          address: string;
+          category: string;
+          county: string;
+          explanation: string;
+          facilities_name: string;
+          holiday: string;
+          id?: number;
+          latitude: string;
+          longitude: string;
+          open_time: string;
+          url: string;
+        };
+        Update: {
+          address?: string;
+          category?: string;
+          county?: string;
+          explanation?: string;
+          facilities_name?: string;
+          holiday?: string;
+          id?: number;
+          latitude?: string;
+          longitude?: string;
+          open_time?: string;
+          url?: string;
+        };
+        Relationships: [];
       };
       main_category: {
         Row: {
@@ -207,19 +246,19 @@ export interface Database {
       };
       profiles: {
         Row: {
-          avatar_url: string;
+          avatar_url: string | null;
           email: string;
           id: string;
           user_name: string;
         };
         Insert: {
-          avatar_url: string;
+          avatar_url?: string | null;
           email: string;
           id?: string;
           user_name: string;
         };
         Update: {
-          avatar_url?: string;
+          avatar_url?: string | null;
           email?: string;
           id?: string;
           user_name?: string;
