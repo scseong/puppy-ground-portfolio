@@ -2,3 +2,51 @@
   width: 100vw;
   height: 100vh;
 }
+
+.overlayWrap {
+  position: absolute;
+  left: 0;
+  bottom: 40px;
+  width: 350px;
+  height: 150px;
+  margin-left: -174px;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.5;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+  padding: 10px 5px;
+}
+
+.placeName {
+  height: 30px;
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+  font-size: 17px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  color: #888;
+  width: 17px;
+  height: 17px;
+}
+
+.placeContent {
+  padding: 8px 10px;
+}
+
+.address {
+  font-weight: 700;
+}
+
+.link {
+  color: rgb(215, 93, 0);
+  line-height: 20px;
+}

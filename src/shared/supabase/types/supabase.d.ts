@@ -128,8 +128,8 @@ export interface Database {
           facilities_name: string;
           holiday: string;
           id: number;
-          latitude: string;
-          longitude: string;
+          latitude: number;
+          longitude: number;
           open_time: string;
           url: string;
         };
@@ -141,8 +141,8 @@ export interface Database {
           facilities_name: string;
           holiday: string;
           id?: number;
-          latitude: string;
-          longitude: string;
+          latitude: number;
+          longitude: number;
           open_time: string;
           url: string;
         };
@@ -154,8 +154,8 @@ export interface Database {
           facilities_name?: string;
           holiday?: string;
           id?: number;
-          latitude?: string;
-          longitude?: string;
+          latitude?: number;
+          longitude?: number;
           open_time?: string;
           url?: string;
         };
@@ -475,4 +475,3 @@ export type Enums<
   : PublicEnumNameOrOptions extends keyof Database['public']['Enums']
     ? Database['public']['Enums'][PublicEnumNameOrOptions]
     : never;
-

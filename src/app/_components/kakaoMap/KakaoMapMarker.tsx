@@ -13,7 +13,7 @@ declare global {
 
 const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_KEY}&libraries=services&autoload=false`;
 
-const KakaoMap = () => {
+const KakaoMapMarker = () => {
   const [currentLocation, setCurrentLocation] = useState<{ latitude: number; longitude: number }>({
     latitude: 33.450701,
     longitude: 126.570667
@@ -101,5 +101,4 @@ const KakaoMap = () => {
   );
 };
 
-export default KakaoMap;
-
+export default KakaoMapMarker;
