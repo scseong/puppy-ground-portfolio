@@ -286,8 +286,8 @@ export interface Database {
           content: string;
           created_at: string;
           id: number;
-          latitude: string;
-          longitude: string;
+          latitude: number;
+          longitude: number;
           main_category_id: number;
           photo_url: string[];
           place_name: string;
@@ -302,8 +302,8 @@ export interface Database {
           content: string;
           created_at?: string;
           id?: number;
-          latitude: string;
-          longitude: string;
+          latitude: number;
+          longitude: number;
           main_category_id: number;
           photo_url: string[];
           place_name: string;
@@ -318,8 +318,8 @@ export interface Database {
           content?: string;
           created_at?: string;
           id?: number;
-          latitude?: string;
-          longitude?: string;
+          latitude?: number;
+          longitude?: number;
           main_category_id?: number;
           photo_url?: string[];
           place_name?: string;

@@ -1,6 +1,13 @@
+.mapContainer {
+  max-width: 100vw;
+  height: 85vh;
+  z-index: 1;
+  margin: 0;
+}
+
 .mapWrap {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 }
 
 .overlayWrap {
@@ -14,8 +21,9 @@
   font-size: 12px;
   line-height: 1.5;
   background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  border: 1px solid #818181;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
   padding: 10px 5px;
 }
 
@@ -49,4 +57,30 @@
 .link {
   color: rgb(215, 93, 0);
   line-height: 20px;
+}
+
+.currentMarker {
+  padding: 5px;
+  text-align: center;
+}
+
+.currentLocation {
+  width: 45px;
+  height: 45px;
+  border-style: none;
+  border-radius: 10px;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  position: relative;
+  bottom: 95%;
+  left: 20px;
+  font-size: 20px;
+  line-height: 50px;
+  cursor: pointer;
+}
+
+.currentLocation:hover {
+  background-color: #868686;
+  color: #ffffff;
 }
