@@ -1,8 +1,21 @@
+'use client';
 import Link from 'next/link';
 import styles from './header.module.scss';
 import Image from 'next/image';
+import { supabase } from '@/shared/supabase/supabase';
+import { useRouter } from 'next/navigation';
 
 const Header = () => {
+  const router = useRouter();
+  const signOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    console.log('로그아웃 에러', error);
+    if (!error) {
+      alert('로그아웃 되었습니다.');
+      router.push('/');
+    }
+  };
+
   return (
     <div className={styles.navbarBox}>
       <div className={styles.logoBox}>
@@ -35,7 +48,9 @@ const Header = () => {
         <Link className={styles.menuItem} href="/auth/login">
           로그인
         </Link>
-        <div className={styles.menuItem}>로그아웃</div>
+        <div className={styles.menuItem} onClick={signOut}>
+          로그아웃
+        </div>
       </div>
     </div>
   );

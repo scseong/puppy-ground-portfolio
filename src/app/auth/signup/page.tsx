@@ -2,61 +2,63 @@
 import { supabase } from '@/shared/supabase/supabase';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useRouter } from 'next/navigation';
-import { FormEvent } from 'react';
-import { ChangeEvent } from 'react';
 import { useState } from 'react';
+import styles from './page.module.scss';
 
 const SingUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
-  const [previewImg, setPreviewImg] = useState<File | null>();
+  const [previewImg, setPreviewImg] = useState<string>(
+    'https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png'
+  );
+  const [uploadImg, setUploadImg] = useState<File | null | string>();
   const router: AppRouterInstance = useRouter();
   // const [pwCheck, setCheck] = useState('');
   // console.log(previewImg);
   // console.log(Date.now());
-  // console.log(Math.floor(Math.random() * 1000));
 
   //  핸들러
-  const idOnchangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+  const idOnchangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
-  const nicknameOnchangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+  const nicknameOnchangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
   };
-  const passwordOnchangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+  const passwordOnchangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
-  // const imageOnchangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setPreviewImg(e.target.files![0]);
-  // };
+  const imageOnchangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUploadImg(e.target.files![0]);
+    setPreviewImg(URL.createObjectURL(e.target.files![0]));
+  };
 
   // const passwordCheckOnchangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
   //   setCheck(e.target.value);
   // };
 
-  //  path? 어떻게 넣을거?
-  // 저장된 이미지 url을 어떻게 불러올 건가
-
-  const singUpOnSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
+  // 이메일 회원가입
+  const singUpOnSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // if (previewImg) {
-    //   const { data, error } = await supabase.storage
-    //     .from('profile_avatar')
-    //     .upload(`profile`, previewImg);
+    let imgUrl = 'https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png';
+    if (uploadImg) {
+      const { data, error } = await supabase.storage
+        .from('profile_avatar')
+        .upload(`profile/${Date.now()}_${Math.floor(Math.random() * 1000)}`, uploadImg);
 
-    //   console.log('스토리지 데이터', data);
-    //   console.log('스토리지 에러', error);
-    // }
-    // const { data } = supabase.storage.from('profile_avatar').createSignedUrl('profile', 6000);
-    // console.log('다운로드 데이터', data);
+      console.log('스토리지 데이터', data);
+      console.log('스토리지 에러', error);
+      const { data: url } = supabase.storage.from('profile_avatar').getPublicUrl(`${data!.path}`);
+      console.log('유알엘', url.publicUrl);
+      imgUrl = url.publicUrl;
+    }
     const { data, error } = await supabase.auth.signUp({
       email: email,
       password: password,
       options: {
         data: {
           display_name: nickname,
-          avatar_url: previewImg
+          avatar_url: imgUrl
         }
       }
     });
@@ -100,7 +102,16 @@ const SingUp = () => {
         value={pwCheck}
         onChange={passwordCheckOnchangeHandler}
       /> */}
-      {/* <input type="file" accept="image/*" onChange={imageOnchangeHandler} /> */}
+      <img alt="이미지 없음" className={styles.previewImg} src={previewImg} />
+      <label htmlFor="preview">
+        <input
+          className={styles.imageInput}
+          type="file"
+          accept="image/*"
+          id="preview"
+          onChange={imageOnchangeHandler}
+        />
+      </label>
       <br />
       <button>회원가입</button>
     </form>
