@@ -16,25 +16,17 @@ class ToastOption {
   }
 }
 
-interface Option {
+type Option = {
   position: ToastPosition;
   timeout: number;
   icon?: string;
-}
+};
 
-interface ToastArgs {
+type ToastArgs = {
   message: string;
   timeout?: number;
-}
+};
 
-/**
- * 사용방법
- * 1. react-toastify를 사용하기 원하는 컴포넌트에서 useToast() 호출
- *    e.g) const {successTopCenter} = useToast()
- * 2. message (필수), timeout(선택)을 인자로 주고 호출
- *    e.g) successTopCenter({message: '성공'});
- *    e.g) successTopCenter({message: '성공', timeout: 2000});
- */
 export const useToast = () => {
   const successTopCenter = ({ message, timeout }: ToastArgs) => {
     const topCenter: ToastOptions = new ToastOption({
@@ -113,4 +105,3 @@ export const useToast = () => {
     alertBottomRight
   };
 };
-
