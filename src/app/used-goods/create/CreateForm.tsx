@@ -4,7 +4,8 @@ import { createUsedGood } from '@/apis/used-goods/actions';
 import { supabase } from '@/shared/supabase/supabase';
 import { TablesInsert } from '@/shared/supabase/types/supabase';
 import Image from 'next/image';
-import { ChangeEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { ChangeEvent, DragEvent, useState } from 'react';
 import { MdOutlineCancel } from 'react-icons/md';
 import { TbCameraCog } from 'react-icons/tb';
 import { v4 as uuidv4 } from 'uuid';
@@ -19,21 +20,35 @@ const CreateForm = () => {
     title: '',
     address: '',
     content: '',
-    latitude: '',
-    longitude: '',
+    latitude: 0,
+    longitude: 0,
     main_category_id: 0,
     sub_category_id: 0,
     photo_url: [],
     place_name: '',
     price: 0,
     sold_out: false,
-    user_id: '740bdd1e-8d81-45f6-938f-9ea2deba8d9e'
+    user_id: '46c9465c-ae9f-4de3-9a42-66500b211463'
   });
 
-  async function uploadImage(e: ChangeEvent<HTMLInputElement>) {
+  async function dropImage(e: DragEvent<HTMLLabelElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const file = e.dataTransfer?.files?.length ? e.dataTransfer?.files[0] : null;
+    if (!file) return;
+
+    await uploadImage(file);
+  }
+
+  async function addImage(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.length ? e.target.files[0] : null;
     if (!file) return;
 
+    await uploadImage(file);
+  }
+
+  async function uploadImage(file: File) {
     if (inputForm.photo_url.length >= 4) {
       // 토스티파이 변경 예정
       alert('이미지는 4개까지만 등록 가능합니다.');
@@ -72,6 +87,17 @@ const CreateForm = () => {
     }));
   };
 
+  const router = useRouter();
+
+  const onClickCancel = () => {
+    // 스윗얼럿 변경 예정
+    if (confirm('정말 취소하시겠습니까?')) {
+      router.push('/used-goods');
+    } else {
+      return;
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.containerLeft}>
@@ -93,11 +119,14 @@ const CreateForm = () => {
                 </>
               ) : (
                 <>
-                  <label htmlFor="file">
-                    {' '}
+                  <label
+                    htmlFor="file"
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={dropImage}
+                  >
                     <TbCameraCog size={27} />
                   </label>
-                  <input id="file" type="file" accept=".gif, .jpg, .png" onChange={uploadImage} />
+                  <input id="file" type="file" accept=".gif, .jpg, .png" onChange={addImage} />
                 </>
               )}
             </div>
@@ -162,7 +191,9 @@ const CreateForm = () => {
             <button className={styles.button} onClick={() => createUsedGood(inputForm)}>
               등록하기
             </button>
-            <button className={styles.button}>취소하기</button>
+            <button className={styles.button} onClick={onClickCancel}>
+              취소하기
+            </button>
           </div>
         </div>
       </div>
