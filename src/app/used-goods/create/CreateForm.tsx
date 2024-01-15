@@ -10,12 +10,15 @@ import { MdOutlineCancel } from 'react-icons/md';
 import { TbCameraCog } from 'react-icons/tb';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './create.module.scss';
+import { useToast } from '@/hooks/useToast';
+import Swal from 'sweetalert2';
 
 const bucketName = 'used_goods';
 const MAINCATEGORY = ['대형견', '중형견', '소형견'];
 const SUBCATEGORY = ['장난감', '식품', '의류', '기타'];
 
 const CreateForm = () => {
+  const { warnTopRight, errorTopRight } = useToast();
   const [inputForm, setInputForm] = useState<TablesInsert<'used_item'>>({
     title: '',
     address: '',
@@ -49,14 +52,8 @@ const CreateForm = () => {
   }
 
   async function uploadImage(file: File) {
-    if (inputForm.photo_url.length >= 4) {
-      // 토스티파이 변경 예정
-      alert('이미지는 4개까지만 등록 가능합니다.');
-      return;
-    }
     if (file.size >= 2000000) {
-      // 토스티파이 변경 예정
-      alert('파일 사이즈가 너무 큽니다. (2MB 이하)');
+      warnTopRight({ message: '파일 사이즈가 너무 큽니다. (2MB 이하)' });
       return;
     }
 
@@ -71,8 +68,7 @@ const CreateForm = () => {
         ]
       }));
     } else {
-      // 토스티파이 변경 예정
-      alert(error?.message);
+      errorTopRight({ message: error?.message });
     }
   }
 
@@ -91,47 +87,62 @@ const CreateForm = () => {
   const router = useRouter();
 
   const onClickCancel = () => {
-    // 스윗얼럿 변경 예정
-    if (confirm('정말 취소하시겠습니까?')) {
-      router.push('/used-goods');
-    } else return;
+    Swal.fire({
+      title: '정말 취소하시겠습니까?',
+      text: '입력하신 정보가 모두 사라집니다.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '네',
+      cancelButtonText: '아니요'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.push('/used-goods');
+      } else return;
+    });
   };
 
   const onClickCreate = () => {
-    // 토스티파이 변경 예정
     if (!inputForm.title) {
-      alert('제목을 입력해주세요');
+      warnTopRight({ message: '제목을 입력해주세요' });
       return;
     }
     if (!inputForm.content) {
-      alert('내용을 입력해주세요');
+      warnTopRight({ message: '내용을 입력해주세요' });
       return;
     }
     if (!inputForm.price) {
-      alert('가격을 입력해주세요');
+      warnTopRight({ message: '가격을 입력해주세요' });
       return;
     }
     if (!inputForm.main_category_id) {
-      alert('견종 크기를 선택해주세요');
+      warnTopRight({ message: '견종 크기를 선택해주세요' });
       return;
     }
     if (!inputForm.sub_category_id) {
-      alert('카테고리를 선택해주세요');
+      warnTopRight({ message: '카테고리를 선택해주세요' });
       return;
     }
     if (!inputForm.photo_url || !inputForm.photo_url.length) {
-      alert('사진을 선택해주세요');
+      warnTopRight({ message: '사진을 선택해주세요' });
       return;
     }
     if (!inputForm.place_name) {
-      alert('위치를 입력해주세요');
+      warnTopRight({ message: '위치를 입력해주세요' });
       return;
     }
-    createUsedGood(inputForm);
-    // 스윗얼럿 변경 예정
-    if (confirm('등록하시겠습니까?')) {
-      router.push('/used-goods');
-    } else return;
+    Swal.fire({
+      title: '등록하시겠습니까?',
+      text: '입력하신 정보로 등록됩니다.',
+      icon: 'success',
+      showCancelButton: true,
+      confirmButtonText: '네',
+      cancelButtonText: '아니요'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        createUsedGood(inputForm);
+        router.push('/used-goods');
+      } else return;
+    });
   };
 
   return (

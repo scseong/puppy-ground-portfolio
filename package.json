@@ -19,11 +19,12 @@
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18",
-    "react-kakao-maps-sdk": "^1.1.24",
     "react-icons": "^5.0.0",
+    "react-kakao-maps-sdk": "^1.1.24",
     "react-modal": "^3.16.1",
     "react-toastify": "^9.1.3",
     "sass": "^1.69.7",
+    "sweetalert2": "^11.10.3",
     "uuidv4": "^6.2.13",
     "zustand": "^4.4.7"
   },
