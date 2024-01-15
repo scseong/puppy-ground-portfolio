@@ -122,6 +122,48 @@ export interface Database {
           }
         ];
       };
+      facilities: {
+        Row: {
+          address: string;
+          category: string;
+          county: string;
+          explanation: string;
+          facilities_name: string;
+          holiday: string;
+          id: number;
+          latitude: number;
+          longitude: number;
+          open_time: string;
+          url: string;
+        };
+        Insert: {
+          address: string;
+          category: string;
+          county: string;
+          explanation: string;
+          facilities_name: string;
+          holiday: string;
+          id?: number;
+          latitude: number;
+          longitude: number;
+          open_time: string;
+          url: string;
+        };
+        Update: {
+          address?: string;
+          category?: string;
+          county?: string;
+          explanation?: string;
+          facilities_name?: string;
+          holiday?: string;
+          id?: number;
+          latitude?: number;
+          longitude?: number;
+          open_time?: string;
+          url?: string;
+        };
+        Relationships: [];
+      };
       main_category: {
         Row: {
           id: number;
@@ -207,19 +249,19 @@ export interface Database {
       };
       profiles: {
         Row: {
-          avatar_url: string;
+          avatar_url: string | null;
           email: string;
           id: string;
           user_name: string;
         };
         Insert: {
-          avatar_url: string;
+          avatar_url?: string | null;
           email: string;
           id?: string;
           user_name: string;
         };
         Update: {
-          avatar_url?: string;
+          avatar_url?: string | null;
           email?: string;
           id?: string;
           user_name?: string;
@@ -247,8 +289,8 @@ export interface Database {
           content: string;
           created_at: string;
           id: number;
-          latitude: string;
-          longitude: string;
+          latitude: number;
+          longitude: number;
           main_category_id: number;
           photo_url: string[];
           place_name: string;
@@ -263,8 +305,8 @@ export interface Database {
           content: string;
           created_at?: string;
           id?: number;
-          latitude: string;
-          longitude: string;
+          latitude: number;
+          longitude: number;
           main_category_id: number;
           photo_url: string[];
           place_name: string;
@@ -279,8 +321,8 @@ export interface Database {
           content?: string;
           created_at?: string;
           id?: number;
-          latitude?: string;
-          longitude?: string;
+          latitude?: number;
+          longitude?: number;
           main_category_id?: number;
           photo_url?: string[];
           place_name?: string;

@@ -1,0 +1,143 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  margin: 0 auto;
+  max-width: var(--max-width);
+}
+
+.containerLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 50%;
+}
+
+.containerRight {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+}
+
+.contentBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.category {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  li {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 0 10px 20px 0;
+    padding: 10px 0;
+    border-bottom: 1px solid black;
+    cursor: pointer;
+  }
+}
+
+.radio {
+  width: 100px;
+  height: 40px;
+  border: 1px solid #eae7e7;
+  border-radius: 10px;
+
+  input {
+    position: absolute;
+    width: 100px;
+    height: 40px;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  label {
+    display: block;
+    border-radius: 10px;
+    margin: 0 auto;
+    text-align: center;
+    height: 100%;
+    line-height: 40px;
+  }
+
+  input[type='radio']:checked + label {
+    background: orange;
+    color: #fff;
+  }
+
+  label:hover {
+    color: #666;
+  }
+
+  input[type='radio'] + label {
+    background: #f9fafc;
+    color: #666;
+  }
+}
+
+.imageBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 450px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.imageInput {
+  width: 200px;
+  height: 200px;
+  position: relative;
+
+  label {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+  }
+
+  input {
+    display: none;
+  }
+}
+
+.mainImage {
+  position: absolute;
+  background-color: orange;
+  color: white;
+  padding: 3px;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.cancelIcon {
+  position: absolute;
+  color: gray;
+  padding: 3px;
+  border-radius: 3px;
+  font-size: 12px;
+  cursor: pointer;
+  right: 5px;
+}
