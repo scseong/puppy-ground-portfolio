@@ -8,10 +8,14 @@ const nextConfig = {
         hostname: 'placehold.co',
         port: '',
         pathname: '/*'
+      },
+      {
+        protocol: 'https',
+        hostname: 'mbcnyqlazlnrnrncctns.supabase.co',
+        pathname: '/**'
       }
     ]
   }
 };
 
 module.exports = nextConfig;
-

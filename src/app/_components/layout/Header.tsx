@@ -12,8 +12,6 @@ const Header = () => {
   const router = useRouter();
   const userInfo = useUserInfo((state: any) => state.initialState);
   const user = useUserInfo((state: any) => state.removeUser);
-  console.log('유저다', user);
-  console.log('이니셜', userInfo);
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     user();
