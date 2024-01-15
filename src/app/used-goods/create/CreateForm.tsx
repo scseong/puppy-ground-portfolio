@@ -28,7 +28,7 @@ const CreateForm = () => {
     place_name: '',
     price: 0,
     sold_out: false,
-    user_id: 'f5bee20f-3dbc-4696-8c74-9c0bad7d1218'
+    user_id: ''
   });
 
   async function dropImage(e: DragEvent<HTMLLabelElement>) {
@@ -71,7 +71,8 @@ const CreateForm = () => {
         ]
       }));
     } else {
-      console.log(error);
+      // 토스티파이 변경 예정
+      alert(error?.message);
     }
   }
 
