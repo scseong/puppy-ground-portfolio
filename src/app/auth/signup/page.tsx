@@ -2,105 +2,152 @@
 import { supabase } from '@/shared/supabase/supabase';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useRouter } from 'next/navigation';
-import { FormEvent } from 'react';
-import { ChangeEvent } from 'react';
-import { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import styles from './page.module.scss';
+
+export type Inputs = {
+  email: string;
+  password: string;
+  password_confirm: string;
+  nickname: string;
+  image: any;
+};
 
 const SingUp = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [nickname, setNickname] = useState('');
-  const [previewImg, setPreviewImg] = useState<File | null>();
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<Inputs>({ mode: 'onChange' });
+
+  const [previewImg, setPreviewImg] = useState<string>(
+    'https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png'
+  );
+  const [uploadImg, setUploadImg] = useState<File | null | string>();
   const router: AppRouterInstance = useRouter();
-  // const [pwCheck, setCheck] = useState('');
-  // console.log(previewImg);
-  // console.log(Date.now());
-  // console.log(Math.floor(Math.random() * 1000));
+  const ref = useRef<React.HTMLInputTypeAttribute>();
+  ref.current = watch('password');
+  const image = watch('image');
 
-  //  핸들러
-  const idOnchangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-  const nicknameOnchangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setNickname(e.target.value);
-  };
-  const passwordOnchangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-  // const imageOnchangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setPreviewImg(e.target.files![0]);
-  // };
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  const passwordRegex = /(?=.*\d)(?=.*[a-zA-ZS]).{8,}/;
 
-  // const passwordCheckOnchangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setCheck(e.target.value);
-  // };
+  useEffect(() => {
+    if (image && image.length > 0) {
+      const imageFile = image[0];
+      setPreviewImg(URL.createObjectURL(imageFile));
+    }
+  }, [image]);
 
-  //  path? 어떻게 넣을거?
-  // 저장된 이미지 url을 어떻게 불러올 건가
+  // 이메일 회원가입
+  const singUpOnSubmitHandler = async (data: Inputs) => {
+    let imgUrl = 'https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png';
+    if (data.image[0]) {
+      const { data: imgData, error } = await supabase.storage
+        .from('profile_avatar')
+        .upload(`profile/${Date.now()}_${Math.floor(Math.random() * 1000)}`, data.image[0]);
 
-  const singUpOnSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // if (previewImg) {
-    //   const { data, error } = await supabase.storage
-    //     .from('profile_avatar')
-    //     .upload(`profile`, previewImg);
-
-    //   console.log('스토리지 데이터', data);
-    //   console.log('스토리지 에러', error);
-    // }
-    // const { data } = supabase.storage.from('profile_avatar').createSignedUrl('profile', 6000);
-    // console.log('다운로드 데이터', data);
-    const { data, error } = await supabase.auth.signUp({
-      email: email,
-      password: password,
+      const { data: url } = supabase.storage
+        .from('profile_avatar')
+        .getPublicUrl(`${imgData!.path}`);
+      console.log('유알엘', url.publicUrl);
+      imgUrl = url.publicUrl;
+    }
+    const { data: loginData, error } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password,
       options: {
         data: {
-          display_name: nickname,
-          avatar_url: previewImg
+          display_name: data.nickname,
+          avatar_url: imgUrl
         }
       }
     });
-    console.log('data', data);
+
+    console.log('data.image', data.image[0]);
+    console.log('data', loginData);
     if (error) {
-      alert('회원가입에 실패했습니다.');
+      alert('오류가 발생했습니다. 다시 시도해주세요');
     }
-    if (data.user !== null) {
+    if (loginData.user !== null) {
       alert('가입되었습니다.');
-      router.push('/auth/login');
+      router.push('/');
     }
   };
+
   return (
-    <form onSubmit={singUpOnSubmitHandler}>
+    <form onSubmit={handleSubmit(singUpOnSubmitHandler)}>
       <input
         placeholder="이메일을 입력하세요"
-        required
-        value={email}
-        onChange={idOnchangeHandler}
+        {...register('email', { required: true, pattern: emailRegex })}
+        // value={email}
+        // onChange={idOnchangeHandler}
       />
+      {errors.email?.type === 'required' && <p className={styles.validP}>이메일을 입력해주세요</p>}
+      {errors.email?.type === 'pattern' && (
+        <p className={styles.validP}>이메일 양식에 맞게 입력해주세요</p>
+      )}
       <br />
       <input
         placeholder="닉네임을 입력하세요"
-        required
-        value={nickname}
-        onChange={nicknameOnchangeHandler}
+        {...register('nickname', { required: true })}
+        // value={nickname}
+        // onChange={nicknameOnchangeHandler}
       />
+      {errors.nickname?.type === 'required' && (
+        <p className={styles.validP}>닉네임을 입력해주세요</p>
+      )}
       <br />
       <input
         type="password"
         placeholder="비밀번호를 입력하세요"
-        required
-        value={password}
-        onChange={passwordOnchangeHandler}
+        {...register('password', { required: true, minLength: 8, pattern: passwordRegex })}
+        // value={password}
+        // onChange={passwordOnchangeHandler}
       />
+      {errors.password?.type === 'required' && (
+        <p className={styles.validP}>비밀번호를 입력해주세요</p>
+      )}
+      {errors.password?.type === 'pattern' && (
+        <p className={styles.validP}>
+          비밀번호는 문자와 숫자를 포함하여 8자리 이상 입력해야 합니다
+        </p>
+      )}
+      {errors.password?.type === 'minLength' && (
+        <p className={styles.validP}>
+          비밀번호는 문자와 숫자를 포함하여 8자리 이상 입력해야 합니다
+        </p>
+      )}
       <br />
-      {/* <input
+      <input
         type="password"
         placeholder="비밀번호 확인"
-        required
-        value={pwCheck}
-        onChange={passwordCheckOnchangeHandler}
-      /> */}
-      {/* <input type="file" accept="image/*" onChange={imageOnchangeHandler} /> */}
+        {...register('password_confirm', {
+          required: true,
+          validate: (value) => value === ref.current
+        })}
+      />
+      {errors.password_confirm?.type === 'required' && (
+        <p className={styles.validP}>비밀번호를 입력해주세요</p>
+      )}
+      {errors.password_confirm?.type === 'validate' && (
+        <p className={styles.validP}>비밀번호가 일치하지 않습니다</p>
+      )}
+      <br />
+
+      <img alt="이미지 없음" className={styles.previewImg} src={previewImg} />
+      <label htmlFor="preview">
+        <input
+          className={styles.imageInput}
+          type="file"
+          accept="image/*"
+          id="preview"
+          {...register('image')}
+          // onChange={imageOnchangeHandler}
+        />
+      </label>
       <br />
       <button>회원가입</button>
     </form>
@@ -108,4 +155,3 @@ const SingUp = () => {
 };
 
 export default SingUp;
-
