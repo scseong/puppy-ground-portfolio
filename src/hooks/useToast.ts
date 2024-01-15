@@ -76,7 +76,7 @@ export const useToast = () => {
     toast.warn(message, topCenter);
   };
 
-  const duckTopRight = ({ message, timeout }: ToastArgs) => {
+  const pugTopRight = ({ message, timeout }: ToastArgs) => {
     const topCenter: ToastOptions = new ToastOption({
       position: 'top-right',
       timeout: timeout ?? 1000,
@@ -101,7 +101,7 @@ export const useToast = () => {
     successTopRight,
     errorTopRight,
     warnTopRight,
-    duckTopRight,
+    pugTopRight,
     alertBottomRight
   };
 };
