@@ -42,7 +42,15 @@ const LoginPage = () => {
         }
       }
     });
-    console.log('data', data);
+    console.log('구글로그인', data);
+  };
+
+  const kakaoLoginHandler = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'kakao'
+    });
+    console.log('카카오로그인', data);
+    console.log('카카오로그인 에러', error);
   };
 
   const emailOnChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,10 +83,9 @@ const LoginPage = () => {
         <button type="submit">로그인</button>
       </form>
       <button onClick={googleLoginHandler}> 구글 로그인 </button>
-      <button> 카카오 로그인 </button>
+      <button onClick={kakaoLoginHandler}> 카카오 로그인 </button>
     </div>
   );
 };
 
 export default LoginPage;
-
