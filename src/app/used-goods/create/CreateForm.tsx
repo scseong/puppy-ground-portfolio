@@ -12,8 +12,8 @@ import { v4 as uuidv4 } from 'uuid';
 import styles from './create.module.scss';
 
 const bucketName = 'used_goods';
-const mainCategory = ['대형견', '중형견', '소형견'];
-const subCategory = ['장난감', '식품', '의류', '기타'];
+const MAINCATEGORY = ['대형견', '중형견', '소형견'];
+const SUBCATEGORY = ['장난감', '식품', '의류', '기타'];
 
 const CreateForm = () => {
   const [inputForm, setInputForm] = useState<TablesInsert<'used_item'>>({
@@ -93,9 +93,44 @@ const CreateForm = () => {
     // 스윗얼럿 변경 예정
     if (confirm('정말 취소하시겠습니까?')) {
       router.push('/used-goods');
-    } else {
+    } else return;
+  };
+
+  const onClickCreate = () => {
+    // 토스티파이 변경 예정
+    if (!inputForm.title) {
+      alert('제목을 입력해주세요');
       return;
     }
+    if (!inputForm.content) {
+      alert('내용을 입력해주세요');
+      return;
+    }
+    if (!inputForm.price) {
+      alert('가격을 입력해주세요');
+      return;
+    }
+    if (!inputForm.main_category_id) {
+      alert('견종 크기를 선택해주세요');
+      return;
+    }
+    if (!inputForm.sub_category_id) {
+      alert('카테고리를 선택해주세요');
+      return;
+    }
+    if (!inputForm.photo_url || !inputForm.photo_url.length) {
+      alert('사진을 선택해주세요');
+      return;
+    }
+    if (!inputForm.place_name) {
+      alert('위치를 입력해주세요');
+      return;
+    }
+    createUsedGood(inputForm);
+    // 스윗얼럿 변경 예정
+    if (confirm('등록하시겠습니까?')) {
+      router.push('/used-goods');
+    } else return;
   };
 
   return (
@@ -119,11 +154,7 @@ const CreateForm = () => {
                 </>
               ) : (
                 <>
-                  <label
-                    htmlFor="file"
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={dropImage}
-                  >
+                  <label htmlFor="file" onDragOver={(e) => e.preventDefault()} onDrop={dropImage}>
                     <TbCameraCog size={27} />
                   </label>
                   <input id="file" type="file" accept=".gif, .jpg, .png" onChange={addImage} />
@@ -154,7 +185,7 @@ const CreateForm = () => {
             onChange={handleFormChange}
           />
           <div className={styles.category}>
-            {mainCategory.map((category, index) => (
+            {MAINCATEGORY.map((category, index) => (
               <div className={styles.radio} key={index}>
                 <input
                   type="radio"
@@ -167,7 +198,7 @@ const CreateForm = () => {
             ))}
           </div>
           <div className={styles.category}>
-            {subCategory.map((category, index) => (
+            {SUBCATEGORY.map((category, index) => (
               <div className={styles.radio} key={index}>
                 <input
                   type="radio"
@@ -188,7 +219,7 @@ const CreateForm = () => {
             />
           </div>
           <div className={styles.buttonBox}>
-            <button className={styles.button} onClick={() => createUsedGood(inputForm)}>
+            <button className={styles.button} onClick={onClickCreate}>
               등록하기
             </button>
             <button className={styles.button} onClick={onClickCancel}>
