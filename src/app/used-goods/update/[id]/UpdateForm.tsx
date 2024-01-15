@@ -1,38 +1,40 @@
 'use client';
 
-import { createUsedGood } from '@/apis/used-goods/actions';
+import { createUsedGood, updateUsedGood } from '@/apis/used-goods/actions';
 import { supabase } from '@/shared/supabase/supabase';
-import { TablesInsert } from '@/shared/supabase/types/supabase';
+import { Tables, TablesInsert } from '@/shared/supabase/types/supabase';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, DragEvent, useState } from 'react';
 import { MdOutlineCancel } from 'react-icons/md';
 import { TbCameraCog } from 'react-icons/tb';
 import { v4 as uuidv4 } from 'uuid';
-import styles from './create.module.scss';
+import styles from './update.module.scss';
 import { useToast } from '@/hooks/useToast';
 import Swal from 'sweetalert2';
-import useUserInfo from '@/hooks/useUserInfo';
 
 const bucketName = 'used_goods';
 const MAINCATEGORY = ['대형견', '중형견', '소형견'];
 const SUBCATEGORY = ['장난감', '식품', '의류', '기타'];
 
-const CreateForm = () => {
-  const user = useUserInfo((state: any) => state.initialState);
+type Props = {
+  usedItem: Tables<'used_item'>;
+};
+
+const UpdateForm = (props: Props) => {
   const [inputForm, setInputForm] = useState<TablesInsert<'used_item'>>({
-    title: '',
-    address: '',
-    content: '',
-    latitude: 0,
-    longitude: 0,
-    main_category_id: 0,
-    sub_category_id: 0,
-    photo_url: [],
-    place_name: '',
-    price: 0,
-    sold_out: false,
-    user_id: user
+    title: props.usedItem?.title,
+    address: props.usedItem?.address,
+    content: props.usedItem?.content,
+    latitude: props.usedItem?.latitude,
+    longitude: props.usedItem?.longitude,
+    main_category_id: props.usedItem?.main_category_id,
+    sub_category_id: props.usedItem?.sub_category_id,
+    photo_url: props.usedItem?.photo_url,
+    place_name: props.usedItem?.place_name,
+    price: props.usedItem?.price,
+    sold_out: props.usedItem?.sold_out,
+    user_id: props.usedItem?.user_id
   });
 
   const { warnTopRight, errorTopRight } = useToast();
@@ -104,7 +106,7 @@ const CreateForm = () => {
     });
   };
 
-  const onClickCreate = () => {
+  const onClickUpdate = () => {
     if (!inputForm.title) {
       warnTopRight({ message: '제목을 입력해주세요' });
       return;
@@ -134,15 +136,15 @@ const CreateForm = () => {
       return;
     }
     Swal.fire({
-      title: '등록하시겠습니까?',
-      text: '입력하신 정보로 등록됩니다.',
+      title: '수정하시겠습니까?',
+      text: '입력하신 정보로 수정됩니다.',
       icon: 'success',
       showCancelButton: true,
       confirmButtonText: '네',
       cancelButtonText: '아니요'
     }).then((result) => {
       if (result.isConfirmed) {
-        createUsedGood(inputForm);
+        updateUsedGood(props.usedItem.id, inputForm);
         router.push('/used-goods');
       } else return;
     });
@@ -186,18 +188,21 @@ const CreateForm = () => {
             placeholder="제목"
             name="title"
             onChange={handleFormChange}
+            value={inputForm.title}
           />
           <textarea
             className={styles.textarea}
             placeholder="제품 설명을 자세히 작성해주세요"
             name="content"
             onChange={handleFormChange}
+            value={inputForm.content}
           />
           <input
             className={styles.price}
             placeholder="가격"
             name="price"
             onChange={handleFormChange}
+            value={inputForm.price}
           />
           <div className={styles.category}>
             {MAINCATEGORY.map((category, index) => (
@@ -207,6 +212,7 @@ const CreateForm = () => {
                   name="main_category_id"
                   value={index + 1}
                   onChange={handleFormChange}
+                  defaultChecked={inputForm.main_category_id === index + 1}
                 />
                 <label htmlFor="main_category_id">{category}</label>
               </div>
@@ -220,6 +226,7 @@ const CreateForm = () => {
                   name="sub_category_id"
                   value={index + 1}
                   onChange={handleFormChange}
+                  defaultChecked={inputForm.sub_category_id === index + 1}
                 />
                 <label htmlFor="sub_category_id">{category}</label>
               </div>
@@ -231,11 +238,12 @@ const CreateForm = () => {
               placeholder="상세주소"
               name="place_name"
               onChange={handleFormChange}
+              value={inputForm.place_name}
             />
           </div>
           <div className={styles.buttonBox}>
-            <button className={styles.button} onClick={onClickCreate}>
-              등록하기
+            <button className={styles.button} onClick={onClickUpdate}>
+              수정하기
             </button>
             <button className={styles.button} onClick={onClickCancel}>
               취소하기
@@ -247,4 +255,4 @@ const CreateForm = () => {
   );
 };
 
-export default CreateForm;
+export default UpdateForm;
