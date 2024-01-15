@@ -29,10 +29,11 @@ const SingUp = () => {
   const router: AppRouterInstance = useRouter();
   const ref = useRef<React.HTMLInputTypeAttribute>();
   ref.current = watch('password');
+  const image = watch('image');
 
   const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  const passwordRegex = /(?=.*\d)(?=.*[a-zA-ZS]).{8,}/;
 
-  const image = watch('image');
   useEffect(() => {
     if (image && image.length > 0) {
       const imageFile = image[0];
@@ -68,19 +69,13 @@ const SingUp = () => {
     console.log('data.image', data.image[0]);
     console.log('data', loginData);
     if (error) {
-      alert('회원가입에 실패했습니다.');
+      alert('오류가 발생했습니다. 다시 시도해주세요');
     }
     if (loginData.user !== null) {
       alert('가입되었습니다.');
+      router.push('/');
     }
-    router.push('/');
   };
-
-  console.log('email', watch('email'));
-  console.log('nickname', watch('nickname'));
-  console.log('password', watch('password'));
-  console.log('pw_confirm', watch('password_confirm'));
-  console.log('image', watch('image'));
 
   return (
     <form onSubmit={handleSubmit(singUpOnSubmitHandler)}>
@@ -108,15 +103,22 @@ const SingUp = () => {
       <input
         type="password"
         placeholder="비밀번호를 입력하세요"
-        {...register('password', { required: true, minLength: 6 })}
+        {...register('password', { required: true, minLength: 8, pattern: passwordRegex })}
         // value={password}
         // onChange={passwordOnchangeHandler}
       />
       {errors.password?.type === 'required' && (
         <p className={styles.validP}>비밀번호를 입력해주세요</p>
       )}
+      {errors.password?.type === 'pattern' && (
+        <p className={styles.validP}>
+          비밀번호는 문자와 숫자를 포함하여 8자리 이상 입력해야 합니다
+        </p>
+      )}
       {errors.password?.type === 'minLength' && (
-        <p className={styles.validP}>비밀번호는 최소 6자리 이상 입력해야 합니다</p>
+        <p className={styles.validP}>
+          비밀번호는 문자와 숫자를 포함하여 8자리 이상 입력해야 합니다
+        </p>
       )}
       <br />
       <input
