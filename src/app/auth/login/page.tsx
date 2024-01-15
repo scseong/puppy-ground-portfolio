@@ -35,6 +35,7 @@ const LoginPage = () => {
     if (emailData.user !== null) {
       setUser(emailData.user.id);
       alert('로그인되었습니다.');
+      router.push('/');
     }
   };
 
