@@ -6,7 +6,7 @@ import { Tables } from '@/shared/supabase/types/supabase';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
-import style from './chat.module.scss';
+import styles from './chat.module.scss';
 import moment from 'moment';
 
 type ModalProps = {
@@ -16,26 +16,17 @@ type ModalProps = {
   ariaHideApp: boolean;
 };
 
+const USERID = 'f5bee20f-3dbc-4696-8c74-9c0bad7d1218';
+
 const getChatList = async () => {
   const getChatListQuery = await supabase
     .from('chat_list')
-    .select('*, profiles(*), used_item(title)')
+    .select('*, used_item(title), chat(read_status), profiles(*)')
     .order('id', { ascending: false })
     .returns<Tables<'chat_list'>[]>();
 
   const { data: getChatListData, error } = getChatListQuery;
   return { getChatListData, error };
-};
-
-const getChat = async () => {
-  const getChatQuery = await supabase
-    .from('chat')
-    .select('*')
-    .order('id', { ascending: true })
-    .returns<Tables<'chat'>[]>();
-
-  const { data: getChatData, error } = getChatQuery;
-  return { getChatData, error };
 };
 
 const sendChat = async ({
@@ -66,11 +57,6 @@ const Chat = ({ isOpen, onClose, ariaHideApp }: ModalProps) => {
     queryFn: getChatList,
     refetchOnWindowFocus: false
   });
-  const { data: getChatData } = useQuery({
-    queryKey: ['getChat'],
-    queryFn: getChat,
-    refetchOnWindowFocus: false
-  });
 
   const queryClient = useQueryClient();
   const sendChatMutation = useMutation({
@@ -81,15 +67,19 @@ const Chat = ({ isOpen, onClose, ariaHideApp }: ModalProps) => {
   });
 
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
-  const [chat, setChat] = useState<Tables<'chat'>[]>(getChatData?.getChatData!);
+  //전체 채팅내용
+  const [chat, setChat] = useState<Tables<'chat'>[]>([]);
+  //로그인한 사람의 채팅 내역
   const [chatItem, setChatItem] = useState<Tables<'chat'>[]>([]);
+  //중고물품의 아이디
   const [chatListId, setChatListId] = useState<number>(0);
+  //채팅보내는 내용
   const [chatContent, setChatContent] = useState<string>('');
   const onChangeChatContent = (e: React.ChangeEvent<HTMLInputElement>) =>
     setChatContent(e.target.value);
 
   //임의로 설정해둔 이름(로그인한 사람)
-  const userName = '오늘은치킨이닭';
+  const userName = 'asdf';
 
   // 클릭 시 채팅방 입장
   const clickChatRoom = (id: number) => {
@@ -105,7 +95,7 @@ const Chat = ({ isOpen, onClose, ariaHideApp }: ModalProps) => {
     sendChatMutation.mutate({
       content: chatContent,
       id: chatListId,
-      userId: 'cf215d96-16ce-494f-96df-1f7e42c58c6a',
+      userId: USERID,
       userName
     });
     setChatContent('');
@@ -151,30 +141,30 @@ const Chat = ({ isOpen, onClose, ariaHideApp }: ModalProps) => {
             {chatItem.length === 0 ? (
               '채팅 내역이 없습니다! 첫 대화를 시작해보세요!'
             ) : (
-              <div>
+              <div className={styles.chatScroll}>
                 {chatItem.map((chatHistory) => {
                   return (
                     <div
                       key={chatHistory.id}
                       className={
                         chatHistory.user_name === userName
-                          ? style.chatUserNameTrue
-                          : style.chatUserNameFalse
+                          ? styles.chatUserNameTrue
+                          : styles.chatUserNameFalse
                       }
                     >
-                      <div className={style.userName}>
+                      <div className={styles.userName}>
                         <p>{chatHistory.user_name}</p>
                       </div>
-                      <div className={style.chatHistory}>
-                        <div className={style.content}>
+                      <div className={styles.chatHistory}>
+                        <div className={styles.content}>
                           <p>{chatHistory.content}</p>
                           <span>{chatHistory.read_status}</span>
                         </div>
                       </div>
-                      <div className={style.date}>
+                      <div className={styles.date}>
                         {moment(chatHistory.created_at)
                           .locale('KO')
-                          .add(-9, 'h')
+                          .add('h')
                           .format('MM월 DD일 A hh:mm')}
                       </div>
                     </div>
@@ -182,13 +172,15 @@ const Chat = ({ isOpen, onClose, ariaHideApp }: ModalProps) => {
                 })}
               </div>
             )}
-            <form onSubmit={clickSendChat} className={style.ChatInputSpace}>
-              <input
-                placeholder="내용을 입력해주세요"
-                value={chatContent}
-                onChange={onChangeChatContent}
-              />
-              <button type="submit">전송</button>
+            <form onSubmit={clickSendChat} className={styles.ChatInputSpace}>
+              <div>
+                <input
+                  placeholder="내용을 입력해주세요"
+                  value={chatContent}
+                  onChange={onChangeChatContent}
+                />
+                <button type="submit">전송</button>
+              </div>
             </form>
           </>
         ) : (
