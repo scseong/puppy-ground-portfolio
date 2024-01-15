@@ -28,7 +28,7 @@ const CreateForm = () => {
     place_name: '',
     price: 0,
     sold_out: false,
-    user_id: '46c9465c-ae9f-4de3-9a42-66500b211463'
+    user_id: 'f5bee20f-3dbc-4696-8c74-9c0bad7d1218'
   });
 
   async function dropImage(e: DragEvent<HTMLLabelElement>) {
