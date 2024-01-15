@@ -32,9 +32,8 @@ const NearFacilities: React.FC<NearFacilitiesProps> = ({ markerFocusHandler, coo
     else setShowingData(facilitiesDataByCorrdinate ? facilitiesDataByCorrdinate?.data! : []);
   }, [facilitiesDataByCorrdinate, filteredPlace]);
 
+  // 리스트 검색버튼
   const searchButtonHandler = () => {
-    console.log(searchPlace.replace(/\s/g, '').toLowerCase());
-
     if (!facilitiesData?.data) return;
 
     const filteredData = facilitiesData.data.filter((place) => {
@@ -50,6 +49,7 @@ const NearFacilities: React.FC<NearFacilitiesProps> = ({ markerFocusHandler, coo
     setFilteredPlace(filteredData);
   };
 
+  // 리스트 열고 닫기 버튼
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
@@ -58,7 +58,7 @@ const NearFacilities: React.FC<NearFacilitiesProps> = ({ markerFocusHandler, coo
     <div>
       {isVisible ? (
         <button onClick={toggleVisibility} className={style.openButton}>
-          열기
+          ▶︎
         </button>
       ) : (
         <div className={style.container}>
@@ -74,9 +74,9 @@ const NearFacilities: React.FC<NearFacilitiesProps> = ({ markerFocusHandler, coo
                 placeholder="검색어를 입력해주세요"
                 onChange={(e) => setSearchPlace(e.target.value)}
               />
-              <button onClick={searchButtonHandler} className={style.listButton}>
-                🔎
-              </button>
+              <button onClick={() => setSearchPlace('')}>X</button>
+              <p>|</p>
+              <button onClick={searchButtonHandler}>🔎</button>
             </div>
             {showingData?.map((list) => {
               return (

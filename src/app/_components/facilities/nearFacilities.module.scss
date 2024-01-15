@@ -1,8 +1,6 @@
 .container {
-  height: 100vh;
   width: 100%;
   display: grid;
-  // flex-direction: row;
   grid-template-columns: 1, 1fr;
 }
 
@@ -10,9 +8,9 @@
   background-color: white;
   width: 22vw;
   height: 100%;
-  position: relative;
+  position: absolute;
   z-index: 2;
-  bottom: 100%;
+  top: 0px;
   justify-content: center;
   align-items: center;
   overflow: scroll;
@@ -21,14 +19,12 @@
 .openButton {
   position: absolute;
   z-index: 2;
-  bottom: 93%;
-  left: 25px;
-  width: 70px;
-  height: 30px;
+  top: 0px;
+  height: 100vh;
+  width: 35px;
   border-style: none;
   background-color: #ffffff;
-  border-radius: 5px;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: 5px 0px 5px 0px rgba(0, 0, 0, 0.2);
 }
 
 .closeButton {
@@ -36,11 +32,10 @@
   width: 35px;
   position: absolute;
   z-index: 3;
-  left: 20%;
+  left: 22%;
   top: 0px;
   background-color: #ffffff;
   border-style: none;
-  // border-left: 1px solid #b0b0b0;
   box-shadow: 5px 0px 5px 0px rgba(0, 0, 0, 0.2);
   cursor: pointer;
 }
@@ -60,7 +55,7 @@
 }
 
 .searchWrap {
-  border: 1px solid #0ac4b9;
+  border: 1.5px solid #0ac4b9;
   border-radius: 5px;
   width: 18vw;
   height: 35px;
@@ -74,21 +69,25 @@
   width: 250px;
   height: 20px;
   border-style: none;
-  border-right: 1px solid #b0b0b0;
   padding-left: 7px;
   background-color: transparent;
+
+  &:focus {
+    outline: none;
+  }
 }
 
-.listInput :focus {
-  outline: none;
-}
-
-.listButton {
-  width: 40px;
+.searchWrap > button {
+  width: 30px;
   height: 30px;
   border-style: none;
   background-color: transparent;
   text-align: center;
+  color: #b0b0b0;
+}
+
+.searchWrap > p {
+  color: #b0b0b0;
 }
 
 .listName {

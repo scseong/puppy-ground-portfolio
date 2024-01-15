@@ -29,7 +29,6 @@ const Facilities = () => {
   });
 
   // TODO: 컴포넌트화
-  // TODO: 현재위치 마커 수정하기
   const [coordinate, setCoordinate] = useState<{ sw: number[]; ne: number[] }>({
     sw: [33.44653220300056, 126.56202403813722],
     ne: [33.45501290255946, 126.57927700861282]
@@ -72,10 +71,6 @@ const Facilities = () => {
   const markerClickHandler = () => {
     setActiveMarkerId(null);
   };
-
-  // useEffect(() => {
-  //   console.log('🚀 ~ Facilities ~ coordinate:', coordinate);
-  // }, [coordinate]);
 
   // 현재위치를 시작점으로 만들기
   useEffect(() => {
