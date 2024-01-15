@@ -1,5 +1,5 @@
 import { supabase } from '@/shared/supabase/supabase';
-import { Tables, TablesInsert } from '@/shared/supabase/types/supabase';
+import { TablesInsert } from '@/shared/supabase/types/supabase';
 
 export const createUsedGood = async (
   createUsedGoodInput: TablesInsert<'used_item'>

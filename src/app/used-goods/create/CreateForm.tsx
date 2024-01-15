@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 import styles from './create.module.scss';
 import { useToast } from '@/hooks/useToast';
 import Swal from 'sweetalert2';
+import useUserInfo from '@/hooks/useUserInfo';
 
 const bucketName = 'used_goods';
 const MAINCATEGORY = ['대형견', '중형견', '소형견'];
@@ -19,6 +20,7 @@ const SUBCATEGORY = ['장난감', '식품', '의류', '기타'];
 
 const CreateForm = () => {
   const { warnTopRight, errorTopRight } = useToast();
+  const user = useUserInfo((state: any) => state.initialState);
   const [inputForm, setInputForm] = useState<TablesInsert<'used_item'>>({
     title: '',
     address: '',
@@ -31,7 +33,7 @@ const CreateForm = () => {
     place_name: '',
     price: 0,
     sold_out: false,
-    user_id: ''
+    user_id: user
   });
 
   async function dropImage(e: DragEvent<HTMLLabelElement>) {
