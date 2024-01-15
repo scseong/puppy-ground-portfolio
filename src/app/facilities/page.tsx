@@ -18,6 +18,7 @@ import { MdMyLocation } from 'react-icons/md';
 import { GiSittingDog } from 'react-icons/gi';
 import { useToast } from '@/hooks/useToast';
 import NearFacilities from '../_components/facilities/NearFacilities';
+import { useFacilitiesQuery } from '@/hooks/useFacilitiesQuery';
 
 const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_KEY}&libraries=services&autoload=false`;
 
@@ -27,29 +28,19 @@ const Facilities = () => {
     longitude: 126.570667
   });
 
-  // TODO: 기본값으로 보여줄 위치 넣어야 함 {sw: [11,22], ne: [22,33]}
-  // TODO: any 타입 지우기
   // TODO: 컴포넌트화
-  // TODO: 쿼리 불러오는거 커스텀훅 만들기
-  const [coordinate, setCoordinate] = useState<{ sw: number[]; ne: number[] }>();
+  // TODO: 현재위치 마커 수정하기
+  const [coordinate, setCoordinate] = useState<{ sw: number[]; ne: number[] }>({
+    sw: [33.44653220300056, 126.56202403813722],
+    ne: [33.45501290255946, 126.57927700861282]
+  });
   const [activeMarkerId, setActiveMarkerId] = useState<number | null>(null);
   const [currentLocationMarker, setCurrentLocationMarker] = useState<boolean>(false);
-  const { data: facilitiesData } = useQuery({
-    queryKey: ['facilitiesList'],
-    queryFn: fetchFacilities
-  });
-  // map 이동 debouncing을 위한 timer 생성
-  // https://velog.io/@sanghyeon/React-useRef
-  const timer = useRef<number | null>(null);
-
-  const { data: facilitiesDataByCorrdinate } = useQuery({
-    queryKey: ['facilitiesList', coordinate?.sw, coordinate?.ne],
-    queryFn: () => fetchFacilitiesByCorrdinate(coordinate)
-  });
-
-  console.log('데이터', facilitiesData);
-
+  const { facilitiesData } = useFacilitiesQuery();
   const { warnTopCenter } = useToast();
+
+  // map 이동 debouncing을 위한 timer 생성
+  const timer = useRef<number | null>(null);
 
   const currentButtonHandler = () => {
     if ('geolocation' in navigator) {
@@ -70,21 +61,21 @@ const Facilities = () => {
     }
   };
 
+  // 장소이름 클릭 시 해당 마커로 이동
   const markerFocusHandler = ({ latitude, longitude }: { latitude: number; longitude: number }) => {
     setCurrentLocation({
       latitude,
       longitude
     });
-    console.log('🚀 ~ markerFocusHandler ~ latitude:', latitude);
   };
 
   const markerClickHandler = () => {
     setActiveMarkerId(null);
   };
 
-  useEffect(() => {
-    console.log('🚀 ~ Facilities ~ coordinate:', coordinate);
-  }, [coordinate]);
+  // useEffect(() => {
+  //   console.log('🚀 ~ Facilities ~ coordinate:', coordinate);
+  // }, [coordinate]);
 
   // 현재위치를 시작점으로 만들기
   useEffect(() => {
@@ -104,6 +95,7 @@ const Facilities = () => {
       );
     }
   }, []);
+
   // onBoundsChanged시 화면 이동 할때마다 데이터를 계속 받아와서 느려짐 -> 디바운싱 이용
   return (
     <div className={style.mapContainer}>
@@ -167,8 +159,8 @@ const Facilities = () => {
                         </div>
                       </div>
                       <div className={style.placeContent}>
-                        {/* <p className={style.address}>{place.address}</p> */}
-                        {/* <div className={style.placeOpen}>
+                        {/* <p className={style.address}>{place.address}</p>
+                        <div className={style.placeOpen}>
                           <p>휴무: {place.holiday}</p>
                           <p>영업시간: {place.open_time}</p>
                         </div> */}
@@ -192,15 +184,20 @@ const Facilities = () => {
           {currentLocationMarker && (
             <MapMarker
               position={{ lat: currentLocation.latitude, lng: currentLocation.longitude }}
+              image={{
+                // 마커이미지의 주소
+                src: 'https://i.ibb.co/DYzyv2q/pngegg.png',
+                size: {
+                  width: 20,
+                  height: 20
+                }
+              }}
             />
           )}
           <MapTypeControl position={'TOPRIGHT'} />
           <ZoomControl position={'RIGHT'} />
         </Map>
-        <NearFacilities
-          markerFocusHandler={markerFocusHandler}
-          facilitiesDataByCorrdinate={facilitiesDataByCorrdinate}
-        />
+        <NearFacilities markerFocusHandler={markerFocusHandler} coordinate={coordinate} />
         <button className={style.currentLocation} onClick={currentButtonHandler}>
           <MdMyLocation />
         </button>

@@ -8,16 +8,19 @@ import { RiCalendarCloseFill } from 'react-icons/ri';
 import { FaRegClock } from 'react-icons/fa';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 import { TbCategory } from 'react-icons/tb';
+import { useFacilitiesQuery } from '@/hooks/useFacilitiesQuery';
 
-const NearFacilities = (props: any) => {
+type NearFacilitiesProps = {
+  markerFocusHandler: ({ latitude, longitude }: { latitude: number; longitude: number }) => void;
+  coordinate: { sw: number[]; ne: number[] };
+};
+const NearFacilities: React.FC<NearFacilitiesProps> = ({ markerFocusHandler, coordinate }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [searchPlace, setSearchPlace] = useState('');
   const [showingData, setShowingData] = useState<Tables<'facilities'>[]>([]);
   const [filteredPlace, setFilteredPlace] = useState<Tables<'facilities'>[] | null>(null);
-  const { data: facilitiesData } = useQuery({
-    queryKey: ['facilitiesList'],
-    queryFn: fetchFacilities
-  });
+
+  const { facilitiesData, facilitiesDataByCorrdinate } = useFacilitiesQuery(coordinate);
 
   // 검색데이터가 변경될때마다 업데이트
   useEffect(() => {
@@ -26,8 +29,8 @@ const NearFacilities = (props: any) => {
 
   useEffect(() => {
     if (searchPlace !== '') setShowingData(filteredPlace ?? []);
-    else setShowingData(props.facilitiesDataByCorrdinate && props.facilitiesDataByCorrdinate.data);
-  }, [props.facilitiesDataByCorrdinate, filteredPlace]);
+    else setShowingData(facilitiesDataByCorrdinate ? facilitiesDataByCorrdinate?.data! : []);
+  }, [facilitiesDataByCorrdinate, filteredPlace]);
 
   const searchButtonHandler = () => {
     console.log(searchPlace.replace(/\s/g, '').toLowerCase());
@@ -38,6 +41,7 @@ const NearFacilities = (props: any) => {
       return Object.values(place).some((value) =>
         value
           .toString()
+          // 공백을 제거해주는 정규표현식
           .replace(/\s/g, '')
           .toLowerCase()
           .includes(searchPlace.replace(/\s/g, '').toLowerCase())
@@ -80,7 +84,7 @@ const NearFacilities = (props: any) => {
                   <div className={style.list}>
                     <div
                       onClick={() =>
-                        props.markerFocusHandler({
+                        markerFocusHandler({
                           latitude: list.latitude,
                           longitude: list.longitude
                         })

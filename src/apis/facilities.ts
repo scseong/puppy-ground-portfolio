@@ -8,26 +8,24 @@ export const fetchFacilities = async () => {
     .select('*')
     .returns<Tables<'facilities'>[]>();
 
-  const { data: fetchFacilitiesData, error } = fetchFacilitiesQuery;
-  return { data: fetchFacilitiesData, error };
+  const { data: facilitiesData, error } = fetchFacilitiesQuery;
+  return { data: facilitiesData, error };
 };
 
 // 현재 지도 안의 데이터만 불러오기
+// sw: 남서쪽 ne: 북동쪽
 export const fetchFacilitiesByCorrdinate = async (
   coordinate: { sw: number[]; ne: number[] } | undefined
 ) => {
-  console.log('sw', coordinate?.sw); // [ 33, 123]
-  console.log('ne', coordinate?.ne); // [ 33, 123]
-
   const fetchFacilitiesQuery = await supabase
     .from('facilities')
     .select('*')
-    .gte('latitude', coordinate?.sw[0] ?? 0) // less than equals
-    .lte('latitude', coordinate?.ne[0] ?? 0) // greater than ...
+    .gte('latitude', coordinate?.sw[0] ?? 0) // greater than equals
+    .lte('latitude', coordinate?.ne[0] ?? 0) // less than equals
     .gte('longitude', coordinate?.sw[1] ?? 0)
     .lte('longitude', coordinate?.ne[1] ?? 0)
     .returns<Tables<'facilities'>[]>();
 
-  const { data: fetchFacilitiesData, error } = fetchFacilitiesQuery;
-  return { data: fetchFacilitiesData, error };
+  const { data: facilitiesDataByCorrdinate, error } = fetchFacilitiesQuery;
+  return { data: facilitiesDataByCorrdinate, error };
 };
