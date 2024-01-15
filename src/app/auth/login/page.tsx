@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styles from './page.module.scss';
+import useUserInfo from '@/hooks/useUserInfo';
 
 export type Inputs = {
   email: string;
@@ -11,6 +12,7 @@ export type Inputs = {
 };
 
 const LoginPage = () => {
+  const setUser = useUserInfo((state: any) => state.setUser);
   const {
     register,
     watch,
@@ -31,6 +33,7 @@ const LoginPage = () => {
       alert('문제가 발생했습니다. 다시 시도해주세요.');
     }
     if (emailData.user !== null) {
+      setUser(emailData.user.id);
       alert('로그인되었습니다.');
     }
   };
