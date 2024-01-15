@@ -1,0 +1,32 @@
+.wrapper {
+  position: relative;
+}
+
+.directionBtn {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  color: #aaa;
+  cursor: pointer;
+}
+
+.leftBtn {
+  left: 0;
+}
+.rightBtn {
+  right: 0;
+}
+
+.indicator {
+  margin: 0 auto;
+  position: absolute;
+  left: 50%;
+  bottom: 1rem;
+  display: inline-flex;
+  transform: translateX(-50%);
+
+  svg {
+    color: #aaa;
+    cursor: pointer;
+  }
+}

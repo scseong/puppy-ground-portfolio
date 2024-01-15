@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { getCountFromTable } from '@/utils/table';
 import KakaoMap from '@/app/_components/kakaoMap/KakaoMapMarker';
 import { getformattedDate } from '@/utils/time';
+import SlideImage from '../_components/SlideImage';
 
 const getUsedGoodDetail = async (id: string) => {
   const { data, error } = await supabase
@@ -26,7 +27,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
     queryFn: () => getUsedGoodDetail(params.id)
   });
 
-  if (isLoading) return <span>LOADING.....................</span>;
+  if (isLoading) return <span>LOADING</span>;
   if (!data) return null;
 
   const {
@@ -36,6 +37,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
     content,
     price,
     profiles,
+    photo_url,
     main_category,
     sub_category,
     used_item_wish
@@ -46,7 +48,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
       <section className={styles.top}>
         <div className={styles.product}>
           <div className={styles.imageContainer}>
-            <Image src={data.photo_url[0]} width="450" height="450" alt="goods item images" />
+            <SlideImage images={photo_url} />
           </div>
           <div className={styles.details}>
             <div>
