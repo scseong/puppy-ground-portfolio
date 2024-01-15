@@ -32,6 +32,33 @@ const Header = () => {
         </Link>
       </div>
       <div className={styles.menuBox}>
+        <Link className={styles.menuItem} href="/used-goods">
+          중고거래
+        </Link>
+        <Link className={styles.menuItem} href="/stray-dogs">
+          유기견
+        </Link>
+        <Link className={styles.menuItem} href="/facilities">
+          동반시설
+        </Link>
+        <Link className={styles.menuItem} href="/mungstagram">
+          멍스타그램
+        </Link>
+        <div className={styles.menuItem}>
+          <button onClick={() => setModalIsOpen(true)}>채팅</button>
+          <Chat isOpen={isModalOpen} onClose={() => setModalIsOpen(false)} ariaHideApp={false} />
+        </div>
+        <div className={styles.menuItem}>알람</div>
+        <Link className={styles.menuItem} href="/profile/asdf">
+          마이페이지
+        </Link>
+        <Link className={styles.menuItem} href="/auth/signup">
+          회원가입
+        </Link>
+        <Link className={styles.menuItem} href="/auth/login">
+          로그인
+        </Link>
+        <div className={styles.menuItem}>로그아웃</div>
         {userInfo ? (
           <>
             <Link className={styles.menuItem} href="/used-goods">
@@ -55,7 +82,8 @@ const Header = () => {
               />
             </div>
             <div className={styles.menuItem}>알람</div>
-            <Link className={styles.menuItem} href="/profile">
+            {/* 일단 임시로 */}
+            <Link className={styles.menuItem} href="/profile/asdf">
               마이페이지
             </Link>
             <div className={styles.menuItem} onClick={signOut}>
