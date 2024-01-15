@@ -7,8 +7,18 @@ const nextConfig = {
         hostname: 'mbcnyqlazlnrnrncctns.supabase.co',
         pathname: '/**'
       }
+    ],
+    dangerouslyAllowSVG: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+        port: '',
+        pathname: '/*'
+      }
     ]
   }
 };
 
 module.exports = nextConfig;
+

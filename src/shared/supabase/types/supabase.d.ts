@@ -91,16 +91,19 @@ export interface Database {
           id: number;
           post_id: number;
           user_id: string;
+          used_item: Tables<'used_item'>;
         };
         Insert: {
           id?: number;
           post_id: number;
           user_id: string;
+          used_item?: Tables<'used_item'>;
         };
         Update: {
           id?: number;
           post_id?: number;
           user_id?: string;
+          used_item?: Tables<'used_item'>;
         };
         Relationships: [
           {
@@ -475,3 +478,4 @@ export type Enums<
   : PublicEnumNameOrOptions extends keyof Database['public']['Enums']
     ? Database['public']['Enums'][PublicEnumNameOrOptions]
     : never;
+

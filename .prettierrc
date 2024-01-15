@@ -6,5 +6,5 @@
   "printWidth": 100,
   "useTabs": false,
   "bracketSpacing": true,
-  "endOfLine": "crlf"
+  "endOfLine": "auto"
 }

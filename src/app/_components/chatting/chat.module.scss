@@ -1,0 +1,27 @@
+.chatUserNameTrue {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.chatUserNameFalse {
+}
+.chatHistory {
+  width: 150px;
+  background-color: rgb(255, 216, 222);
+  border-radius: 10px;
+  padding: 5px 10px;
+}
+.userName {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+.content {
+  font-size: 15px;
+}
+.date {
+  margin-bottom: 15px;
+  font-size: 12px;
+}
+.ChatInputSpace {
+  display: flex;
+}

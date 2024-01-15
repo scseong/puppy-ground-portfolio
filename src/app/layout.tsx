@@ -5,6 +5,8 @@ import './variables.css';
 import ReactQueryProviders from '@/utils/ReactQueryProviders';
 import Header from './_components/layout/Header';
 import Footer from './_components/layout/Footer';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,13 +18,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning={true}>
         <ReactQueryProviders>
           <Header />
           {children}
+          <ToastContainer />
           <Footer />
         </ReactQueryProviders>
       </body>
     </html>
   );
 }
+
