@@ -19,3 +19,7 @@ export const getUsedGood = async (id: number): Promise<Tables<'used_item'> | nul
 
   return data ? data[0] : null;
 };
+
+export const deleteUsedGood = async (id: number): Promise<void> => {
+  await supabase.from('used_item').delete().eq('id', id).select();
+};
