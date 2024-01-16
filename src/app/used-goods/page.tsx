@@ -21,7 +21,8 @@ const UsedGoodsList = async () => {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
     queryKey: [getUsedGooddsKey],
-    queryFn: getUsedGoods
+    queryFn: getUsedGoods,
+    staleTime: 1000
   });
   const usedGoods = queryClient.getQueryData<UsedItemsWithCategoryAndCount>([getUsedGooddsKey]);
 
