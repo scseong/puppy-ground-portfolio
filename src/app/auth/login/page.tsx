@@ -1,10 +1,11 @@
 'use client';
 import { supabase } from '@/shared/supabase/supabase';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import styles from './page.module.scss';
-import useUserInfo from '@/hooks/useUserInfo';
+import useUserInfo from '../../../../zustand/useUserInfo';
+import { useToast } from '@/hooks/useToast';
 
 export type Inputs = {
   email: string;
@@ -12,6 +13,7 @@ export type Inputs = {
 };
 
 const LoginPage = () => {
+  const { errorTopRight, successTopRight } = useToast();
   const setUser = useUserInfo((state: any) => state.setUser);
   const {
     register,
@@ -27,23 +29,16 @@ const LoginPage = () => {
       email: data.email,
       password: data.password
     });
-    console.log('로그인된 유저정보', emailData);
     if (error) {
       console.log('에러메세지', error);
-      alert('문제가 발생했습니다. 다시 시도해주세요.');
+      errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
     }
     if (emailData.user !== null) {
       setUser(emailData.user.id);
-      alert('로그인되었습니다.');
+      successTopRight({ message: '로그인되었습니다', timeout: 2000 });
       router.push('/');
     }
   };
-
-  useEffect(() => {
-    supabase.auth.onAuthStateChange((event, session) => {
-      console.log('이벤트', event, '세션', session);
-    });
-  }, []);
 
   // 구글 로그인
   const googleLoginHandler = async () => {
@@ -56,6 +51,12 @@ const LoginPage = () => {
         }
       }
     });
+
+    const { data: userData, error: userError } = await supabase.auth.getSession();
+    console.log('유저데이터', userData);
+    if (error) {
+      errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
+    }
   };
 
   // 카카오 로그인
@@ -69,11 +70,10 @@ const LoginPage = () => {
         }
       }
     });
-    if (data.url !== null) {
-      alert('로그인 되었습니다.');
+
+    if (error) {
+      errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
     }
-    console.log('카카오로그인', data);
-    console.log('카카오로그인 에러', error);
   };
 
   const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
