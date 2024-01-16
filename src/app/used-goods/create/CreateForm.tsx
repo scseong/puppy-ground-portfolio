@@ -12,14 +12,12 @@ import { v4 as uuidv4 } from 'uuid';
 import styles from './create.module.scss';
 import { useToast } from '@/hooks/useToast';
 import Swal from 'sweetalert2';
-import useUserInfo from '@/hooks/useUserInfo';
 
 const bucketName = 'used_goods';
 const MAINCATEGORY = ['대형견', '중형견', '소형견'];
 const SUBCATEGORY = ['장난감', '식품', '의류', '기타'];
 
 const CreateForm = () => {
-  const user = useUserInfo((state: any) => state.initialState);
   const [inputForm, setInputForm] = useState<TablesInsert<'used_item'>>({
     title: '',
     address: '',
@@ -32,7 +30,8 @@ const CreateForm = () => {
     place_name: '',
     price: 0,
     sold_out: false,
-    user_id: user
+    // 전역관리 수정되면 변경예정
+    user_id: 'ab9e4d3d-1cb8-4cd8-aac5-3f126b6ed5de'
   });
 
   const { warnTopRight, errorTopRight } = useToast();
