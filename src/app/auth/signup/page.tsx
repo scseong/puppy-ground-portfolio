@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styles from './page.module.scss';
+import { useToast } from '@/hooks/useToast';
+import useUserInfo from '../../../../zustand/useUserInfo';
 
 export type Inputs = {
   email: string;
@@ -14,18 +16,18 @@ export type Inputs = {
   image: any;
 };
 
-const SingUp = () => {
+const SignUp = () => {
+  const setUser = useUserInfo((state: any) => state.setUser);
+  const [previewImg, setPreviewImg] = useState<string>(
+    'https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png'
+  );
+  const { successTopRight, errorTopRight } = useToast();
   const {
     register,
     watch,
     handleSubmit,
     formState: { errors }
   } = useForm<Inputs>({ mode: 'onChange' });
-
-  const [previewImg, setPreviewImg] = useState<string>(
-    'https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png'
-  );
-  const [uploadImg, setUploadImg] = useState<File | null | string>();
   const router: AppRouterInstance = useRouter();
   const ref = useRef<React.HTMLInputTypeAttribute>();
   ref.current = watch('password');
@@ -42,7 +44,7 @@ const SingUp = () => {
   }, [image]);
 
   // 이메일 회원가입
-  const singUpOnSubmitHandler = async (data: Inputs) => {
+  const signUpOnSubmitHandler = async (data: Inputs) => {
     let imgUrl = 'https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png';
     if (data.image[0]) {
       const { data: imgData, error } = await supabase.storage
@@ -65,37 +67,28 @@ const SingUp = () => {
         }
       }
     });
-
-    console.log('data.image', data.image[0]);
-    console.log('data', loginData);
     if (error) {
-      alert('오류가 발생했습니다. 다시 시도해주세요');
+      errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
     }
     if (loginData.user !== null) {
-      alert('가입되었습니다.');
+      successTopRight({ message: '회원가입 되었습니다', timeout: 2000 });
+      setUser(loginData.user.id);
       router.push('/');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(singUpOnSubmitHandler)}>
+    <form onSubmit={handleSubmit(signUpOnSubmitHandler)}>
       <input
         placeholder="이메일을 입력하세요"
         {...register('email', { required: true, pattern: emailRegex })}
-        // value={email}
-        // onChange={idOnchangeHandler}
       />
       {errors.email?.type === 'required' && <p className={styles.validP}>이메일을 입력해주세요</p>}
       {errors.email?.type === 'pattern' && (
         <p className={styles.validP}>이메일 양식에 맞게 입력해주세요</p>
       )}
       <br />
-      <input
-        placeholder="닉네임을 입력하세요"
-        {...register('nickname', { required: true })}
-        // value={nickname}
-        // onChange={nicknameOnchangeHandler}
-      />
+      <input placeholder="닉네임을 입력하세요" {...register('nickname', { required: true })} />
       {errors.nickname?.type === 'required' && (
         <p className={styles.validP}>닉네임을 입력해주세요</p>
       )}
@@ -104,8 +97,6 @@ const SingUp = () => {
         type="password"
         placeholder="비밀번호를 입력하세요"
         {...register('password', { required: true, minLength: 8, pattern: passwordRegex })}
-        // value={password}
-        // onChange={passwordOnchangeHandler}
       />
       {errors.password?.type === 'required' && (
         <p className={styles.validP}>비밀번호를 입력해주세요</p>
@@ -145,7 +136,6 @@ const SingUp = () => {
           accept="image/*"
           id="preview"
           {...register('image')}
-          // onChange={imageOnchangeHandler}
         />
       </label>
       <br />
@@ -154,4 +144,4 @@ const SingUp = () => {
   );
 };
 
-export default SingUp;
+export default SignUp;
