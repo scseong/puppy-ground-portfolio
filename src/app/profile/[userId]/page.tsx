@@ -1,6 +1,6 @@
 'use client';
 
-import { getProfile, updateUserProfile } from '@/apis/profile';
+import { getProfile, updateUserProfile } from '@/apis/profile/profile';
 import { supabase } from '@/shared/supabase/supabase';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
