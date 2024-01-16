@@ -23,7 +23,7 @@ const getUsedGoodDetail = async (id: string) => {
 
 const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const { isLoading, isError, data } = useQuery({
-    queryKey: ['used-item'],
+    queryKey: ['used-item', params.id],
     queryFn: () => getUsedGoodDetail(params.id)
   });
 
