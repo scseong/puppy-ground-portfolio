@@ -10,8 +10,8 @@ import useUserInfo from '@/hooks/useUserInfo';
 
 const Header = () => {
   const router = useRouter();
-  const userInfo = useUserInfo((state: any) => state.initialState);
-  const user = useUserInfo((state: any) => state.removeUser);
+  const userInfo = useUserInfo((state) => state.initialState);
+  const user = useUserInfo((state) => state.removeUser);
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     user();
@@ -21,7 +21,8 @@ const Header = () => {
       router.push('/');
     }
   };
-  const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
+
+  const [isModalOpen, setIsModalIsOpen] = useState<boolean>(false);
 
   return (
     <div className={styles.navbarBox}>

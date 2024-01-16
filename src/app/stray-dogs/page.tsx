@@ -3,43 +3,72 @@
 import { getStrayList } from '@/apis/stray';
 import style from './page.module.scss';
 import { useQuery } from '@tanstack/react-query';
+import Image from 'next/image';
+import { FaMapMarkerAlt } from 'react-icons/fa';
+import { FaCalendarDays } from 'react-icons/fa6';
+import { PiGenderIntersexFill } from 'react-icons/pi';
+import { FaDog } from 'react-icons/fa6';
 
 const StrayDogs = () => {
-  const { isLoading, isError, data } = useQuery({
+  const {
+    isLoading,
+    isError,
+    data: strayList
+  } = useQuery<StrayList[]>({
     queryKey: ['strayList'],
-    queryFn: getStrayList
-    // refetchOnWindowFocus: false,
-    // staleTime: 3000
+    queryFn: getStrayList,
+    refetchOnWindowFocus: false,
+    staleTime: 3000
   });
-  console.log('🚀 ~ StrayDogs ~ data:', data);
+  console.log('🚀 ~ StrayDogs ~ data:', strayList);
 
   return (
     <div className={style.container}>
       <div className={style.filterWrap}>필터</div>
       <div className={style.gridContainer}>
-        <div className={style.listContainer}>
-          <div className={style.listCard}>
-            <div className={style.image}>이미지</div>
-            <div className={style.explanationWrap}>
-              <div className={style.explanationColumn}>
-                <p className={style.title}>공고기간</p>
-                <p>0000.00.00-00.00</p>
-              </div>
-              <div className={style.explanationColumn}>
-                <p className={style.title}>견종</p>
-                <p>포메라니언</p>
-              </div>
-              <div className={style.explanationColumn}>
-                <p className={style.title}>성별</p>
-                <p>암컷</p>
-              </div>
-              <div className={style.explanationColumn}>
-                <p className={style.title}>발견장소</p>
-                <p>경기도 의정부 000</p>
+        {strayList?.map((list, index) => {
+          return (
+            <div key={index} className={style.listContainer}>
+              <div className={style.listCard}>
+                <Image
+                  src={list.popfile}
+                  alt="dog-image"
+                  className={style.image}
+                  width={250}
+                  height={250}
+                />
+                <div className={style.explanationWrap}>
+                  <div className={style.titleColumn}>
+                    <p className={style.title}>
+                      <FaCalendarDays />
+                      &nbsp;공고기간
+                    </p>
+                    <p className={style.title}>
+                      <FaDog />
+                      &nbsp;견종
+                    </p>
+                    <p className={style.title}>
+                      <PiGenderIntersexFill />
+                      &nbsp;성별
+                    </p>
+                    <p className={style.title}>
+                      <FaMapMarkerAlt />
+                      &nbsp;발견장소
+                    </p>
+                  </div>
+                  <div className={style.contentColumn}>
+                    <p>
+                      {list.noticeSdt} - {list.noticeEdt}
+                    </p>
+                    <p>{list.kindCd.slice(3)}</p>
+                    <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
+                    <p>{list.happenPlace}</p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          );
+        })}
       </div>
     </div>
   );
