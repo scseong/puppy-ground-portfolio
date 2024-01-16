@@ -64,7 +64,6 @@ const KakaoMap = () => {
   return (
     <div className={style['container']}>
       <div id="map" className={style['map-wrap']}>
-        <Script src={KAKAO_SDK_URL} strategy="beforeInteractive" />
         <Map
           center={{ lat: currentLocation.latitude, lng: currentLocation.longitude }}
           level={3}
@@ -102,4 +101,3 @@ const KakaoMap = () => {
 };
 
 export default KakaoMap;
-
