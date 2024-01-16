@@ -1,7 +1,6 @@
 'use client';
 
 import { getProfile, updateUserProfile } from '@/apis/profile';
-import useUserInfo from '@/hooks/useUserInfo';
 import { supabase } from '@/shared/supabase/supabase';
 import { Tables } from '@/shared/supabase/types/supabase';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -9,6 +8,7 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import styles from './page.module.scss';
 import { useToast } from '@/hooks/useToast';
+import useUserInfo from '../../../../zustand/useUserInfo';
 
 const Profile = () => {
   const {
@@ -29,7 +29,7 @@ const Profile = () => {
       successTopRight({ message: '프로필이 업데이트 되었습니다!', timeout: 2000 });
     }
   });
-  const { initialState } = useUserInfo();
+  const initialState = useUserInfo((state: any) => state.initialState);
   const [editProfile, setEditProfile] = useState(false);
   const [userProfile, setUserProfile] = useState<Tables<'profiles'>>();
   const [profileImg, setProfileImg] = useState(userProfile?.avatar_url);
@@ -76,7 +76,7 @@ const Profile = () => {
 
       updateUserNameMutation.mutate({
         user_name: editUserName,
-        id: initialState.id!,
+        id: initialState,
         avatar_url: uploadUrl
       });
     } catch (error) {
@@ -90,10 +90,10 @@ const Profile = () => {
       const { data: profile, error } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', initialState.id!)
+        .eq('id', initialState)
         .returns<Tables<'profiles'>>()
         .single();
-      console.log(profile);
+      console.log(error);
       setUserProfile(profile!);
     };
 

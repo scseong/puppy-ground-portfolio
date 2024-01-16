@@ -5,3 +5,7 @@ import 'moment/locale/ko';
 export const getStringFromNow = (timestamp: string) => {
   return moment(timestamp).fromNow();
 };
+
+export const getformattedDate = (timestamp: string, format: string) => {
+  return moment(timestamp).format(format);
+};
