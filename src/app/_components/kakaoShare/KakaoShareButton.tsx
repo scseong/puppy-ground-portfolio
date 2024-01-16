@@ -10,8 +10,26 @@ declare global {
 
 const KakaoShareButton = () => {
   const clickShare = () => {
-    window.Kakao.Link.sendScrap({
-      requestUrl: location.href
+    window.Kakao.Link.sendDefault({
+      objectType: 'feed',
+      content: {
+        title: 'Puppy Ground',
+        description: '반려견 중고 물품 거래 및 정보공유 플랫폼',
+        imageUrl: 'https://dimg.donga.com/wps/NEWS/IMAGE/2022/01/28/111500268.2.jpg',
+        link: {
+          mobileWebUrl: location.href,
+          webUrl: location.href
+        }
+      },
+      buttons: [
+        {
+          title: '자세히보기',
+          link: {
+            mobileWebUrl: location.href,
+            webUrl: location.href
+          }
+        }
+      ]
     });
   };
 
