@@ -4,21 +4,42 @@ import styles from './header.module.scss';
 import Image from 'next/image';
 import { supabase } from '@/shared/supabase/supabase';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Chat from '../chatting/Chat';
-import useUserInfo from '@/hooks/useUserInfo';
+import useUserInfo from '../../../../zustand/useUserInfo';
+import { useToast } from '@/hooks/useToast';
 
 const Header = () => {
   const router = useRouter();
   const userInfo = useUserInfo((state: any) => state.initialState);
   const user = useUserInfo((state: any) => state.removeUser);
+  const setUser = useUserInfo((state: any) => state.setUser);
+  const { errorTopRight, successTopRight } = useToast();
+
+  useEffect(() => {
+    supabase.auth.onAuthStateChange((event, session) => {
+      console.log('123', event, session);
+      setUser(session?.user);
+      // if (event !== 'SIGNED_OUT' && session === null) {
+      //   Swal.fire({
+      //     icon: 'error',
+      //     text: '로그인을 다시 시도해주세요'
+      //   });
+      //   router.push('/auth/login');
+      // }
+    });
+  }, [userInfo]);
+
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     user();
     console.log('로그아웃 에러', error);
     if (!error) {
-      alert('로그아웃 되었습니다.');
+      successTopRight({ message: '로그아웃 되었습니다.' });
       router.push('/');
+    }
+    if (error) {
+      errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
     }
   };
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
