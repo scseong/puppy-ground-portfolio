@@ -1,0 +1,22 @@
+.imgLabel {
+  display: flex;
+  flex-direction: column;
+  & > img {
+    border-radius: 50%;
+  }
+
+  & > label {
+    border: 1px solid #0ac4b9;
+    border-radius: 5px;
+    width: 80px;
+    text-align: center;
+    padding: 2px;
+
+    transition: all 0.4s;
+
+    &:hover {
+      background-color: #0ac4b9;
+      color: white;
+    }
+  }
+}
