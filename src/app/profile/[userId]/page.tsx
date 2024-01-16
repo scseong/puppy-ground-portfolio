@@ -37,7 +37,7 @@ const Profile = () => {
   const [imgFile, setImgFile] = useState<File>();
   const [editUserName, setEditUserName] = useState('');
 
-  const { successTopRight, errorTopRight } = useToast();
+  const { successTopRight, errorTopRight, warnTopRight } = useToast();
 
   const onChangeImg = (e: React.ChangeEvent<HTMLInputElement | HTMLFormElement>) => {
     if (e.target.files[0]) {
@@ -59,10 +59,16 @@ const Profile = () => {
     setEditUserName(e.target.value);
 
   const updateProfile = async () => {
+    if (editUserName.length > 8)
+      return warnTopRight({ message: '닉네임은 8자 이하로 입력해주세요!', timeout: 2000 });
+
+    if (editUserName === '')
+      return warnTopRight({ message: '닉네임을 입력해주세요!', timeout: 2000 });
+
     let uploadUrl = profileImg!;
     try {
       if (imgFile) {
-        const { data: uploadData, error: uploadError } = await supabase.storage
+        const { data: uploadData, error } = await supabase.storage
           .from('profile_avatar')
           .upload(`profile/${Date.now()}_${Math.floor(Math.random() * 1000)}.png`, imgFile, {
             contentType: 'image/png'
