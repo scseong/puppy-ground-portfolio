@@ -1,6 +1,4 @@
-import { fetchFacilities } from '@/apis/facilities';
 import style from './nearFacilities.module.scss';
-import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { Tables } from '@/shared/supabase/types/supabase';
 import { FaMapMarkerAlt } from 'react-icons/fa';
@@ -15,7 +13,7 @@ type NearFacilitiesProps = {
   coordinate: { sw: number[]; ne: number[] };
 };
 const NearFacilities: React.FC<NearFacilitiesProps> = ({ markerFocusHandler, coordinate }) => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [searchPlace, setSearchPlace] = useState('');
   const [showingData, setShowingData] = useState<Tables<'facilities'>[]>([]);
   const [filteredPlace, setFilteredPlace] = useState<Tables<'facilities'>[] | null>(null);

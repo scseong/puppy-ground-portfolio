@@ -1,6 +1,5 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import style from './page.module.scss';
 import Script from 'next/script';
 import { useEffect, useRef, useState } from 'react';
@@ -11,7 +10,6 @@ import {
   MapTypeControl,
   ZoomControl
 } from 'react-kakao-maps-sdk';
-import { fetchFacilitiesByCorrdinate, fetchFacilities } from '@/apis/facilities';
 import { IoIosCloseCircle } from 'react-icons/io';
 import { RiHomeSmile2Fill } from 'react-icons/ri';
 import { MdMyLocation } from 'react-icons/md';
@@ -28,7 +26,7 @@ const Facilities = () => {
     longitude: 126.570667
   });
 
-  // TODO: 컴포넌트화
+  // TODO: 컴포넌트화 시키기
   const [coordinate, setCoordinate] = useState<{ sw: number[]; ne: number[] }>({
     sw: [33.44653220300056, 126.56202403813722],
     ne: [33.45501290255946, 126.57927700861282]
@@ -154,11 +152,6 @@ const Facilities = () => {
                         </div>
                       </div>
                       <div className={style.placeContent}>
-                        {/* <p className={style.address}>{place.address}</p>
-                        <div className={style.placeOpen}>
-                          <p>휴무: {place.holiday}</p>
-                          <p>영업시간: {place.open_time}</p>
-                        </div> */}
                         <p>
                           <GiSittingDog />
                           &nbsp;{place.explanation}
