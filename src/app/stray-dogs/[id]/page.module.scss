@@ -1,0 +1,12 @@
+.container {
+  width: 1200px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: auto;
+}
+
+.explanationWrap {
+  display: flex;
+}
