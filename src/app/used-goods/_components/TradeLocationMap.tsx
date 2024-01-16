@@ -3,10 +3,7 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk';
 const TradeLocationMap = ({ lat, lng }: { lat: number; lng: number }) => {
   return (
     <Map
-      center={{
-        lat: 37.464567,
-        lng: 127.538327
-      }}
+      center={{ lat, lng }}
       style={{
         width: '100%',
         height: '450px',
