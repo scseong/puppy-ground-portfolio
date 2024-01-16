@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { set } from 'react-hook-form';
 import { create } from 'zustand';
 
 export type User = {
@@ -31,7 +29,7 @@ export type UserInfoType = {
 //   : '';
 const initialState = null;
 
-// console.log('1234', initialState);
+console.log('1234', initialState);
 const useUserInfo = create((set) => ({
   initialState,
   setUser: (userId: User) => set(() => ({ initialState: userId?.id })),
