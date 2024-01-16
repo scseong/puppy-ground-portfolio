@@ -78,7 +78,7 @@ const Header = () => {
             </div>
             <div className={styles.menuItem}>알람</div>
             {/* 일단 임시로 */}
-            <Link className={styles.menuItem} href={`/profile/`}>
+            <Link className={styles.menuItem} href={`/profile/${initialState}`}>
               마이페이지
             </Link>
             <div className={styles.menuItem} onClick={signOut}>

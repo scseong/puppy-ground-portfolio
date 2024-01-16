@@ -2,10 +2,9 @@
 
 import { getProfile, updateUserProfile } from '@/apis/profile';
 import { supabase } from '@/shared/supabase/supabase';
-import { Tables } from '@/shared/supabase/types/supabase';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import styles from './page.module.scss';
 import { useToast } from '@/hooks/useToast';
 import useUserInfo from '../../../../zustand/useUserInfo';
@@ -20,6 +19,7 @@ const Profile = () => {
     queryFn: getProfile,
     refetchOnWindowFocus: false
   });
+
   const queryClient = useQueryClient();
   const updateUserNameMutation = useMutation({
     mutationFn: updateUserProfile,
@@ -29,21 +29,21 @@ const Profile = () => {
       successTopRight({ message: '프로필이 업데이트 되었습니다!', timeout: 2000 });
     }
   });
-  const initialState = useUserInfo((state: any) => state.initialState);
+  const store = useUserInfo((state: any) => state.initialState);
+  const profile = getProfileData?.find((pro) => pro.id === store);
+
   const [editProfile, setEditProfile] = useState(false);
-  const [userProfile, setUserProfile] = useState<Tables<'profiles'>>();
-  const [profileImg, setProfileImg] = useState(userProfile?.avatar_url);
+  const [profileImg, setProfileImg] = useState(profile?.avatar_url);
   const [imgFile, setImgFile] = useState<File>();
   const [editUserName, setEditUserName] = useState('');
 
-  const fileInput = useRef<HTMLInputElement>(null);
   const { successTopRight, errorTopRight } = useToast();
 
   const onChangeImg = (e: React.ChangeEvent<HTMLInputElement | HTMLFormElement>) => {
     if (e.target.files[0]) {
       setImgFile(e.target!.files[0]);
     } else {
-      setProfileImg(userProfile?.avatar_url);
+      setProfileImg(profile?.avatar_url!);
       return;
     }
     const reader = new FileReader();
@@ -76,7 +76,7 @@ const Profile = () => {
 
       updateUserNameMutation.mutate({
         user_name: editUserName,
-        id: initialState,
+        id: store,
         avatar_url: uploadUrl
       });
     } catch (error) {
@@ -84,24 +84,9 @@ const Profile = () => {
     }
   };
 
-  useEffect(() => {
-    //user 정보 가져오기
-    const getProfile = async () => {
-      const { data: profile, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', initialState)
-        .returns<Tables<'profiles'>>()
-        .single();
-      console.log(error);
-      setUserProfile(profile!);
-    };
-
-    getProfile();
-  }, []);
-
   if (isLoading) return <div>로딩 중입니다...</div>;
   if (isError) return <div>오류가 발생했습니다...</div>;
+
   return (
     <>
       {editProfile ? (
@@ -112,7 +97,7 @@ const Profile = () => {
                 <Image
                   width={100}
                   height={100}
-                  src={profileImg! || userProfile?.avatar_url!}
+                  src={profileImg! || profile?.avatar_url!}
                   alt="유저 프로필"
                 />
                 <label htmlFor="input-file">사진 변경</label>
@@ -145,12 +130,9 @@ const Profile = () => {
               width={100}
               height={100}
               style={{ border: 'none' }}
-              src={userProfile?.avatar_url || ''}
-              onClick={() => {
-                if (editProfile) fileInput.current!.click();
-              }}
+              src={profile?.avatar_url || ''}
             />
-            <p>{userProfile?.user_name}</p>
+            <p>{profile?.user_name}</p>
             <button onClick={() => setEditProfile((state) => !state)}>프로필 수정</button>
             <div>중고거래</div>
             <div>멍스타그램</div>

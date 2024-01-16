@@ -6,8 +6,7 @@ export const getProfile = async () => {
   const { data: userProfile, error } = await supabase
     .from('profiles')
     .select('*')
-    .eq('id', '')
-    .returns<Tables<'profiles'>>();
+    .returns<Tables<'profiles'>[]>();
 
   return userProfile;
 };
