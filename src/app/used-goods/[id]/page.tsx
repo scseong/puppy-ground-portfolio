@@ -5,15 +5,15 @@ import styles from './page.module.scss';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import { getCountFromTable } from '@/utils/table';
-import KakaoMap from '@/app/_components/kakaoMap/KakaoMapMarker';
 import { getformattedDate } from '@/utils/time';
-import SlideImage from '../_components/SlideImage';
+import { SlideImage, TradeLocationMap } from '../_components';
+import { FaMapMarkerAlt } from 'react-icons/fa';
 
 const getUsedGoodDetail = async (id: string) => {
   const { data, error } = await supabase
     .from('used_item')
     .select(
-      `id, created_at, title, content, price, address, sold_out, photo_url, profiles ( * ), main_category ( name ), sub_category ( name ), used_item_wish ( count ), chat_list ( count )`
+      `*, profiles ( * ), main_category ( name ), sub_category ( name ), used_item_wish ( count ), chat_list ( count )`
     )
     .eq('id', id)
     .single();
@@ -31,13 +31,15 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   if (!data) return null;
 
   const {
-    id,
     created_at,
     title,
     content,
     price,
     profiles,
     photo_url,
+    longitude,
+    latitude,
+    place_name,
     main_category,
     sub_category,
     used_item_wish
@@ -52,13 +54,10 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
           </div>
           <div className={styles.details}>
             <div>
-              {/* Info */}
               <div className={styles.info}>
                 <h3 title={title}>{title}</h3>
                 <span className={styles.price}>{price.toLocaleString('ko-KR')}원</span>
               </div>
-
-              {/* Writer */}
               <div className={styles.profile}>
                 {/* TODO: change to avatar_url */}
                 <Image
@@ -69,8 +68,6 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                 />
                 <span>{profiles?.user_name}</span>
               </div>
-
-              {/* Category */}
               <div className={styles.moreInfo}>
                 <time>{getformattedDate(created_at, 'YY년 YY월 DD일')}</time>
                 <div>
@@ -79,7 +76,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                 </div>
               </div>
             </div>
-            {/* Buttons */}
+            {/* TODO: 채팅, 찜 기능 동작 */}
             <div className={styles.btns}>
               <button>채팅하기</button>
               <button>찜 {getCountFromTable(used_item_wish)}</button>
@@ -87,7 +84,6 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
           </div>
         </div>
       </section>
-
       <section className={styles.mid}>
         <div className={styles.header}>
           <h3>제품 상세 설명</h3>
@@ -96,12 +92,18 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
           <p>{content}</p>
         </div>
       </section>
-
       <section className={styles.bottom}>
         <div className={styles.header}>
           <h3>거래 희망 장소</h3>
+          <p>
+            <FaMapMarkerAlt />
+            {place_name}
+          </p>
         </div>
-        <div className={styles.content}>{/* TODO: 장소  */}</div>
+        <div className={styles.content}>
+          <TradeLocationMap lat={latitude} lng={longitude} />
+        </div>
+        {/* TODO: SNS 공유, 링크 복사 */}
       </section>
     </main>
   );
