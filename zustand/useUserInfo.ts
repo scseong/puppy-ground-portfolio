@@ -33,7 +33,7 @@ console.log('1234', initialState);
 const useUserInfo = create((set) => ({
   initialState,
   setUser: (userId: User) => set(() => ({ initialState: userId?.id })),
-  removeUser: () => set(() => ({ initialState: '' }))
+  removeUser: () => set(() => ({ initialState: null }))
 }));
 //   const store = create((set) => ({
 //     initialState,

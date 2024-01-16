@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { supabase } from '@/shared/supabase/supabase';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import Swal from 'sweetalert2';
 import Chat from '../chatting/Chat';
 import useUserInfo from '../../../../zustand/useUserInfo';
 import { useToast } from '@/hooks/useToast';

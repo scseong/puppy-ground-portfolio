@@ -72,7 +72,7 @@ const SignUp = () => {
     }
     if (loginData.user !== null) {
       successTopRight({ message: '회원가입 되었습니다', timeout: 2000 });
-      setUser(loginData.user.id);
+      setUser(loginData.user);
       router.push('/');
     }
   };
