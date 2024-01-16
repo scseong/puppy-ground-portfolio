@@ -1,4 +1,3 @@
-import { set } from 'react-hook-form';
 import { create } from 'zustand';
 
 export type User = {
@@ -7,18 +6,20 @@ export type User = {
 
 export type UserInfoType = {
   initialState: User;
-  serUser: (userInfo: User) => void;
+  // serUser: (userInfo: User) => void;
   removeUser: () => void;
 };
 
-const initialState: User = localStorage.getItem('sb-mbcnyqlazlnrnrncctns-auth-token')
-  ? JSON.parse(localStorage.getItem('sb-mbcnyqlazlnrnrncctns-auth-token')!).user.id
-  : '';
+const initialState: User = {
+  id: localStorage.getItem('sb-mbcnyqlazlnrnrncctns-auth-token')
+    ? JSON.parse(localStorage.getItem('sb-mbcnyqlazlnrnrncctns-auth-token')!).user.id
+    : ''
+};
 
-const useUserInfo = create((set) => ({
+const useUserInfo = create<UserInfoType>()((set) => ({
   initialState,
-  setUser: (userId: User) => set(() => ({ initialState: userId })),
-  removeUser: () => set(() => ({ initialState: '' }))
+  setUser: (userInfo: string) => set(() => ({ initialState: { id: userInfo } })),
+  removeUser: () => set(() => ({ initialState: undefined }))
 }));
 
 export default useUserInfo;
