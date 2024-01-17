@@ -8,11 +8,13 @@ export type User = {
     display_name: string;
   };
 };
+
 export type UserInfoType = {
   initialState: User | null;
-  serUser: (userInfo: User) => void;
+  seUser: (userInfo: User) => void;
   removeUser: () => void;
 };
+
 // let initialState: User = { id:'' };
 // const useUserInfo = () => {
 //   useEffect(() => {
@@ -24,17 +26,21 @@ export type UserInfoType = {
 //       }
 //     }
 //   }, []);
+
 // const initialState: User = localStorage.getItem('sb-mbcnyqlazlnrnrncctns-auth-toke'')
 //   ? JSON.parse(localStorage.getItem('sb-mbcnyqlazlnrnrncctns-auth-toke')!).user.id
 //   : '';
+
 const initialState = null;
 
 console.log('1234', initialState);
+
 const useUserInfo = create((set) => ({
   initialState,
-  setUser: (userId: User) => set(() => ({ initialState: userId?.id })),
+  setUser: (userId: User | null) => set(() => ({ initialState: userId?.id })),
   removeUser: () => set(() => ({ initialState: null }))
 }));
+
 //   const store = create((set) => ({
 //     initialState,
 //     setUser: (userId: User) => set(() => ({ initialState: userId })),
@@ -42,4 +48,5 @@ const useUserInfo = create((set) => ({
 //   }));
 //   return store.getState();
 // };
+
 export default useUserInfo;
