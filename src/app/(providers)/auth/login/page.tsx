@@ -1,11 +1,10 @@
 'use client';
 import { supabase } from '@/shared/supabase/supabase';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import styles from './page.module.scss';
-import useUserInfo from '../../../../zustand/useUserInfo';
 import { useToast } from '@/hooks/useToast';
+import useAuth from '@/hooks/useAuth';
 
 export type Inputs = {
   email: string;
@@ -14,7 +13,7 @@ export type Inputs = {
 
 const LoginPage = () => {
   const { errorTopRight, successTopRight } = useToast();
-  const setUser = useUserInfo((state: any) => state.setUser);
+  const setUser = useAuth((state) => state.setUser);
   const {
     register,
     watch,
@@ -34,7 +33,7 @@ const LoginPage = () => {
       errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
     }
     if (emailData.user !== null) {
-      setUser(emailData.user.id);
+      setUser(emailData.user);
       successTopRight({ message: '로그인되었습니다', timeout: 2000 });
       router.push('/');
     }
@@ -52,8 +51,9 @@ const LoginPage = () => {
       }
     });
 
-    const { data: userData, error: userError } = await supabase.auth.getSession();
+    const { data: userData, error: userError } = await supabase.auth.getUser();
     console.log('유저데이터', userData);
+    console.log('구글', data);
     if (error) {
       errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
     }
@@ -70,7 +70,7 @@ const LoginPage = () => {
         }
       }
     });
-
+    console.log('카카오', data);
     if (error) {
       errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
     }
@@ -118,6 +118,17 @@ const LoginPage = () => {
       </form>
       <button onClick={googleLoginHandler}> 구글 로그인 </button>
       <button onClick={kakaoLoginHandler}> 카카오 로그인 </button>
+      <p>
+        Puppy Ground가 처음이신가요?
+        <span
+          className={styles.moveLogin}
+          onClick={() => {
+            router.push('/auth/signup');
+          }}
+        >
+          회원가입 하러가기
+        </span>
+      </p>
     </div>
   );
 };
