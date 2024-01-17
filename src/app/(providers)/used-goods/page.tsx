@@ -1,40 +1,62 @@
+import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
+import { UsedGoodsList, UsedGoodsFilter } from './_components';
 import { supabase } from '@/shared/supabase/supabase';
-import { QueryClient } from '@tanstack/react-query';
-import { QueryData } from '@supabase/supabase-js';
-import { UsedGoodsItem, UsedGoodsListFilter } from './_components';
-import styled from './page.module.scss';
 
-const usedItemsWithCategoryAndCountQuery = supabase
-  .from('used_item')
-  .select(
-    `id, created_at, title, price, address, sold_out, photo_url, main_category (name), sub_category (name) , used_item_wish ( count ), chat_list ( count )`
-  );
-export type UsedItemsWithCategoryAndCount = QueryData<typeof usedItemsWithCategoryAndCountQuery>;
-export const getUsedGooddsKey = 'used-goods';
+export const revalidate = 0;
 
 export const getUsedGoods = async () => {
-  const { data } = await usedItemsWithCategoryAndCountQuery;
-  return data ?? [];
+  const { data } = await supabase
+    .from('used_item')
+    .select(
+      `id, created_at, title, price, address, sold_out, photo_url, used_item_wish ( count ), chat_list ( count )`
+    );
+  return data;
 };
 
-const UsedGoodsList = async () => {
+export const getUsedGoodsByCategory = async (main: string, sub: string) => {
+  const { data } = await supabase
+    .from('used_item')
+    .select(
+      `id, created_at, title, price, address, sold_out, photo_url, used_item_wish ( count ), chat_list ( count )`
+    )
+    .eq('main_category_id', main)
+    .eq('sub_category_id', sub);
+  return data;
+};
+
+// TODO: params type 지정
+// TODO: 관심사 분리
+export const getQueryKey = (params: any) => {
+  const usedGoodsKeys = {
+    all: ['used-goods'] as const,
+    category: (params: any) => ['used-goods', { main: params.main, sub: params.sub }] as const
+  };
+  if (!Object.keys(params).length) return usedGoodsKeys.all;
+
+  return usedGoodsKeys.category(params);
+};
+export const getQueryFunction = (params: any) => {
+  if (!Object.keys(params).length) return getUsedGoods;
+  return () => getUsedGoodsByCategory(params.main, params.sub);
+};
+
+const UsedGoodsContainer = async ({
+  searchParams
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) => {
+  const [queryKey, queryFn] = [getQueryKey(searchParams), getQueryFunction(searchParams)];
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: [getUsedGooddsKey],
-    queryFn: getUsedGoods,
-    staleTime: 1000
-  });
-  const usedGoods = queryClient.getQueryData<UsedItemsWithCategoryAndCount>([getUsedGooddsKey]);
+  await queryClient.prefetchQuery({ queryKey, queryFn });
 
   return (
-    <div>
-      <h2 className={styled.title}>중고 물품 리스트</h2>
-      <UsedGoodsListFilter />
-      <div className={styled.goodList}>
-        {usedGoods?.map((goods) => <UsedGoodsItem key={goods.id} goods={goods} />)}
-      </div>
-    </div>
+    <>
+      <UsedGoodsFilter />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <UsedGoodsList />
+      </HydrationBoundary>
+    </>
   );
 };
 
-export default UsedGoodsList;
+export default UsedGoodsContainer;

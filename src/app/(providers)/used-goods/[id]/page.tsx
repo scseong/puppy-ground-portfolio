@@ -8,6 +8,8 @@ import { getCountFromTable } from '@/utils/table';
 import { getformattedDate } from '@/utils/time';
 import { SlideImage, TradeLocationMap } from '../_components';
 import { FaMapMarkerAlt } from 'react-icons/fa';
+import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
+import ClipBoardButton from '@/app/_components/shareButton/ClipBoardButton';
 
 const getUsedGoodDetail = async (id: string) => {
   const { data, error } = await supabase
@@ -23,7 +25,7 @@ const getUsedGoodDetail = async (id: string) => {
 
 const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const { isLoading, isError, data } = useQuery({
-    queryKey: ['used-item'],
+    queryKey: ['used-item', params.id],
     queryFn: () => getUsedGoodDetail(params.id)
   });
 
@@ -104,6 +106,8 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
           <TradeLocationMap lat={latitude} lng={longitude} />
         </div>
         {/* TODO: SNS 공유, 링크 복사 */}
+        <KakaoShareButton />
+        <ClipBoardButton />
       </section>
     </main>
   );
