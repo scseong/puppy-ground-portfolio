@@ -10,10 +10,10 @@ import { FaMapMarkerAlt } from 'react-icons/fa';
 import { FaCalendarDays } from 'react-icons/fa6';
 import { PiGenderIntersexFill } from 'react-icons/pi';
 import { FaDog } from 'react-icons/fa6';
-import Loading from '../_components/layout/loading/Loading';
 import Link from 'next/link';
 import { useState } from 'react';
-import regionList from '../../data/regionList.json';
+import Loading from '@/app/_components/layout/loading/Loading';
+import regionList from '../../../data/regionList.json';
 
 const StrayDogs = () => {
   const [startDate, setStartDate] = useState<Date | null>(new Date());

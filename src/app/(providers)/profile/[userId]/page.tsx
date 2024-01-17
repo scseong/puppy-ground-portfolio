@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import styles from './page.module.scss';
 import { useToast } from '@/hooks/useToast';
-import useUserInfo from '../../../../zustand/useUserInfo';
+import useAuth from '@/hooks/useAuth';
 
 const Profile = () => {
   const {
@@ -29,8 +29,9 @@ const Profile = () => {
       successTopRight({ message: '프로필이 업데이트 되었습니다!', timeout: 2000 });
     }
   });
-  const store = useUserInfo((state: any) => state.initialState);
-  const profile = getProfileData?.find((pro) => pro.id === store);
+
+  const user = useAuth((state) => state.user);
+  const profile = getProfileData?.find((pro) => pro.id === user?.id);
 
   const [editProfile, setEditProfile] = useState(false);
   const [profileImg, setProfileImg] = useState(profile?.avatar_url);
@@ -82,7 +83,7 @@ const Profile = () => {
 
       updateUserNameMutation.mutate({
         user_name: editUserName,
-        id: store,
+        id: user?.id!,
         avatar_url: uploadUrl
       });
     } catch (error) {

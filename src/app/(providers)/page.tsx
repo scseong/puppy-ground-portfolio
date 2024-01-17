@@ -1,4 +1,3 @@
-import { supabase } from '@/shared/supabase/supabase';
 import styles from './page.module.scss';
 
 export default function Home() {

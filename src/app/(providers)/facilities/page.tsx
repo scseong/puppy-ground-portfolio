@@ -15,8 +15,8 @@ import { RiHomeSmile2Fill } from 'react-icons/ri';
 import { MdMyLocation } from 'react-icons/md';
 import { GiSittingDog } from 'react-icons/gi';
 import { useToast } from '@/hooks/useToast';
-import NearFacilities from '../_components/facilities/NearFacilities';
 import { useFacilitiesQuery } from '@/hooks/useFacilitiesQuery';
+import NearFacilities from '@/app/_components/facilities/NearFacilities';
 
 const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_KEY}&libraries=services&autoload=false`;
 
