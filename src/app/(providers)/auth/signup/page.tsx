@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styles from './page.module.scss';
 import { useToast } from '@/hooks/useToast';
-import useUserInfo from '../../../../zustand/useUserInfo';
+import useAuth from '@/hooks/useAuth';
 
 export type Inputs = {
   email: string;
@@ -17,7 +17,7 @@ export type Inputs = {
 };
 
 const SignUp = () => {
-  const setUser = useUserInfo((state: any) => state.setUser);
+  const setUser = useAuth((state) => state.setUser);
   const [previewImg, setPreviewImg] = useState<string>(
     'https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png'
   );

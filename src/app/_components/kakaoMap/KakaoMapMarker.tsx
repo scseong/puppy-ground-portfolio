@@ -3,17 +3,11 @@
 import style from './kakaoMapMarker.module.scss';
 import Script from 'next/script';
 import { Map, MapMarker, MapTypeControl, ZoomControl } from 'react-kakao-maps-sdk';
-import { useState, useEffect, useCallback } from 'react';
-
-declare global {
-  interface Window {
-    kakao: any;
-  }
-}
+import { useState, useEffect } from 'react';
 
 const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_KEY}&libraries=services&autoload=false`;
 
-const KakaoMap = () => {
+const KakaoMapMarker = () => {
   const [currentLocation, setCurrentLocation] = useState<{ latitude: number; longitude: number }>({
     latitude: 33.450701,
     longitude: 126.570667
@@ -62,8 +56,9 @@ const KakaoMap = () => {
   }, []);
 
   return (
-    <div className={style['container']}>
-      <div id="map" className={style['map-wrap']}>
+    <div className={style.container}>
+      <div id="map" className={style.mapWrap}>
+        <Script src={KAKAO_SDK_URL} strategy="beforeInteractive" />
         <Map
           center={{ lat: currentLocation.latitude, lng: currentLocation.longitude }}
           level={3}
@@ -95,9 +90,9 @@ const KakaoMap = () => {
           {position && <p>{`위도 : ${position.lat} 경도 : ${position.lng}`}</p>}
         </Map>
       </div>
-      <p className={style['search-address']}>{address || '선택하신 위치의 주소입니다'}</p>
+      <p className={style.searchAddress}>{address || '선택하신 위치의 주소입니다'}</p>
     </div>
   );
 };
 
-export default KakaoMap;
+export default KakaoMapMarker;
