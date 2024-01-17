@@ -6,15 +6,11 @@ import { supabase } from '@/shared/supabase/supabase';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Chat from '../chatting/Chat';
-import useUserInfo from '../../../zustand/useUserInfo';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
 
 const Header = () => {
   const router = useRouter();
-  const userInfo = useUserInfo((state: any) => state.initialState);
-  // const user = useUserInfo((state: any) => state.removeUser);
-  const setUser = useUserInfo((state: any) => state.setUser);
   const { errorTopRight, successTopRight } = useToast();
   const user = useAuth((state) => state.user);
 
@@ -66,7 +62,8 @@ const Header = () => {
               />
             </div>
             <div className={styles.menuItem}>알람</div>
-            <Link className={styles.menuItem} href="/profile">
+            {/* 일단 임시로 */}
+            <Link className={styles.menuItem} href={`/profile/${user.id}`}>
               마이페이지
             </Link>
             <div className={styles.menuItem} onClick={signOut}>
