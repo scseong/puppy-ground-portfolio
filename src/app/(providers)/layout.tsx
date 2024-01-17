@@ -1,11 +1,11 @@
 'use client';
 import ReactQueryProviders from '@/utils/ReactQueryProviders';
 import React, { useEffect } from 'react';
-import Header from '../_components/layout/Header';
 import { ToastContainer } from 'react-toastify';
-import Footer from '../_components/layout/Footer';
 import useAuth from '@/hooks/useAuth';
 import { supabase } from '@/shared/supabase/supabase';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Footer, Header } from '../_components/layout';
 
 function ProvidersLayout({ children }: { children: React.ReactNode }) {
   const setUser = useAuth((state) => state.setUser);
@@ -34,6 +34,7 @@ function ProvidersLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <ReactQueryProviders>
+      <ReactQueryDevtools initialIsOpen={false} />
       <Header />
       {children}
       <ToastContainer />
