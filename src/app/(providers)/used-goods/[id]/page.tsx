@@ -1,15 +1,17 @@
 'use client';
 
+import { updateUsedGood } from '@/apis/used-goods/actions';
+import ClipBoardButton from '@/app/_components/shareButton/ClipBoardButton';
+import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
 import { supabase } from '@/shared/supabase/supabase';
-import styles from './page.module.scss';
-import { useQuery } from '@tanstack/react-query';
-import Image from 'next/image';
 import { getCountFromTable } from '@/utils/table';
 import { getformattedDate } from '@/utils/time';
-import { SlideImage, TradeLocationMap } from '../_components';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import Image from 'next/image';
 import { FaMapMarkerAlt } from 'react-icons/fa';
-import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
-import ClipBoardButton from '@/app/_components/shareButton/ClipBoardButton';
+import Swal from 'sweetalert2';
+import { SlideImage, TradeLocationMap } from '../_components';
+import styles from './page.module.scss';
 
 const getUsedGoodDetail = async (id: string) => {
   const { data, error } = await supabase
@@ -24,10 +26,40 @@ const getUsedGoodDetail = async (id: string) => {
 };
 
 const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
+  const queryClient = useQueryClient();
+
   const { isLoading, isError, data } = useQuery({
     queryKey: ['used-item', params.id],
     queryFn: () => getUsedGoodDetail(params.id)
   });
+
+  const onClickUpdateSoldOut = async () => {
+    Swal.fire({
+      title: '판매완료 처리하시겠습니까?',
+      showDenyButton: true,
+      confirmButtonText: `네`,
+      denyButtonText: `아니오`
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const { error } = await updateUsedGood(Number(params.id), { sold_out: true });
+
+        if (error) {
+          Swal.fire({
+            title: '판매완료 처리에 실패했습니다.',
+            icon: 'error'
+          });
+          return;
+        }
+
+        Swal.fire({
+          title: '판매완료 처리되었습니다.',
+          icon: 'success'
+        });
+
+        queryClient.invalidateQueries({ queryKey: ['used-item', params.id] });
+      }
+    });
+  };
 
   if (isLoading) return <span>LOADING</span>;
   if (!data) return null;
@@ -44,7 +76,8 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
     place_name,
     main_category,
     sub_category,
-    used_item_wish
+    used_item_wish,
+    sold_out
   } = data;
 
   return (
@@ -52,7 +85,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
       <section className={styles.top}>
         <div className={styles.product}>
           <div className={styles.imageContainer}>
-            <SlideImage images={photo_url} />
+            {sold_out ? <div>판매완료</div> : <SlideImage images={photo_url} />}
           </div>
           <div className={styles.details}>
             <div>
@@ -108,6 +141,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
         {/* TODO: SNS 공유, 링크 복사 */}
         <KakaoShareButton />
         <ClipBoardButton />
+        <button onClick={onClickUpdateSoldOut}>sold-out</button>
       </section>
     </main>
   );
