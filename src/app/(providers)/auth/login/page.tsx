@@ -29,7 +29,6 @@ const LoginPage = () => {
       password: data.password
     });
     if (error) {
-      console.log('에러메세지', error);
       errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
     }
     if (emailData.user !== null) {
@@ -50,10 +49,6 @@ const LoginPage = () => {
         }
       }
     });
-
-    const { data: userData, error: userError } = await supabase.auth.getUser();
-    console.log('유저데이터', userData);
-    console.log('구글', data);
     if (error) {
       errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
     }
@@ -70,7 +65,7 @@ const LoginPage = () => {
         }
       }
     });
-    console.log('카카오', data);
+
     if (error) {
       errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
     }
@@ -80,44 +75,48 @@ const LoginPage = () => {
   const passwordRegex = /^.*(?=.{8,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(emailLoginHandler)}>
-        이메일:
-        <input
-          placeholder="이메일을 입력하세요"
-          {...register('email', { required: true, pattern: emailRegex })}
-        />
-        {errors.email?.type === 'required' && (
-          <p className={styles.validP}>이메일을 입력해주세요</p>
-        )}
-        {errors.email?.type === 'pattern' && (
-          <p className={styles.validP}>이메일 양식에 맞게 입력해주세요</p>
-        )}
-        <br />
-        비밀번호:
-        <input
-          type="password"
-          placeholder="비밀번호를 입력하세요"
-          {...register('password', { required: true, minLength: 8, pattern: passwordRegex })}
-        />
-        {errors.password?.type === 'required' && (
-          <p className={styles.validP}>비밀번호를 입력해주세요</p>
-        )}
-        {errors.password?.type === 'pattern' && (
-          <p className={styles.validP}>
-            비밀번호는 문자와 숫자를 포함하여 8자리 이상 입력해야 합니다
-          </p>
-        )}
-        {errors.password?.type === 'minLength' && (
-          <p className={styles.validP}>
-            비밀번호는 문자와 숫자를 포함하여 8자리 이상 입력해야 합니다.
-          </p>
-        )}
-        <br />
+    <div className={styles.body}>
+      <h2>Puppy Ground</h2>
+      <h1>로그인</h1>
+      <form className={styles.form} onSubmit={handleSubmit(emailLoginHandler)}>
+        <div>
+          <input
+            placeholder="이메일을 입력하세요"
+            {...register('email', { required: true, pattern: emailRegex })}
+          />
+          {errors.email?.type === 'required' && (
+            <p className={styles.validP}>이메일을 입력해주세요</p>
+          )}
+          {errors.email?.type === 'pattern' && (
+            <p className={styles.validP}>이메일 양식에 맞게 입력해주세요</p>
+          )}
+        </div>
+        <div>
+          <input
+            type="password"
+            placeholder="비밀번호를 입력하세요"
+            {...register('password', { required: true, minLength: 8, pattern: passwordRegex })}
+          />
+          {errors.password?.type === 'required' && (
+            <p className={styles.validP}>비밀번호를 입력해주세요</p>
+          )}
+          {errors.password?.type === 'pattern' && (
+            <p className={styles.validP}>
+              비밀번호는 문자와 숫자를 포함하여 8자리 이상 입력해야 합니다
+            </p>
+          )}
+          {errors.password?.type === 'minLength' && (
+            <p className={styles.validP}>
+              비밀번호는 문자와 숫자를 포함하여 8자리 이상 입력해야 합니다.
+            </p>
+          )}
+        </div>
         <button type="submit">로그인</button>
       </form>
-      <button onClick={googleLoginHandler}> 구글 로그인 </button>
-      <button onClick={kakaoLoginHandler}> 카카오 로그인 </button>
+      <div className={styles.buttonWrapper}>
+        <button onClick={googleLoginHandler}> 구글 로그인 </button>
+        <button onClick={kakaoLoginHandler}> 카카오 로그인 </button>
+      </div>
       <p>
         Puppy Ground가 처음이신가요?
         <span

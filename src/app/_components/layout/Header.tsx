@@ -14,10 +14,6 @@ const Header = () => {
   const { errorTopRight, successTopRight } = useToast();
   const user = useAuth((state) => state.user);
 
-  useEffect(() => {
-    console.log('여기는 헤더입니다', user);
-  }, [user]);
-
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (!error) {
