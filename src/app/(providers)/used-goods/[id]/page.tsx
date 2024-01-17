@@ -2,12 +2,16 @@
 
 import { supabase } from '@/shared/supabase/supabase';
 import styles from './page.module.scss';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { getCountFromTable } from '@/utils/table';
 import { getformattedDate } from '@/utils/time';
 import { SlideImage, TradeLocationMap } from '../_components';
 import { FaMapMarkerAlt } from 'react-icons/fa';
+import Chat from '@/app/_components/chatting/Chat';
+import { useState } from 'react';
+import { makeChatList } from '@/apis/chat/chat';
+import useAuth from '@/hooks/useAuth';
 
 const getUsedGoodDetail = async (id: string) => {
   const { data, error } = await supabase
@@ -26,6 +30,27 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
     queryKey: ['used-item'],
     queryFn: () => getUsedGoodDetail(params.id)
   });
+
+  const queryClient = useQueryClient();
+  const makeChatListMutation = useMutation({
+    mutationFn: makeChatList,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getChatList'] });
+    }
+  });
+
+  const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
+  const [chatListId, setChatListId] = useState(0);
+  const user = useAuth((state) => state.user);
+  const clickOpenChat = async () => {
+    const chat = await makeChatListMutation.mutateAsync({
+      post_id: data?.id,
+      user_id: user?.id,
+      other_user: data?.user_id
+    });
+    setChatListId(chat![0].id);
+    setModalIsOpen(true);
+  };
 
   if (isLoading) return <span>LOADING</span>;
   if (!data) return null;
@@ -69,7 +94,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                 <span>{profiles?.user_name}</span>
               </div>
               <div className={styles.moreInfo}>
-                <time>{getformattedDate(created_at, 'YY년 YY월 DD일')}</time>
+                <time>{getformattedDate(created_at, 'YY년 MM월 DD일')}</time>
                 <div>
                   <span className={styles.tag}>#{main_category!.name}</span>
                   <span className={styles.tag}>#{sub_category!.name}</span>
@@ -78,7 +103,14 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
             </div>
             {/* TODO: 채팅, 찜 기능 동작 */}
             <div className={styles.btns}>
-              <button>채팅하기</button>
+              <button onClick={clickOpenChat}>채팅하기</button>
+              <Chat
+                isOpen={isModalOpen}
+                onClose={() => setModalIsOpen(false)}
+                ariaHideApp={false}
+                isChatRoomOpen={true}
+                listId={chatListId}
+              />
               <button>찜 {getCountFromTable(used_item_wish)}</button>
             </div>
           </div>

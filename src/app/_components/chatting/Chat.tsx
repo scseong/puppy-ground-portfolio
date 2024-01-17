@@ -5,56 +5,38 @@ import { supabase } from '@/shared/supabase/supabase';
 import { Tables } from '@/shared/supabase/types/supabase';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-
 import styles from './chat.module.scss';
 import moment from 'moment';
+import { getChatContent, getChatList, sendChat } from '@/apis/chat/chat';
+import useAuth from '@/hooks/useAuth';
+import { getProfile } from '@/apis/profile/profile';
 
 type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
-
   ariaHideApp: boolean;
+  isChatRoomOpen: boolean;
+  listId: number;
 };
 
-const USERID = 'f5bee20f-3dbc-4696-8c74-9c0bad7d1218';
-
-const getChatList = async () => {
-  const getChatListQuery = await supabase
-    .from('chat_list')
-    .select('*, used_item(title), chat(read_status), profiles(*)')
-    .order('id', { ascending: false })
-    .returns<Tables<'chat_list'>[]>();
-
-  const { data: getChatListData, error } = getChatListQuery;
-  return { getChatListData, error };
-};
-
-const sendChat = async ({
-  content,
-  id,
-  userId,
-  userName
-}: {
-  content: string;
-  id: number;
-  userId: string;
-  userName: string;
-}) => {
-  await supabase
-    .from('chat')
-    //나중에 고쳐야함
-    .insert([{ content, chat_list_id: id, user_id: userId, user_name: userName }])
-    .select();
-};
-
-const Chat = ({ isOpen, onClose, ariaHideApp }: ModalProps) => {
-  const {
-    isLoading,
-    isError,
-    data: getChatListData
-  } = useQuery({
+const Chat = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, listId }: ModalProps) => {
+  const { data: getChatListData } = useQuery({
     queryKey: ['getChatList'],
     queryFn: getChatList,
+    refetchOnWindowFocus: false
+  });
+  const { data: getProfileData } = useQuery({
+    queryKey: ['getProfile'],
+    queryFn: getProfile,
+    refetchOnWindowFocus: false
+  });
+  const {
+    isError,
+    isLoading,
+    data: getChat
+  } = useQuery({
+    queryKey: ['getChat'],
+    queryFn: getChatContent,
     refetchOnWindowFocus: false
   });
 
@@ -66,9 +48,13 @@ const Chat = ({ isOpen, onClose, ariaHideApp }: ModalProps) => {
     }
   });
 
-  const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
+  // 유저 정보
+  const user = useAuth((state) => state.user);
+  const userProfile = getProfileData?.find((pro) => pro.id === user?.id)!;
+
+  const [isChatOpen, setIsChatOpen] = useState<boolean>(isChatRoomOpen);
   //전체 채팅내용
-  const [chat, setChat] = useState<Tables<'chat'>[]>([]);
+  const [chat, setChat] = useState<Tables<'chat'>[]>(getChat!);
   //로그인한 사람의 채팅 내역
   const [chatItem, setChatItem] = useState<Tables<'chat'>[]>([]);
   //중고물품의 아이디
@@ -78,9 +64,6 @@ const Chat = ({ isOpen, onClose, ariaHideApp }: ModalProps) => {
   const onChangeChatContent = (e: React.ChangeEvent<HTMLInputElement>) =>
     setChatContent(e.target.value);
 
-  //임의로 설정해둔 이름(로그인한 사람)
-  const userName = 'asdf';
-
   // 클릭 시 채팅방 입장
   const clickChatRoom = (id: number) => {
     const chatHistory = chat.filter((chat) => chat.chat_list_id === id);
@@ -88,22 +71,23 @@ const Chat = ({ isOpen, onClose, ariaHideApp }: ModalProps) => {
     setChatListId(id);
     setIsChatOpen(true);
   };
+  console.log(chat);
 
   // 채팅 보내기
   const clickSendChat = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    sendChatMutation.mutate({
+    sendChatMutation.mutateAsync({
       content: chatContent,
-      id: chatListId,
-      userId: USERID,
-      userName
+      id: chatListId === 0 ? listId : chatListId,
+      userId: user?.id!,
+      userName: userProfile?.user_name
     });
     setChatContent('');
   };
 
   const chatContents = async () => {
     try {
-      const { data: chat, error } = await supabase.from('chat').select('*');
+      const { data: chat } = await supabase.from('chat').select('*').returns<Tables<'chat'>[]>();
       setChat(chat!);
     } catch (error) {
       console.log(error);
@@ -118,7 +102,7 @@ const Chat = ({ isOpen, onClose, ariaHideApp }: ModalProps) => {
         if (payload.new && 'chat_list_id' in payload.new) {
           setChat((prev) => [...prev, payload.new as Tables<'chat'>]);
           // 특정 채팅방의 채팅 내용 업데이트
-          if (payload.new.chat_list_id === chatListId) {
+          if (payload.new.chat_list_id === chatListId || payload.new.chat_list_id === listId) {
             setChatItem((prev) => [...prev, payload.new as Tables<'chat'>]);
           }
         }
@@ -130,7 +114,10 @@ const Chat = ({ isOpen, onClose, ariaHideApp }: ModalProps) => {
     return () => {
       chat.unsubscribe();
     };
-  }, [chatListId]);
+  }, [chatListId, listId]);
+
+  if (isLoading) return <div>스땁</div>;
+  if (isError) return <div>스땁</div>;
 
   return (
     <div>
@@ -147,7 +134,7 @@ const Chat = ({ isOpen, onClose, ariaHideApp }: ModalProps) => {
                     <div
                       key={chatHistory.id}
                       className={
-                        chatHistory.user_name === userName
+                        chatHistory.user_name === userProfile?.user_name
                           ? styles.chatUserNameTrue
                           : styles.chatUserNameFalse
                       }

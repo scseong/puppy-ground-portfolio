@@ -59,6 +59,8 @@ const Header = () => {
                 isOpen={isModalOpen}
                 onClose={() => setModalIsOpen(false)}
                 ariaHideApp={false}
+                isChatRoomOpen={false}
+                listId={0}
               />
             </div>
             <div className={styles.menuItem}>알람</div>
