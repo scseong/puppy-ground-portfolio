@@ -4,6 +4,11 @@ import { supabase } from '@/shared/supabase/supabase';
 
 export const revalidate = 0;
 
+export type SearchParamsKeys = 'main' | 'sub' | 'query' | 'page';
+export type SearchParams = {
+  [key in SearchParamsKeys]?: string;
+};
+
 export const getUsedGoods = async () => {
   const { data } = await supabase
     .from('used_item')
@@ -24,34 +29,68 @@ export const getUsedGoodsByCategory = async (main: string, sub: string) => {
   return data;
 };
 
-// TODO: params type 지정
-// TODO: 관심사 분리
-export const getQueryKey = (params: any) => {
-  const usedGoodsKeys = {
-    all: ['used-goods'] as const,
-    category: (params: any) => ['used-goods', { main: params.main, sub: params.sub }] as const
-  };
-  if (!Object.keys(params).length) return usedGoodsKeys.all;
-
-  return usedGoodsKeys.category(params);
-};
-export const getQueryFunction = (params: any) => {
-  if (!Object.keys(params).length) return getUsedGoods;
-  return () => getUsedGoodsByCategory(params.main, params.sub);
+export const getUsedGoodsByKeyword = async (query: string) => {
+  const { data } = await supabase
+    .from('used_item')
+    .select(
+      `id, created_at, title, price, address, sold_out, photo_url, used_item_wish ( count ), chat_list ( count )`
+    )
+    .ilike('title', `%${query}%`);
+  return data;
 };
 
-const UsedGoodsContainer = async ({
-  searchParams
-}: {
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) => {
+export const getUsedGoodsByKeywordAndCategory = async (
+  main: string,
+  sub: string,
+  query: string
+) => {
+  const { data } = await supabase
+    .from('used_item')
+    .select(
+      `id, created_at, title, price, address, sold_out, photo_url, used_item_wish ( count ), chat_list ( count )`
+    )
+    .ilike('title', `%${query}%`)
+    .eq('main_category_id', main)
+    .eq('sub_category_id', sub);
+
+  return data;
+};
+
+export const usedGoodsKeys = {
+  all: ['used-goods'] as const,
+  search: (params: SearchParams) => [...usedGoodsKeys.all, { query: params.query }] as const,
+  category: (params: SearchParams) =>
+    [...usedGoodsKeys.all, { main: params.main, sub: params.sub }] as const,
+  categoryAndSearch: (params: SearchParams) =>
+    [...usedGoodsKeys.all, { main: params.main, sub: params.sub, query: params.query }] as const
+};
+
+export const getQueryKey = (params: SearchParams) => {
+  const { main, sub, query } = params;
+
+  if (query && main && sub) return usedGoodsKeys.categoryAndSearch(params);
+  if (query) return usedGoodsKeys.search(params);
+  if (main || sub) return usedGoodsKeys.category(params);
+  return usedGoodsKeys.all;
+};
+
+export const getQueryFunction = (params: SearchParams) => {
+  const { main, sub, query } = params;
+
+  if (main && sub && query) return () => getUsedGoodsByKeywordAndCategory(main, sub, query);
+  if (main && sub) return () => getUsedGoodsByCategory(main, sub);
+  if (query) return () => getUsedGoodsByKeyword(query);
+  return getUsedGoods;
+};
+
+const UsedGoodsContainer = async ({ searchParams }: { searchParams: SearchParams }) => {
   const [queryKey, queryFn] = [getQueryKey(searchParams), getQueryFunction(searchParams)];
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery({ queryKey, queryFn });
 
   return (
     <>
-      <UsedGoodsFilter />
+      <UsedGoodsFilter params={searchParams} />
       <HydrationBoundary state={dehydrate(queryClient)}>
         <UsedGoodsList />
       </HydrationBoundary>
