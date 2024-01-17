@@ -5,9 +5,13 @@ import Image from 'next/image';
 import { supabase } from '@/shared/supabase/supabase';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import Chat from '../chatting/Chat';
+import ChatList from '../chatting/ChatList';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
+import { useQuery } from '@tanstack/react-query';
+import { getChatContent } from '@/apis/chat/chat';
+import Loading from './loading/Loading';
+import logo from '../../../../public/images/logo.png';
 
 const Header = () => {
   const router = useRouter();
@@ -28,13 +32,24 @@ const Header = () => {
       errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
     }
   };
+  const {
+    isError,
+    isLoading,
+    data: getChat
+  } = useQuery({
+    queryKey: ['getChat'],
+    queryFn: getChatContent,
+    refetchOnWindowFocus: false
+  });
 
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className={styles.navbarBox}>
       <div className={styles.logoBox}>
-        <Image src="/logo.png" alt="logo" width={90} height={60} />
+        <Image src={logo} alt="logo" width={90} height={60} />
         <Link href="/" className={styles.logoText}>
           Puppy Ground
         </Link>
@@ -56,12 +71,13 @@ const Header = () => {
             </Link>
             <div className={styles.menuItem}>
               <button onClick={() => setModalIsOpen(true)}>채팅</button>
-              <Chat
+              <ChatList
                 isOpen={isModalOpen}
                 onClose={() => setModalIsOpen(false)}
                 ariaHideApp={false}
                 isChatRoomOpen={false}
                 listId={0}
+                getChat={getChat!}
               />
             </div>
             <div className={styles.menuItem}>알람</div>

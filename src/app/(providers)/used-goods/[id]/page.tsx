@@ -10,7 +10,7 @@ import { SlideImage, TradeLocationMap } from '../_components';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
 import ClipBoardButton from '@/app/_components/shareButton/ClipBoardButton';
-import Chat from '@/app/_components/chatting/Chat';
+import ChatList from '@/app/_components/chatting/ChatList';
 import { useState } from 'react';
 import { makeChatList } from '@/apis/chat/chat';
 import useAuth from '@/hooks/useAuth';
@@ -106,12 +106,13 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
             {/* TODO: 채팅, 찜 기능 동작 */}
             <div className={styles.btns}>
               <button onClick={clickOpenChat}>채팅하기</button>
-              <Chat
+              <ChatList
                 isOpen={isModalOpen}
                 onClose={() => setModalIsOpen(false)}
                 ariaHideApp={false}
                 isChatRoomOpen={true}
                 listId={chatListId}
+                getChat={[]}
               />
               <button>찜 {getCountFromTable(used_item_wish)}</button>
             </div>
