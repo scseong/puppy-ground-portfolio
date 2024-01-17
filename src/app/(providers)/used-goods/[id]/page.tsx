@@ -12,6 +12,8 @@ import { FaMapMarkerAlt } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import { SlideImage, TradeLocationMap } from '../_components';
 import styles from './page.module.scss';
+import useAuth from '@/hooks/useAuth';
+import { useToast } from '@/hooks/useToast';
 
 const getUsedGoodDetail = async (id: string) => {
   const { data, error } = await supabase
@@ -33,7 +35,14 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
     queryFn: () => getUsedGoodDetail(params.id)
   });
 
+  const user = useAuth((state) => state.user);
+  const { errorTopRight } = useToast();
+
   const onClickUpdateSoldOut = async () => {
+    if (user?.id !== data?.user_id) {
+      errorTopRight({ message: '본인의 상품만 판매완료 처리할 수 있습니다.' });
+      return;
+    }
     Swal.fire({
       title: '판매완료 처리하시겠습니까?',
       showDenyButton: true,
