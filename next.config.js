@@ -13,6 +13,11 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'mbcnyqlazlnrnrncctns.supabase.co',
         pathname: '/**'
+      },
+      {
+        protocol: 'http',
+        hostname: 'k.kakaocdn.net',
+        pathname: '/**'
       }
     ]
   }
