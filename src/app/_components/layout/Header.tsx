@@ -6,34 +6,20 @@ import { supabase } from '@/shared/supabase/supabase';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Chat from '../chatting/Chat';
-import useUserInfo from '../../../../zustand/useUserInfo';
 import { useToast } from '@/hooks/useToast';
+import useAuth from '@/hooks/useAuth';
 
 const Header = () => {
   const router = useRouter();
-  const userInfo = useUserInfo((state: any) => state.initialState);
-  const user = useUserInfo((state: any) => state.removeUser);
-  const setUser = useUserInfo((state: any) => state.setUser);
   const { errorTopRight, successTopRight } = useToast();
+  const user = useAuth((state) => state.user);
 
   useEffect(() => {
-    supabase.auth.onAuthStateChange((event, session) => {
-      console.log('123', event, session);
-      setUser(session?.user);
-      // if (event !== 'SIGNED_OUT' && session === null) {
-      //   Swal.fire({
-      //     icon: 'error',
-      //     text: '로그인을 다시 시도해주세요'
-      //   });
-      //   router.push('/auth/login');
-      // }
-    });
-  }, [userInfo]);
+    console.log('여기는 헤더입니다', user);
+  }, [user]);
 
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
-    user();
-    console.log('로그아웃 에러', error);
     if (!error) {
       successTopRight({ message: '로그아웃 되었습니다.' });
       router.push('/');
@@ -53,7 +39,7 @@ const Header = () => {
         </Link>
       </div>
       <div className={styles.menuBox}>
-        {userInfo ? (
+        {user ? (
           <>
             <Link className={styles.menuItem} href="/used-goods">
               중고거래
@@ -76,7 +62,8 @@ const Header = () => {
               />
             </div>
             <div className={styles.menuItem}>알람</div>
-            <Link className={styles.menuItem} href="/profile">
+            {/* 일단 임시로 */}
+            <Link className={styles.menuItem} href={`/profile/${user.id}`}>
               마이페이지
             </Link>
             <div className={styles.menuItem} onClick={signOut}>
