@@ -18,6 +18,7 @@ import regionList from '../../../data/regionList.json';
 const StrayDogs = () => {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
+  const [selectCity, setSelectCity] = useState('');
   const {
     isLoading,
     isError,
@@ -28,6 +29,13 @@ const StrayDogs = () => {
     refetchOnWindowFocus: false,
     staleTime: 3000
   });
+
+  const cityChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectCity(event.target.value);
+  };
+
+  const selectRegion = regionList.find((region) => region.city === selectCity);
+  const guList = selectRegion ? selectRegion.gu : [];
 
   const formatDate = (dateStr: string) => {
     const year = dateStr.substring(0, 4);
@@ -47,7 +55,10 @@ const StrayDogs = () => {
   return (
     <div className={style.container}>
       <div className={style.filterWrap}>
-        <p>기간</p>
+        <p>
+          <FaCalendarDays />
+          &nbsp;기간
+        </p>
         <div className={style.calender}>
           <DatePicker
             className={style.datePicker}
@@ -72,14 +83,19 @@ const StrayDogs = () => {
             onChange={(date) => setEndDate(date)}
           />
         </div>
-        <p>지역</p>
-        <select className={style.selectCity}>
+        <p>
+          <FaMapMarkerAlt />
+          &nbsp;지역
+        </p>
+        <select name="지역" className={style.selectCity} onChange={cityChangeHandler}>
           {regionList.map((region, index) => {
-            return <option key={index}>{region.name}</option>;
+            return <option key={index}>{region.city}</option>;
           })}
         </select>
-        <select className={style.selectCity}>
-          <option>군/구</option>;
+        <select name="시/군/구" className={style.selectCity}>
+          {guList?.map((gu, index) => {
+            return <option key={index}>{gu}</option>;
+          })}
         </select>
       </div>
       <div className={style.gridContainer}>
