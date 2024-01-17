@@ -88,9 +88,16 @@ const SignUp = () => {
         <p className={styles.validP}>이메일 양식에 맞게 입력해주세요</p>
       )}
       <br />
-      <input placeholder="닉네임을 입력하세요" {...register('nickname', { required: true })} />
+      <input
+        placeholder="닉네임을 입력하세요"
+        {...register('nickname', { required: true, maxLength: 8 })}
+        maxLength={8}
+      />
       {errors.nickname?.type === 'required' && (
         <p className={styles.validP}>닉네임을 입력해주세요</p>
+      )}
+      {errors.nickname?.type === 'maxLength' && (
+        <p className={styles.validP}>닉네임은 최대 8자까지 입력 가능합니다.</p>
       )}
       <br />
       <input
@@ -140,6 +147,17 @@ const SignUp = () => {
       </label>
       <br />
       <button>회원가입</button>
+      <p>
+        이미 회원이신가요?
+        <span
+          className={styles.moveLogin}
+          onClick={() => {
+            router.push('/auth/login');
+          }}
+        >
+          로그인 하러가기
+        </span>
+      </p>
     </form>
   );
 };

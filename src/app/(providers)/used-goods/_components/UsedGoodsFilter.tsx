@@ -28,7 +28,6 @@ const getCategories = async (): Promise<CategoryObject> => {
 
 const UsedGoodsFilter = async () => {
   const { mainCategory, subCategory } = await getCategories();
-  const data = await getCategories();
 
   return (
     <form action={handleSubmit}>
@@ -46,7 +45,7 @@ const UsedGoodsFilter = async () => {
           </option>
         ))}
       </select>
-      <button value="Submit">Submit</button>
+      <button value="Submit">분류</button>
     </form>
   );
 };
