@@ -8,6 +8,7 @@ import Footer from './_components/layout/Footer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Script from 'next/script';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={inter.className} suppressHydrationWarning={true}>
         <Script strategy="beforeInteractive" src={KAKAO_SDK_URL} />
         <ReactQueryProviders>
+          <ReactQueryDevtools initialIsOpen={false} />
           <Header />
           {children}
           <ToastContainer />
