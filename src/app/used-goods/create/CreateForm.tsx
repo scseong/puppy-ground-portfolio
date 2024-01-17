@@ -30,8 +30,7 @@ const CreateForm = () => {
     place_name: '',
     price: 0,
     sold_out: false,
-    // 전역관리 수정되면 변경예정
-    user_id: 'ab9e4d3d-1cb8-4cd8-aac5-3f126b6ed5de'
+    user_id: ''
   });
 
   const { warnTopRight, errorTopRight } = useToast();
