@@ -26,8 +26,6 @@ const CreateForm = () => {
   const user = useAuth((state) => state.user);
   const position = usePosition((state) => state.position);
   const address = useAddress((state) => state.address);
-  console.log('🚀 ~ CreateForm ~ position:', position);
-  console.log('🚀 ~ CreateForm ~ address:', address);
 
   const [inputForm, setInputForm] = useState<TablesInsert<'used_item'>>({
     title: '',

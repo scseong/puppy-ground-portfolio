@@ -1,0 +1,141 @@
+.container {
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: auto;
+  z-index: 1;
+}
+
+.firstContainer {
+  width: 100%;
+  height: 600px;
+  margin-left: 200px;
+  background-color: #ebebeb;
+  border-radius: 70px 0 0 70px;
+}
+
+.firstSection {
+  width: 1200px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto 100px auto 150px;
+}
+
+.firstTextWrap {
+  width: 50%;
+}
+
+.firstTextWrap > p {
+  font-family: Pretendard-Medium;
+  font-size: 45px;
+  line-height: 65px;
+}
+
+.bold {
+  font-family: Pretendard-ExtraBold;
+}
+
+.firstImageWrap {
+  width: 60%;
+  height: 600px;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.secondSection {
+  width: 1200px;
+  height: 600px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: auto;
+}
+
+.secondImageWrap {
+  width: 400px;
+  height: 500px;
+  overflow: hidden;
+  border-radius: 30px;
+}
+
+.secondBold {
+  font-family: Pretendard-ExtraBold;
+  font-size: 45px;
+  line-height: 100px;
+}
+
+.secondTextWrap > p {
+  font-family: Pretendard-Light;
+  font-size: 25px;
+  line-height: 40px;
+}
+
+.button {
+  background-color: #0ac4b9;
+  width: 180px;
+  height: 50px;
+  border-radius: 100px;
+  border-style: none;
+  color: white;
+  margin: 50px auto;
+  font-size: 17px;
+  font-family: Pretendard-Medium;
+}
+
+.thirdSection {
+  width: 100vw;
+  height: 600px;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.thirdImageWrap {
+  opacity: 0.4;
+}
+
+.thirdTextWrap {
+  font-family: Pretendard-ExtraBold;
+  text-align: center;
+  font-size: 45px;
+  position: absolute;
+  width: 100%;
+  height: 600px;
+  //   bottom: 350px;
+  //   top: 1400px;
+}
+
+.fourthSection {
+  width: 1200px;
+  height: 600px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: auto;
+}
+
+.fourthImageWrap {
+  width: 500px;
+  height: 500px;
+  overflow: hidden;
+}
+
+.fourthTextWrap {
+  font-family: Pretendard-Medium;
+  font-size: 45px;
+  line-height: 65px;
+  width: 50%;
+}
+
+.fourthBold {
+  font-family: Pretendard-ExtraBold;
+}
