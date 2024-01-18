@@ -13,13 +13,11 @@ const Chat = ({
     <div
       key={chatHistory.id}
       className={
-        chatHistory.user_name === userProfile?.user_name
-          ? styles.chatUserNameTrue
-          : styles.chatUserNameFalse
+        chatHistory.user_id === userProfile.id ? styles.chatUserNameTrue : styles.chatUserNameFalse
       }
     >
       <div className={styles.userName}>
-        <p>{chatHistory.user_name}</p>
+        <p>{userProfile.user_name}</p>
       </div>
       <div className={styles.chatHistory}>
         <div className={styles.content}>
