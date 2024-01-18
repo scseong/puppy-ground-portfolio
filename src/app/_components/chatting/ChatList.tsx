@@ -144,11 +144,11 @@ const ChatList = ({
             </div>
             <ul>
               {getChatListData?.getChatListData?.map((chat) => {
-                return (
+                return chat.user_id === userProfile.id || chat.other_user === userProfile.id ? (
                   <li onClick={() => clickChatRoom(chat.id)} key={chat.id}>
                     {chat.used_item.title}
                   </li>
-                );
+                ) : null;
               })}
             </ul>
           </>

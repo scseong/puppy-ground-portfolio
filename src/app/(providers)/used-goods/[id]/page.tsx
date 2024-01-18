@@ -96,7 +96,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                 <span>{profiles?.user_name}</span>
               </div>
               <div className={styles.moreInfo}>
-                <time>{getformattedDate(created_at, 'YY년 MM월 DD일')}</time>
+                <time>{getformattedDate(created_at, 'YY년 YY월 DD일')}</time>
                 <div>
                   <span className={styles.tag}>#{main_category!.name}</span>
                   <span className={styles.tag}>#{sub_category!.name}</span>
