@@ -1,50 +1,27 @@
 'use client';
 
-import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import UsedGoodsItem from './UsedGoodsItem';
-import { SearchParams, getQueryFunction, getQueryKey } from '../page';
-import { useSearchParams } from 'next/navigation';
-import { handleSearch } from '../actions';
+import { getQueryFunction, getQueryKey } from '../page';
 import styles from './usedGoodsList.module.scss';
+import { useQueryParam } from '@/hooks/useQueryParam';
 
 const UsedGoodsList = () => {
-  const [isSoldOut, setSoldOut] = useState(false);
-  const router = useSearchParams();
-  const params: SearchParams = Object.fromEntries(router);
+  const { isSoldout, queryObject } = useQueryParam();
   const { data } = useQuery({
-    queryKey: getQueryKey(params),
-    queryFn: getQueryFunction(params)
+    queryKey: getQueryKey(queryObject),
+    queryFn: getQueryFunction(queryObject)
   });
 
   // TODO: Empty Component 만들기
   if (!data) return <div>상품이 없습니다.</div>;
 
-  const filtedGoods = data.filter((goods) => goods.sold_out === isSoldOut);
-
-  const handleSoldOut = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const name = e.currentTarget.name;
-    if (name === 'soldout') return setSoldOut(true);
-    setSoldOut(false);
-  };
+  const filtedGoods = data.filter((goods) => goods.sold_out === isSoldout);
 
   return (
-    <>
-      {/* <form action={handleSearch}>
-        <input type="text" name="query" />
-        <button>검색</button>
-      </form> */}
-      <button name="avaliable" onClick={handleSoldOut}>
-        판매중
-      </button>
-      <button name="soldout" onClick={handleSoldOut}>
-        판매 완료
-      </button>
-
-      <div className={styles.wrapper}>
-        {filtedGoods?.map((goods) => <UsedGoodsItem key={goods.id} goods={goods} />)}
-      </div>
-    </>
+    <div className={styles.wrapper}>
+      {filtedGoods?.map((goods) => <UsedGoodsItem key={goods.id} goods={goods} />)}
+    </div>
   );
 };
 
