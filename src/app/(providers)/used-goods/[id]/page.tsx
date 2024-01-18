@@ -1,19 +1,22 @@
 'use client';
 
+import { updateUsedGood } from '@/apis/used-goods/actions';
+import ClipBoardButton from '@/app/_components/shareButton/ClipBoardButton';
+import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
 import { supabase } from '@/shared/supabase/supabase';
 import styles from './page.module.scss';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { getCountFromTable } from '@/utils/table';
 import { getformattedDate } from '@/utils/time';
-import { SlideImage, TradeLocationMap } from '../_components';
 import { FaMapMarkerAlt } from 'react-icons/fa';
-import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
-import ClipBoardButton from '@/app/_components/shareButton/ClipBoardButton';
+import Swal from 'sweetalert2';
+import { SlideImage, TradeLocationMap } from '../_components';
 import ChatList from '@/app/_components/chatting/ChatList';
 import { useState } from 'react';
 import { makeChatList } from '@/apis/chat/chat';
 import useAuth from '@/hooks/useAuth';
+import { useToast } from '@/hooks/useToast';
 
 const getUsedGoodDetail = async (id: string) => {
   const { data, error } = await supabase
@@ -28,12 +31,48 @@ const getUsedGoodDetail = async (id: string) => {
 };
 
 const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
+  const queryClient = useQueryClient();
+
   const { isLoading, isError, data } = useQuery({
     queryKey: ['used-item', params.id],
     queryFn: () => getUsedGoodDetail(params.id)
   });
 
-  const queryClient = useQueryClient();
+  const user = useAuth((state) => state.user);
+  const { errorTopRight } = useToast();
+
+  const onClickUpdateSoldOut = async () => {
+    if (user?.id !== data?.user_id) {
+      errorTopRight({ message: '본인의 상품만 판매완료 처리할 수 있습니다.' });
+      return;
+    }
+    Swal.fire({
+      title: '판매완료 처리하시겠습니까?',
+      showDenyButton: true,
+      confirmButtonText: `네`,
+      denyButtonText: `아니오`
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const { error } = await updateUsedGood(Number(params.id), { sold_out: true });
+
+        if (error) {
+          Swal.fire({
+            title: '판매완료 처리에 실패했습니다.',
+            icon: 'error'
+          });
+          return;
+        }
+
+        Swal.fire({
+          title: '판매완료 처리되었습니다.',
+          icon: 'success'
+        });
+
+        queryClient.invalidateQueries({ queryKey: ['used-item', params.id] });
+      }
+    });
+  };
+
   const makeChatListMutation = useMutation({
     mutationFn: makeChatList,
     onSuccess: () => {
@@ -43,7 +82,6 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
 
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
   const [chatListId, setChatListId] = useState(0);
-  const user = useAuth((state) => state.user);
   const clickOpenChat = async () => {
     const chat = await makeChatListMutation.mutateAsync({
       post_id: data?.id,
@@ -69,7 +107,8 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
     place_name,
     main_category,
     sub_category,
-    used_item_wish
+    used_item_wish,
+    sold_out
   } = data;
 
   return (
@@ -96,11 +135,19 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                 <span>{profiles?.user_name}</span>
               </div>
               <div className={styles.moreInfo}>
-                <time>{getformattedDate(created_at, 'YY년 YY월 DD일')}</time>
-                <div>
-                  <span className={styles.tag}>#{main_category!.name}</span>
-                  <span className={styles.tag}>#{sub_category!.name}</span>
-                </div>
+                <time>{getformattedDate(created_at, 'YY년 MM월 DD일')}</time>
+                {sold_out ? (
+                  <div>
+                    <span className={styles.tag}>#{main_category!.name}</span>
+                    <span className={styles.tag}>#{sub_category!.name}</span>
+                    <span className={styles.soldOut}>#판매완료</span>
+                  </div>
+                ) : (
+                  <div>
+                    <span className={styles.tag}>#{main_category!.name}</span>
+                    <span className={styles.tag}>#{sub_category!.name}</span>
+                  </div>
+                )}
               </div>
             </div>
             {/* TODO: 채팅, 찜 기능 동작 */}
@@ -141,6 +188,8 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
         {/* TODO: SNS 공유, 링크 복사 */}
         <KakaoShareButton />
         <ClipBoardButton />
+        {/* 버튼 생기면 옮겨 주세요 */}
+        {sold_out ? null : <button onClick={onClickUpdateSoldOut}>sold-out</button>}
       </section>
     </main>
   );
