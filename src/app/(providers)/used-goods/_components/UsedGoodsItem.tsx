@@ -1,8 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import styled from './usedGoodsItem.module.scss';
+import styles from './usedGoodsItem.module.scss';
 import { getStringFromNow } from '@/utils/time';
 import { getCountFromTable } from '@/utils/table';
+import { FaMapMarkerAlt } from 'react-icons/fa';
+import { addCommasToNumber } from '@/utils/format';
 
 type UsedGoodsItemProps = {
   goods: {
@@ -23,20 +25,27 @@ const UsedGoodsItem = ({ goods }: UsedGoodsItemProps) => {
     goods;
 
   return (
-    <div className={styled.container}>
+    <div className={styles.container}>
       <Link href={`used-goods/${id}`}>
-        <div className={styled.goodsImage}>
-          <Image src={photo_url[0]} alt="상품 이미지" width={250} height={250} />
-          {/* TODO: 판매완료 이미지로 변경 */}
-          {sold_out && <div className={styled.overlay}>판매완료</div>}
+        <div className={styles.goodsImage}>
+          <Image src={photo_url[0]} alt="상품 이미지" width={350} height={320} />
+          {sold_out && <div className={styles.overlay}></div>}
         </div>
-        <div className={styled.goodsInfo}>
+        <div className={styles.goodsInfo}>
           <h3>{title}</h3>
-          <span>{price}원</span>
-          <time>{getStringFromNow(created_at)}</time>
-          <address>{address}</address>
-          <span>찜 {getCountFromTable(used_item_wish)}</span>
-          <span>채팅 {getCountFromTable(chat_list)}</span>
+          <div className={styles.detail}>
+            <span>{addCommasToNumber(price)}원</span>
+            <time>{getStringFromNow(created_at)}</time>
+          </div>
+          <div className={styles.address}>
+            <FaMapMarkerAlt />
+            <address>{address}</address>
+          </div>
+          <div className={styles.count}>
+            <span>찜 {getCountFromTable(used_item_wish)}개</span>
+            <span className={styles.divide}>|</span>
+            <span>채팅 {getCountFromTable(chat_list)}개</span>
+          </div>
         </div>
       </Link>
     </div>

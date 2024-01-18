@@ -14,6 +14,7 @@ import { SlideImage, TradeLocationMap } from '../_components';
 import styles from './page.module.scss';
 import useAuth from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
+import { addCommasToNumber } from '@/utils/format';
 
 const getUsedGoodDetail = async (id: string) => {
   const { data, error } = await supabase
@@ -100,7 +101,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
             <div>
               <div className={styles.info}>
                 <h3 title={title}>{title}</h3>
-                <span className={styles.price}>{price.toLocaleString('ko-KR')}원</span>
+                <span className={styles.price}>{addCommasToNumber(price)}원</span>
               </div>
               <div className={styles.profile}>
                 {/* TODO: change to avatar_url */}

@@ -1,4 +1,6 @@
 :root {
   --max-width: 1200px;
   --primary-color: #0ac4b9;
+
+  --card-detail-text-color: #3F423E;
 }

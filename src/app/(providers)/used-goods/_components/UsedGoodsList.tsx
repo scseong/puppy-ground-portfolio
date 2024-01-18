@@ -6,6 +6,7 @@ import UsedGoodsItem from './UsedGoodsItem';
 import { SearchParams, getQueryFunction, getQueryKey } from '../page';
 import { useSearchParams } from 'next/navigation';
 import { handleSearch } from '../actions';
+import styles from './usedGoodsList.module.scss';
 
 const UsedGoodsList = () => {
   const [isSoldOut, setSoldOut] = useState(false);
@@ -29,10 +30,10 @@ const UsedGoodsList = () => {
 
   return (
     <>
-      <form action={handleSearch}>
+      {/* <form action={handleSearch}>
         <input type="text" name="query" />
         <button>검색</button>
-      </form>
+      </form> */}
       <button name="avaliable" onClick={handleSoldOut}>
         판매중
       </button>
@@ -40,7 +41,9 @@ const UsedGoodsList = () => {
         판매 완료
       </button>
 
-      {filtedGoods?.map((goods) => <UsedGoodsItem key={goods.id} goods={goods} />)}
+      <div className={styles.wrapper}>
+        {filtedGoods?.map((goods) => <UsedGoodsItem key={goods.id} goods={goods} />)}
+      </div>
     </>
   );
 };
