@@ -91,16 +91,21 @@ export interface Database {
           id: number;
           post_id: number;
           user_id: string;
+          other_user: string;
+          used_item: Tables<'used_item'>;
+          chat: Tables<'chat'>;
         };
         Insert: {
           id?: number;
-          post_id: number;
-          user_id: string;
+          post_id?: number;
+          user_id?: string;
+          other_user?: string;
         };
         Update: {
           id?: number;
           post_id?: number;
           user_id?: string;
+          other_user?: string;
         };
         Relationships: [
           {
