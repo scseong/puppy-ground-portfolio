@@ -1,5 +1,6 @@
 import { supabase } from '@/shared/supabase/supabase';
 import { handleSubmit } from '../actions';
+import { SearchParams } from '../page';
 
 type CategoryObject = {
   mainCategory: string[];
@@ -26,11 +27,13 @@ const getCategories = async (): Promise<CategoryObject> => {
   }, {} as CategoryObject);
 };
 
-const UsedGoodsFilter = async () => {
+const UsedGoodsFilter = async ({ params }: { params: SearchParams }) => {
   const { mainCategory, subCategory } = await getCategories();
+  const handleFilter = handleSubmit.bind(null, params);
 
   return (
-    <form action={handleSubmit}>
+    // TODO; 카테고리 여러개 선택 가능
+    <form action={handleFilter}>
       <select name="main" id="main">
         {mainCategory.map((category, idx) => (
           <option value={idx + 1} key={category}>
