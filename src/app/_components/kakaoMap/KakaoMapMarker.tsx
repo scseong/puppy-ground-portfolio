@@ -4,6 +4,7 @@ import style from './kakaoMapMarker.module.scss';
 import Script from 'next/script';
 import { Map, MapMarker, MapTypeControl, ZoomControl } from 'react-kakao-maps-sdk';
 import { useState, useEffect } from 'react';
+import { useAddress, usePosition } from '@/hooks/useKakaoMapMarker';
 
 const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_KEY}&libraries=services&autoload=false`;
 
@@ -12,9 +13,14 @@ const KakaoMapMarker = () => {
     latitude: 33.450701,
     longitude: 126.570667
   });
-  const [position, setPosition] = useState<{ lat: number; lng: number }>();
-  const [address, setAddress] = useState<string>('');
 
+  const setPosition = usePosition((state) => state.setPosition);
+  const setAddress = useAddress((state) => state.setAddress);
+
+  const position = usePosition((state) => state.position);
+  const address = useAddress((state) => state.address);
+
+  // 마커 클릭 시 해당위치 정보 저장
   const mapClickHandler = (_t: any, mouseEvent: any) => {
     const lat = mouseEvent.latLng.getLat();
     const lng = mouseEvent.latLng.getLng();
