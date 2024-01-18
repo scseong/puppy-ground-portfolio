@@ -14,11 +14,16 @@ import Link from 'next/link';
 import { useState } from 'react';
 import Loading from '@/app/_components/layout/loading/Loading';
 import regionList from '../../../data/regionList.json';
+import Pagination from '@/app/_components/pagination/Pagination';
 
 const StrayDogs = () => {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
   const [selectCity, setSelectCity] = useState('');
+  const [page, setPage] = useState(1);
+  const limit = 15;
+  const offset = (page - 1) * limit;
+
   const {
     isLoading,
     isError,
@@ -99,7 +104,7 @@ const StrayDogs = () => {
         </select>
       </div>
       <div className={style.gridContainer}>
-        {strayList?.map((list, index) => {
+        {strayList?.slice(offset, offset + limit).map((list, index) => {
           const formatNoticeEdt = formatDate(list.noticeEdt);
           return (
             <div key={index} className={style.listContainer}>
@@ -144,6 +149,7 @@ const StrayDogs = () => {
           );
         })}
       </div>
+      <Pagination page={page} setPage={setPage} limit={limit} total={strayList?.length} />
     </div>
   );
 };

@@ -1,0 +1,12 @@
+.bottonWarpper {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  margin-bottom: 20px;
+
+  button {
+    border: none;
+    width: 17px;
+    height: 17px;
+  }
+}
