@@ -5,7 +5,7 @@ import { supabase } from '@/shared/supabase/supabase';
 import { TablesInsert } from '@/shared/supabase/types/supabase';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, DragEvent, useState } from 'react';
+import { ChangeEvent, DragEvent, useEffect, useState } from 'react';
 import { MdOutlineCancel } from 'react-icons/md';
 import { TbCameraCog } from 'react-icons/tb';
 import { v4 as uuidv4 } from 'uuid';
@@ -13,6 +13,8 @@ import styles from './create.module.scss';
 import { useToast } from '@/hooks/useToast';
 import Swal from 'sweetalert2';
 import useAuth from '@/hooks/useAuth';
+import KakaoMapMarker from '@/app/_components/kakaoMap/KakaoMapMarker';
+import { useAddress, usePosition } from '@/hooks/useKakaoMapMarker';
 
 const bucketName = 'used_goods';
 const MAINCATEGORY = ['대형견', '중형견', '소형견'];
@@ -20,14 +22,19 @@ const SUBCATEGORY = ['장난감', '식품', '의류', '기타'];
 
 const CreateForm = () => {
   const { warnTopRight, errorTopRight } = useToast();
+
   const user = useAuth((state) => state.user);
+  const position = usePosition((state) => state.position);
+  const address = useAddress((state) => state.address);
+  console.log('🚀 ~ CreateForm ~ position:', position);
+  console.log('🚀 ~ CreateForm ~ address:', address);
 
   const [inputForm, setInputForm] = useState<TablesInsert<'used_item'>>({
     title: '',
-    address: '',
+    address: address,
     content: '',
-    latitude: 0,
-    longitude: 0,
+    latitude: position.lat,
+    longitude: position.lng,
     main_category_id: 0,
     sub_category_id: 0,
     photo_url: [],
@@ -36,7 +43,6 @@ const CreateForm = () => {
     sold_out: false,
     user_id: user?.id!
   });
-
   async function dropImage(e: DragEvent<HTMLLabelElement>) {
     e.preventDefault();
     e.stopPropagation();
@@ -104,7 +110,7 @@ const CreateForm = () => {
     });
   };
 
-  const onClickCreate = () => {
+  const onClickCreate = async () => {
     if (!inputForm.title) {
       warnTopRight({ message: '제목을 입력해주세요' });
       return;
@@ -133,6 +139,7 @@ const CreateForm = () => {
       warnTopRight({ message: '위치를 입력해주세요' });
       return;
     }
+
     Swal.fire({
       title: '등록하시겠습니까?',
       text: '입력하신 정보로 등록됩니다.',
@@ -143,10 +150,20 @@ const CreateForm = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         createUsedGood(inputForm);
+        console.log('🚀 ~ onClickCreate ~ inputForm:', inputForm);
         router.push('/used-goods');
       } else return;
     });
   };
+
+  useEffect(() => {
+    setInputForm((prev) => ({
+      ...prev,
+      address: address,
+      latitude: position.lat,
+      longitude: position.lng
+    }));
+  }, [address, position]);
 
   return (
     <div className={styles.container}>
@@ -243,6 +260,7 @@ const CreateForm = () => {
           </div>
         </div>
       </div>
+      <KakaoMapMarker />
     </div>
   );
 };
