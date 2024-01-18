@@ -12,6 +12,8 @@ import styles from './chatList.module.scss';
 import Chat from './Chat';
 import ChatInput from './ChatInput';
 import Loading from '../layout/loading/Loading';
+import Image from 'next/image';
+import { IoIosArrowBack } from 'react-icons/io';
 
 type ModalProps = {
   isOpen: boolean;
@@ -113,39 +115,55 @@ const ChatList = ({
     <div>
       <ChatModal isOpen={isOpen} onClose={closeModal} ariaHideApp={ariaHideApp}>
         {isChatOpen ? (
-          <>
-            <button onClick={() => setIsChatOpen(false)}>이전으로</button>
-            {chatItem.length === 0 ? (
-              '채팅 내역이 없습니다! 첫 대화를 시작해보세요!'
-            ) : (
-              <div className={styles.chatScroll}>
-                {chatItem.map((chatHistory) => {
-                  return (
-                    <Chat
-                      key={chatHistory.id}
-                      chatHistory={chatHistory}
-                      userProfile={userProfile}
-                    />
-                  );
-                })}
-              </div>
-            )}
-            <ChatInput
-              chatListId={chatListId}
-              listId={listId}
-              user={user!}
-              userProfile={userProfile}
-            />
-          </>
+          <div>
+            <div>
+              <button className={styles.backBtn} onClick={() => setIsChatOpen(false)}>
+                <IoIosArrowBack size={20} color={'#0AC4B9'} />
+              </button>
+              {chatItem.length === 0 ? (
+                '채팅 내역이 없습니다! 첫 대화를 시작해보세요!'
+              ) : (
+                <div className={styles.chatScroll}>
+                  {chatItem.map((chatHistory) => {
+                    return (
+                      <Chat
+                        key={chatHistory.id}
+                        chatHistory={chatHistory}
+                        userProfile={userProfile}
+                      />
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+            <div>
+              <ChatInput
+                chatListId={chatListId}
+                listId={listId}
+                user={user!}
+                userProfile={userProfile}
+              />
+            </div>
+          </div>
         ) : (
           <>
-            <div>
-              채팅 <FaMagnifyingGlass />
+            <div className={styles.chatSearch}>
+              채팅 <FaMagnifyingGlass color={'#0AC4B9'} />
             </div>
             <ul>
               {getChatListData?.getChatListData?.map((chat) => {
                 return chat.user_id === userProfile.id || chat.other_user === userProfile.id ? (
-                  <li onClick={() => clickChatRoom(chat.id)} key={chat.id}>
+                  <li
+                    className={styles.chatList}
+                    onClick={() => clickChatRoom(chat.id)}
+                    key={chat.id}
+                  >
+                    <Image
+                      width={50}
+                      height={50}
+                      src={`${chat.used_item.photo_url[0]}`}
+                      alt="물건 사진"
+                    />
                     {chat.used_item.title}
                   </li>
                 ) : null;

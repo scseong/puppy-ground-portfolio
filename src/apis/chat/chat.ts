@@ -5,7 +5,7 @@ import { Tables } from '@/shared/supabase/types/supabase';
 export const getChatList = async () => {
   const getChatListQuery = await supabase
     .from('chat_list')
-    .select('*, used_item(title), chat(read_status), profiles(*)')
+    .select('*, used_item(title, photo_url), chat(read_status), profiles(*)')
     .order('id', { ascending: false })
     .returns<Tables<'chat_list'>[]>();
 

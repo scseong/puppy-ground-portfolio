@@ -2,13 +2,26 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  margin-right: 10px;
 }
-
-.chatHistory {
-  width: 150px;
-  background-color: rgb(255, 216, 222);
+.chatUserNameFalse {
+  margin-left: 10px;
+}
+.myChat {
+  max-width: 300px;
+  background-color: var(--primary-color);
+  color: white;
   border-radius: 10px;
   padding: 5px 10px;
+  margin-bottom: 5px;
+}
+.otherChat {
+  max-width: 300px;
+  display: inline-block;
+  background-color: rgba(186, 186, 186, 0.22);
+  border-radius: 10px;
+  padding: 5px 10px;
+  margin-bottom: 5px;
 }
 .userName {
   font-size: 12px;

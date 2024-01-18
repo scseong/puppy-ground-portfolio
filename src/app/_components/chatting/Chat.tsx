@@ -17,12 +17,13 @@ const Chat = ({
       }
     >
       <div className={styles.userName}>
-        <p>{userProfile.user_name}</p>
+        <p>
+          {chatHistory.user_id === userProfile.id ? userProfile.user_name : chatHistory.user_name}
+        </p>
       </div>
-      <div className={styles.chatHistory}>
+      <div className={chatHistory.user_id === userProfile.id ? styles.myChat : styles.otherChat}>
         <div className={styles.content}>
           <p>{chatHistory.content}</p>
-          <span>{chatHistory.read_status}</span>
         </div>
       </div>
       <div className={styles.date}>
