@@ -1,5 +1,6 @@
 import { supabase } from '@/shared/supabase/supabase';
-import { Tables, TablesInsert } from '@/shared/supabase/types/supabase';
+import { Tables, TablesInsert, TablesUpdate } from '@/shared/supabase/types/supabase';
+import { PostgrestSingleResponse } from '@supabase/supabase-js';
 
 export const createUsedGood = async (
   createUsedGoodInput: TablesInsert<'used_item'>
@@ -9,9 +10,9 @@ export const createUsedGood = async (
 
 export const updateUsedGood = async (
   id: number,
-  updateUsedGoodInput: TablesInsert<'used_item'>
-): Promise<void> => {
-  await supabase.from('used_item').update(updateUsedGoodInput).eq('id', id).select();
+  updateUsedGoodInput: TablesUpdate<'used_item'>
+): Promise<PostgrestSingleResponse<Tables<'used_item'>[]>> => {
+  return await supabase.from('used_item').update(updateUsedGoodInput).eq('id', id).select();
 };
 
 export const getUsedGood = async (id: number): Promise<Tables<'used_item'> | null> => {
