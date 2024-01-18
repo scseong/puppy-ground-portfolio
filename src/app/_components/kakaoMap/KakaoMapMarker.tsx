@@ -93,10 +93,11 @@ const KakaoMapMarker = () => {
               }}
             ></MapMarker>
           )}
-          {position && <p>{`위도 : ${position.lat} 경도 : ${position.lng}`}</p>}
+          {/* 지도 페이지 적용 후 주석 삭제 예정 */}
+          {/* {position && <p>{`위도 : ${position.lat} 경도 : ${position.lng}`}</p>} */}
         </Map>
       </div>
-      <p className={style.searchAddress}>{address || '선택하신 위치의 주소입니다'}</p>
+      {/* <p className={style.searchAddress}>{address || '선택하신 위치의 주소입니다'}</p> */}
     </div>
   );
 };
