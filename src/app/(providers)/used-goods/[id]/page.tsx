@@ -94,7 +94,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
       <section className={styles.top}>
         <div className={styles.product}>
           <div className={styles.imageContainer}>
-            {sold_out ? <div>판매완료</div> : <SlideImage images={photo_url} />}
+            <SlideImage images={photo_url} />
           </div>
           <div className={styles.details}>
             <div>
@@ -113,11 +113,19 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                 <span>{profiles?.user_name}</span>
               </div>
               <div className={styles.moreInfo}>
-                <time>{getformattedDate(created_at, 'YY년 YY월 DD일')}</time>
-                <div>
-                  <span className={styles.tag}>#{main_category!.name}</span>
-                  <span className={styles.tag}>#{sub_category!.name}</span>
-                </div>
+                <time>{getformattedDate(created_at, 'YY년 MM월 DD일')}</time>
+                {sold_out ? (
+                  <div>
+                    <span className={styles.tag}>#{main_category!.name}</span>
+                    <span className={styles.tag}>#{sub_category!.name}</span>
+                    <span className={styles.soldOut}>#판매완료</span>
+                  </div>
+                ) : (
+                  <div>
+                    <span className={styles.tag}>#{main_category!.name}</span>
+                    <span className={styles.tag}>#{sub_category!.name}</span>
+                  </div>
+                )}
               </div>
             </div>
             {/* TODO: 채팅, 찜 기능 동작 */}
@@ -150,7 +158,8 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
         {/* TODO: SNS 공유, 링크 복사 */}
         <KakaoShareButton />
         <ClipBoardButton />
-        <button onClick={onClickUpdateSoldOut}>sold-out</button>
+        {/* 버튼 생기면 옮겨 주세요 */}
+        {sold_out ? null : <button onClick={onClickUpdateSoldOut}>sold-out</button>}
       </section>
     </main>
   );
