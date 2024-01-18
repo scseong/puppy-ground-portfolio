@@ -85,7 +85,7 @@ const ChatList = ({
   useEffect(() => {
     const chat = supabase
       .channel('custom-all-channel')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'chat' }, (payload) => {
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat' }, (payload) => {
         // payload.new에 chat_list_id 속성이 있는지 확인 후 업데이트
         if (payload.new && 'chat_list_id' in payload.new) {
           setChat((prev) => [...prev!, payload.new as Tables<'chat'>]);
@@ -124,15 +124,17 @@ const ChatList = ({
                 '채팅 내역이 없습니다! 첫 대화를 시작해보세요!'
               ) : (
                 <div className={styles.chatScroll}>
-                  {chatItem.map((chatHistory) => {
-                    return (
-                      <Chat
-                        key={chatHistory.id}
-                        chatHistory={chatHistory}
-                        userProfile={userProfile}
-                      />
-                    );
-                  })}
+                  <div>
+                    {chatItem.map((chatHistory) => {
+                      return (
+                        <Chat
+                          key={chatHistory.id}
+                          chatHistory={chatHistory}
+                          userProfile={userProfile}
+                        />
+                      );
+                    })}
+                  </div>
                 </div>
               )}
             </div>

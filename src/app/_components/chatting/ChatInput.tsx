@@ -44,7 +44,7 @@ const ChatInput = ({
   };
 
   return (
-    <form onSubmit={clickSendChat}>
+    <form className={styles.form} onSubmit={clickSendChat}>
       <div className={styles.ChatInputSpace}>
         <input
           placeholder="내용을 입력해주세요"
