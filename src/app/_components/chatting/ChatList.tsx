@@ -4,7 +4,7 @@ import ChatModal from './ChatModal';
 import { supabase } from '@/shared/supabase/supabase';
 import { Tables } from '@/shared/supabase/types/supabase';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getChatList } from '@/apis/chat/chat';
 import useAuth from '@/hooks/useAuth';
 import { getProfile } from '@/apis/profile/profile';
@@ -47,6 +47,7 @@ const ChatList = ({
     refetchOnWindowFocus: false
   });
 
+  const chatListRef = useRef<HTMLDivElement | null>(null);
   // 유저 정보
   const user = useAuth((state) => state.user);
   const userProfile = getProfileData?.find((pro) => pro.id === user?.id)!;
@@ -65,6 +66,15 @@ const ChatList = ({
     setChatItem(chatHistory!);
     setChatListId(id);
     setIsChatOpen(true);
+  };
+  // 스크롤
+  const scrollToBottom = () => {
+    if (chatListRef.current) {
+      chatListRef.current.scrollTo({
+        top: chatListRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
   };
 
   const chatContents = async () => {
@@ -108,6 +118,14 @@ const ChatList = ({
     setChat(getChat || []); // getChat이 변경될 때 업데이트
   }, [getChat]);
 
+  useEffect(() => {
+    scrollToBottom();
+  }, []);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chat]);
+
   if (isLoading) return <Loading />;
   if (isError) return <div>오류가 발생하였습니다...</div>;
 
@@ -120,23 +138,19 @@ const ChatList = ({
               <button className={styles.backBtn} onClick={() => setIsChatOpen(false)}>
                 <IoIosArrowBack size={20} color={'#0AC4B9'} />
               </button>
-              {chatItem.length === 0 ? (
-                '채팅 내역이 없습니다! 첫 대화를 시작해보세요!'
-              ) : (
-                <div className={styles.chatScroll}>
-                  <div>
-                    {chatItem.map((chatHistory) => {
-                      return (
-                        <Chat
-                          key={chatHistory.id}
-                          chatHistory={chatHistory}
-                          userProfile={userProfile}
-                        />
-                      );
-                    })}
-                  </div>
+              <div ref={chatListRef} className={styles.chatScroll}>
+                <div>
+                  {chatItem.map((chatHistory) => {
+                    return (
+                      <Chat
+                        key={chatHistory.id}
+                        chatHistory={chatHistory}
+                        userProfile={userProfile}
+                      />
+                    );
+                  })}
                 </div>
-              )}
+              </div>
             </div>
             <div>
               <ChatInput

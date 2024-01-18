@@ -47,6 +47,7 @@ const ChatInput = ({
     <form className={styles.form} onSubmit={clickSendChat}>
       <div className={styles.ChatInputSpace}>
         <input
+          autoFocus
           placeholder="내용을 입력해주세요"
           value={chatContent}
           onChange={onChangeChatContent}
