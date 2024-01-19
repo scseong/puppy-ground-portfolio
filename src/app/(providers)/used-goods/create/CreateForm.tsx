@@ -6,8 +6,6 @@ import { TablesInsert } from '@/shared/supabase/types/supabase';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, DragEvent, useEffect, useState } from 'react';
-import { MdOutlineCancel } from 'react-icons/md';
-import { TbCameraCog } from 'react-icons/tb';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './create.module.scss';
 import { useToast } from '@/hooks/useToast';
@@ -15,6 +13,10 @@ import Swal from 'sweetalert2';
 import useAuth from '@/hooks/useAuth';
 import KakaoMapMarker from '@/app/_components/kakaoMap/KakaoMapMarker';
 import { useAddress, usePosition } from '@/hooks/useKakaoMapMarker';
+import { MdOutlineCancel } from 'react-icons/md';
+import { LuPencilLine } from 'react-icons/lu';
+import { FiPlus } from 'react-icons/fi';
+import { PiDotsThreeOutlineVerticalFill } from 'react-icons/pi';
 
 const bucketName = 'used_goods';
 const MAINCATEGORY = ['대형견', '중형견', '소형견'];
@@ -41,6 +43,7 @@ const CreateForm = () => {
     sold_out: false,
     user_id: user?.id!
   });
+
   async function dropImage(e: DragEvent<HTMLLabelElement>) {
     e.preventDefault();
     e.stopPropagation();
@@ -148,7 +151,6 @@ const CreateForm = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         createUsedGood(inputForm);
-        console.log('🚀 ~ onClickCreate ~ inputForm:', inputForm);
         router.push('/used-goods');
       } else return;
     });
@@ -164,101 +166,113 @@ const CreateForm = () => {
   }, [address, position]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.containerLeft}>
-        <div className={styles.imageBox}>
-          {Array.from({ length: 4 }).map((_, index) => (
-            <div className={styles.imageInput} key={index}>
-              {inputForm.photo_url[index] ? (
-                <>
-                  {index === 0 ? <div className={styles.mainImage}>대표</div> : null}
-                  <div className={styles.cancelIcon} onClick={() => removeImage(index)}>
-                    <MdOutlineCancel size={20} />
-                  </div>
-                  <Image
-                    src={inputForm.photo_url[index] || ''}
-                    alt="image"
-                    width={200}
-                    height={200}
-                  />
-                </>
-              ) : (
-                <>
-                  <label htmlFor="file" onDragOver={(e) => e.preventDefault()} onDrop={dropImage}>
-                    <TbCameraCog size={27} />
-                  </label>
-                  <input id="file" type="file" accept=".gif, .jpg, .png" onChange={addImage} />
-                </>
-              )}
+    <div className={styles.containerBox}>
+      <div className={styles.title}>
+        제목 <LuPencilLine fill="black" />
+        <input className={styles.titleInput} name="title" onChange={handleFormChange} autoFocus />
+      </div>
+      <p className={styles.info}>
+        이미지는 필수입니다. (최대 4장) 드래그하거나 클릭해서 이미지를 선택하세요.
+      </p>
+      <div className={styles.containers}>
+        <div className={styles.containerLeft}>
+          <div className={styles.imageBox}>
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div
+                className={
+                  inputForm.photo_url[index] && index === 0
+                    ? styles.imageInputMain
+                    : styles.imageInput
+                }
+                key={index}
+              >
+                {inputForm.photo_url[index] ? (
+                  <>
+                    {index === 0 ? <div className={styles.mainImage}>대표</div> : null}
+                    <div className={styles.cancelIcon} onClick={() => removeImage(index)}>
+                      <MdOutlineCancel size={20} color="black" />
+                    </div>
+                    <Image
+                      src={inputForm.photo_url[index] || ''}
+                      alt="image"
+                      width={300}
+                      height={300}
+                      style={{ objectFit: 'cover' }}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <label htmlFor="file" onDragOver={(e) => e.preventDefault()} onDrop={dropImage}>
+                      <FiPlus size={27} color="#B0B0B0" />
+                    </label>
+                    <input id="file" type="file" accept=".gif, .jpg, .png" onChange={addImage} />
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className={styles.containerRight}>
+          <textarea
+            className={styles.textarea}
+            placeholder={`제품 설명을 자세히 작성해주세요.\nex) 몸무게, 의류, 사이즈, 유통기한 등`}
+            name="content"
+            onChange={handleFormChange}
+          />
+          <div className={styles.priceBox}>
+            가격 <input className={styles.price} name="price" onChange={handleFormChange} /> 원
+          </div>
+        </div>
+      </div>
+      <p className={styles.info}>선택해주세요 (최대 1개씩)</p>
+      <div className={styles.categoryBox}>
+        <div className={styles.category}>
+          {MAINCATEGORY.map((category, index) => (
+            <div className={styles.radio} key={index}>
+              <input
+                type="radio"
+                name="main_category_id"
+                value={index + 1}
+                onChange={handleFormChange}
+              />
+              <label htmlFor="main_category_id"># {category}</label>
+            </div>
+          ))}
+        </div>
+        <PiDotsThreeOutlineVerticalFill size={25} color="#B0B0B0" />
+        <div className={styles.category}>
+          {SUBCATEGORY.map((category, index) => (
+            <div className={styles.radio} key={index}>
+              <input
+                type="radio"
+                name="sub_category_id"
+                value={index + 1}
+                onChange={handleFormChange}
+              />
+              <label htmlFor="sub_category_id"># {category}</label>
             </div>
           ))}
         </div>
       </div>
-      <div className={styles.containerRight}>
-        <div className={styles.contentBox}>
-          <input
-            className={styles.input}
-            placeholder="제목"
-            name="title"
-            onChange={handleFormChange}
-          />
-          <textarea
-            className={styles.textarea}
-            placeholder="제품 설명을 자세히 작성해주세요"
-            name="content"
-            onChange={handleFormChange}
-          />
-          <input
-            className={styles.price}
-            placeholder="가격"
-            name="price"
-            onChange={handleFormChange}
-          />
-          <div className={styles.category}>
-            {MAINCATEGORY.map((category, index) => (
-              <div className={styles.radio} key={index}>
-                <input
-                  type="radio"
-                  name="main_category_id"
-                  value={index + 1}
-                  onChange={handleFormChange}
-                />
-                <label htmlFor="main_category_id">{category}</label>
-              </div>
-            ))}
-          </div>
-          <div className={styles.category}>
-            {SUBCATEGORY.map((category, index) => (
-              <div className={styles.radio} key={index}>
-                <input
-                  type="radio"
-                  name="sub_category_id"
-                  value={index + 1}
-                  onChange={handleFormChange}
-                />
-                <label htmlFor="sub_category_id">{category}</label>
-              </div>
-            ))}
-          </div>
-          <div className={styles.location}>
-            <input
-              className={styles.locationInput}
-              placeholder="상세주소"
-              name="place_name"
-              onChange={handleFormChange}
-            />
-          </div>
-          <div className={styles.buttonBox}>
-            <button className={styles.button} onClick={onClickCreate}>
-              등록하기
-            </button>
-            <button className={styles.button} onClick={onClickCancel}>
-              취소하기
-            </button>
-          </div>
-        </div>
-      </div>
+
+      <p className={styles.infoMap}>거래 희망 장소 선택하기 (필수)</p>
       <KakaoMapMarker />
+
+      <div className={styles.detailmap}>
+        <p className={styles.firstWord}>상세주소를 적어주세요.</p> &nbsp;
+        <p className={styles.secondWord}>ex&#41; 교보문고앞</p>
+      </div>
+      <div className={styles.location}>
+        <input className={styles.locationInput} name="place_name" onChange={handleFormChange} />
+      </div>
+      <div className={styles.buttonBox}>
+        <button className={styles.buttonCancel} onClick={onClickCancel}>
+          취소하기
+        </button>
+        <button className={styles.buttonCreate} onClick={onClickCreate}>
+          등록하기
+        </button>
+      </div>
     </div>
   );
 };
