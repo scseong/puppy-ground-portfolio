@@ -122,13 +122,13 @@ const MainGrid = () => {
         </motion.div>
         <motion.div
           className={style.fourthTextWrap}
-          initial={{ opacity: 0, y: 100 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: 100 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: false }}
           transition={{
             ease: 'easeInOut',
             duration: 1,
-            y: { duration: 1 }
+            x: { duration: 1 }
           }}
         >
           <p>사랑스러운,</p>
@@ -168,20 +168,18 @@ const MainGrid = () => {
               </motion.button>
             </Link>
           </div>
-          <div className={style.fifthImageGrid}>
-            <div className={style.fifthImageWrap}>
-              <div className={style.fifthImage}>
-                <Image src={walk} alt="image" width={400} height={400} className={style.image} />
-                <Image src={hotel} alt="image" width={400} height={400} className={style.image} />
-                <Image
-                  src={restaurant}
-                  alt="image"
-                  width={400}
-                  height={400}
-                  className={style.image}
-                />
-                <Image src={travel} alt="image" width={400} height={400} className={style.image} />
-              </div>
+          <div>
+            <div className={style.fifthImageGrid}>
+              <Image src={walk} alt="image" width={400} height={400} className={style.image} />
+              <Image src={hotel} alt="image" width={400} height={400} className={style.image} />
+              <Image
+                src={restaurant}
+                alt="image"
+                width={400}
+                height={400}
+                className={style.image}
+              />
+              <Image src={travel} alt="image" width={400} height={400} className={style.image} />
             </div>
           </div>
         </div>

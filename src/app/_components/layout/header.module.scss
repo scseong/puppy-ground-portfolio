@@ -44,7 +44,7 @@
 }
 
 .menuItem:hover {
-  color: #0ac4b9;
+  color: var(--primary-color);
 }
 
 .chat {
@@ -56,7 +56,7 @@
 }
 
 .chat:hover {
-  color: #0ac4b9;
+  color: var(--primary-color);
 }
 
 .bell {
@@ -66,5 +66,5 @@
 }
 
 .bell:hover {
-  color: #0ac4b9;
+  color: var(--primary-color);
 }
