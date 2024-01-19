@@ -4,14 +4,13 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
-  margin: auto;
   z-index: 1;
 }
 
 .firstContainer {
-  width: 100%;
+  width: 90vw;
   height: 600px;
-  margin-left: 200px;
+  margin-left: 10vw;
   background-color: #ebebeb;
   border-radius: 70px 0 0 70px;
 }
@@ -20,9 +19,9 @@
   width: 1200px;
   height: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  margin: auto 100px auto 150px;
+  margin: auto 0 auto 200px;
 }
 
 .firstTextWrap {
@@ -40,7 +39,7 @@
 }
 
 .firstImageWrap {
-  width: 60%;
+  width: 700px;
   height: 600px;
   overflow: hidden;
 }
@@ -53,7 +52,7 @@
 
 .secondSection {
   width: 1200px;
-  height: 600px;
+  height: 700px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -93,7 +92,7 @@
 
 .thirdSection {
   width: 100vw;
-  height: 600px;
+  height: 700px;
   justify-content: center;
   align-items: center;
   overflow: hidden;
@@ -110,13 +109,12 @@
   position: absolute;
   width: 100%;
   height: 600px;
-  //   bottom: 350px;
-  //   top: 1400px;
+  top: 185%;
 }
 
 .fourthSection {
   width: 1200px;
-  height: 600px;
+  height: 700px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -124,18 +122,61 @@
 }
 
 .fourthImageWrap {
-  width: 500px;
+  width: 600px;
   height: 500px;
   overflow: hidden;
+  border-radius: 30px;
 }
 
 .fourthTextWrap {
+  display: flex;
+  flex-direction: column;
   font-family: Pretendard-Medium;
   font-size: 45px;
   line-height: 65px;
-  width: 50%;
 }
 
 .fourthBold {
   font-family: Pretendard-ExtraBold;
+}
+
+.fifthContainer {
+  width: 100vw;
+  background-color: #ebebeb;
+}
+
+.fifthSection {
+  width: 1200px;
+  height: 700px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+}
+
+.fifthTextWrap {
+  font-family: Pretendard-Medium;
+  font-size: 40px;
+  text-align: center;
+}
+
+.fifthImageGrid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  margin: 0 auto;
+}
+
+.fifthImageWrap {
+  width: 100%;
+  height: 100%;
+}
+
+.fifthImage {
+  width: 250px;
+  height: 250px;
+  //   overflow: hidden;
+  border-radius: 30px;
 }

@@ -39,6 +39,7 @@ const Facilities = () => {
   // map 이동 debouncing을 위한 timer 생성
   const timer = useRef<number | null>(null);
 
+  // 현재위치로 가는 버튼
   const currentButtonHandler = () => {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -50,7 +51,6 @@ const Facilities = () => {
           setCurrentLocationMarker(true);
         },
         () => {
-          console.log('현재위치를 찾는데 실패하였습니다');
           warnTopCenter({ message: '현재 위치를 찾지 못하였습니다 🥲', timeout: 2000 });
           setCurrentLocationMarker(false);
         }

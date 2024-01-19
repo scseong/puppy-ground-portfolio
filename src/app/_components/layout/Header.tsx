@@ -19,10 +19,6 @@ const Header = () => {
   const { errorTopRight, successTopRight } = useToast();
   const user = useAuth((state) => state.user);
 
-  useEffect(() => {
-    console.log('여기는 헤더입니다', user);
-  }, [user]);
-
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (!error) {
@@ -33,6 +29,7 @@ const Header = () => {
       errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
     }
   };
+
   const {
     isError,
     isLoading,

@@ -1,20 +1,19 @@
 .container {
   width: 100vw;
-  // border-bottom: 1px solid #b0b0b0;
+  background-color: #ffffff;
 }
 
 .navbarBox {
+  width: 1200px;
   display: flex;
   align-items: center;
   margin: auto;
   height: 100px;
-  background-color: #ffffff;
   flex-direction: row;
   justify-content: space-between;
   position: sticky;
   top: 0;
   z-index: 3;
-  width: 1200px;
 }
 
 .logoBox {
@@ -40,7 +39,7 @@
 .menuItem {
   font-size: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   font-family: Pretendard-Medium;
 }
 
@@ -53,7 +52,7 @@
   border-style: none;
   background-color: transparent;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .chat:hover {
@@ -63,7 +62,7 @@
 .bell {
   font-size: 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .bell:hover {
