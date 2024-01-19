@@ -1,0 +1,33 @@
+.wrapper {
+  height: 42px;
+  display: flex;
+  gap: 6px;
+
+  button {
+    height: 100%;
+    background-color: #e6e8e8;
+    border: 1px solid #979797;
+    border-radius: 5px;
+    aspect-ratio: 1 / 1;
+
+    svg {
+      transform: franslateY(1px);
+    }
+  }
+}
+
+.input {
+  height: 100%;
+  padding: 0.5rem 1rem;
+  outline: none;
+  border: 1px solid var(--placeholder-input-border-color);
+  border-radius: 5px;
+
+  &:placeholder {
+    color: var(----placeholder-text-color);
+  }
+
+  &:focus {
+    border-color: var(--primary-color);
+  }
+}
