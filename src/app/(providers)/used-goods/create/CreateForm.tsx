@@ -255,7 +255,7 @@ const CreateForm = () => {
         </div>
       </div>
 
-      <p className={styles.info}>거래 희망 장소 선택하기 (필수)</p>
+      <p className={styles.infoMap}>거래 희망 장소 선택하기 (필수)</p>
       <KakaoMapMarker />
 
       <div className={styles.detailmap}>

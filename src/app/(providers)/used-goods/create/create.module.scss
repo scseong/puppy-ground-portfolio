@@ -27,14 +27,13 @@
 }
 
 .info {
-  margin: 20px 0;
+  margin: 50px 0 20px 0;
   color: #212529;
   font-size: 22px;
   font-weight: 700;
   line-height: 32px;
   letter-spacing: -0.3px;
   width: 100%;
-  margin-top: 50px;
 }
 
 .containers {
@@ -99,6 +98,16 @@
   font-size: 20px;
   text-align: right;
   width: 400px;
+}
+
+.infoMap {
+  color: #212529;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 32px;
+  letter-spacing: -0.3px;
+  width: 100%;
+  margin-top: 50px;
 }
 
 .categoryBox {
@@ -236,7 +245,6 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  margin-top: 20px;
   width: 100%;
 
   .locationInput {
