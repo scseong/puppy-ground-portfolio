@@ -3,7 +3,7 @@ import { FaMagnifyingGlass } from 'react-icons/fa6';
 import ChatModal from './ChatModal';
 import { supabase } from '@/shared/supabase/supabase';
 import { Tables } from '@/shared/supabase/types/supabase';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { getChatList } from '@/apis/chat/chat';
 import useAuth from '@/hooks/useAuth';
@@ -14,6 +14,8 @@ import ChatInput from './ChatInput';
 import Loading from '../layout/loading/Loading';
 import Image from 'next/image';
 import { IoIosArrowBack } from 'react-icons/io';
+import { FaTrashAlt } from 'react-icons/fa';
+import Swal from 'sweetalert2';
 
 type ModalProps = {
   isOpen: boolean;
@@ -32,20 +34,27 @@ const ChatList = ({
   listId,
   getChat
 }: ModalProps) => {
-  const { data: getChatListData } = useQuery({
+  const {
+    isError,
+    isLoading,
+    data: getChatListData
+  } = useQuery({
     queryKey: ['getChatList'],
     queryFn: getChatList,
     refetchOnWindowFocus: false
   });
-  const {
-    isError,
-    isLoading,
-    data: getProfileData
-  } = useQuery({
+  const { data: getProfileData } = useQuery({
     queryKey: ['getProfile'],
     queryFn: getProfile,
     refetchOnWindowFocus: false
   });
+  // const queryClient = useQueryClient();
+  // const sendChatMutation = useMutation({
+  //   mutationFn: deleteChatRoom,
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ['getChatList'] });
+  //   }
+  // });
 
   const chatListRef = useRef<HTMLDivElement | null>(null);
   // 유저 정보
@@ -76,6 +85,27 @@ const ChatList = ({
       });
     }
   };
+
+  //  채팅방 삭제 기능
+  // const clickDeleteChatRoom = (id: number) => {
+  //   Swal.fire({
+  //     title: '삭제하시겠습니까?',
+  //     text: '삭제 시 되돌릴 수 없습니다.',
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#0AC4B9',
+  //     confirmButtonText: '삭제',
+  //     cancelButtonText: '취소'
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       Swal.fire({
+  //         title: '삭제되었습니다.',
+  //         icon: 'success'
+  //       });
+  //       sendChatMutation.mutate(id);
+  //     }
+  //   });
+  // };
 
   const chatContents = async () => {
     try {
@@ -166,21 +196,24 @@ const ChatList = ({
             <div className={styles.chatSearch}>
               채팅 <FaMagnifyingGlass color={'#0AC4B9'} />
             </div>
-            <ul>
+            <ul className={styles.chatScroll}>
               {getChatListData?.getChatListData?.map((chat) => {
-                return chat.user_id === userProfile.id || chat.other_user === userProfile.id ? (
-                  <li
-                    className={styles.chatList}
-                    onClick={() => clickChatRoom(chat.id)}
-                    key={chat.id}
-                  >
-                    <Image
-                      width={50}
-                      height={50}
-                      src={`${chat.used_item.photo_url[0]}`}
-                      alt="물건 사진"
-                    />
-                    {chat.used_item.title}
+                return chat.user_id === userProfile?.id || chat.other_user === userProfile?.id ? (
+                  <li className={styles.chatList} key={chat.id}>
+                    <div onClick={() => clickChatRoom(chat.id)} className={styles.chatContent}>
+                      <Image
+                        width={50}
+                        height={50}
+                        src={`${chat.used_item.photo_url[0]}`}
+                        alt="물건 사진"
+                      />
+                      {chat.used_item.title}
+                    </div>
+                    {/* <div className={styles.wastebaseket}>
+                      <span>
+                        <FaTrashAlt color={'#0AC4B9'} />
+                      </span>
+                    </div> */}
                   </li>
                 ) : null;
               })}

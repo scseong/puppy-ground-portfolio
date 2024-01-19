@@ -14,9 +14,10 @@ import Swal from 'sweetalert2';
 import { SlideImage, TradeLocationMap } from '../_components';
 import ChatList from '@/app/_components/chatting/ChatList';
 import { useState } from 'react';
-import { makeChatList } from '@/apis/chat/chat';
+import { getChatList, makeChatList } from '@/apis/chat/chat';
 import useAuth from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
+import { useParams } from 'next/navigation';
 
 const getUsedGoodDetail = async (id: string) => {
   const { data, error } = await supabase
@@ -38,7 +39,13 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
     queryFn: () => getUsedGoodDetail(params.id)
   });
 
+  const { data: chatList } = useQuery({
+    queryKey: ['chat_list'],
+    queryFn: getChatList
+  });
+
   const user = useAuth((state) => state.user);
+  const { id } = useParams();
   const { errorTopRight } = useToast();
 
   const onClickUpdateSoldOut = async () => {
@@ -82,14 +89,29 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
 
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
   const [chatListId, setChatListId] = useState(0);
+  //채팅하기 한번만 할 수 있는.. 눈속임 state(?)
+  const [userChatList, setUserChatList] = useState(false);
+
+  const list = chatList?.getChatListData?.filter((chat) => chat?.post_id === Number(id));
+
   const clickOpenChat = async () => {
-    const chat = await makeChatListMutation.mutateAsync({
-      post_id: data?.id,
-      user_id: user?.id,
-      other_user: data?.user_id
-    });
-    setChatListId(chat![0].id);
-    setModalIsOpen(true);
+    const findUserChatList = list?.filter((chat) => chat.user_id === user?.id);
+
+    if (userChatList === true || findUserChatList?.length !== 0)
+      return errorTopRight({ message: '이미 채팅을 보냈습니다', timeout: 2000 });
+
+    try {
+      const chat = await makeChatListMutation.mutateAsync({
+        post_id: data?.id,
+        user_id: user?.id,
+        other_user: data?.user_id
+      });
+      setChatListId(chat![0].id);
+      setModalIsOpen(true);
+      setUserChatList(true);
+    } catch (error) {
+      errorTopRight({ message: '오류가 발생하였습니다', timeout: 2000 });
+    }
   };
 
   if (isLoading) return <span>LOADING</span>;
