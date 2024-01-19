@@ -168,7 +168,7 @@ const ChatList = ({
             </div>
             <ul className={styles.chatScroll}>
               {getChatListData?.getChatListData?.map((chat) => {
-                return chat.user_id === userProfile.id || chat.other_user === userProfile.id ? (
+                return chat.user_id === userProfile?.id || chat.other_user === userProfile?.id ? (
                   <li
                     className={styles.chatList}
                     onClick={() => clickChatRoom(chat.id)}
