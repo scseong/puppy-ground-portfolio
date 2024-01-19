@@ -5,7 +5,7 @@ import { supabase } from '@/shared/supabase/supabase';
 import { Tables, TablesInsert } from '@/shared/supabase/types/supabase';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, DragEvent, useState } from 'react';
+import { ChangeEvent, DragEvent, useEffect, useState } from 'react';
 import { MdOutlineCancel } from 'react-icons/md';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './update.module.scss';
@@ -16,6 +16,8 @@ import { FiPlus } from 'react-icons/fi';
 import { PiDotsThreeOutlineVerticalFill } from 'react-icons/pi';
 import KakaoMapMarker from '@/app/_components/kakaoMap/KakaoMapMarker';
 import useAuth from '@/hooks/useAuth';
+import { useAddress, usePosition } from '@/hooks/useKakaoMapMarker';
+import { TradeLocationMap } from '../../_components';
 
 const bucketName = 'used_goods';
 const MAINCATEGORY = ['대형견', '중형견', '소형견'];
@@ -26,6 +28,9 @@ type Props = {
 };
 
 const UpdateForm = (props: Props) => {
+  const position = usePosition((state) => state.position);
+  const address = useAddress((state) => state.address);
+
   const [inputForm, setInputForm] = useState<TablesInsert<'used_item'>>({
     title: props.usedItem?.title,
     address: props.usedItem?.address,
@@ -40,6 +45,7 @@ const UpdateForm = (props: Props) => {
     sold_out: props.usedItem?.sold_out,
     user_id: props.usedItem?.user_id
   });
+  console.log(inputForm.latitude, inputForm.longitude);
 
   const { warnTopRight, errorTopRight } = useToast();
   const user = useAuth((state) => state.user);
@@ -159,6 +165,15 @@ const UpdateForm = (props: Props) => {
     });
   };
 
+  useEffect(() => {
+    setInputForm((prev) => ({
+      ...prev,
+      address: address,
+      latitude: position.lat,
+      longitude: position.lng
+    }));
+  }, [address, position]);
+
   return (
     <div className={styles.containerBox}>
       <div className={styles.title}>
@@ -266,8 +281,9 @@ const UpdateForm = (props: Props) => {
       </div>
 
       <p className={styles.infoMap}>거래 희망 장소 선택하기 (필수)</p>
+      {/* 지도업데이트 수정필요 */}
       <KakaoMapMarker />
-
+      {/* <TradeLocationMap lat={inputForm.latitude} lng={inputForm.longitude} /> */}
       <div className={styles.detailmap}>
         <p className={styles.firstWord}>상세주소를 적어주세요.</p> &nbsp;
         <p className={styles.secondWord}>ex&#41; 교보문고앞</p>
