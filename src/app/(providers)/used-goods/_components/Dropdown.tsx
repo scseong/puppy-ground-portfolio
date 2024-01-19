@@ -3,7 +3,7 @@ import { TfiArrowCircleUp, TfiArrowCircleDown } from 'react-icons/tfi';
 import styles from './dropdown.module.scss';
 
 const Dropdown = ({ categories, defaultText }: { categories: string[]; defaultText: string }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
     <div className={styles.dropdown}>
@@ -19,8 +19,8 @@ const Dropdown = ({ categories, defaultText }: { categories: string[]; defaultTe
             {categories.map((category) => (
               <li key={category}>
                 <div className={styles.option}>
-                  <input type="checkbox" name={category} />
-                  <span>{category}</span>
+                  <input type="checkbox" id={category} name={category} />
+                  <label htmlFor={category}>{category}</label>
                 </div>
               </li>
             ))}

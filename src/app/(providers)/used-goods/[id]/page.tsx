@@ -4,16 +4,20 @@ import { updateUsedGood } from '@/apis/used-goods/actions';
 import ClipBoardButton from '@/app/_components/shareButton/ClipBoardButton';
 import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
 import { supabase } from '@/shared/supabase/supabase';
+import styles from './page.module.scss';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import Image from 'next/image';
 import { getCountFromTable } from '@/utils/table';
 import { getformattedDate } from '@/utils/time';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import Image from 'next/image';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import { SlideImage, TradeLocationMap } from '../_components';
-import styles from './page.module.scss';
+import ChatList from '@/app/_components/chatting/ChatList';
+import { useState } from 'react';
+import { getChatList, makeChatList } from '@/apis/chat/chat';
 import useAuth from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
+import { useParams } from 'next/navigation';
 import { addCommasToNumber } from '@/utils/format';
 
 const getUsedGoodDetail = async (id: string) => {
@@ -36,7 +40,13 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
     queryFn: () => getUsedGoodDetail(params.id)
   });
 
+  const { data: chatList } = useQuery({
+    queryKey: ['chat_list'],
+    queryFn: getChatList
+  });
+
   const user = useAuth((state) => state.user);
+  const { id } = useParams();
   const { errorTopRight } = useToast();
 
   const onClickUpdateSoldOut = async () => {
@@ -69,6 +79,40 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
         queryClient.invalidateQueries({ queryKey: ['used-item', params.id] });
       }
     });
+  };
+
+  const makeChatListMutation = useMutation({
+    mutationFn: makeChatList,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getChatList'] });
+    }
+  });
+
+  const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
+  const [chatListId, setChatListId] = useState(0);
+  //채팅하기 한번만 할 수 있는.. 눈속임 state(?)
+  const [userChatList, setUserChatList] = useState(false);
+
+  const list = chatList?.getChatListData?.filter((chat) => chat?.post_id === Number(id));
+
+  const clickOpenChat = async () => {
+    const findUserChatList = list?.filter((chat) => chat.user_id === user?.id);
+
+    if (userChatList === true || findUserChatList?.length !== 0)
+      return errorTopRight({ message: '이미 채팅을 보냈습니다', timeout: 2000 });
+
+    try {
+      const chat = await makeChatListMutation.mutateAsync({
+        post_id: data?.id,
+        user_id: user?.id,
+        other_user: data?.user_id
+      });
+      setChatListId(chat![0].id);
+      setModalIsOpen(true);
+      setUserChatList(true);
+    } catch (error) {
+      errorTopRight({ message: '오류가 발생하였습니다', timeout: 2000 });
+    }
   };
 
   if (isLoading) return <span>LOADING</span>;
@@ -131,7 +175,15 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
             </div>
             {/* TODO: 채팅, 찜 기능 동작 */}
             <div className={styles.btns}>
-              <button>채팅하기</button>
+              <button onClick={clickOpenChat}>채팅하기</button>
+              <ChatList
+                isOpen={isModalOpen}
+                onClose={() => setModalIsOpen(false)}
+                ariaHideApp={false}
+                isChatRoomOpen={true}
+                listId={chatListId}
+                getChat={[]}
+              />
               <button>찜 {getCountFromTable(used_item_wish)}</button>
             </div>
           </div>
