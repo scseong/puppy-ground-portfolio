@@ -77,16 +77,6 @@ const UpdateForm = (props: Props) => {
     }
   }
 
-  async function deleteImage(photo_url: string) {
-    const file = photo_url.split('/').pop();
-    if (!file) return;
-
-    const { error } = await supabase.storage.from('used_goods').remove([file]);
-    if (error) {
-      errorTopRight({ message: error.message });
-    }
-  }
-
   const handleFormChange = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const { name, value } = e.target;
     setInputForm({ ...inputForm, [name]: value });
@@ -111,23 +101,6 @@ const UpdateForm = (props: Props) => {
       cancelButtonText: '아니요'
     }).then((result) => {
       if (result.isConfirmed) {
-        router.push('/used-goods');
-      } else return;
-    });
-  };
-
-  const onClickDelete = () => {
-    Swal.fire({
-      title: '정말 삭제하시겠습니까?',
-      text: '입력하신 정보가 모두 사라집니다.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: '네',
-      cancelButtonText: '아니요'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        inputForm.photo_url.map((photo_url) => deleteImage(photo_url));
-        deleteUsedGood(props.usedItem.id);
         router.push('/used-goods');
       } else return;
     });
@@ -274,9 +247,6 @@ const UpdateForm = (props: Props) => {
             </button>
             <button className={styles.button} onClick={onClickCancel}>
               취소하기
-            </button>
-            <button className={styles.button} onClick={onClickDelete}>
-              삭제하기
             </button>
           </div>
         </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { updateUsedGood } from '@/apis/used-goods/actions';
+import { deleteUsedGood, updateUsedGood } from '@/apis/used-goods/actions';
 import ClipBoardButton from '@/app/_components/shareButton/ClipBoardButton';
 import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
 import { supabase } from '@/shared/supabase/supabase';
@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { makeChatList } from '@/apis/chat/chat';
 import useAuth from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
+import { useRouter } from 'next/navigation';
 
 const getUsedGoodDetail = async (id: string) => {
   const { data, error } = await supabase
@@ -70,6 +71,35 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
 
         queryClient.invalidateQueries({ queryKey: ['used-item', params.id] });
       }
+    });
+  };
+
+  async function deleteImage(photo_url: string) {
+    const file = photo_url.split('/').pop();
+    if (!file) return;
+
+    const { error } = await supabase.storage.from('used_goods').remove([file]);
+    if (error) {
+      errorTopRight({ message: error.message });
+    }
+  }
+
+  const router = useRouter();
+
+  const onClickDelete = () => {
+    Swal.fire({
+      title: '정말 삭제하시겠습니까?',
+      text: '입력하신 정보가 모두 사라집니다.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '네',
+      cancelButtonText: '아니요'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        data?.photo_url.map((photo_url) => deleteImage(photo_url));
+        deleteUsedGood(Number(params.id));
+        router.push('/used-goods');
+      } else return;
     });
   };
 
@@ -190,6 +220,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
         <ClipBoardButton />
         {/* 버튼 생기면 옮겨 주세요 */}
         {sold_out ? null : <button onClick={onClickUpdateSoldOut}>sold-out</button>}
+        <button onClick={onClickDelete}>delete</button>
       </section>
     </main>
   );
