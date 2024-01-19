@@ -17,7 +17,6 @@ import { PiDotsThreeOutlineVerticalFill } from 'react-icons/pi';
 import KakaoMapMarker from '@/app/_components/kakaoMap/KakaoMapMarker';
 import useAuth from '@/hooks/useAuth';
 import { useAddress, usePosition } from '@/hooks/useKakaoMapMarker';
-import { TradeLocationMap } from '../../_components';
 
 const bucketName = 'used_goods';
 const MAINCATEGORY = ['대형견', '중형견', '소형견'];
@@ -45,7 +44,6 @@ const UpdateForm = (props: Props) => {
     sold_out: props.usedItem?.sold_out,
     user_id: props.usedItem?.user_id
   });
-  console.log(inputForm.latitude, inputForm.longitude);
 
   const { warnTopRight, errorTopRight } = useToast();
   const user = useAuth((state) => state.user);
@@ -281,9 +279,11 @@ const UpdateForm = (props: Props) => {
       </div>
 
       <p className={styles.infoMap}>거래 희망 장소 선택하기 (필수)</p>
-      {/* 지도업데이트 수정필요 */}
-      <KakaoMapMarker />
-      {/* <TradeLocationMap lat={inputForm.latitude} lng={inputForm.longitude} /> */}
+      <KakaoMapMarker
+        lat={inputForm.latitude}
+        lng={inputForm.longitude}
+        address={inputForm.address}
+      />
       <div className={styles.detailmap}>
         <p className={styles.firstWord}>상세주소를 적어주세요.</p> &nbsp;
         <p className={styles.secondWord}>ex&#41; 교보문고앞</p>
