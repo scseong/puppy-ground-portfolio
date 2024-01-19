@@ -4,20 +4,15 @@ import Image from 'next/image';
 import style from './page.module.scss';
 import { useQuery } from '@tanstack/react-query';
 import { getStrayList } from '@/apis/stray';
-import { FaMapMarkerAlt } from 'react-icons/fa';
-import { FaCalendarDays } from 'react-icons/fa6';
-import { PiGenderIntersexFill } from 'react-icons/pi';
-import { FaDog } from 'react-icons/fa6';
 import { useParams } from 'next/navigation';
+import { FaMapMarkerAlt, FaHandsHelping } from 'react-icons/fa';
+import { PiGenderIntersexFill } from 'react-icons/pi';
+import { FaDog, FaCakeCandles, FaUserDoctor, FaCalendarDays, FaSquarePhone } from 'react-icons/fa6';
 import Loading from '@/app/_components/layout/loading/Loading';
 import { IoMdColorPalette } from 'react-icons/io';
-import { FaCakeCandles } from 'react-icons/fa6';
 import { GiWeight } from 'react-icons/gi';
-import { FaUserDoctor } from 'react-icons/fa6';
 import { MdStickyNote2 } from 'react-icons/md';
 import { BiSolidHomeHeart } from 'react-icons/bi';
-import { FaSquarePhone } from 'react-icons/fa6';
-import { FaHandsHelping } from 'react-icons/fa';
 
 const StrayDogsDetail = () => {
   const params = useParams();
