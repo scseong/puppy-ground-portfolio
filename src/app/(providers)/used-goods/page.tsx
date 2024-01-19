@@ -1,5 +1,5 @@
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
-import { UsedGoodsList, UsedGoodsFilter, UsedGoodsOrder } from './_components';
+import { UsedGoodsList, UsedGoodsFilter, UsedGoodsOrder, UsedGoodsSearch } from './_components';
 import { supabase } from '@/shared/supabase/supabase';
 import styles from './page.module.scss';
 
@@ -92,7 +92,10 @@ const UsedGoodsContainer = async ({ searchParams }: { searchParams: SearchParams
   return (
     <main className={styles.main}>
       <h2>중고물품 리스트</h2>
-      <UsedGoodsFilter params={searchParams} />
+      <div className={styles.filtering}>
+        <UsedGoodsFilter />
+        <UsedGoodsSearch />
+      </div>
       <UsedGoodsOrder />
       <HydrationBoundary state={dehydrate(queryClient)}>
         <UsedGoodsList />

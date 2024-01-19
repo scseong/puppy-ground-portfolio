@@ -1,11 +1,7 @@
 .wrapper {
   display: flex;
-}
 
-.blind {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  clip: rect(0 0 0 0);
-  overflow: hidden;
+  & > div:first-child {
+    margin-right: 1rem;
+  }
 }

@@ -69,6 +69,13 @@
 
 .divide {
   margin: 0 4px;
+  line-height: 1rem;
+
+  &:after {
+    content: '|';
+    font-size: 0.8rem;
+    vertical-align: top;
+  }
 }
 
 .overlay {

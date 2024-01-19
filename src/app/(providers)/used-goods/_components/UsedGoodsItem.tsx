@@ -43,7 +43,7 @@ const UsedGoodsItem = ({ goods }: UsedGoodsItemProps) => {
           </div>
           <div className={styles.count}>
             <span>찜 {getCountFromTable(used_item_wish)}개</span>
-            <span className={styles.divide}>|</span>
+            <span className={styles.divide}></span>
             <span>채팅 {getCountFromTable(chat_list)}개</span>
           </div>
         </div>

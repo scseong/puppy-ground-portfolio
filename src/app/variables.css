@@ -1,6 +1,7 @@
 :root {
   --max-width: 1200px;
   --primary-color: #0ac4b9;
-
+  --placeholder-text-color: #909090;
+  --placeholder-input-border-color: #979797;
   --card-detail-text-color: #3F423E;
 }

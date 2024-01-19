@@ -1,8 +1,10 @@
+'use client';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/shared/supabase/supabase';
-import { handleSubmit } from '../actions';
-import { SearchParams } from '../page';
+import { useQuery } from '@tanstack/react-query';
 import styles from './usedGoodsFilter.module.scss';
-import CustomSelect from '@/app/_components/element/CustomSelect';
+import Dropdown from './Dropdown';
 
 type CategoryObject = {
   mainCategory: string[];
@@ -29,37 +31,18 @@ const getCategories = async (): Promise<CategoryObject> => {
   }, {} as CategoryObject);
 };
 
-const UsedGoodsFilter = async ({ params }: { params: SearchParams }) => {
-  const { mainCategory, subCategory } = await getCategories();
-  const handleFilter = handleSubmit.bind(null, params);
+const UsedGoodsFilter = () => {
+  const [selected, setSelected] = useState({ main: new Set(), sub: new Set() });
+  const { data } = useQuery<CategoryObject>({ queryKey: ['categories'], queryFn: getCategories });
+
+  if (!data) return;
 
   return (
-    // TODO; 카테고리 여러개 선택 가능
-    <form action={handleFilter}>
-      <div className={styles.wrapper}>
-        {/* <label htmlFor="main" className={styles.blind}>
-          메인 카테고리
-        </label>
-        <select id="main" name="main">
-          {mainCategory.map((category, idx) => (
-            <option value={idx + 1} key={category}>
-              {category}
-            </option>
-          ))}
-        </select>
-        <label htmlFor="sub" className={styles.blind}>
-          서브 카테고리
-        </label>
-        <select id="sub" name="sub">
-          {subCategory.map((category, idx) => (
-            <option value={idx + 1} key={category}>
-              {category}
-            </option>
-          ))}
-        </select> */}
-        <button value="Submit">분류</button>
-      </div>
-    </form>
+    // TODO: css 분리
+    <div className={styles.wrapper}>
+      <Dropdown categories={data.mainCategory} defaultText="견종 크기" />
+      <Dropdown categories={data.subCategory} defaultText="카테고리" />
+    </div>
   );
 };
 
