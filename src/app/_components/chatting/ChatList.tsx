@@ -32,16 +32,16 @@ const ChatList = ({
   listId,
   getChat
 }: ModalProps) => {
-  const { data: getChatListData } = useQuery({
+  const {
+    isError,
+    isLoading,
+    data: getChatListData
+  } = useQuery({
     queryKey: ['getChatList'],
     queryFn: getChatList,
     refetchOnWindowFocus: false
   });
-  const {
-    isError,
-    isLoading,
-    data: getProfileData
-  } = useQuery({
+  const { data: getProfileData } = useQuery({
     queryKey: ['getProfile'],
     queryFn: getProfile,
     refetchOnWindowFocus: false
@@ -166,7 +166,7 @@ const ChatList = ({
             <div className={styles.chatSearch}>
               채팅 <FaMagnifyingGlass color={'#0AC4B9'} />
             </div>
-            <ul>
+            <ul className={styles.chatScroll}>
               {getChatListData?.getChatListData?.map((chat) => {
                 return chat.user_id === userProfile.id || chat.other_user === userProfile.id ? (
                   <li
