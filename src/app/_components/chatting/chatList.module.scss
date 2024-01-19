@@ -17,6 +17,10 @@
 
 .chatList {
   display: flex;
+  justify-content: space-between;
+}
+.chatContent {
+  display: flex;
   align-items: center;
   margin-top: 15px;
   gap: 10px;
@@ -32,6 +36,14 @@
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.053);
+  }
+}
+.wastebaseket {
+  display: flex;
+  align-items: center;
+
+  & > span {
+    cursor: pointer;
   }
 }
 .backBtn {

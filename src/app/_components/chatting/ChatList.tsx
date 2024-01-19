@@ -14,6 +14,7 @@ import ChatInput from './ChatInput';
 import Loading from '../layout/loading/Loading';
 import Image from 'next/image';
 import { IoIosArrowBack } from 'react-icons/io';
+import { FaTrashAlt } from 'react-icons/fa';
 
 type ModalProps = {
   isOpen: boolean;
@@ -174,13 +175,20 @@ const ChatList = ({
                     onClick={() => clickChatRoom(chat.id)}
                     key={chat.id}
                   >
-                    <Image
-                      width={50}
-                      height={50}
-                      src={`${chat.used_item.photo_url[0]}`}
-                      alt="물건 사진"
-                    />
-                    {chat.used_item.title}
+                    <div className={styles.chatContent}>
+                      <Image
+                        width={50}
+                        height={50}
+                        src={`${chat.used_item.photo_url[0]}`}
+                        alt="물건 사진"
+                      />
+                      {chat.used_item.title}
+                    </div>
+                    <div className={styles.wastebaseket}>
+                      <span>
+                        <FaTrashAlt color={'#0AC4B9'} />
+                      </span>
+                    </div>
                   </li>
                 ) : null;
               })}
