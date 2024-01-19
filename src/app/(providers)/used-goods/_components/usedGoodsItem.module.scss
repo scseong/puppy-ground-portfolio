@@ -1,23 +1,108 @@
 .container {
   display: flex;
   flex-direction: column;
-  max-width: 250px;
-  border: 1px solid black;
+  width: 100%;
   overflow: hidden;
 }
 
 .goodsImage {
   position: relative;
+  border-radius: 5px;
+  overflow: hidden;
+  img {
+    width: 100%;
+    height: unset;
+    object-fit: cover;
+    aspect-ratio: 10 / 9;
+  }
+}
+
+.goodsInfo {
+  padding: 1rem 0;
+  h3 {
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
+    font-weight: bold;
+    line-height: 2rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  & > div:first-child {
+    span {
+      margin-bottom: 1rem;
+      font-size: 1.35rem;
+      font-weight: 600;
+    }
+  }
+
+  .detail {
+    margin-bottom: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    span {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    time {
+      color: var(--card-detail-text-color);
+    }
+  }
+
+  .address {
+    margin-bottom: 0.8rem;
+    color: var(--card-detail-text-color);
+    address {
+      display: inline-block;
+    }
+  }
+
+  .count {
+    span {
+      font-weight: 600;
+      display: inline-block;
+    }
+  }
+}
+
+.divide {
+  margin: 0 4px;
+  line-height: 1rem;
+
+  &:after {
+    content: '|';
+    font-size: 0.8rem;
+    vertical-align: top;
+  }
 }
 
 .overlay {
-  position: absolute;
-  display: block;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 2;
-  text-align: center;
-  color: white;
+  &:before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  &:after {
+    content: '판매완료';
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+    height: 70px;
+    top: calc(50% - 35px);
+    left: calc(50% - 35px);
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 100%;
+    text-align: center;
+    font-size: 0.8em;
+    font-weight: bold;
+  }
 }

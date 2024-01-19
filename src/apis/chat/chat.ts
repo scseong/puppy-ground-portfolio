@@ -56,3 +56,10 @@ export const makeChatList = async ({
 
   return data;
 };
+
+// // 채팅방 삭제 - 보류..
+// export const deleteChatRoom = async (id: number) => {
+//   await supabase.from('chat_list').delete().eq('id', id);
+
+//   await supabase.from('chat').delete().eq('chat_list_id', id);
+// };

@@ -1,0 +1,17 @@
+.wrapper {
+  display: flex;
+  height: 42px;
+
+  & > div:first-child {
+    margin-right: 1rem;
+  }
+}
+
+.customSelect {
+  min-width: 200px;
+  max-width: 300px;
+
+  & > div:first-child {
+    height: 100%;
+  }
+}

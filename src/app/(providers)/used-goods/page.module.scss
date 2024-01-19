@@ -1,0 +1,21 @@
+.main {
+  margin: 0 auto;
+  padding: 3rem;
+  max-width: var(--max-width);
+
+  h2 {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    line-height: 2rem;
+    font-weight: bold;
+  }
+}
+
+.filtering {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-height: 4rem;
+  min-height: 42px;
+}
