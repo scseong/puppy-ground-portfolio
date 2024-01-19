@@ -9,20 +9,41 @@ export type Props = {
 
 function Pagination({ page, setPage, total, limit }: Props) {
   const numPages = Math.ceil(total! / limit);
+  const pagesToShow = 5;
+
+  const startPage = Math.max(1, page - Math.floor(pagesToShow / 2));
+  const endPage = Math.min(numPages, startPage + pagesToShow - 1);
+
+  const renderPageButtons = Array.from(
+    { length: endPage - startPage + 1 },
+    (_, index) => startPage + index
+  );
 
   return (
-    <nav className={style.bottonWarpper}>
-      {Array(numPages)
-        .fill(0)
-        .map((_, i) => (
-          <button
-            key={i + 1}
-            onClick={() => setPage(i + 1)}
-            aria-current={page === i + 1 ? 'page' : undefined}
-          >
-            {i + 1}
-          </button>
-        ))}
+    <nav className={style.buttonWrapper}>
+      <button
+        className={style.button}
+        onClick={() => setPage(Math.max(1, page - pagesToShow))}
+        disabled={page <= 1}
+      >
+        &lt;
+      </button>
+      {renderPageButtons.map((pageNumber) => (
+        <button
+          key={pageNumber}
+          onClick={() => setPage(pageNumber)}
+          className={page === pageNumber ? style.selectedPage : style.button}
+        >
+          {pageNumber}
+        </button>
+      ))}
+      <button
+        className={style.button}
+        onClick={() => setPage(Math.min(numPages, page + pagesToShow))}
+        disabled={page >= numPages}
+      >
+        &gt;
+      </button>
     </nav>
   );
 }

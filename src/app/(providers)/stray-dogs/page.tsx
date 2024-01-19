@@ -15,11 +15,13 @@ import { useState } from 'react';
 import Loading from '@/app/_components/layout/loading/Loading';
 import regionList from '../../../data/regionList.json';
 import Pagination from '@/app/_components/pagination/Pagination';
+import { ko } from 'date-fns/locale';
 
 const StrayDogs = () => {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
   const [selectCity, setSelectCity] = useState('');
+  const [selectGu, setSelectGu] = useState('');
   const [page, setPage] = useState(1);
   const limit = 15;
   const offset = (page - 1) * limit;
@@ -35,8 +37,14 @@ const StrayDogs = () => {
     staleTime: 3000
   });
 
+  console.log('유기견 정보', strayList);
+
   const cityChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectCity(event.target.value);
+    setSelectGu(''); // 도시가 변경될 때 구 선택을 초기화
+  };
+  const guChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectGu(event.target.value);
   };
 
   const selectRegion = regionList.find((region) => region.city === selectCity);
@@ -66,6 +74,7 @@ const StrayDogs = () => {
         </p>
         <div className={style.calender}>
           <DatePicker
+            locale={ko}
             className={style.datePicker}
             dateFormat="yyyy-MM-dd"
             shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
@@ -78,6 +87,7 @@ const StrayDogs = () => {
           />
           <DatePicker
             className={style.datePicker}
+            locale={ko}
             dateFormat="yyyy-MM-dd"
             shouldCloseOnSelect
             selected={endDate}
@@ -97,57 +107,82 @@ const StrayDogs = () => {
             return <option key={index}>{region.city}</option>;
           })}
         </select>
-        <select name="시/군/구" className={style.selectCity}>
+        <select
+          name="시/군/구"
+          className={style.selectCity}
+          onChange={guChangeHandler}
+          value={selectGu}
+        >
           {guList?.map((gu, index) => {
             return <option key={index}>{gu}</option>;
           })}
         </select>
       </div>
       <div className={style.gridContainer}>
-        {strayList?.slice(offset, offset + limit).map((list, index) => {
-          const formatNoticeEdt = formatDate(list.noticeEdt);
-          return (
-            <div key={index} className={style.listContainer}>
-              <Link href={`/stray-dogs/${list.desertionNo}`}>
-                <div className={style.listCard}>
-                  <Image
-                    src={list.popfile}
-                    alt="dog-image"
-                    className={style.image}
-                    width={250}
-                    height={250}
-                  />
-                  <div className={style.explanationWrap}>
-                    <div className={style.titleColumn}>
-                      <p>
-                        <FaCalendarDays />
-                        &nbsp;공고기간
-                      </p>
-                      <p>
-                        <FaDog />
-                        &nbsp;견종
-                      </p>
-                      <p>
-                        <PiGenderIntersexFill />
-                        &nbsp;성별
-                      </p>
-                      <p>
-                        <FaMapMarkerAlt />
-                        &nbsp;발견장소
-                      </p>
-                    </div>
-                    <div className={style.contentColumn}>
-                      <p>{formatNoticeEdt} 까지</p>
-                      <p>{list.kindCd.slice(3)}</p>
-                      <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
-                      <p>{list.happenPlace}</p>
+        {strayList
+          ?.filter((item) => {
+            if (selectCity === '전지역' || !selectCity) {
+              console.log('자른거임', item.orgNm.split(' ')[0]);
+              console.log('선택한 시티', selectCity);
+              return item;
+            } else if (selectCity === item.orgNm.split(' ')[0] && !selectGu) {
+              return selectCity === item.orgNm.split(' ')[0];
+            } else if (selectCity === item.orgNm.split(' ')[0] && selectGu === '전체') {
+              return selectCity === item.orgNm.split(' ')[0];
+            } else if (
+              selectCity === item.orgNm.split(' ')[0] &&
+              selectGu === item.orgNm.split(' ')[1]
+            ) {
+              return (
+                selectCity === item.orgNm.split(' ')[0] && selectGu === item.orgNm.split(' ')[1]
+              );
+            }
+          })
+          .slice(offset, offset + limit)
+          .map((list, index) => {
+            const formatNoticeEdt = formatDate(list.noticeEdt);
+            return (
+              <div key={index} className={style.listContainer}>
+                <Link href={`/stray-dogs/${list.desertionNo}`}>
+                  <div className={style.listCard}>
+                    <Image
+                      src={list.popfile}
+                      alt="dog-image"
+                      className={style.image}
+                      width={250}
+                      height={250}
+                    />
+                    <div className={style.explanationWrap}>
+                      <div className={style.titleColumn}>
+                        <p>
+                          <FaCalendarDays />
+                          &nbsp;공고기간
+                        </p>
+                        <p>
+                          <FaDog />
+                          &nbsp;견종
+                        </p>
+                        <p>
+                          <PiGenderIntersexFill />
+                          &nbsp;성별
+                        </p>
+                        <p>
+                          <FaMapMarkerAlt />
+                          &nbsp;발견장소
+                        </p>
+                      </div>
+                      <div className={style.contentColumn}>
+                        <p>{formatNoticeEdt} 까지</p>
+                        <p>{list.kindCd.slice(3)}</p>
+                        <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
+                        <p>{list.happenPlace}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            </div>
-          );
-        })}
+                </Link>
+              </div>
+            );
+          })}
       </div>
       <Pagination page={page} setPage={setPage} limit={limit} total={strayList?.length} />
     </div>

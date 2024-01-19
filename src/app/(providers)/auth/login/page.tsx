@@ -76,7 +76,6 @@ const LoginPage = () => {
 
   return (
     <div className={styles.body}>
-      <h2>Puppy Ground</h2>
       <h1>로그인</h1>
       <form className={styles.form} onSubmit={handleSubmit(emailLoginHandler)}>
         <div>
@@ -84,12 +83,8 @@ const LoginPage = () => {
             placeholder="이메일을 입력하세요"
             {...register('email', { required: true, pattern: emailRegex })}
           />
-          {errors.email?.type === 'required' && (
-            <p className={styles.validP}>이메일을 입력해주세요</p>
-          )}
-          {errors.email?.type === 'pattern' && (
-            <p className={styles.validP}>이메일 양식에 맞게 입력해주세요</p>
-          )}
+          {errors.email?.type === 'required' && <p> 이메일을 입력해주세요</p>}
+          {errors.email?.type === 'pattern' && <p> 이메일 양식에 맞게 입력해주세요</p>}
         </div>
         <div>
           <input
@@ -97,36 +92,32 @@ const LoginPage = () => {
             placeholder="비밀번호를 입력하세요"
             {...register('password', { required: true, minLength: 8, pattern: passwordRegex })}
           />
-          {errors.password?.type === 'required' && (
-            <p className={styles.validP}>비밀번호를 입력해주세요</p>
-          )}
+          {errors.password?.type === 'required' && <p>비밀번호를 입력해주세요</p>}
           {errors.password?.type === 'pattern' && (
-            <p className={styles.validP}>
-              비밀번호는 문자와 숫자를 포함하여 8자리 이상 입력해야 합니다
-            </p>
+            <p>비밀번호는 문자와 숫자를 포함하여 8자리 이상 입력해야 합니다</p>
           )}
           {errors.password?.type === 'minLength' && (
-            <p className={styles.validP}>
-              비밀번호는 문자와 숫자를 포함하여 8자리 이상 입력해야 합니다.
-            </p>
+            <p>비밀번호는 문자와 숫자를 포함하여 8자리 이상 입력해야 합니다.</p>
           )}
         </div>
         <button type="submit">로그인</button>
       </form>
       <div className={styles.buttonWrapper}>
-        <button onClick={googleLoginHandler}> 구글 로그인 </button>
-        <button onClick={kakaoLoginHandler}> 카카오 로그인 </button>
+        <button className={styles.kakaoBtn} onClick={kakaoLoginHandler}>
+          카카오 로그인
+        </button>
+        <button className={styles.googleBtn} onClick={googleLoginHandler}>
+          구글 로그인
+        </button>
       </div>
-      <p>
-        Puppy Ground가 처음이신가요?
-        <span
-          className={styles.moveLogin}
-          onClick={() => {
-            router.push('/auth/signup');
-          }}
-        >
-          회원가입 하러가기
-        </span>
+      <p
+        className={styles.moveLogin}
+        onClick={() => {
+          router.push('/auth/signup');
+        }}
+      >
+        처음이신가요?
+        <span> 회원가입 하러가기</span>
       </p>
     </div>
   );

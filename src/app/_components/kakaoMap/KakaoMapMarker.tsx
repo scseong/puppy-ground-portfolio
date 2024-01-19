@@ -4,17 +4,32 @@ import style from './kakaoMapMarker.module.scss';
 import Script from 'next/script';
 import { Map, MapMarker, MapTypeControl, ZoomControl } from 'react-kakao-maps-sdk';
 import { useState, useEffect } from 'react';
+import { useAddress, usePosition } from '@/hooks/useKakaoMapMarker';
+import { useToast } from '@/hooks/useToast';
 
 const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_KEY}&libraries=services&autoload=false`;
 
-const KakaoMapMarker = () => {
+type Props = {
+  lat?: number;
+  lng?: number;
+  address?: string;
+};
+
+const KakaoMapMarker = (props: Props) => {
+  const { errorTopRight } = useToast();
+
   const [currentLocation, setCurrentLocation] = useState<{ latitude: number; longitude: number }>({
     latitude: 33.450701,
     longitude: 126.570667
   });
-  const [position, setPosition] = useState<{ lat: number; lng: number }>();
-  const [address, setAddress] = useState<string>('');
 
+  const setPosition = usePosition((state) => state.setPosition);
+  const setAddress = useAddress((state) => state.setAddress);
+
+  const position = usePosition((state) => state.position);
+  const address = useAddress((state) => state.address);
+
+  // 마커 클릭 시 해당위치 정보 저장
   const mapClickHandler = (_t: any, mouseEvent: any) => {
     const lat = mouseEvent.latLng.getLat();
     const lng = mouseEvent.latLng.getLng();
@@ -30,15 +45,14 @@ const KakaoMapMarker = () => {
     const callback = (result: any, status: any) => {
       if (status === kakao.maps.services.Status.OK) {
         setAddress(result[0].address.address_name);
-        console.log('결과', result);
       }
     };
-
     geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
   };
 
   // 현재위치를 시작점으로 만들기
   useEffect(() => {
+    if (props.lat && props.lng) return;
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -48,12 +62,23 @@ const KakaoMapMarker = () => {
           });
         },
         () => {
-          console.log('위치 받기에 실패하였습니다');
+          errorTopRight({ message: '위치 받기에 실패하였습니다' });
           setCurrentLocation({ latitude: 33.450701, longitude: 126.570667 });
         }
       );
     }
   }, []);
+
+  // props로 받은 위치로 지도 이동
+  useEffect(() => {
+    if (props.lat && props.lng) {
+      setPosition({ lat: props.lat, lng: props.lng });
+      setCurrentLocation({ latitude: props.lat, longitude: props.lng });
+    }
+    if (props.address) {
+      setAddress(props.address);
+    }
+  }, [props.lat, props.lng, props.address]);
 
   return (
     <div className={style.container}>
@@ -87,10 +112,8 @@ const KakaoMapMarker = () => {
               }}
             ></MapMarker>
           )}
-          {position && <p>{`위도 : ${position.lat} 경도 : ${position.lng}`}</p>}
         </Map>
       </div>
-      <p className={style.searchAddress}>{address || '선택하신 위치의 주소입니다'}</p>
     </div>
   );
 };
