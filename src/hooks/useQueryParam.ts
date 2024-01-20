@@ -1,6 +1,6 @@
 import { useSearchParams, usePathname } from 'next/navigation';
 
-type QueryKeyword = 'soldout' | 'available';
+type QueryKeyword = 'soldout' | 'available' | 'main' | 'sub' | 'page';
 
 export const useQueryParam = () => {
   const searchParams = useSearchParams();
@@ -10,16 +10,23 @@ export const useQueryParam = () => {
 
   const isSoldout = 'soldout' in queryObject;
 
-  const generateQueryParameter = (keyword: QueryKeyword) => {
-    const prefix = queryParameter.length ? '&' : '';
+  const generateQueryParameter = (keyword: QueryKeyword, payload?: string) => {
+    const { main, sub, query, soldout, page } = Object.fromEntries(searchParams);
     const reg = /&*soldout=true/g;
-    const query = `${pathname}?${queryParameter}${prefix}soldout=true`;
+    let baseURL = pathname + '?';
 
     switch (keyword) {
+      case 'sub':
+        return baseURL + `sub=${payload}`;
+      case 'main':
+        if (sub) return baseURL + `sub=${sub}&main=${payload}`;
+        return baseURL + `main=${payload}`;
       case 'soldout':
-        return query;
+        if (soldout) return baseURL + queryParameter;
+        return baseURL + queryParameter + '&soldout=true';
       case 'available':
-        return query.replace(reg, '');
+        return baseURL + queryParameter.replace(reg, '');
+      case 'page':
       default:
         return queryParameter;
     }

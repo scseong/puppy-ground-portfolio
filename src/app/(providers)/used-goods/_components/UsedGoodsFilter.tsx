@@ -1,10 +1,12 @@
 'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState, useRef } from 'react';
 import { supabase } from '@/shared/supabase/supabase';
 import { useQuery } from '@tanstack/react-query';
 import styles from './usedGoodsFilter.module.scss';
-import Select, { StylesConfig } from 'react-select';
+import { SingleValue, StylesConfig } from 'react-select';
+import CustomSelect from './CustomSelect';
+import { useQueryParam } from '@/hooks/useQueryParam';
+import { useRouter } from 'next/navigation';
 
 type CategoryObject = {
   mainCategory: string[];
@@ -31,99 +33,100 @@ const getCategories = async (): Promise<CategoryObject> => {
   }, {} as CategoryObject);
 };
 
-const main = [
+const mainCategory = [
   { value: '1', label: '대형견' },
   { value: '2', label: '중형견' },
   { value: '3', label: '소형견' }
 ];
 
-const sub = [
+const subCategory = [
   { value: '1', label: '장난감' },
   { value: '2', label: '식품' },
   { value: '3', label: '의류' },
   { value: '4', label: '기타' }
 ];
 
-type Category = typeof main;
-export interface ColourOption {
-  readonly value: string;
-  readonly label: string;
-  readonly color: string;
-  readonly isFixed?: boolean;
-  readonly isDisabled?: boolean;
-}
+type SelectOption = (typeof mainCategory)[number];
 
-const colourStyles: StylesConfig<{ value: string; label: string }, true> = {
-  option: (styles) => {
-    return {
-      ...styles,
-      fontSize: '0.8rem'
-    };
-  },
-  multiValue: (styles) => {
-    return {
-      ...styles,
-      backgroundColor: '#0ac4b9',
-      borderRadius: '15px',
-      padding: '5px',
-      color: 'white'
-    };
-  },
-  multiValueLabel: (styles) => {
-    return {
-      ...styles,
-      color: 'white'
-    };
-  },
-  clearIndicator: (styles) => {
-    return {
-      ...styles,
-      display: 'none'
-    };
-  },
-  multiValueRemove: (styles) => {
-    return {
-      ...styles,
-      backgroundColor: 'inherit',
-      ':hover': {
-        backgroundColor: 'inherit',
-        cursor: 'pointer'
-      }
-    };
-  }
+const customStyles: StylesConfig<{ value: string; label: string }, false> = {
+  option: (styles, { isSelected }) => ({
+    ...styles,
+    color: isSelected ? '#0ac4a9' : '#333',
+    backgroundColor: 'none',
+    cursor: 'pointer',
+    fontSize: '14px',
+    padding: '0.5rem 1rem',
+    '&:hover': {
+      color: '#0ac4a9'
+    }
+  }),
+  indicatorSeparator: () => ({
+    display: 'none'
+  }),
+  control: (styles, { isFocused }) => ({
+    ...styles,
+    cursor: 'pointer',
+    borderColor: isFocused ? '#0ac4a9' : '#979797',
+
+    fontSize: '13px',
+    lineHeight: '1rem',
+    boxShadow: isFocused ? '0 0 0 1px #0ac4a9' : undefined,
+    height: '100%',
+    '&:hover': {
+      color: '#333'
+    },
+    '&:focus': {
+      border: '#0ac4a9'
+    }
+  })
 };
 
 const UsedGoodsFilter = () => {
-  const [selectedMain, setSelectedMain] = useState<Category>([]);
-  const [selectedSub, setSelectedSub] = useState<Category>([]);
-  const { data } = useQuery<CategoryObject>({ queryKey: ['categories'], queryFn: getCategories });
+  const selectInputRef = useRef(null);
+  const { isSoldout, queryParameter, queryObject, generateQueryParameter } = useQueryParam();
+  const [selectedMain, setSelectedMain] = useState<SelectOption | null>(null);
+  const [selectedSub, setSelectedSub] = useState<SelectOption | null>(null);
+  // const { data } = useQuery<CategoryObject>({ queryKey: ['categories'], queryFn: getCategories });
+  // if (!data) return;
+  const router = useRouter();
 
-  if (!data) return;
+  useEffect(() => {
+    const { main, sub } = queryObject;
+    if (main) setSelectedMain(mainCategory.filter((category) => category.value === main)[0]);
+    else setSelectedMain(null);
+    if (sub) setSelectedSub(subCategory.filter((category) => category.value === sub)[0]);
+    else setSelectedSub(null);
+  }, [queryObject]);
+
+  const handleMainSelect = (newValue: SingleValue<SelectOption>) => {
+    if (!newValue) return;
+    setSelectedMain(newValue);
+    router.push(generateQueryParameter('main', newValue.value));
+  };
+
+  const handleSubSelect = (newValue: SingleValue<SelectOption>) => {
+    if (!newValue) return;
+    setSelectedSub(newValue);
+    router.push(generateQueryParameter('sub', newValue.value));
+  };
 
   return (
-    // TODO: css 분리
     <div className={styles.wrapper}>
-      <Select
+      <CustomSelect
         className={styles.customSelect}
-        defaultValue={selectedMain}
-        onChange={(newValue) => {
-          setSelectedMain([...newValue]);
-        }}
-        options={main}
-        placeholder="견종 사이즈"
-        styles={colourStyles}
-        isMulti
-      />
-      <Select
-        className={styles.customSelect}
-        defaultValue={selectedSub}
-        onChange={(newValue) => {
-          setSelectedSub([...newValue]);
-        }}
-        options={sub}
+        value={selectedSub ? selectedSub : null}
+        onChange={handleSubSelect}
+        options={subCategory}
         placeholder="카테고리"
-        styles={colourStyles}
-        isMulti
+        styles={customStyles}
+      />
+      <CustomSelect
+        className={styles.customSelect}
+        value={selectedMain ? selectedMain : null}
+        onChange={handleMainSelect}
+        options={mainCategory}
+        placeholder="견종 사이즈"
+        styles={customStyles}
       />
     </div>
   );

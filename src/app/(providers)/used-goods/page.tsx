@@ -19,15 +19,36 @@ export const getUsedGoods = async () => {
   return data;
 };
 
-export const getUsedGoodsByCategory = async (main: string, sub: string) => {
-  const { data } = await supabase
-    .from('used_item')
-    .select(
-      `id, created_at, title, price, address, sold_out, photo_url, used_item_wish ( count ), chat_list ( count )`
-    )
-    .eq('main_category_id', main)
-    .eq('sub_category_id', sub);
-  return data;
+export const getUsedGoodsByCategory = async ({ main, sub }: { main?: string; sub?: string }) => {
+  if (main && sub) {
+    const { data } = await supabase
+      .from('used_item')
+      .select(
+        `id, created_at, title, price, address, sold_out, photo_url, used_item_wish ( count ), chat_list ( count )`
+      )
+      .eq('sub_category_id', sub)
+      .eq('main_category_id', main);
+    return data;
+  }
+  if (sub) {
+    const { data } = await supabase
+      .from('used_item')
+      .select(
+        `id, created_at, title, price, address, sold_out, photo_url, used_item_wish ( count ), chat_list ( count )`
+      )
+      .eq('sub_category_id', sub);
+    return data;
+  }
+  if (main) {
+    const { data } = await supabase
+      .from('used_item')
+      .select(
+        `id, created_at, title, price, address, sold_out, photo_url, used_item_wish ( count ), chat_list ( count )`
+      )
+      .eq('main_category_id', main);
+
+    return data;
+  }
 };
 
 export const getUsedGoodsByKeyword = async (query: string) => {
@@ -79,7 +100,9 @@ export const getQueryFunction = (params: SearchParams) => {
   const { main, sub, query } = params;
 
   if (main && sub && query) return () => getUsedGoodsByKeywordAndCategory(main, sub, query);
-  if (main && sub) return () => getUsedGoodsByCategory(main, sub);
+  if (main && sub) return () => getUsedGoodsByCategory({ main, sub });
+  if (main) return () => getUsedGoodsByCategory({ main });
+  if (sub) return () => getUsedGoodsByCategory({ sub });
   if (query) return () => getUsedGoodsByKeyword(query);
   return getUsedGoods;
 };

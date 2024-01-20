@@ -7,13 +7,14 @@
 
 .goodsImage {
   position: relative;
-  border-radius: 5px;
+  height: fit-content;
   overflow: hidden;
   img {
     width: 100%;
     height: unset;
     object-fit: cover;
     aspect-ratio: 10 / 9;
+    border-radius: 5px;
   }
 }
 
@@ -79,6 +80,7 @@
 }
 
 .overlay {
+  
   &:before {
     content: '';
     width: 100%;
@@ -87,6 +89,8 @@
     top: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    overflow: hidden;
   }
 
   &:after {

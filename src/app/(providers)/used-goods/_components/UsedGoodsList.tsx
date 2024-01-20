@@ -14,13 +14,19 @@ const UsedGoodsList = () => {
   });
 
   // TODO: Empty Component 만들기
+
   if (!data) return <div>상품이 없습니다.</div>;
 
-  const filtedGoods = data.filter((goods) => goods.sold_out === isSoldout);
+  const ForSaleGoods = data.filter((goods) => !goods.sold_out);
+  const SoldOutGoods = data.filter((goods) => goods.sold_out);
+
+  if (isSoldout && !SoldOutGoods.length) return <div>상품이 없습니다.</div>;
+  if (!isSoldout && !ForSaleGoods.length) return <div>상품이 없습니다.</div>;
 
   return (
     <div className={styles.wrapper}>
-      {filtedGoods?.map((goods) => <UsedGoodsItem key={goods.id} goods={goods} />)}
+      {isSoldout && SoldOutGoods?.map((goods) => <UsedGoodsItem key={goods.id} goods={goods} />)}
+      {!isSoldout && ForSaleGoods?.map((goods) => <UsedGoodsItem key={goods.id} goods={goods} />)}
     </div>
   );
 };
