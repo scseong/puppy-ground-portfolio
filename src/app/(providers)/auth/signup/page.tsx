@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import styles from './page.module.scss';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
+import { setCookie } from 'nextjs-cookie';
 
 export type Inputs = {
   email: string;
@@ -69,9 +70,10 @@ const SignUp = () => {
     if (error) {
       errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
     }
-    if (loginData.user !== null) {
+    if (loginData !== null) {
       successTopRight({ message: '회원가입 되었습니다', timeout: 2000 });
       setUser(loginData.user);
+      setCookie('access_token', loginData.session?.access_token);
       router.push('/');
     }
   };
