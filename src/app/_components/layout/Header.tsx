@@ -13,6 +13,7 @@ import { getChatContent } from '@/apis/chat/chat';
 import Loading from './loading/Loading';
 import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
 import { FaRegBell } from 'react-icons/fa';
+import { deleteCookie } from 'nextjs-cookie';
 
 const Header = () => {
   const router = useRouter();
@@ -23,6 +24,7 @@ const Header = () => {
     const { error } = await supabase.auth.signOut();
     if (!error) {
       successTopRight({ message: '로그아웃 되었습니다.' });
+      deleteCookie('access_token');
       router.push('/');
     }
     if (error) {

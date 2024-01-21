@@ -1,8 +1,98 @@
-.validP {
-  color: red;
+.body {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 194px;
+  gap: 15px;
+
+  h1 {
+    color: #000000;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: 32px; /* 100% */
+    letter-spacing: -0.3px;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+
+    .googleBtn {
+      border-radius: 5px;
+      background: #df4b38;
+      border: none;
+      width: 540px;
+      height: 82px;
+      font-size: 22px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 41px; /* 186.364% */
+      letter-spacing: -0.3px;
+    }
+    .kakaoBtn {
+      border-radius: 5px;
+      background: #fae24c;
+      border: none;
+      width: 540px;
+      height: 82px;
+      font-size: 22px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 41px; /* 186.364% */
+      letter-spacing: -0.3px;
+    }
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  padding: 25px;
+  border-bottom: 1px solid rgb(184, 184, 184);
+
+  div {
+    input {
+      width: 540px;
+      height: 82px;
+      border-radius: 5px;
+      border: 1px solid #979797;
+      font-size: 22px;
+      padding-left: 20px;
+    }
+    p {
+      color: red;
+      margin-top: 5px;
+    }
+  }
+  button {
+    width: 201px;
+    height: 67px;
+    background-color: #0ac4b9;
+    border: none;
+    border-radius: 5px;
+    margin: 22px 0;
+    font-size: 22px;
+    color: #ffffff;
+  }
+}
+
+.buttonWrapper {
+  margin: 10px;
+  display: flex;
+  gap: 10px;
 }
 
 .moveLogin {
   cursor: pointer;
-  color: blue;
+  color: #979797;
+  font-weight: 500;
+  span {
+    color: #000000;
+    font-weight: 700;
+  }
 }

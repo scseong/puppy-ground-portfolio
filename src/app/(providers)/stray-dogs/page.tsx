@@ -11,11 +11,18 @@ import { useState } from 'react';
 import Loading from '@/app/_components/layout/loading/Loading';
 import regionList from '../../../data/regionList.json';
 import { IoSearch } from 'react-icons/io5';
+import Pagination from '@/app/_components/pagination/Pagination';
+import { ko } from 'date-fns/locale';
 
 const StrayDogs = () => {
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [startDate, setStartDate] = useState<Date | null>(new Date('2023-10-01'));
   const [endDate, setEndDate] = useState<Date | null>(new Date());
   const [selectCity, setSelectCity] = useState('');
+  const [selectGu, setSelectGu] = useState('');
+  const [page, setPage] = useState(1);
+  const limit = 15;
+  const offset = (page - 1) * limit;
+
   const {
     isLoading,
     isError,
@@ -27,8 +34,13 @@ const StrayDogs = () => {
     staleTime: 3000
   });
 
+  console.log('유기견 정보', strayList?.length);
   const cityChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectCity(event.target.value);
+    setSelectGu(''); // 도시가 변경될 때 구 선택을 초기화
+  };
+  const guChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectGu(event.target.value);
   };
 
   const selectRegion = regionList.find((region) => region.city === selectCity);
@@ -40,6 +52,42 @@ const StrayDogs = () => {
     const day = dateStr.substring(6, 8);
     return `${year}년 ${month}월 ${day}일`;
   };
+
+  const cityfilter = strayList?.filter((item) => {
+    const strayCity = item.orgNm.split(' ')[0];
+    const strayGu = item.orgNm.split(' ')[1];
+    if (selectCity === '전지역' || !selectCity) {
+      return item;
+    } else if (selectCity === strayCity && !selectGu) {
+      return true;
+    } else if (selectCity === strayCity && selectGu === '전체') {
+      return true;
+    } else if (selectCity === item.orgNm.split(' ')[0] && selectGu === strayGu) {
+      return true;
+    }
+  });
+
+  const filterDate = cityfilter?.filter((item) => {
+    const startYear = startDate?.getFullYear();
+    const startMonth = startDate!.getMonth() + 1;
+    const startDay = startDate!.getDate();
+    const endYear = endDate?.getFullYear();
+    const endMonth = endDate!.getMonth() + 1;
+    const endDay = endDate!.getDate();
+
+    // 20230101 <- 과 같이 표기
+    const start = `${startYear}${('00' + startMonth.toString()).slice(-2)}${(
+      '00' + startDay.toString()
+    ).slice(-2)}`;
+    const end = `${endYear}${('00' + endMonth.toString()).slice(-2)}${(
+      '00' + endDay.toString()
+    ).slice(-2)}`;
+
+    if (item.noticeEdt >= start && item.noticeEdt <= end) {
+      const total = item.noticeSdt >= start && item.noticeEdt <= end;
+      return true;
+    }
+  });
 
   if (isLoading) {
     return <Loading />;
@@ -57,6 +105,7 @@ const StrayDogs = () => {
             <p>기간</p>
             <div className={style.calender}>
               <DatePicker
+                locale={ko}
                 className={style.datePicker}
                 dateFormat="yyyy-MM-dd"
                 shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
@@ -69,13 +118,14 @@ const StrayDogs = () => {
               />
               <DatePicker
                 className={style.datePicker}
+                locale={ko}
                 dateFormat="yyyy-MM-dd"
                 shouldCloseOnSelect
                 selected={endDate}
                 startDate={startDate}
                 endDate={endDate}
                 minDate={startDate}
-                maxDate={new Date()} // maxDate 이후 날짜 선택 불가
+                maxDate={new Date('2025-01-01')} // maxDate 이후 날짜 선택 불가
                 onChange={(date) => setEndDate(date)}
               />
             </div>
@@ -87,7 +137,12 @@ const StrayDogs = () => {
                 return <option key={index}>{region.city}</option>;
               })}
             </select>
-            <select name="시/군/구" className={style.selectCity}>
+            <select
+              name="시/군/구"
+              className={style.selectCity}
+              onChange={guChangeHandler}
+              value={selectGu}
+            >
               {guList?.map((gu, index) => {
                 return <option key={index}>{gu}</option>;
               })}
@@ -98,7 +153,7 @@ const StrayDogs = () => {
           </div>
         </div>
         <div className={style.gridContainer}>
-          {strayList?.map((list, index) => {
+          {filterDate!.slice(offset, offset + limit).map((list, index) => {
             const formatHappenDt = formatDate(list.happenDt);
             return (
               <div key={index}>
@@ -134,6 +189,7 @@ const StrayDogs = () => {
           })}
         </div>
       </div>
+      <Pagination page={page} setPage={setPage} limit={limit} total={filterDate?.length} />
     </div>
   );
 };
