@@ -97,7 +97,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const clickOpenChat = async () => {
     const findUserChatList = list?.filter((chat) => chat.user_id === user?.id);
 
-    if (userChatList === true || findUserChatList?.length !== 0)
+    if (userChatList === true || findUserChatList === undefined)
       return errorTopRight({ message: '이미 채팅을 보냈습니다', timeout: 2000 });
 
     try {
