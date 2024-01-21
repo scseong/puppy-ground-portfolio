@@ -22,7 +22,7 @@
   padding: 1rem 0;
   h3 {
     margin-bottom: 1rem;
-    font-size: 1.75rem;
+    font-size: 1.4rem;
     font-weight: bold;
     line-height: 2rem;
     text-overflow: ellipsis;
@@ -55,8 +55,17 @@
   .address {
     margin-bottom: 0.8rem;
     color: var(--card-detail-text-color);
+
+    svg {
+      margin-right: 4px;
+    }
+
     address {
       display: inline-block;
+      width: 90%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
 
@@ -80,7 +89,6 @@
 }
 
 .overlay {
-  
   &:before {
     content: '';
     width: 100%;
