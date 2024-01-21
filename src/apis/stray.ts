@@ -7,7 +7,7 @@ export const getStrayList = async () => {
     );
     console.log(response);
     return response.data.response.body.items.item; //꼭 리턴 해주기
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
   }
 };
