@@ -1,6 +1,9 @@
 'use client';
 
+import Image from 'next/image';
 import Script from 'next/script';
+import kakaotalk from '../../../../public/images/kakaoLogo.png';
+import style from './kakaoShareButton.module.scss';
 
 declare global {
   interface Window {
@@ -15,7 +18,8 @@ const KakaoShareButton = () => {
       content: {
         title: 'Puppy Ground',
         description: '반려견 중고 물품 거래 및 정보공유 플랫폼',
-        imageUrl: 'https://th.bing.com/th?id=OIG.yCY0aHQ8ykhnDeT.vco2&w=236&c=11&rs=1&qlt=90&bgcl=ececec&o=6&pid=PersonalBing&p=0',
+        imageUrl:
+          'https://th.bing.com/th?id=OIG.yCY0aHQ8ykhnDeT.vco2&w=236&c=11&rs=1&qlt=90&bgcl=ececec&o=6&pid=PersonalBing&p=0',
         link: {
           mobileWebUrl: location.href,
           webUrl: location.href
@@ -42,7 +46,9 @@ const KakaoShareButton = () => {
           window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_API_KEY);
         }}
       />
-      <button onClick={clickShare}>Share</button>
+      <button onClick={clickShare} className={style.kakaoButton}>
+        <Image src={kakaotalk} alt="kakaotalk" width={45} height={45} />
+      </button>
     </>
   );
 };
