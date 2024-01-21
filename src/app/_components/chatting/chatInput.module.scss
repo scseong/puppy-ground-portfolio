@@ -1,0 +1,28 @@
+.ChatInputSpace {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+
+  & > input {
+    width: 70%;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 10px;
+    background: #88888830;
+    outline: none;
+  }
+  & > button {
+    width: 15%;
+    border: none;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: var(--primary-color);
+    color: white;
+  }
+}
+.form {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 10px;
+}

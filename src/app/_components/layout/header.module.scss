@@ -1,0 +1,71 @@
+.container {
+  width: 100vw;
+  background-color: #ffffff;
+}
+
+.navbarBox {
+  width: 1200px;
+  display: flex;
+  align-items: center;
+  margin: auto;
+  height: 100px;
+  flex-direction: row;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+
+.logoBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  letter-spacing: 1px;
+}
+
+.logoText {
+  font-size: 20px;
+  font-family: GmarketSansBold;
+}
+
+.menuBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  flex-direction: row;
+}
+
+.menuItem {
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: Pretendard-Regular;
+  font-weight: 400;
+}
+
+.menuItem:hover {
+  color: var(--primary-color);
+}
+
+.chat {
+  font-size: 20px;
+  border-style: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chat:hover {
+  color: var(--primary-color);
+}
+
+.bell {
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bell:hover {
+  color: var(--primary-color);
+}

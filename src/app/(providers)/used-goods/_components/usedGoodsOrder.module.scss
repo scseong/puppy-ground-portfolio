@@ -1,0 +1,23 @@
+.wrapper {
+  font-weight: 600;
+  color: #bebebe;
+
+  a {
+    padding: 2px;
+  }
+}
+
+.active {
+  color: var(--primary-color);
+}
+
+.divide {
+  margin: 0 4px;
+  line-height: 1rem;
+
+  &:after {
+    content: '|';
+    font-size: 0.8rem;
+    vertical-align: top;
+  }
+}
