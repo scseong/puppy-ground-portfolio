@@ -13,6 +13,5 @@ export function middleware(request: NextRequest) {
   //   }
 }
 export const config = {
-  // 이 Middleware가 동작할 경로들을 추가해주면된다.
   matcher: ['/used-goods/:path*', '/profile/:path*', '/stray-dogs/:path*', '/facilities']
 };
