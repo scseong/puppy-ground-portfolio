@@ -1,6 +1,6 @@
 'use client';
 
-import style from './kakaoMapMarker.module.scss';
+import style from './KakaoMapMarker.module.scss';
 import Script from 'next/script';
 import { Map, MapMarker, MapTypeControl, ZoomControl } from 'react-kakao-maps-sdk';
 import { useState, useEffect } from 'react';
