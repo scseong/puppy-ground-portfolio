@@ -22,7 +22,7 @@ const StrayDogs = () => {
   const [selectCity, setSelectCity] = useState('');
   const [selectGu, setSelectGu] = useState('');
   const [page, setPage] = useState(1);
-  const limit = 15;
+  const limit = 16;
   const offset = (page - 1) * limit;
 
   const {
@@ -43,6 +43,13 @@ const StrayDogs = () => {
   };
   const guChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectGu(event.target.value);
+  };
+
+  const filterRefreshBtn = () => {
+    setSelectCity('전지역');
+    setSelectGu('');
+    setStartDate(new Date('2023-10-01'));
+    setEndDate(new Date());
   };
 
   const selectRegion = regionList.find((region) => region.city === selectCity);
