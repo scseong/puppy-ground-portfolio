@@ -82,7 +82,6 @@ const Facilities = () => {
           setCurrentLocationMarker(true);
         },
         () => {
-          console.log('위치 받기에 실패하였습니다');
           setCurrentLocation({ latitude: 33.450701, longitude: 126.570667 });
         }
       );

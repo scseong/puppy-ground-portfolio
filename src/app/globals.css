@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'Pretendard-Light';
+  font-family: 'pretendard';
   src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Light.woff')
     format('woff');
   font-weight: 300;
@@ -7,7 +7,7 @@
 }
 
 @font-face {
-  font-family: 'Pretendard-Regular';
+  font-family: 'pretendard';
   src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff')
     format('woff');
   font-weight: 400;
@@ -15,7 +15,7 @@
 }
 
 @font-face {
-  font-family: 'Pretendard-Medium';
+  font-family: 'pretendard';
   src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Medium.woff')
     format('woff');
   font-weight: 500;
@@ -23,7 +23,7 @@
 }
 
 @font-face {
-  font-family: 'Pretendard-SemiBold';
+  font-family: 'pretendard';
   src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-SemiBold.woff')
     format('woff');
   font-weight: 600;
@@ -31,7 +31,7 @@
 }
 
 @font-face {
-  font-family: 'Pretendard-Bold';
+  font-family: 'pretendard';
   src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff')
     format('woff');
   font-weight: 700;
@@ -39,7 +39,7 @@
 }
 
 @font-face {
-  font-family: 'Pretendard-ExtraBold';
+  font-family: 'pretendard';
   src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraBold.woff')
     format('woff');
   font-weight: 800;
@@ -47,7 +47,7 @@
 }
 
 @font-face {
-  font-family: 'GmarketSansMedium';
+  font-family: 'GmarketSans';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff')
     format('woff');
   font-weight: normal;
@@ -55,7 +55,7 @@
 }
 
 @font-face {
-  font-family: 'GmarketSansBold';
+  font-family: 'GmarketSans';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff')
     format('woff');
   font-weight: normal;
@@ -190,7 +190,7 @@ body {
   background: var(--bg-color);
   min-width: 100vw;
   min-height: 100vh;
-  font-family: Pretendard-Regular;
+  font-family: pretendard;
 }
 button {
   outline: none;
