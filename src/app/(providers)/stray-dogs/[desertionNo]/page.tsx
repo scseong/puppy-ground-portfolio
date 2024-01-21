@@ -13,6 +13,8 @@ import { IoMdColorPalette } from 'react-icons/io';
 import { GiWeight } from 'react-icons/gi';
 import { MdStickyNote2 } from 'react-icons/md';
 import { BiSolidHomeHeart } from 'react-icons/bi';
+import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
+import ClipBoardButton from '@/app/_components/shareButton/ClipBoardButton';
 
 const StrayDogsDetail = () => {
   const params = useParams();
@@ -42,8 +44,6 @@ const StrayDogsDetail = () => {
     return `${year}년 ${month}월 ${day}일`;
   };
 
-  const formatNoticeSdt = formatDate(strayDesertionNo?.noticeSdt!);
-  const formatNoticeEdt = formatDate(strayDesertionNo?.noticeEdt!);
   const formatHappenDt = formatDate(strayDesertionNo?.happenDt!);
 
   if (isLoading) {
@@ -56,91 +56,99 @@ const StrayDogsDetail = () => {
 
   return (
     <div className={style.container}>
-      <div className={style.imageWrap}>
-        <Image src={strayDesertionNo?.popfile!} alt="stray-dog" width={500} height={300} />
-      </div>
-      <div className={style.explanationWrap}>
-        <div className={style.titleColumn}>
-          <p>
-            <FaHandsHelping />
-            &nbsp;구조일시
-          </p>
-          <p>
-            <FaMapMarkerAlt />
-            &nbsp;구조장소
-          </p>
-          <p>
-            <FaCalendarDays />
-            &nbsp;공고기간
-          </p>
-          <hr />
-          <p>
-            <FaDog />
-            &nbsp;견종
-          </p>
-          <p>
-            <IoMdColorPalette />
-            &nbsp;색상
-          </p>
-          <p>
-            <FaCakeCandles />
-            &nbsp;나이
-          </p>
-          <p>
-            <GiWeight />
-            &nbsp;몸무게
-          </p>
-          <p>
-            <PiGenderIntersexFill />
-            &nbsp;성별
-          </p>
-          <p>
-            <FaUserDoctor />
-            &nbsp;중성화여부
-          </p>
-          <p>
-            <MdStickyNote2 />
-            &nbsp;특이사항
-          </p>
-          <hr />
-          <p>
-            <BiSolidHomeHeart />
-            &nbsp;보호소 이름
-          </p>
-          <p>
-            <FaSquarePhone />
-            &nbsp;보호소 전화번호
-          </p>
-          <p>
-            <FaMapMarkerAlt />
-            &nbsp;보호소 위치
-          </p>
-        </div>
-        <div className={style.contentColumn}>
-          <p>{formatHappenDt}</p>
-          <p>{strayDesertionNo?.happenPlace}</p>
-          <p>
-            {formatNoticeSdt} - {formatNoticeEdt}
-          </p>
+      <div className={style.contentContainer}>
+        <div className={style.firstSection}>
+          <div className={style.imageWrap}>
+            <Image src={strayDesertionNo?.popfile!} alt="stray-dog" width={500} height={300} />
+          </div>
 
-          <hr />
-          <p>{strayDesertionNo?.kindCd.slice(3)}</p>
-          <p>{strayDesertionNo?.colorCd}</p>
-          <p>{strayDesertionNo?.age}</p>
-          <p>{strayDesertionNo?.weight}</p>
-          <p>{strayDesertionNo?.sexCd === 'M' ? '수컷' : '암컷'}</p>
-          <p>
-            {strayDesertionNo?.neuterYn === 'Y'
-              ? '예'
-              : strayDesertionNo?.neuterYn === 'N'
-                ? '아니요'
-                : '미상'}
-          </p>
-          <p>{strayDesertionNo?.specialMark}</p>
-          <hr />
-          <p>{strayDesertionNo?.careNm}</p>
-          <p>{strayDesertionNo?.careTel}</p>
-          <p>{strayDesertionNo?.careAddr}</p>
+          <div className={style.dogExplanationWrap}>
+            <div className={style.titleColumn}>
+              <p>
+                <FaDog />
+                &nbsp;견종
+              </p>
+              <p>
+                <IoMdColorPalette />
+                &nbsp;색상
+              </p>
+              <p>
+                <FaCakeCandles />
+                &nbsp;나이
+              </p>
+              <p>
+                <GiWeight />
+                &nbsp;몸무게
+              </p>
+              <p>
+                <PiGenderIntersexFill />
+                &nbsp;성별
+              </p>
+              <p>
+                <FaUserDoctor />
+                &nbsp;중성화여부
+              </p>
+            </div>
+            <div className={style.contentColumn}>
+              <p>{strayDesertionNo?.kindCd.slice(3)}</p>
+              <p>{strayDesertionNo?.colorCd}</p>
+              <p>{strayDesertionNo?.age}</p>
+              <p>{strayDesertionNo?.weight}</p>
+              <p>{strayDesertionNo?.sexCd === 'M' ? '수컷' : '암컷'}</p>
+              <p>
+                {strayDesertionNo?.neuterYn === 'Y'
+                  ? '중성화 O'
+                  : strayDesertionNo?.neuterYn === 'N'
+                    ? '중성화 X'
+                    : '미상'}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className={style.careExplanationWrap}>
+          <div className={style.titleColumn}>
+            <p>
+              <FaCalendarDays />
+              &nbsp;접수번호
+            </p>
+            <p>
+              <MdStickyNote2 />
+              &nbsp;특이사항
+            </p>
+            <p>
+              <FaHandsHelping />
+              &nbsp;구조일시
+            </p>
+            <p>
+              <FaMapMarkerAlt />
+              &nbsp;구조장소
+            </p>
+            <p>
+              <BiSolidHomeHeart />
+              &nbsp;보호소 이름
+            </p>
+            <p>
+              <FaSquarePhone />
+              &nbsp;보호소 전화번호
+            </p>
+            <p>
+              <FaMapMarkerAlt />
+              &nbsp;보호소 위치
+            </p>
+          </div>
+          <div className={style.contentColumn}>
+            <p>{strayDesertionNo?.noticeNo}</p>
+            <p>{strayDesertionNo?.specialMark}</p>
+            <p>{formatHappenDt}</p>
+            <p>{strayDesertionNo?.happenPlace}</p>
+            <p>{strayDesertionNo?.careNm}</p>
+            <p>{strayDesertionNo?.careTel}</p>
+            <p>{strayDesertionNo?.careAddr}</p>
+          </div>
+        </div>
+        <div className={style.buttonWrap}>
+          <KakaoShareButton />
+          <ClipBoardButton />
         </div>
       </div>
     </div>
