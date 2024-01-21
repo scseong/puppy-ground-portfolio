@@ -6,10 +6,9 @@ import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { FaMapMarkerAlt } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaDog } from 'react-icons/fa';
 import { FaCalendarDays } from 'react-icons/fa6';
 import { PiGenderIntersexFill } from 'react-icons/pi';
-import { FaDog } from 'react-icons/fa6';
 import Link from 'next/link';
 import { useState } from 'react';
 import Loading from '@/app/_components/layout/loading/Loading';
@@ -18,7 +17,7 @@ import Pagination from '@/app/_components/pagination/Pagination';
 import { ko } from 'date-fns/locale';
 
 const StrayDogs = () => {
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [startDate, setStartDate] = useState<Date | null>(new Date('2023-10-01'));
   const [endDate, setEndDate] = useState<Date | null>(new Date());
   const [selectCity, setSelectCity] = useState('');
   const [selectGu, setSelectGu] = useState('');
@@ -37,8 +36,7 @@ const StrayDogs = () => {
     staleTime: 3000
   });
 
-  console.log('유기견 정보', strayList);
-
+  console.log('유기견 정보', strayList?.length);
   const cityChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectCity(event.target.value);
     setSelectGu(''); // 도시가 변경될 때 구 선택을 초기화
@@ -56,6 +54,42 @@ const StrayDogs = () => {
     const day = dateStr.substring(6, 8);
     return `${year}년 ${month}월 ${day}일`;
   };
+
+  const cityfilter = strayList?.filter((item) => {
+    const strayCity = item.orgNm.split(' ')[0];
+    const strayGu = item.orgNm.split(' ')[1];
+    if (selectCity === '전지역' || !selectCity) {
+      return item;
+    } else if (selectCity === strayCity && !selectGu) {
+      return true;
+    } else if (selectCity === strayCity && selectGu === '전체') {
+      return true;
+    } else if (selectCity === item.orgNm.split(' ')[0] && selectGu === strayGu) {
+      return true;
+    }
+  });
+
+  const filterDate = cityfilter?.filter((item) => {
+    const startYear = startDate?.getFullYear();
+    const startMonth = startDate!.getMonth() + 1;
+    const startDay = startDate!.getDate();
+    const endYear = endDate?.getFullYear();
+    const endMonth = endDate!.getMonth() + 1;
+    const endDay = endDate!.getDate();
+
+    // 20230101 <- 과 같이 표기
+    const start = `${startYear}${('00' + startMonth.toString()).slice(-2)}${(
+      '00' + startDay.toString()
+    ).slice(-2)}`;
+    const end = `${endYear}${('00' + endMonth.toString()).slice(-2)}${(
+      '00' + endDay.toString()
+    ).slice(-2)}`;
+
+    if (item.noticeEdt >= start && item.noticeEdt <= end) {
+      const total = item.noticeSdt >= start && item.noticeEdt <= end;
+      return true;
+    }
+  });
 
   if (isLoading) {
     return <Loading />;
@@ -78,7 +112,7 @@ const StrayDogs = () => {
             className={style.datePicker}
             dateFormat="yyyy-MM-dd"
             shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
-            minDate={new Date('2023-01-01')} // minDate 이전 날짜 선택 불가
+            minDate={new Date('2023-10-01')} // minDate 이전 날짜 선택 불가
             maxDate={new Date()} // maxDate 이후 날짜 선택 불가
             selected={startDate}
             startDate={startDate}
@@ -94,7 +128,7 @@ const StrayDogs = () => {
             startDate={startDate}
             endDate={endDate}
             minDate={startDate}
-            maxDate={new Date()} // maxDate 이후 날짜 선택 불가
+            maxDate={new Date('2025-01-01')} // maxDate 이후 날짜 선택 불가
             onChange={(date) => setEndDate(date)}
           />
         </div>
@@ -119,72 +153,52 @@ const StrayDogs = () => {
         </select>
       </div>
       <div className={style.gridContainer}>
-        {strayList
-          ?.filter((item) => {
-            if (selectCity === '전지역' || !selectCity) {
-              console.log('자른거임', item.orgNm.split(' ')[0]);
-              console.log('선택한 시티', selectCity);
-              return item;
-            } else if (selectCity === item.orgNm.split(' ')[0] && !selectGu) {
-              return selectCity === item.orgNm.split(' ')[0];
-            } else if (selectCity === item.orgNm.split(' ')[0] && selectGu === '전체') {
-              return selectCity === item.orgNm.split(' ')[0];
-            } else if (
-              selectCity === item.orgNm.split(' ')[0] &&
-              selectGu === item.orgNm.split(' ')[1]
-            ) {
-              return (
-                selectCity === item.orgNm.split(' ')[0] && selectGu === item.orgNm.split(' ')[1]
-              );
-            }
-          })
-          .slice(offset, offset + limit)
-          .map((list, index) => {
-            const formatNoticeEdt = formatDate(list.noticeEdt);
-            return (
-              <div key={index} className={style.listContainer}>
-                <Link href={`/stray-dogs/${list.desertionNo}`}>
-                  <div className={style.listCard}>
-                    <Image
-                      src={list.popfile}
-                      alt="dog-image"
-                      className={style.image}
-                      width={250}
-                      height={250}
-                    />
-                    <div className={style.explanationWrap}>
-                      <div className={style.titleColumn}>
-                        <p>
-                          <FaCalendarDays />
-                          &nbsp;공고기간
-                        </p>
-                        <p>
-                          <FaDog />
-                          &nbsp;견종
-                        </p>
-                        <p>
-                          <PiGenderIntersexFill />
-                          &nbsp;성별
-                        </p>
-                        <p>
-                          <FaMapMarkerAlt />
-                          &nbsp;발견장소
-                        </p>
-                      </div>
-                      <div className={style.contentColumn}>
-                        <p>{formatNoticeEdt} 까지</p>
-                        <p>{list.kindCd.slice(3)}</p>
-                        <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
-                        <p>{list.happenPlace}</p>
-                      </div>
+        {filterDate!.slice(offset, offset + limit).map((list, index) => {
+          const formatNoticeEdt = formatDate(list.noticeEdt);
+          return (
+            <div key={index} className={style.listContainer}>
+              <Link href={`/stray-dogs/${list.desertionNo}`}>
+                <div className={style.listCard}>
+                  <Image
+                    src={list.popfile}
+                    alt="dog-image"
+                    className={style.image}
+                    width={250}
+                    height={250}
+                  />
+                  <div className={style.explanationWrap}>
+                    <div className={style.titleColumn}>
+                      <p>
+                        <FaCalendarDays />
+                        &nbsp;공고기간
+                      </p>
+                      <p>
+                        <FaDog />
+                        &nbsp;견종
+                      </p>
+                      <p>
+                        <PiGenderIntersexFill />
+                        &nbsp;성별
+                      </p>
+                      <p>
+                        <FaMapMarkerAlt />
+                        &nbsp;발견장소
+                      </p>
+                    </div>
+                    <div className={style.contentColumn}>
+                      <p>{formatNoticeEdt} 까지</p>
+                      <p>{list.kindCd.slice(3)}</p>
+                      <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
+                      <p>{list.happenPlace}</p>
                     </div>
                   </div>
-                </Link>
-              </div>
-            );
-          })}
+                </div>
+              </Link>
+            </div>
+          );
+        })}
       </div>
-      <Pagination page={page} setPage={setPage} limit={limit} total={strayList?.length} />
+      <Pagination page={page} setPage={setPage} limit={limit} total={filterDate?.length} />
     </div>
   );
 };

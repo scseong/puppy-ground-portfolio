@@ -1,3 +1,52 @@
+@font-face {
+  font-family: 'Pretendard';
+  src: url('../../public/fonts/Pretendard-Light.otf');
+  font-weight: light;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('../../public/fonts/Pretendard-Regular.otf');
+  font-weight: regular;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('../../public/fonts/Pretendard-Medium.otf');
+  font-weight: medium;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('../../public/fonts/Pretendard-SemiBold.otf');
+  font-weight: semibold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('../../public/fonts/Pretendard-Bold.otf');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('../../public/fonts/Pretendard-ExtraBold.otf');
+  font-weight: extrabold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GmarketSans';
+  src: url('../../public/fonts/GmarketSansBold.otf');
+  font-weight: bold;
+  font-style: normal;
+}
+
 html,
 body,
 div,
