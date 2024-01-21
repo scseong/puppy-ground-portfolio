@@ -43,6 +43,13 @@ const StrayDogs = () => {
     setSelectGu(event.target.value);
   };
 
+  const filterRefreshBtn = () => {
+    setSelectCity('전지역');
+    setSelectGu('');
+    setStartDate(new Date('2023-10-01'));
+    setEndDate(new Date());
+  };
+
   const selectRegion = regionList.find((region) => region.city === selectCity);
   const guList = selectRegion ? selectRegion.gu : [];
 

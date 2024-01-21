@@ -6,7 +6,7 @@ import UsedGoodsItem from './UsedGoodsItem';
 import styles from './usedGoodsList.module.scss';
 import { useQueryParam } from '@/hooks/useQueryParam';
 import { getQueryKey, getQueryFunction } from '@/apis/goods';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
 
 const UsedGoodsList = () => {
