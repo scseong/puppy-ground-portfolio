@@ -34,7 +34,6 @@ const StrayDogs = () => {
     staleTime: 3000
   });
 
-  console.log('유기견 정보', strayList?.length);
   const cityChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectCity(event.target.value);
     setSelectGu(''); // 도시가 변경될 때 구 선택을 초기화

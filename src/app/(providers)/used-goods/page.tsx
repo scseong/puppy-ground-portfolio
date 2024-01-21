@@ -18,7 +18,6 @@ const UsedGoodsContainer = async ({ searchParams }: { searchParams: SearchParams
         <UsedGoodsFilter />
         <UsedGoodsSearch />
       </div>
-      {/* TODO: 등록하기 버튼 */}
       <div className={styles.subFiltering}>
         <UsedGoodsOrder />
         <Link href="/used-goods/create" className={styles.createLink}>
