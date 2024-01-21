@@ -126,10 +126,10 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const list = chatList?.getChatListData?.filter((chat) => chat?.post_id === Number(id));
 
   const clickOpenChat = async () => {
-    const findUserChatList = list?.filter((chat) => chat.user_id === user?.id);
+    // const findUserChatList = list?.filter((chat) => chat.user_id === user?.id);
 
-    if (userChatList === true || findUserChatList !== undefined)
-      return errorTopRight({ message: '이미 채팅을 보냈습니다', timeout: 2000 });
+    // if (userChatList === true || findUserChatList !== undefined)
+    //   return errorTopRight({ message: '이미 채팅을 보냈습니다', timeout: 2000 });
 
     try {
       const chat = await makeChatListMutation.mutateAsync({
