@@ -154,7 +154,7 @@ const SignUp = () => {
         </label>
         <br />
         <button>회원가입</button>
-        <p>
+        <p className={styles.moveLogin}>
           이미 회원이신가요?
           <span
             className={styles.moveLogin}

@@ -20,7 +20,7 @@ const StrayDogs = () => {
   const [selectCity, setSelectCity] = useState('');
   const [selectGu, setSelectGu] = useState('');
   const [page, setPage] = useState(1);
-  const limit = 15;
+  const limit = 16;
   const offset = (page - 1) * limit;
 
   const {
@@ -188,8 +188,8 @@ const StrayDogs = () => {
             );
           })}
         </div>
+        <Pagination page={page} setPage={setPage} limit={limit} total={filterDate?.length} />
       </div>
-      <Pagination page={page} setPage={setPage} limit={limit} total={filterDate?.length} />
     </div>
   );
 };
