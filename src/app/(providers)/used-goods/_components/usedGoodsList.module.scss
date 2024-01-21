@@ -3,4 +3,26 @@
   grid-template-columns: repeat(3, 1fr);
   row-gap: 4rem;
   column-gap: 2rem;
+  padding: 2rem 0;
+}
+
+.pagination {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  gap: 2rem;
+
+  button {
+    padding: 1rem;
+    border: none;
+    background: none;
+    font-size: 1.2rem;
+  }
+
+  .isActive {
+    button {
+      color: #0ac4b9;
+    }
+  }
 }

@@ -19,3 +19,25 @@
   max-height: 4rem;
   min-height: 42px;
 }
+
+.subFiltering {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: fit-content;
+}
+
+.createLink {
+  padding: 0.8rem 1rem;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--primary-color);
+  font-size: 1rem;
+  line-height: 1.2rem;
+  color: white;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}

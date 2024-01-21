@@ -16,6 +16,7 @@ type CategoryObject = {
 const mainCategoryQuery = supabase.from('main_category').select('*');
 const subCategoryQuery = supabase.from('sub_category').select('*');
 
+// TODO: API 응답 받아 처리
 const getCategories = async (): Promise<CategoryObject> => {
   const response = await Promise.all([mainCategoryQuery, subCategoryQuery]);
   const categoryArray: string[][] = response.map((res) => {

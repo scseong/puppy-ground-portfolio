@@ -5,28 +5,48 @@ import UsedGoodsItem from './UsedGoodsItem';
 import styles from './usedGoodsList.module.scss';
 import { useQueryParam } from '@/hooks/useQueryParam';
 import { getQueryKey, getQueryFunction } from '@/apis/goods';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 const UsedGoodsList = () => {
-  const { isSoldout, queryObject } = useQueryParam();
+  const { queryObject, generateQueryParameter } = useQueryParam();
   const { data } = useQuery({
     queryKey: getQueryKey(queryObject),
     queryFn: getQueryFunction(queryObject)
   });
+  const pageNumbers = Array.from({ length: 5 }, (_, index) => index + 1);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // TODO: Empty Component 만들기
-  if (!data) return <div>상품이 없습니다.</div>;
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
 
-  const ForSaleGoods = data.filter((goods) => !goods.sold_out);
-  const SoldOutGoods = data.filter((goods) => goods.sold_out);
-
-  if ((isSoldout && !SoldOutGoods.length) || (!isSoldout && !ForSaleGoods.length))
-    return <div>상품이 없습니다.</div>;
+  // TODO: pagination과 query parameter page 동기화
+  useEffect(() => {
+    // const { page } = queryObject;
+    // if (!page) setCurrentPage(1);
+  }, [queryObject]);
 
   return (
-    <div className={styles.wrapper}>
-      {isSoldout && SoldOutGoods?.map((goods) => <UsedGoodsItem key={goods.id} goods={goods} />)}
-      {!isSoldout && ForSaleGoods?.map((goods) => <UsedGoodsItem key={goods.id} goods={goods} />)}
-    </div>
+    <>
+      <div className={styles.wrapper}>
+        {/*  TODO: Empty Component 만들기 */}
+        {!data || (!data.length && <div>상품이 없습니다.</div>)}
+        {data?.map((goods) => <UsedGoodsItem key={goods.id} goods={goods} />)}
+      </div>
+      {/* TODO: 페이지네이션 컴포넌트 분리*/}
+      <div className={styles.pagination}>
+        {pageNumbers.map((number, idx) => (
+          <Link
+            key={number}
+            href={`${generateQueryParameter('page', number + '')}`}
+            className={idx + 1 == currentPage ? styles.isActive : undefined}
+          >
+            <button onClick={() => handlePageChange(number)}>{number}</button>
+          </Link>
+        ))}
+      </div>
+    </>
   );
 };
 
