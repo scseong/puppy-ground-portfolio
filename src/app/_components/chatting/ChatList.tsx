@@ -209,11 +209,6 @@ const ChatList = ({
                       />
                       {chat.used_item.title}
                     </div>
-                    {/* <div className={styles.wastebaseket}>
-                      <span>
-                        <FaTrashAlt color={'#0AC4B9'} />
-                      </span>
-                    </div> */}
                   </li>
                 ) : null;
               })}
