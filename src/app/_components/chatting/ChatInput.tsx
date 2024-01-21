@@ -34,6 +34,7 @@ const ChatInput = ({
   // 채팅 보내기
   const clickSendChat = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (chatContent === '') return;
     sendChatMutation.mutateAsync({
       content: chatContent,
       id: chatListId === 0 ? listId : chatListId,
