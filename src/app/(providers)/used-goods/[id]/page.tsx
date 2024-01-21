@@ -21,7 +21,6 @@ import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 import { addCommasToNumber } from '@/utils/format';
 
-
 const getUsedGoodDetail = async (id: string) => {
   const { data, error } = await supabase
     .from('used_item')

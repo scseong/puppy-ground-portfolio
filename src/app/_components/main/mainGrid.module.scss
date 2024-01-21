@@ -13,6 +13,7 @@
   margin-left: 10vw;
   background-color: #ebebeb;
   border-radius: 70px 0 0 70px;
+  overflow: hidden;
 }
 
 .firstSection {
@@ -41,7 +42,7 @@
 .firstImageWrap {
   width: 700px;
   height: 600px;
-  overflow: hidden;
+  // overflow: hidden;
 }
 
 .image {
@@ -91,15 +92,18 @@
 }
 
 .thirdSection {
-  width: 100vw;
+  max-width: 100vw;
   height: 700px;
-  justify-content: center;
-  align-items: center;
   overflow: hidden;
 }
 
 .thirdImageWrap {
+  max-width: 100vw;
   opacity: 0.4;
+}
+
+.thirdImageWrap > img {
+  object-fit: cover;
 }
 
 .thirdTextWrap {
