@@ -7,9 +7,12 @@ import { useQueryParam } from '@/hooks/useQueryParam';
 import { getQueryKey, getQueryFunction } from '@/apis/goods';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 const UsedGoodsList = () => {
   const { queryObject, generateQueryParameter } = useQueryParam();
+
+  const searchParams = useSearchParams();
   const { data } = useQuery({
     queryKey: getQueryKey(queryObject),
     queryFn: getQueryFunction(queryObject)
@@ -21,11 +24,12 @@ const UsedGoodsList = () => {
     setCurrentPage(pageNumber);
   };
 
-  // TODO: pagination과 query parameter page 동기화
   useEffect(() => {
-    // const { page } = queryObject;
-    // if (!page) setCurrentPage(1);
-  }, [queryObject]);
+    const current = searchParams.get('page');
+    if (!current) return setCurrentPage(1);
+    // TODO: 숫자 아닌 값 방지
+    setCurrentPage(Number(current));
+  }, [searchParams]);
 
   return (
     <>
