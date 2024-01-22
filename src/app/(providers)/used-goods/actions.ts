@@ -1,7 +1,7 @@
 'use server';
 
+import { SearchParams } from '@/apis/goods';
 import { redirect } from 'next/navigation';
-import { SearchParams } from './page';
 
 const formDataToQueryString = (formData: FormData) => {
   return new URLSearchParams(formData as never).toString();

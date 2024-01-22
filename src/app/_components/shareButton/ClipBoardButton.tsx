@@ -1,4 +1,6 @@
 import { useToast } from '@/hooks/useToast';
+import style from './clipBoardButton.module.scss';
+import { IoShareSocialOutline } from 'react-icons/io5';
 
 const ClipBoardButton = () => {
   const { successTopRight } = useToast();
@@ -8,7 +10,9 @@ const ClipBoardButton = () => {
   };
   return (
     <>
-      <button onClick={copyToClipboard}>clipboard</button>
+      <button onClick={copyToClipboard} className={style.shareButton}>
+        <IoShareSocialOutline />
+      </button>
     </>
   );
 };

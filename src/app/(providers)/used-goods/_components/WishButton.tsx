@@ -1,12 +1,12 @@
-import { addUsedGoodWish, removeUsedGoodWish } from '@/apis/wish,like/actions';
+import { addUsedGoodWish, removeUsedGoodWish } from '@/apis/wishLike/actions';
 import useAuth from '@/hooks/useAuth';
 import { supabase } from '@/shared/supabase/supabase';
 import { getCountFromTable } from '@/utils/table';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/useToast';
 import { IoIosHeartEmpty, IoMdHeart } from 'react-icons/io';
-import { getUsedGoodDetail } from '../[id]/page';
 import styles from './wishButton.module.scss';
+import { getUsedGoodDetail } from '../[id]/page';
 
 const WishButton = ({ usedItemId }: { usedItemId: string }) => {
   const queryClient = useQueryClient();

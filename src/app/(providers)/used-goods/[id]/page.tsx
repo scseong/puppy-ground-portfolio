@@ -17,8 +17,8 @@ import { useState } from 'react';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import { SlideImage, TradeLocationMap } from '../_components';
+import styles from './page.module.scss'
 import WishButton from '../_components/WishButton';
-import styles from './page.module.scss';
 
 export const getUsedGoodDetail = async (id: string) => {
   const { data, error } = await supabase
@@ -32,7 +32,7 @@ export const getUsedGoodDetail = async (id: string) => {
   return data;
 };
 
-const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
+  const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const queryClient = useQueryClient();
   const user = useAuth((state) => state.user);
 
@@ -127,7 +127,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const clickOpenChat = async () => {
     const findUserChatList = list?.filter((chat) => chat.user_id === user?.id);
 
-    if (userChatList === true || findUserChatList?.length !== 0)
+    if (userChatList === true || findUserChatList !== undefined)
       return errorTopRight({ message: '이미 채팅을 보냈습니다', timeout: 2000 });
 
     try {
@@ -176,13 +176,10 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                 <span className={styles.price}>{addCommasToNumber(price)}원</span>
               </div>
               <div className={styles.profile}>
-                {/* TODO: change to avatar_url */}
-                <Image
-                  src={'https://placehold.co/30x30'}
-                  alt="profile image"
-                  width="40"
-                  height="40"
-                />
+                {profiles && (
+                  <Image src={profiles.avatar_url!} alt="profile image" width={40} height={40} />
+                )}
+
                 <span>{profiles?.user_name}</span>
               </div>
               <div className={styles.moreInfo}>

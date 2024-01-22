@@ -144,16 +144,16 @@ const MainGrid = () => {
           </Link>
         </motion.div>
       </div>
-      <motion.div
-        className={style.fifthContainer}
-        whileInView={{ opacity: [0, 1], scale: [0.6, 1.1, 1] }}
-        viewport={{ once: false }}
-        transition={{
-          ease: 'easeInOut',
-          duration: 1
-        }}
-      >
-        <div className={style.fifthSection}>
+      <div className={style.fifthContainer}>
+        <motion.div
+          className={style.fifthSection}
+          whileInView={{ opacity: [0, 1], scale: [0.6, 1.1, 1] }}
+          viewport={{ once: false }}
+          transition={{
+            ease: 'easeInOut',
+            duration: 1
+          }}
+        >
           <div className={style.fifthTextWrap}>
             <p>
               아이들과 <span className={style.bold}>함께 여행을</span> 떠나볼까요?
@@ -182,8 +182,8 @@ const MainGrid = () => {
               <Image src={travel} alt="image" width={400} height={400} className={style.image} />
             </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 };

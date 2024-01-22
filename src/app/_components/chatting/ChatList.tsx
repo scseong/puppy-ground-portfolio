@@ -111,9 +111,7 @@ const ChatList = ({
     try {
       const { data: chat } = await supabase.from('chat').select('*').returns<Tables<'chat'>[]>();
       setChat(chat!);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error: any) {}
   };
 
   // 채팅 모달 닫았을 때 채팅목록으로 나가도록
