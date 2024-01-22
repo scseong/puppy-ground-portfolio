@@ -22,7 +22,7 @@ export const getUsedGoods = async (params: SearchParams) => {
   else queryFn = queryFn.eq('sold_out', false);
   if (page) {
     const from = (Number(page) - 1) * ITEMS_PER_PAGE;
-    const to = from + ITEMS_PER_PAGE;
+    const to = from + ITEMS_PER_PAGE - 1;
     queryFn = queryFn.range(from, to);
   } else {
     queryFn = queryFn.range(0, ITEMS_PER_PAGE - 1);
