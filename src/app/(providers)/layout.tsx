@@ -14,7 +14,6 @@ function ProvidersLayout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
-      console.log(event, session);
       if (session) {
         setUser(session.user);
       } else {
