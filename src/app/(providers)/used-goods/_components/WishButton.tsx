@@ -1,3 +1,5 @@
+"use client"
+
 import { addUsedGoodWish, removeUsedGoodWish } from '@/apis/wishLike/actions';
 import useAuth from '@/hooks/useAuth';
 import { supabase } from '@/shared/supabase/supabase';
