@@ -1,40 +1,30 @@
 'use client';
 
+import { getChatList, makeChatList } from '@/apis/chat/chat';
 import { deleteUsedGood, updateUsedGood } from '@/apis/used-goods/actions';
+import ChatList from '@/app/_components/chatting/ChatList';
 import ClipBoardButton from '@/app/_components/shareButton/ClipBoardButton';
 import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
+import useAuth from '@/hooks/useAuth';
+import { useToast } from '@/hooks/useToast';
 import { supabase } from '@/shared/supabase/supabase';
-import styles from './page.module.scss';
+import { addCommasToNumber } from '@/utils/format';
+import { getformattedDate } from '@/utils/time';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
-import { getCountFromTable } from '@/utils/table';
-import { getformattedDate } from '@/utils/time';
+import { useParams, useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import { SlideImage, TradeLocationMap } from '../_components';
-import ChatList from '@/app/_components/chatting/ChatList';
-import { useState } from 'react';
-import { getChatList, makeChatList } from '@/apis/chat/chat';
-import useAuth from '@/hooks/useAuth';
-import { useToast } from '@/hooks/useToast';
-import { useRouter } from 'next/navigation';
-import { useParams } from 'next/navigation';
-import { addCommasToNumber } from '@/utils/format';
+import styles from './page.module.scss';
+import WishButton from '../_components/WishButton';
+import { getUsedGoodDetail } from '@/apis/goods';
 
-const getUsedGoodDetail = async (id: string) => {
-  const { data, error } = await supabase
-    .from('used_item')
-    .select(
-      `*, profiles ( * ), main_category ( name ), sub_category ( name ), used_item_wish ( count ), chat_list ( count )`
-    )
-    .eq('id', id)
-    .single();
-
-  return data;
-};
 
 const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const queryClient = useQueryClient();
+  const user = useAuth((state) => state.user);
 
   const { isLoading, isError, data } = useQuery({
     queryKey: ['used-item', params.id],
@@ -46,7 +36,6 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
     queryFn: getChatList
   });
 
-  const user = useAuth((state) => state.user);
   const { id } = useParams();
   const { errorTopRight } = useToast();
 
@@ -160,7 +149,6 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
     place_name,
     main_category,
     sub_category,
-    used_item_wish,
     sold_out
   } = data;
 
@@ -178,13 +166,10 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                 <span className={styles.price}>{addCommasToNumber(price)}원</span>
               </div>
               <div className={styles.profile}>
-                {/* TODO: change to avatar_url */}
-                <Image
-                  src={'https://placehold.co/30x30'}
-                  alt="profile image"
-                  width="40"
-                  height="40"
-                />
+                {profiles && (
+                  <Image src={profiles.avatar_url!} alt="profile image" width={40} height={40} />
+                )}
+
                 <span>{profiles?.user_name}</span>
               </div>
               <div className={styles.moreInfo}>
@@ -214,7 +199,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                 listId={chatListId}
                 getChat={[]}
               />
-              <button>찜 {getCountFromTable(used_item_wish)}</button>
+              <WishButton usedItemId={params.id} />
             </div>
           </div>
         </div>
