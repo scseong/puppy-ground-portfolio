@@ -1,10 +1,11 @@
 .container {
-  width: 100vw;
+  max-width: var(--max-width);
+  margin: 0 auto;
   background-color: #ffffff;
 }
 
 .navbarBox {
-  width: 1200px;
+  // width: 1200px;
   display: flex;
   align-items: center;
   margin: auto;
