@@ -14,6 +14,7 @@ import Loading from './loading/Loading';
 import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
 import { FaRegBell } from 'react-icons/fa';
 import { deleteCookie } from 'nextjs-cookie';
+import Logo from '../../../../public/images/logo.png';
 
 const Header = () => {
   const router = useRouter();
@@ -50,7 +51,7 @@ const Header = () => {
     <div className={styles.container}>
       <div className={styles.navbarBox}>
         <div className={styles.logoBox}>
-          <Image src="/logo.png" alt="logo" width={90} height={60} />
+          <Image src={Logo} alt="logo" width={90} height={60} />
           <Link href="/" className={styles.logoText}>
             Puppy Ground
           </Link>
