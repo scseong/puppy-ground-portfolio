@@ -178,13 +178,10 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                 <span className={styles.price}>{addCommasToNumber(price)}원</span>
               </div>
               <div className={styles.profile}>
-                {/* TODO: change to avatar_url */}
-                <Image
-                  src={'https://placehold.co/30x30'}
-                  alt="profile image"
-                  width="40"
-                  height="40"
-                />
+                {profiles && (
+                  <Image src={profiles.avatar_url!} alt="profile image" width={40} height={40} />
+                )}
+
                 <span>{profiles?.user_name}</span>
               </div>
               <div className={styles.moreInfo}>
