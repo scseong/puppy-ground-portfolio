@@ -17,22 +17,12 @@ import { useState } from 'react';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import { SlideImage, TradeLocationMap } from '../_components';
-import styles from './page.module.scss'
+import styles from './page.module.scss';
 import WishButton from '../_components/WishButton';
+import { getUsedGoodDetail } from '@/apis/goods';
 
-export const getUsedGoodDetail = async (id: string) => {
-  const { data, error } = await supabase
-    .from('used_item')
-    .select(
-      `*, profiles ( * ), main_category ( name ), sub_category ( name ), used_item_wish ( count ), chat_list ( count )`
-    )
-    .eq('id', id)
-    .single();
 
-  return data;
-};
-
-  const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
+const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const queryClient = useQueryClient();
   const user = useAuth((state) => state.user);
 

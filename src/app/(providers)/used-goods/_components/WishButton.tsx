@@ -8,7 +8,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/useToast';
 import { IoIosHeartEmpty, IoMdHeart } from 'react-icons/io';
 import styles from './wishButton.module.scss';
-import { getUsedGoodDetail } from '../[id]/page';
+import { getUsedGoodDetail } from '@/apis/goods';
 
 const WishButton = ({ usedItemId }: { usedItemId: string }) => {
   const queryClient = useQueryClient();
