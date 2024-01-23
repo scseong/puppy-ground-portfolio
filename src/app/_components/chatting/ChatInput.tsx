@@ -23,12 +23,8 @@ const ChatInput = ({
   const onChangeChatContent = (e: React.ChangeEvent<HTMLInputElement>) =>
     setChatContent(e.target.value);
 
-  const queryClient = useQueryClient();
   const sendChatMutation = useMutation({
-    mutationFn: sendChat,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getChat'] });
-    }
+    mutationFn: sendChat
   });
 
   // 채팅 보내기

@@ -5,7 +5,7 @@ import { Tables } from '@/shared/supabase/types/supabase';
 export const getChatList = async () => {
   const getChatListQuery = await supabase
     .from('chat_list')
-    .select('*, used_item(title, photo_url), chat(read_status), profiles(*)')
+    .select('*, used_item(title, photo_url), chat(read_status, user_id), profiles(*)')
     .order('id', { ascending: false })
     .returns<Tables<'chat_list'>[]>();
 
@@ -15,7 +15,11 @@ export const getChatList = async () => {
 
 // 채팅 가져오기
 export const getChatContent = async () => {
-  const { data: chat, error } = await supabase.from('chat').select('*').returns<Tables<'chat'>[]>();
+  const { data: chat, error } = await supabase
+    .from('chat')
+    .select('*')
+    .order('created_at', { ascending: true })
+    .returns<Tables<'chat'>[]>();
 
   return chat;
 };
@@ -63,3 +67,22 @@ export const makeChatList = async ({
 
 //   await supabase.from('chat').delete().eq('chat_list_id', id);
 // };
+
+//채팅 읽기
+
+export const readChat = async ({
+  list_id,
+  other_user
+}: {
+  list_id: number;
+  other_user: string;
+}) => {
+  const { data, error } = await supabase
+    .from('chat')
+    .update({ read_status: true })
+    .eq('chat_list_id', list_id)
+    .eq('user_id', other_user)
+    .select();
+
+  console.log('data', data, 'error', error);
+};

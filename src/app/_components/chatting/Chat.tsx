@@ -17,9 +17,7 @@ const Chat = ({
       }
     >
       <div className={styles.userName}>
-        <p>
-          {chatHistory.user_id === userProfile.id ? userProfile.user_name : chatHistory.user_name}
-        </p>
+        <p>{chatHistory.profiles?.user_name}</p>
       </div>
       <div className={chatHistory.user_id === userProfile.id ? styles.myChat : styles.otherChat}>
         <div className={styles.content}>

@@ -50,6 +50,7 @@ export interface Database {
           read_status: boolean;
           user_id: string;
           user_name: string;
+          profiles: Tables<'profiles'>;
         };
         Insert: {
           chat_list_id: number;
@@ -93,7 +94,7 @@ export interface Database {
           user_id: string;
           other_user: string;
           used_item: Tables<'used_item'>;
-          chat: Tables<'chat'>;
+          chat: { read_status: boolean; user_id: string }[];
         };
         Insert: {
           id?: number;

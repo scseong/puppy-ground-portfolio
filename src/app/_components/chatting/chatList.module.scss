@@ -14,42 +14,6 @@
     background-color: rgba(0, 0, 0, 0.053);
   }
 }
-
-.chatList {
-  display: flex;
-  justify-content: space-between;
-}
-.chatContent {
-  width: 95%;
-  display: flex;
-  align-items: center;
-  margin-top: 15px;
-  margin-right: 10px;
-  gap: 10px;
-  padding: 5px;
-  border-radius: 10px;
-
-  transition: all 0.3s;
-  cursor: pointer;
-
-  & > img {
-    border-radius: 50%;
-  }
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.053);
-  }
-}
-.wastebaseket {
-  width: 5%;
-  display: flex;
-  align-items: center;
-  margin-right: 10px;
-
-  & > span {
-    cursor: pointer;
-  }
-}
 .backBtn {
   border: none;
   background: transparent;
