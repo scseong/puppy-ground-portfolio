@@ -25,7 +25,6 @@ const UsedGoodsContainer = async ({ searchParams }: { searchParams: SearchParams
         </Link>
       </div>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        {/* TODO: 한 줄에 게시글 4개씩 */}
         <UsedGoodsList />
       </HydrationBoundary>
     </main>

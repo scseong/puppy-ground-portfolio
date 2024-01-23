@@ -22,7 +22,7 @@ export const getUsedGoods = async (params: SearchParams) => {
   else queryFn = queryFn.eq('sold_out', false);
   if (page) {
     const from = (Number(page) - 1) * ITEMS_PER_PAGE;
-    const to = from + ITEMS_PER_PAGE;
+    const to = from + ITEMS_PER_PAGE - 1;
     queryFn = queryFn.range(from, to);
   } else {
     queryFn = queryFn.range(0, ITEMS_PER_PAGE - 1);
@@ -44,4 +44,16 @@ export const getQueryKey = (params: SearchParams) => {
 
 export const getQueryFunction = (params: SearchParams) => {
   return () => getUsedGoods(params);
+};
+
+export const getUsedGoodDetail = async (id: string) => {
+  const { data, error } = await supabase
+    .from('used_item')
+    .select(
+      `*, profiles ( * ), main_category ( name ), sub_category ( name ), used_item_wish ( count ), chat_list ( count )`
+    )
+    .eq('id', id)
+    .single();
+
+  return data;
 };
