@@ -20,6 +20,24 @@ const Header = () => {
   const { errorTopRight, successTopRight } = useToast();
   const user = useAuth((state) => state.user);
 
+  const setUser = useAuth((state) => state.setUser);
+  const isAuthInitialized = useAuth((state) => state.isAuthInitialized);
+  const setIsAuthInitialized = useAuth((state) => state.setIsAuthInitialized);
+
+  useEffect(() => {
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        setUser(session.user);
+      } else {
+        setUser(null);
+      }
+
+      if (!isAuthInitialized) {
+        setIsAuthInitialized(true);
+      }
+    });
+  }, []);
+
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (!error) {
@@ -45,6 +63,10 @@ const Header = () => {
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
 
   if (isLoading) return <Loading />;
+
+  if (!isAuthInitialized) {
+    return null;
+  }
 
   return (
     <div className={styles.container}>

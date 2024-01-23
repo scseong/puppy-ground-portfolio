@@ -34,7 +34,7 @@ const LoginPage = () => {
     }
     if (emailData.user !== null) {
       setUser(emailData.user);
-      setCookie('access_token', emailData.session.access_token);
+      // setCookie('access_token', emailData.session.access_token);
       router.push('/');
     }
   };
