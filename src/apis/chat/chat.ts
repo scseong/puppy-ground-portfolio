@@ -77,12 +77,10 @@ export const readChat = async ({
   list_id: number;
   other_user: string;
 }) => {
-  const { data, error } = await supabase
+  await supabase
     .from('chat')
     .update({ read_status: true })
     .eq('chat_list_id', list_id)
     .eq('user_id', other_user)
     .select();
-
-  console.log('data', data, 'error', error);
 };
