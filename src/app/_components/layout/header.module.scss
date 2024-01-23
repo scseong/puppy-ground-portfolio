@@ -5,7 +5,6 @@
 }
 
 .navbarBox {
-  // width: 1200px;
   display: flex;
   align-items: center;
   margin: auto;
@@ -43,10 +42,17 @@
   transition: all 0.2s ease;
   font-family: Pretendard-Regular;
   font-weight: 400;
+
+  &:hover {
+    color: var(--primary-color);
+  }
 }
 
-.menuItem:hover {
-  color: var(--primary-color);
+.menuEmoji {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
 }
 
 .chat {
@@ -55,18 +61,143 @@
   background-color: transparent;
   cursor: pointer;
   transition: all 0.2s ease;
-}
 
-.chat:hover {
-  color: var(--primary-color);
+  &:hover {
+    color: var(--primary-color);
+  }
 }
 
 .bell {
   font-size: 20px;
   cursor: pointer;
   transition: all 0.2s ease;
+
+  &:hover {
+    color: var(--primary-color);
+  }
 }
 
-.bell:hover {
-  color: var(--primary-color);
+.toggle {
+  cursor: pointer;
+
+  &:hover {
+    color: var(--primary-color);
+  }
+}
+
+.toggleList {
+  position: absolute;
+  z-index: 9999;
+  background-color: white;
+  color: black;
+  right: 1%;
+  top: 70px;
+  border-radius: 10px;
+  box-shadow: 0px 8px 16px 0px #00000033;
+  padding: 10px;
+
+  .toggleItems {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .toggleItem {
+    padding: 10px;
+    font-size: 16px;
+    font-family: Pretendard-Regular;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+
+  .togglemenu {
+    padding: 10px;
+    font-size: 16px;
+    font-family: Pretendard-Regular;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    display: none;
+
+    &:hover {
+      color: var(--primary-color);
+    }
+
+    @media (max-width: 820px) {
+      display: block;
+    }
+  }
+}
+
+//반응형 디자인
+
+@media (max-width: 820px) {
+  .navbarBox {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: flex-start;
+    margin-top: 30px;
+  }
+
+  .menuBox {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+
+    .menuItem {
+      display: none;
+    }
+
+    .toggleList {
+      top: 50px;
+    }
+  }
+
+  .menuEmojiPosition {
+    display: block;
+    position: absolute;
+    top: 10px;
+    right: 0;
+    transform: translate(-20%, 20%);
+    margin-right: 10px;
+  }
+}
+
+@media (max-width: 550px) {
+  .logo {
+    display: none;
+  }
+
+  .logoBox {
+    height: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbarBox {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: center;
+    margin: 30px 0 0 15px;
+  }
+}
+
+@media (max-width: 360px) {
+  .logo {
+    display: none;
+  }
+
+  .logoBox {
+    height: 40px;
+  }
 }
