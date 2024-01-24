@@ -1,6 +1,6 @@
 'use client';
 
-import { getChatList, makeChatList } from '@/apis/chat/chat';
+import { getChatRoomList, makeChatList } from '@/apis/chat/chat';
 import { deleteUsedGood, updateUsedGood } from '@/apis/used-goods/actions';
 import ChatList from '@/app/_components/chatting/ChatList';
 import ClipBoardButton from '@/app/_components/shareButton/ClipBoardButton';
@@ -20,6 +20,7 @@ import { SlideImage, TradeLocationMap } from '../_components';
 import styles from './page.module.scss';
 import WishButton from '../_components/WishButton';
 import { getUsedGoodDetail } from '@/apis/goods';
+import { Tables } from '@/shared/supabase/types/supabase';
 
 const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const queryClient = useQueryClient();
@@ -31,8 +32,8 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   });
 
   const { data: chatList } = useQuery({
-    queryKey: ['chat_list'],
-    queryFn: getChatList
+    queryKey: ['chatRoom'],
+    queryFn: () => getChatRoomList(user!.id)
   });
 
   const { id } = useParams();
@@ -102,22 +103,22 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const makeChatListMutation = useMutation({
     mutationFn: makeChatList,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getChatList'] });
+      queryClient.invalidateQueries({ queryKey: ['chatRoom'] });
     }
   });
 
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
-  const [chatListId, setChatListId] = useState(0);
+  const [chatListData, setChatListData] = useState<Tables<'chat_list'>>();
   //채팅하기 한번만 할 수 있는.. 눈속임 state(?)
-  const [userChatList, setUserChatList] = useState(false);
+  // const [userChatList, setUserChatList] = useState(false);
 
-  const list = chatList?.getChatListData?.filter((chat) => chat?.post_id === Number(id));
+  // const list = chatList?.getChatListData?.filter((chat) => chat?.post_id === Number(id));
 
   const clickOpenChat = async () => {
-    const findUserChatList = list?.filter((chat) => chat.user_id === user?.id);
+    // const findUserChatList = list?.filter((chat) => chat.user_id === user?.id);
 
-    if (userChatList === true || findUserChatList !== undefined)
-      return errorTopRight({ message: '이미 채팅을 보냈습니다', timeout: 2000 });
+    // if (userChatList === true || findUserChatList !== undefined)
+    //   return errorTopRight({ message: '이미 채팅을 보냈습니다', timeout: 2000 });
 
     try {
       const chat = await makeChatListMutation.mutateAsync({
@@ -125,9 +126,10 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
         user_id: user?.id,
         other_user: data?.user_id
       });
-      setChatListId(chat![0].id);
+      if (!chat) return;
+      setChatListData(chat);
       setModalIsOpen(true);
-      setUserChatList(true);
+      // setUserChatList(true);
     } catch (error) {
       errorTopRight({ message: '오류가 발생하였습니다', timeout: 2000 });
     }
@@ -188,8 +190,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                 onClose={() => setModalIsOpen(false)}
                 ariaHideApp={false}
                 isChatRoomOpen={true}
-                listId={chatListId}
-                getChat={[]}
+                list={chatListData}
               />
               <WishButton usedItemId={params.id} />
             </div>
