@@ -5,12 +5,19 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Footer, Header } from '../_components/layout';
 import AuthProvider from '@/shared/AuthProvider';
 
-function ProvidersLayout({ children }: { children: React.ReactNode }) {
+function ProvidersLayout({
+  children,
+  modal
+}: {
+  children: React.ReactNode;
+  modal: React.ReactNode;
+}) {
   return (
     <ReactQueryProviders>
       <ReactQueryDevtools initialIsOpen={false} />
       <Header />
       {children}
+      {modal}
       <ToastContainer />
       <Footer />
     </ReactQueryProviders>

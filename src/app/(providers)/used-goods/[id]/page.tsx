@@ -21,7 +21,6 @@ import styles from './page.module.scss';
 import WishButton from '../_components/WishButton';
 import { getUsedGoodDetail } from '@/apis/goods';
 
-
 const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const queryClient = useQueryClient();
   const user = useAuth((state) => state.user);
@@ -174,18 +173,11 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
               </div>
               <div className={styles.moreInfo}>
                 <time>{getformattedDate(created_at, 'YY년 MM월 DD일')}</time>
-                {sold_out ? (
-                  <div>
-                    <span className={styles.tag}>#{main_category!.name}</span>
-                    <span className={styles.tag}>#{sub_category!.name}</span>
-                    <span className={styles.soldOut}>#판매완료</span>
-                  </div>
-                ) : (
-                  <div>
-                    <span className={styles.tag}>#{main_category!.name}</span>
-                    <span className={styles.tag}>#{sub_category!.name}</span>
-                  </div>
-                )}
+                <div>
+                  <span className={styles.tag}>#{main_category!.name}</span>
+                  <span className={styles.tag}>#{sub_category!.name}</span>
+                  {sold_out && <span className={styles.soldOut}>#판매완료</span>}
+                </div>
               </div>
             </div>
             {/* TODO: 채팅, 찜 기능 동작 */}
