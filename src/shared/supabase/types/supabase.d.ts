@@ -49,7 +49,6 @@ export interface Database {
           id: number;
           read_status: boolean;
           user_id: string;
-          user_name: string;
           profiles: Tables<'profiles'>;
         };
         Insert: {
@@ -59,7 +58,6 @@ export interface Database {
           id?: number;
           read_status?: boolean;
           user_id: string;
-          user_name?: string;
         };
         Update: {
           chat_list_id?: number;
@@ -68,7 +66,6 @@ export interface Database {
           id?: number;
           read_status?: boolean;
           user_id?: string;
-          user_name?: string;
         };
         Relationships: [
           {
