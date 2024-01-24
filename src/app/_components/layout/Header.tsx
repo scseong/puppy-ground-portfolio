@@ -64,9 +64,9 @@ const Header = () => {
 
   if (isLoading) return <Loading />;
 
-  if (!isAuthInitialized) {
-    return null;
-  }
+  // if (!isAuthInitialized) {
+  //   return null;
+  // }
 
   return (
     <div className={styles.container}>
