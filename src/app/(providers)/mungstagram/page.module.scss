@@ -1,0 +1,99 @@
+.mungstaList {
+  padding: 2rem 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.mungstaItem {
+  border-radius: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+
+  a {
+    display: block;
+    padding: 0 1rem 1rem 1rem;
+  }
+}
+
+.profile {
+  padding: 0.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  & > div:first-child {
+    display: flex;
+    align-items: center;
+  }
+
+  & > div:last-child {
+    svg {
+      cursor: pointer;
+    }
+  }
+
+  img {
+    margin-right: 4px;
+    border-radius: 50%;
+  }
+}
+
+.images {
+  position: relative;
+  border-radius: 5px;
+
+  img {
+    max-width: 270px;
+    max-height: 270px;
+    border-radius: 1rem;
+  }
+
+  span {
+    display: inline-block;
+    position: absolute;
+    bottom: 0.6rem;
+    right: 0.6rem;
+  }
+
+  svg {
+    color: white;
+  }
+}
+
+.info {
+  padding-top: 1.2rem;
+
+  h3 {
+    margin-bottom: 1.2rem;
+    font-size: 1.4rem;
+    line-height: 1.4rem;
+    font-weight: bold;
+  }
+
+  & > div {
+    margin-bottom: 1rem;
+    ul {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    li {
+      padding: 0.4rem 0.6rem;
+      background-color: #e6e8e8;
+      border-radius: 6px;
+      font-weight: bold;
+      color: #757575;
+    }
+  }
+
+  p {
+    height: 3.6rem;
+    font-size: 1rem;
+    line-height: 1.2rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+}
