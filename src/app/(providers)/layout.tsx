@@ -7,7 +7,13 @@ import { supabase } from '@/shared/supabase/supabase';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Footer, Header } from '../_components/layout';
 
-function ProvidersLayout({ children }: { children: React.ReactNode }) {
+function ProvidersLayout({
+  children,
+  modal
+}: {
+  children: React.ReactNode;
+  modal: React.ReactNode;
+}) {
   const setUser = useAuth((state) => state.setUser);
   const isAuthInitialized = useAuth((state) => state.isAuthInitialized);
   const setIsAuthInitialized = useAuth((state) => state.setIsAuthInitialized);
@@ -35,6 +41,7 @@ function ProvidersLayout({ children }: { children: React.ReactNode }) {
       <ReactQueryDevtools initialIsOpen={false} />
       <Header />
       {children}
+      {modal}
       <ToastContainer />
       <Footer />
     </ReactQueryProviders>

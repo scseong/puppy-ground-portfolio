@@ -1,44 +1,30 @@
 'use client';
 
+import { getChatRoomList, makeChatList } from '@/apis/chat/chat';
 import { deleteUsedGood, updateUsedGood } from '@/apis/used-goods/actions';
+import ChatList from '@/app/_components/chatting/ChatList';
 import ClipBoardButton from '@/app/_components/shareButton/ClipBoardButton';
 import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
+import useAuth from '@/hooks/useAuth';
+import { useToast } from '@/hooks/useToast';
 import { supabase } from '@/shared/supabase/supabase';
-import styles from './page.module.scss';
+import { addCommasToNumber } from '@/utils/format';
+import { getformattedDate } from '@/utils/time';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
-import { getCountFromTable } from '@/utils/table';
-import { getformattedDate } from '@/utils/time';
+import { useParams, useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import { SlideImage, TradeLocationMap } from '../_components';
-import ChatList from '@/app/_components/chatting/ChatList';
-import { useState } from 'react';
-import { getChatRoomList, makeChatList } from '@/apis/chat/chat';
-import useAuth from '@/hooks/useAuth';
-import { useToast } from '@/hooks/useToast';
-import { useRouter } from 'next/navigation';
-import { useParams } from 'next/navigation';
-import { addCommasToNumber } from '@/utils/format';
+import styles from './page.module.scss';
+import WishButton from '../_components/WishButton';
+import { getUsedGoodDetail } from '@/apis/goods';
 import { Tables } from '@/shared/supabase/types/supabase';
-
-const getUsedGoodDetail = async (id: string) => {
-  const { data, error } = await supabase
-    .from('used_item')
-    .select(
-      `*, profiles ( * ), main_category ( name ), sub_category ( name ), used_item_wish ( count ), chat_list ( count )`
-    )
-    .eq('id', id)
-    .single();
-
-  return data;
-};
 
 const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const queryClient = useQueryClient();
   const user = useAuth((state) => state.user);
-  const { id } = useParams();
-  const { errorTopRight } = useToast();
 
   const { isLoading, isError, data } = useQuery({
     queryKey: ['used-item', params.id],
@@ -49,6 +35,9 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
     queryKey: ['chatRoom'],
     queryFn: () => getChatRoomList(user!.id)
   });
+
+  const { id } = useParams();
+  const { errorTopRight } = useToast();
 
   const onClickUpdateSoldOut = async () => {
     if (user?.id !== data?.user_id) {
@@ -161,7 +150,6 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
     place_name,
     main_category,
     sub_category,
-    used_item_wish,
     sold_out
   } = data;
 
@@ -187,18 +175,11 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
               </div>
               <div className={styles.moreInfo}>
                 <time>{getformattedDate(created_at, 'YY년 MM월 DD일')}</time>
-                {sold_out ? (
-                  <div>
-                    <span className={styles.tag}>#{main_category!.name}</span>
-                    <span className={styles.tag}>#{sub_category!.name}</span>
-                    <span className={styles.soldOut}>#판매완료</span>
-                  </div>
-                ) : (
-                  <div>
-                    <span className={styles.tag}>#{main_category!.name}</span>
-                    <span className={styles.tag}>#{sub_category!.name}</span>
-                  </div>
-                )}
+                <div>
+                  <span className={styles.tag}>#{main_category!.name}</span>
+                  <span className={styles.tag}>#{sub_category!.name}</span>
+                  {sold_out && <span className={styles.soldOut}>#판매완료</span>}
+                </div>
               </div>
             </div>
             {/* TODO: 채팅, 찜 기능 동작 */}
@@ -211,7 +192,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                 isChatRoomOpen={true}
                 list={chatListData}
               />
-              <button>찜 {getCountFromTable(used_item_wish)}</button>
+              <WishButton usedItemId={params.id} />
             </div>
           </div>
         </div>
