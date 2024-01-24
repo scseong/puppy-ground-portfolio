@@ -11,12 +11,10 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     const {
       data: { subscription }
     } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('이벤트다', event);
       if (session) {
         setUser(session.user);
       } else {
         setUser(null);
-        console.log('왜 이러냐 나에게');
       }
       setIsAuthInitialized(true);
     });

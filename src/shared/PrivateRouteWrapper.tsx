@@ -1,20 +1,23 @@
 import useAuth from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { useRouter } from 'next/navigation';
-import React from 'react';
-import AuthProvider from './AuthProvider';
+import React, { useEffect, useState } from 'react';
 
 function PrivateRouteWrapper({ children }: { children: React.ReactNode }) {
   const { errorTopRight } = useToast();
   const user = useAuth((state) => state.user);
   const router = useRouter();
-  if (!user) {
-    errorTopRight({ message: '로그인이 필요한 페이지입니다' });
-    router.push('/auth/login');
-    return null;
-  }
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    if (!user) {
+      errorTopRight({ message: '로그인이 필요한 페이지입니다' });
+      router.push('/auth/login');
+      return;
+    }
+    setIsLoading(false);
+  }, []);
 
-  return children;
+  return !isLoading && children;
 }
 
 // const AuthProvidedPrivateRouteWrapper = ({ children }: { children: React.ReactNode }) => (
