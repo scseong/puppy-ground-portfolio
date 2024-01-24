@@ -111,14 +111,15 @@ const LoginPage = () => {
           구글 로그인
         </button>
       </div>
-      <p
-        className={styles.moveLogin}
-        onClick={() => {
-          router.push('/auth/signup');
-        }}
-      >
+      <p className={styles.moveLogin}>
         처음이신가요?
-        <span> 회원가입 하러가기</span>
+        <span
+          onClick={() => {
+            router.push('/auth/signup');
+          }}
+        >
+          &nbsp;회원가입 하러가기
+        </span>
       </p>
     </div>
   );

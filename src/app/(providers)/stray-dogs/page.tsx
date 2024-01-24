@@ -1,7 +1,7 @@
 'use client';
 
 import { getStrayList } from '@/apis/stray';
-import style from './page.module.scss';
+import styles from './page.module.scss';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import DatePicker from 'react-datepicker';
@@ -104,15 +104,15 @@ const StrayDogs = () => {
   }
 
   return (
-    <div className={style.container}>
-      <div className={style.contentContainer}>
-        <div className={style.filterWrap}>
-          <div className={style.filterContent}>
+    <div className={styles.container}>
+      <div className={styles.contentContainer}>
+        <div className={styles.filterWrap}>
+          <div className={styles.filterContent}>
             <p>기간</p>
-            <div className={style.calender}>
+            <div className={styles.calender}>
               <DatePicker
                 locale={ko}
-                className={style.datePicker}
+                className={styles.datePicker}
                 dateFormat="yyyy-MM-dd"
                 shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
                 minDate={new Date('2023-10-01')} // minDate 이전 날짜 선택 불가
@@ -123,7 +123,7 @@ const StrayDogs = () => {
                 onChange={(date) => setStartDate(date)}
               />
               <DatePicker
-                className={style.datePicker}
+                className={styles.datePicker}
                 locale={ko}
                 dateFormat="yyyy-MM-dd"
                 shouldCloseOnSelect
@@ -136,16 +136,16 @@ const StrayDogs = () => {
               />
             </div>
           </div>
-          <div className={style.filterContent}>
+          <div className={styles.filterContent}>
             <p>지역</p>
-            <select name="지역" className={style.selectCity} onChange={cityChangeHandler}>
+            <select name="지역" className={styles.selectCity} onChange={cityChangeHandler}>
               {regionList.map((region, index) => {
                 return <option key={index}>{region.city}</option>;
               })}
             </select>
             <select
               name="시/군/구"
-              className={style.selectCity}
+              className={styles.selectCity}
               onChange={guChangeHandler}
               value={selectGu}
             >
@@ -158,31 +158,31 @@ const StrayDogs = () => {
             </button>
           </div>
         </div>
-        <div className={style.gridContainer}>
+        <div className={styles.gridContainer}>
           {filterDate!.slice(offset, offset + limit).map((list, index) => {
             const formatHappenDt = formatDate(list.happenDt);
             return (
               <div key={index}>
-                <div className={style.listCard}>
+                <div className={styles.listCard}>
                   <Link href={`/stray-dogs/${list.desertionNo}`}>
-                    <div className={style.imageWrap}>
+                    <div className={styles.imageWrap}>
                       <Image
                         src={list.popfile}
                         alt="dog-image"
-                        className={style.image}
+                        className={styles.image}
                         width={250}
                         height={250}
                       />
                     </div>
                   </Link>
-                  <div className={style.explanationWrap}>
-                    <div className={style.titleColumn}>
+                  <div className={styles.explanationWrap}>
+                    <div className={styles.titleColumn}>
                       <p>구조일시</p>
                       <p>견종</p>
                       <p>성별</p>
                       <p>발견장소</p>
                     </div>
-                    <div className={style.contentColumn}>
+                    <div className={styles.contentColumn}>
                       <p>{formatHappenDt}</p>
                       <p>{list.kindCd.slice(3)}</p>
                       <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>

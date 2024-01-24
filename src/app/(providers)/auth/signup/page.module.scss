@@ -28,10 +28,13 @@
       font-family: pretendard-regular;
       padding-left: 15px;
     }
+    input:focus {
+      border-color: var(--primary-color);
+    }
     p {
       color: red;
       margin-top: 10px;
-      font-size: 12px;
+      font-size: 11px;
     }
   }
 
