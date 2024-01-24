@@ -14,6 +14,9 @@ import ChatInput from './ChatInput';
 import Loading from '../layout/loading/Loading';
 import { IoIosArrowBack } from 'react-icons/io';
 import ChatListContent from './ChatListContent';
+import Image from 'next/image';
+import { addCommasToNumber } from '@/utils/format';
+import { useRouter } from 'next/navigation';
 
 type ModalProps = {
   isOpen: boolean;
@@ -56,6 +59,7 @@ const ChatList = ({
   });
 
   const chatListRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
 
   // 유저 정보
   const user = useAuth((state) => state.user);
@@ -66,18 +70,36 @@ const ChatList = ({
   const [chat, setChat] = useState<Tables<'chat'>[]>(getChat!);
   //로그인한 사람의 채팅 내역
   const [chatItem, setChatItem] = useState<Tables<'chat'>[]>([]);
-  //중고물품의 아이디
+  //채팅방 아이디
   const [chatListId, setChatListId] = useState<number>(0);
+  //채팅방에서 쓸 중고물품 정보
+  const [usedItem, setUsedItem] = useState<Tables<'used_item'>>();
 
   // 클릭 시 채팅방 입장
-  const clickChatRoom = ({ id, other_user }: { id: number; other_user: string }) => {
+  const clickChatRoom = ({
+    id,
+    other_user,
+    usedItem
+  }: {
+    id: number;
+    other_user: string;
+    usedItem: Tables<'used_item'>;
+  }) => {
     const chatHistory = chat?.filter((chat) => chat.chat_list_id === id);
     //안 읽은 채팅 읽음으로 바꿔야함으
     setChatItem(chatHistory!);
     readChatMutation.mutate({ list_id: id, other_user });
     setChatListId(id);
+    setUsedItem(usedItem);
     setIsChatOpen(true);
   };
+
+  //클릭 시 중고물품 상세페이지로 이동
+  const clickUsedItem = (usedItemId: number) => {
+    router.push(`/used-goods/${usedItemId}`);
+    closeModal();
+  };
+
   // 스크롤
   const scrollToBottom = () => {
     if (chatListRef.current) {
@@ -149,6 +171,23 @@ const ChatList = ({
               <button className={styles.backBtn} onClick={() => setIsChatOpen(false)}>
                 <IoIosArrowBack size={20} color={'#0AC4B9'} />
               </button>
+              <div className={styles.usedItemContainer}>
+                <div className={styles.usedItemImage}>
+                  <Image width={50} height={50} src={`${usedItem?.photo_url[0]}`} alt="물건 사진" />
+                </div>
+                <div
+                  className={styles.usedItem}
+                  onClick={() => clickUsedItem(usedItem?.id as number)}
+                >
+                  <div className={styles.usedItemTitle}>
+                    <p className={styles.title}>{usedItem?.title}</p>
+                    <p className={styles.soldOut}>{usedItem?.sold_out ? '거래완료' : '판매중'}</p>
+                  </div>
+                  <div className={styles.usedItemPrice}>
+                    <p>{usedItem?.price && addCommasToNumber(usedItem?.price as number)}원</p>
+                  </div>
+                </div>
+              </div>
               <div ref={chatListRef} className={styles.chatScroll}>
                 <div>
                   {chatItem.map((chatHistory) => {

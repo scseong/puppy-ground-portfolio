@@ -1,4 +1,4 @@
-import ReactModal from 'react-modal';
+import Modal from 'react-modal';
 import styles from './chatModal.module.scss';
 type ModalProps = {
   isOpen: boolean;
@@ -6,17 +6,29 @@ type ModalProps = {
   children: React.ReactNode;
   ariaHideApp: boolean;
 };
+
 const ChatModal = ({ isOpen, onClose, children }: ModalProps) => {
   return (
-    <ReactModal
+    <Modal
       isOpen={isOpen}
       onRequestClose={onClose}
       ariaHideApp={false}
       contentLabel="Modal"
       className={styles.modalContainer}
+      style={{
+        overlay: {
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(255, 255, 255, 0.75)',
+          zIndex: '3000'
+        }
+      }}
     >
       {children}
-    </ReactModal>
+    </Modal>
   );
 };
 export default ChatModal;
