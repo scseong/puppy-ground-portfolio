@@ -69,20 +69,20 @@ const Header = () => {
             </Link>
           </div>
           <div className={styles.menuBox}>
+            <Link className={styles.menuItem} href="/used-goods">
+              중고거래
+            </Link>
+            <Link className={styles.menuItem} href="/stray-dogs">
+              유기견공고
+            </Link>
+            <Link className={styles.menuItem} href="/facilities">
+              동반시설
+            </Link>
+            <Link className={styles.menuItem} href="/mungstagram">
+              멍스타그램
+            </Link>
             {user ? (
               <>
-                <Link className={styles.menuItem} href="/used-goods">
-                  중고거래
-                </Link>
-                <Link className={styles.menuItem} href="/stray-dogs">
-                  유기견공고
-                </Link>
-                <Link className={styles.menuItem} href="/facilities">
-                  동반시설
-                </Link>
-                <Link className={styles.menuItem} href="/mungstagram">
-                  멍스타그램
-                </Link>
                 <div className={styles.menuEmojiPosition}>
                   <div className={styles.menuEmoji}>
                     <div className={styles.bell}>
@@ -154,20 +154,59 @@ const Header = () => {
                 </Link>
                 <div className={styles.menuEmojiPosition}>
                   <div className={styles.logOuttoggle}>
-                    <RxHamburgerMenu size={25} />
+                    <RxHamburgerMenu size={25} onClick={handleToggle} />
                   </div>
                 </div>
                 {isVisible && (
-                  <div className={styles.toggleList}>
-                    <div className={styles.toggleItems}>
-                      <Link onClick={closeToggle} className={styles.toggleItem} href="/auth/signup">
-                        회원가입
-                      </Link>
-                      <Link onClick={closeToggle} className={styles.toggleItem} href="/auth/login">
-                        로그인
-                      </Link>
+                  <>
+                    <div className={styles.toggleBackground} onClick={handleToggle}></div>
+                    <div className={styles.toggleList}>
+                      <div className={styles.toggleItems}>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/used-goods"
+                        >
+                          중고거래
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/stray-dogs"
+                        >
+                          유기견공고
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/facilities"
+                        >
+                          동반시설
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/mungstagram"
+                        >
+                          멍스타그램
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.toggleItem}
+                          href="/auth/signup"
+                        >
+                          회원가입
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.toggleItem}
+                          href="/auth/login"
+                        >
+                          로그인
+                        </Link>
+                      </div>
                     </div>
-                  </div>
+                  </>
                 )}
               </>
             )}
