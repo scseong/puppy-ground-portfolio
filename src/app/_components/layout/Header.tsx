@@ -20,6 +20,23 @@ const Header = () => {
   const router = useRouter();
   const { errorTopRight, successTopRight } = useToast();
   const user = useAuth((state) => state.user);
+  const setUser = useAuth((state) => state.setUser);
+  const isAuthInitialized = useAuth((state) => state.isAuthInitialized);
+  const setIsAuthInitialized = useAuth((state) => state.setIsAuthInitialized);
+
+  useEffect(() => {
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        setUser(session.user);
+      } else {
+        setUser(null);
+      }
+
+      if (!isAuthInitialized) {
+        setIsAuthInitialized(true);
+      }
+    });
+  }, []);
 
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
@@ -46,6 +63,10 @@ const Header = () => {
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
 
   if (isLoading) return <Loading />;
+
+  if (!isAuthInitialized) {
+    return null;
+  }
 
   return (
     <div className={styles.container}>
@@ -97,6 +118,18 @@ const Header = () => {
             </>
           ) : (
             <>
+              <Link className={styles.menuItem} href="/used-goods">
+                중고거래
+              </Link>
+              <Link className={styles.menuItem} href="/stray-dogs">
+                유기견공고
+              </Link>
+              <Link className={styles.menuItem} href="/facilities">
+                동반시설
+              </Link>
+              <Link className={styles.menuItem} href="/mungstagram">
+                멍스타그램
+              </Link>
               <Link className={styles.menuItem} href="/auth/signup">
                 회원가입
               </Link>

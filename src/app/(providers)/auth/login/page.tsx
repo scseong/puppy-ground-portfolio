@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import styles from './page.module.scss';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
-import { setCookie } from 'nextjs-cookie';
+import PublicRouteWrapper from '@/shared/PublicRouteWrapper';
 
 export type Inputs = {
   email: string;
@@ -30,11 +30,14 @@ const LoginPage = () => {
       password: data.password
     });
     if (error) {
-      errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
+      console.log(error.message === 'Invalid login credentials');
+      errorTopRight({
+        message: '아이디 또는 비밀번호가 일치하지 않습니다.',
+        timeout: 1500
+      });
     }
     if (emailData.user !== null) {
       setUser(emailData.user);
-      setCookie('access_token', emailData.session.access_token);
       router.push('/');
     }
   };
@@ -124,4 +127,12 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+const PublicLoginPage = () => {
+  return (
+    <PublicRouteWrapper>
+      <LoginPage />
+    </PublicRouteWrapper>
+  );
+};
+
+export default PublicLoginPage;

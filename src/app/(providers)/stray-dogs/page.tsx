@@ -13,6 +13,7 @@ import regionList from '../../../data/regionList.json';
 import { IoSearch } from 'react-icons/io5';
 import Pagination from '@/app/_components/pagination/Pagination';
 import { ko } from 'date-fns/locale';
+import { supabase } from '@/shared/supabase/supabase';
 
 const StrayDogs = () => {
   const [startDate, setStartDate] = useState<Date | null>(new Date('2023-10-01'));
@@ -22,6 +23,14 @@ const StrayDogs = () => {
   const [page, setPage] = useState(1);
   const limit = 16;
   const offset = (page - 1) * limit;
+
+  const a = async () => {
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+    console.log('유저정보임', user);
+  };
+  a();
 
   const {
     isLoading,

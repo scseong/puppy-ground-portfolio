@@ -17,6 +17,7 @@ import { MdOutlineCancel } from 'react-icons/md';
 import { LuPencilLine } from 'react-icons/lu';
 import { FiPlus } from 'react-icons/fi';
 import { PiDotsThreeOutlineVerticalFill } from 'react-icons/pi';
+import PrivateRouteWrapper from '@/shared/PrivateRouteWrapper';
 
 const bucketName = 'used_goods';
 const MAINCATEGORY = ['대형견', '중형견', '소형견'];
@@ -277,4 +278,12 @@ const CreateForm = () => {
   );
 };
 
-export default CreateForm;
+const PrivateCreatePage = () => {
+  return (
+    <PrivateRouteWrapper>
+      <CreateForm />
+    </PrivateRouteWrapper>
+  );
+};
+
+export default PrivateCreatePage;
