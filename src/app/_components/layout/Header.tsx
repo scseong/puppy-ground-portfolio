@@ -124,6 +124,23 @@ const Header = () => {
                 <Link className={styles.menuItem} href="/auth/login">
                   로그인
                 </Link>
+                <div className={styles.menuEmojiPosition}>
+                  <div className={styles.logOuttoggle}>
+                    <RxHamburgerMenu size={25} onClick={handleToggle} />
+                  </div>
+                </div>
+                {isVisible && (
+                  <div className={styles.toggleList}>
+                    <div className={styles.toggleItems}>
+                      <Link className={styles.toggleItem} href="/auth/signup">
+                        회원가입
+                      </Link>
+                      <Link className={styles.toggleItem} href="/auth/login">
+                        로그인
+                      </Link>
+                    </div>
+                  </div>
+                )}
               </>
             )}
           </div>
