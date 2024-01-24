@@ -14,12 +14,13 @@ import Swal from 'sweetalert2';
 import { SlideImage, TradeLocationMap } from '../_components';
 import ChatList from '@/app/_components/chatting/ChatList';
 import { useState } from 'react';
-import { getChatList, makeChatList } from '@/apis/chat/chat';
+import { getChatRoomList, makeChatList } from '@/apis/chat/chat';
 import useAuth from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 import { addCommasToNumber } from '@/utils/format';
+import { Tables } from '@/shared/supabase/types/supabase';
 
 const getUsedGoodDetail = async (id: string) => {
   const { data, error } = await supabase
@@ -35,6 +36,9 @@ const getUsedGoodDetail = async (id: string) => {
 
 const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const queryClient = useQueryClient();
+  const user = useAuth((state) => state.user);
+  const { id } = useParams();
+  const { errorTopRight } = useToast();
 
   const { isLoading, isError, data } = useQuery({
     queryKey: ['used-item', params.id],
@@ -42,13 +46,9 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   });
 
   const { data: chatList } = useQuery({
-    queryKey: ['chat_list'],
-    queryFn: getChatList
+    queryKey: ['chatRoom'],
+    queryFn: () => getChatRoomList(user!.id)
   });
-
-  const user = useAuth((state) => state.user);
-  const { id } = useParams();
-  const { errorTopRight } = useToast();
 
   const onClickUpdateSoldOut = async () => {
     if (user?.id !== data?.user_id) {
@@ -114,12 +114,12 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const makeChatListMutation = useMutation({
     mutationFn: makeChatList,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getChatList'] });
+      queryClient.invalidateQueries({ queryKey: ['chatRoom'] });
     }
   });
 
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
-  const [chatListId, setChatListId] = useState(0);
+  const [chatListData, setChatListData] = useState<Tables<'chat_list'>>();
   //채팅하기 한번만 할 수 있는.. 눈속임 state(?)
   // const [userChatList, setUserChatList] = useState(false);
 
@@ -137,7 +137,8 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
         user_id: user?.id,
         other_user: data?.user_id
       });
-      setChatListId(chat![0].id);
+      if (!chat) return;
+      setChatListData(chat);
       setModalIsOpen(true);
       // setUserChatList(true);
     } catch (error) {
@@ -208,8 +209,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                 onClose={() => setModalIsOpen(false)}
                 ariaHideApp={false}
                 isChatRoomOpen={true}
-                listId={chatListId}
-                getChat={[]}
+                list={chatListData}
               />
               <button>찜 {getCountFromTable(used_item_wish)}</button>
             </div>

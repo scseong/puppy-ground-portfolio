@@ -80,7 +80,6 @@ const Header = () => {
                   onClose={() => setModalIsOpen(false)}
                   ariaHideApp={false}
                   isChatRoomOpen={false}
-                  listId={0}
                   getChat={getChat!}
                 />
               </div>

@@ -10,13 +10,11 @@ import { User } from '@supabase/supabase-js';
 const ChatInput = ({
   chatListId,
   listId,
-  user,
-  userProfile
+  user
 }: {
   chatListId: number;
   listId: number;
   user: User;
-  userProfile: Tables<'profiles'>;
 }) => {
   //채팅보내는 내용
   const [chatContent, setChatContent] = useState<string>('');
@@ -31,11 +29,10 @@ const ChatInput = ({
   const clickSendChat = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (chatContent === '') return;
-    sendChatMutation.mutateAsync({
+    sendChatMutation.mutate({
       content: chatContent,
       id: chatListId === 0 ? listId : chatListId,
-      userId: user?.id!,
-      userName: userProfile?.user_name
+      userId: user?.id!
     });
     setChatContent('');
   };

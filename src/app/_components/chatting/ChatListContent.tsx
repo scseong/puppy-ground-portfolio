@@ -13,12 +13,12 @@ type PropsType = {
     other_user: string;
     usedItem: Tables<'used_item'>;
   }) => void;
-  userProfile: Tables<'profiles'>;
+  userProfile: string;
 };
 
 const ChatListContent = ({ chat: chatList, clickChatRoom, userProfile }: PropsType) => {
   const readMessages = chatList.chat
-    .map((chat) => (chat.user_id !== userProfile.id ? chat.read_status : undefined))
+    .map((chat) => (chat.user_id !== userProfile ? chat.read_status : undefined))
     .filter((chat) => chat === false);
 
   return (
@@ -27,7 +27,8 @@ const ChatListContent = ({ chat: chatList, clickChatRoom, userProfile }: PropsTy
         onClick={() =>
           clickChatRoom({
             id: chatList.id,
-            other_user: chatList.other_user,
+            other_user:
+              userProfile !== chatList.other_user ? chatList.other_user : chatList.user_id,
             usedItem: chatList.used_item
           })
         }
