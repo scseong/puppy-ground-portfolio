@@ -13,16 +13,6 @@ export const getChatRoomList = async (id: string) => {
   const { data: getChatListData, error } = getChatListQuery;
   return { getChatListData, error };
 };
-// export const getChatList = async () => {
-//   const getChatListQuery = await supabase
-//     .from('chat_list')
-//     .select('*, used_item(*), chat(read_status, user_id), profiles(*)')
-//     .order('id', { ascending: false })
-//     .returns<Tables<'chat_list'>[]>();
-
-//   const { data: getChatListData, error } = getChatListQuery;
-//   return { getChatListData, error };
-// };
 
 // 채팅 가져오기
 export const getChatContent = async () => {

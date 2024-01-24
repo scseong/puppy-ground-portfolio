@@ -43,16 +43,6 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  // const {
-  //   isError,
-  //   isLoading,
-  //   data: getChatListData
-  // } = useQuery({
-  //   queryKey: ['getChatList'],
-  //   queryFn: getChatList,
-  //   refetchOnWindowFocus: true
-  // });
-
   const {
     isError,
     isLoading,

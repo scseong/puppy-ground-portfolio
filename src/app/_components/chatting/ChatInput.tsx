@@ -1,10 +1,9 @@
 'use client';
 
 import { sendChat } from '@/apis/chat/chat';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import styles from './chatInput.module.scss';
-import { Tables } from '@/shared/supabase/types/supabase';
 import { User } from '@supabase/supabase-js';
 
 const ChatInput = ({
