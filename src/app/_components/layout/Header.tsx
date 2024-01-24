@@ -28,6 +28,7 @@ const Header = () => {
     if (!error) {
       successTopRight({ message: '로그아웃 되었습니다.' });
       deleteCookie('access_token');
+      setIsVisible(false);
       router.push('/');
     }
     if (error) {
@@ -49,6 +50,10 @@ const Header = () => {
 
   const handleToggle = () => {
     setIsVisible(!isVisible);
+  };
+
+  const closeToggle = () => {
+    setIsVisible(false);
   };
 
   if (isLoading) return <Loading />;
@@ -92,28 +97,51 @@ const Header = () => {
                   </div>
                 </div>
                 {isVisible && (
-                  <div className={styles.toggleList}>
-                    <div className={styles.toggleItems}>
-                      <Link className={styles.togglemenu} href="/used-goods">
-                        중고거래
-                      </Link>
-                      <Link className={styles.togglemenu} href="/stray-dogs">
-                        유기견공고
-                      </Link>
-                      <Link className={styles.togglemenu} href="/facilities">
-                        동반시설
-                      </Link>
-                      <Link className={styles.togglemenu} href="/mungstagram">
-                        멍스타그램
-                      </Link>
-                      <Link className={styles.toggleItem} href={`/profile/${user.id}`}>
-                        마이페이지
-                      </Link>
-                      <div className={styles.toggleItem} onClick={signOut}>
-                        로그아웃
+                  <>
+                    <div className={styles.toggleBackground} onClick={handleToggle}></div>
+                    <div className={styles.toggleList}>
+                      <div className={styles.toggleItems}>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/used-goods"
+                        >
+                          중고거래
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/stray-dogs"
+                        >
+                          유기견공고
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/facilities"
+                        >
+                          동반시설
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/mungstagram"
+                        >
+                          멍스타그램
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.toggleItem}
+                          href={`/profile/${user.id}`}
+                        >
+                          마이페이지
+                        </Link>
+                        <div className={styles.toggleItem} onClick={signOut}>
+                          로그아웃
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </>
                 )}
               </>
             ) : (
@@ -126,16 +154,16 @@ const Header = () => {
                 </Link>
                 <div className={styles.menuEmojiPosition}>
                   <div className={styles.logOuttoggle}>
-                    <RxHamburgerMenu size={25} onClick={handleToggle} />
+                    <RxHamburgerMenu size={25} />
                   </div>
                 </div>
                 {isVisible && (
                   <div className={styles.toggleList}>
                     <div className={styles.toggleItems}>
-                      <Link className={styles.toggleItem} href="/auth/signup">
+                      <Link onClick={closeToggle} className={styles.toggleItem} href="/auth/signup">
                         회원가입
                       </Link>
-                      <Link className={styles.toggleItem} href="/auth/login">
+                      <Link onClick={closeToggle} className={styles.toggleItem} href="/auth/login">
                         로그인
                       </Link>
                     </div>
