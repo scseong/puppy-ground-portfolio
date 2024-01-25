@@ -1,6 +1,7 @@
-import moment from 'moment';
 import styles from './chat.module.scss';
 import { Tables } from '@/shared/supabase/types/supabase';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 
 const Chat = ({
   chatHistory,
@@ -25,7 +26,7 @@ const Chat = ({
         </div>
       </div>
       <div className={styles.date}>
-        {moment(chatHistory.created_at).locale('KO').add('h').format('MM월 DD일 A hh:mm')}
+        {dayjs(chatHistory.created_at).locale('KO').format('a hh:mm')}
       </div>
     </div>
   );
