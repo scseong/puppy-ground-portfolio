@@ -1,13 +1,136 @@
-.modal {
-  padding: 15px;
-  width: 400px;
-  height: 600px;
-  position: absolute;
-  top: 15%;
-  left: 41%;
-  justify-content: center;
-  background-color: white;
-  box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.376);
-  border-radius: 10px;
-  z-index: 1000;
+.container {
+  padding: 4rem;
+  width: 1000px;
+  height: 800px;
+}
+
+.title {
+  margin-bottom: 2rem;
+
+  input {
+    font-size: 2rem;
+    font-weight: bold;
+    line-height: 2rem;
+    border: none;
+    outline: none;
+  }
+}
+
+.imageBox {
+  padding: 1rem 0;
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.imageInput {
+  position: relative;
+  width: 18%;
+  aspect-ratio: 1 / 1;
+  border-radius: 5px;
+  overflow: hidden;
+
+  img {
+    width: auto;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .cancelIcon {
+    position: absolute;
+    padding: 3px;
+    top: 5px;
+    right: 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    color: gray;
+    z-index: 10;
+    cursor: pointer;
+  }
+
+  label {
+    position: absolute;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: #e6e8e8;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  input {
+    display: none;
+  }
+}
+
+.tags {
+  margin-bottom: 1rem;
+  padding: 2rem 3rem;
+  width: 100%;
+  border-radius: 5px;
+  background-color: #f5f4f4;
+
+  ul {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  li {
+    padding: 0.8rem 1.2rem;
+    background-color: #000;
+    border-radius: 2rem;
+    color: white;
+  }
+}
+
+.tagForm {
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #bbb;
+
+  input {
+    padding: 1rem 0;
+    display: block;
+    width: 100%;
+    border: none;
+    outline: none;
+  }
+}
+
+.content {
+  margin-bottom: 1rem;
+
+  textarea {
+    padding: 1rem;
+    width: 100%;
+    height: 120px;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    line-height: 1.4rem;
+    outline: none;
+    overflow-y: hidden;
+    resize: none;
+  }
+}
+
+.btnBox {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+
+  button {
+    padding: 1rem;
+    width: 140px;
+    background-color: #bbb;
+    border: none;
+    border-radius: 5px;
+    color: white;
+  }
+
+  .submitBtn {
+    background-color: var(--primary-color);
+  }
 }

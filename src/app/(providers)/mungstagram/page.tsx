@@ -22,6 +22,7 @@ const Mungstagram = () => {
   return (
     <Main>
       <h2>멍스타그램</h2>
+      <Link href="/mungstagram/create">등록하기</Link>
       <section className={styles.mungstagram}>
         <div className={styles.mungstaList}>
           <div className={styles.mungstaItem}>
