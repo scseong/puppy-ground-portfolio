@@ -10,11 +10,7 @@ import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
 
 const Profile = () => {
-  const {
-    isLoading,
-    isError,
-    data: getProfileData
-  } = useQuery({
+  const { data: getProfileData } = useQuery({
     queryKey: ['getProfile'],
     queryFn: getProfile,
     refetchOnWindowFocus: false
@@ -90,19 +86,16 @@ const Profile = () => {
     }
   };
 
-  if (isLoading) return <div>로딩 중입니다...</div>;
-  if (isError) return <div>오류가 발생했습니다...</div>;
-
   return (
     <div className={styles.container}>
-      <div>
+      <div className={styles.profileBox}>
         {editProfile ? (
           <div>
             <div>
               <div className={styles.imgLabel}>
                 <Image
-                  width={100}
-                  height={100}
+                  width={150}
+                  height={150}
                   src={profileImg! || profile?.avatar_url!}
                   alt="유저 프로필"
                 />
@@ -125,16 +118,20 @@ const Profile = () => {
             <button onClick={() => setEditProfile((state) => !state)}>취소</button>
           </div>
         ) : (
-          <div>
-            <Image
-              alt="유저 프로필"
-              width={100}
-              height={100}
-              style={{ border: 'none' }}
-              src={profile?.avatar_url || ''}
-            />
-            <p>{profile?.user_name}</p>
-            <button onClick={() => setEditProfile((state) => !state)}>프로필 수정</button>
+          <div className={styles.imgLabel}>
+            <div className={styles.wrapper}>
+              <Image
+                alt="유저 프로필"
+                width={150}
+                height={150}
+                style={{ border: 'none' }}
+                src={profile?.avatar_url || ''}
+              />
+              <div className={styles.userName}>{profile?.user_name}</div>
+            </div>
+            <button className={styles.editButton} onClick={() => setEditProfile((state) => !state)}>
+              프로필 수정
+            </button>
           </div>
         )}
       </div>

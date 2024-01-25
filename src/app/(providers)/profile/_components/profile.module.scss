@@ -4,16 +4,24 @@
   align-items: center;
   justify-content: flex-start;
   height: 100%;
-  border: 5px solid red;
-  margin: 0 auto;
+  margin: 50px auto auto auto;
+
+  .profileBox {
+    background-color: #ffffff;
+    width: 300px;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+    border-radius: 5px;
+  }
 }
 
 .imgLabel {
   display: flex;
   flex-direction: column;
-  & > img {
-    border-radius: 50%;
-  }
+  align-items: center;
+  justify-content: space-between;
 
   & > label {
     border: 1px solid #0ac4b9;
@@ -28,5 +36,30 @@
       background-color: #0ac4b9;
       color: white;
     }
+  }
+}
+
+.userName {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 20px 0 20px 0;
+  font-family: pretendard-regular;
+  text-align: center;
+}
+
+.editButton {
+  color: #757575;
+  font-family: Pretendard;
+  font-size: 13px;
+  font-weight: bold;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  width: 120px;
+}
+
+.wrapper {
+  & > img {
+    border-radius: 50%;
   }
 }
