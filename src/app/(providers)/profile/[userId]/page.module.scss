@@ -1,0 +1,18 @@
+.container {
+  max-width: 1200px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0 auto;
+  justify-content: flex-start;
+  min-height: 100vh;
+  align-items: flex-start;
+}
+
+.right {
+  width: 25%;
+}
+
+.left {
+  width: 75%;
+}

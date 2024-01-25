@@ -5,10 +5,9 @@ import { supabase } from '@/shared/supabase/supabase';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useState } from 'react';
-import styles from './page.module.scss';
+import styles from './profile.module.scss';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
-import PrivateRouteWrapper from '@/shared/PrivateRouteWrapper';
 
 const Profile = () => {
   const {
@@ -96,50 +95,51 @@ const Profile = () => {
 
   return (
     <div className={styles.container}>
-      {editProfile ? (
-        <div>
+      <div>
+        {editProfile ? (
           <div>
-            <div className={styles.imgLabel}>
-              <Image
-                width={100}
-                height={100}
-                src={profileImg! || profile?.avatar_url!}
-                alt="유저 프로필"
+            <div>
+              <div className={styles.imgLabel}>
+                <Image
+                  width={100}
+                  height={100}
+                  src={profileImg! || profile?.avatar_url!}
+                  alt="유저 프로필"
+                />
+                <label htmlFor="input-file">사진 변경</label>
+              </div>
+              <input
+                type="file"
+                id="input-file"
+                accept="image/jpg,image/png,image/jpeg"
+                style={{ display: 'none' }}
+                onChange={onChangeImg}
               />
-              <label htmlFor="input-file">사진 변경</label>
+              <input
+                value={editUserName}
+                onChange={onChangeUserName}
+                placeholder="변경할 이름을 입력해주세요"
+              />
+              <button onClick={updateProfile}>수정 완료</button>
             </div>
-            <input
-              type="file"
-              id="input-file"
-              accept="image/jpg,image/png,image/jpeg"
-              style={{ display: 'none' }}
-              onChange={onChangeImg}
-            />
-            <input
-              value={editUserName}
-              onChange={onChangeUserName}
-              placeholder="변경할 이름을 입력해주세요"
-            />
-            <button onClick={updateProfile}>수정 완료</button>
+            <button onClick={() => setEditProfile((state) => !state)}>취소</button>
           </div>
-          <button onClick={() => setEditProfile((state) => !state)}>취소</button>
-        </div>
-      ) : (
-        <div>
-          <Image
-            alt="유저 프로필"
-            width={100}
-            height={100}
-            style={{ border: 'none' }}
-            src={profile?.avatar_url || ''}
-          />
-          <p>{profile?.user_name}</p>
-          <button onClick={() => setEditProfile((state) => !state)}>프로필 수정</button>
-        </div>
-      )}
+        ) : (
+          <div>
+            <Image
+              alt="유저 프로필"
+              width={100}
+              height={100}
+              style={{ border: 'none' }}
+              src={profile?.avatar_url || ''}
+            />
+            <p>{profile?.user_name}</p>
+            <button onClick={() => setEditProfile((state) => !state)}>프로필 수정</button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
-
 
 export default Profile;
