@@ -21,6 +21,50 @@ const MungModal = () => {
 
   const [inputForm, setInputForm] = useState<{ photo_url: string[] }>({ photo_url: [] });
 
+  async function uploadImage(file: File) {
+    if (file.size >= 2_000_000) {
+      warnTopRight({ message: '파일 사이즈가 너무 큽니다. (2MB 이하)' });
+      return;
+    }
+
+    const { data, error } = await supabase.storage.from('mungstagram').upload(uuidv4(), file);
+
+    if (data) {
+      setInputForm((prev) => ({
+        ...prev,
+        photo_url: [
+          ...prev.photo_url,
+          `${process.env.NEXT_PUBLIC_IMAGE_PREFIX}/mungstagram/${data.path}`
+        ]
+      }));
+    } else {
+      errorTopRight({ message: error?.message });
+    }
+  }
+
+  async function dropImage(e: React.DragEvent<HTMLLabelElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const file = e.dataTransfer?.files?.length ? e.dataTransfer?.files[0] : null;
+    if (!file) return;
+
+    await uploadImage(file);
+  }
+
+  async function addImage(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.length ? e.target.files[0] : null;
+    if (!file) return;
+
+    await uploadImage(file);
+  }
+
+  const removeImage = (index: number) => {
+    setInputForm((prev) => ({
+      ...prev,
+      photo_url: prev.photo_url.filter((_, i) => i !== index)
+    }));
+  };
 
   return (
     <ReactModal
@@ -62,7 +106,7 @@ const MungModal = () => {
             <div key={index} className={styles.imageInput}>
               {inputForm.photo_url[index] && (
                 <>
-                  <div className={styles.cancelIcon}>
+                  <div className={styles.cancelIcon} onClick={() => removeImage(index)}>
                     <MdOutlineCancel size={20} color="#B0B0B0" />
                   </div>
                   <Image
@@ -76,10 +120,10 @@ const MungModal = () => {
               )}
               {!inputForm.photo_url[index] && (
                 <>
-                  <label htmlFor="file" >
+                  <label htmlFor="file" onDragOver={(e) => e.preventDefault()} onDrop={dropImage}>
                     <FiPlus size={27} color="#B0B0B0" />
                   </label>
-                  <input id="file" type="file" accept=".gif, .jpg, .png"/>
+                  <input id="file" type="file" accept=".gif, .jpg, .png" onChange={addImage} />
                 </>
               )}
             </div>
