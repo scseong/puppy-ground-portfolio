@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { addUsedGoodWish, removeUsedGoodWish } from '@/apis/wishLike/actions';
 import useAuth from '@/hooks/useAuth';
@@ -9,12 +9,13 @@ import { useToast } from '@/hooks/useToast';
 import { IoIosHeartEmpty, IoMdHeart } from 'react-icons/io';
 import styles from './wishButton.module.scss';
 import { getUsedGoodDetail } from '@/apis/goods';
+import { useAlertMessage } from '@/hooks/useAlertMessage';
 
 const WishButton = ({ usedItemId }: { usedItemId: string }) => {
   const queryClient = useQueryClient();
   const user = useAuth((state) => state.user);
   const { errorTopRight } = useToast();
-
+  const { addAlertMessage } = useAlertMessage();
   const { isLoading, isError, data } = useQuery({
     queryKey: ['used-item', usedItemId],
     queryFn: () => getUsedGoodDetail(usedItemId)
@@ -51,8 +52,16 @@ const WishButton = ({ usedItemId }: { usedItemId: string }) => {
         ]
       };
     });
-
     queryClient.setQueryData(['my_wish', usedItemId], true);
+
+    // if (data?.user_id === user!.id) {
+    //   addAlertMessage({
+    //     type: 'wish',
+    //     message: `등록하신 상품 ${title} 에 찜이 추가되었습니다 `,
+    //     userId: user,
+    //     targetId: usedItemId
+    //   });
+    // }
   };
 
   const removeUsedGoodWishClient = () => {

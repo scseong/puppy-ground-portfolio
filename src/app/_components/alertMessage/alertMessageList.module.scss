@@ -6,6 +6,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+  overflow-y: auto;
+  position: absolute;
+  z-index: 9999;
+  scroll-behavior: smooth;
+  top: 70px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 0px #00000033;
+  padding: 10px;
 }
 
 .messageWrap {

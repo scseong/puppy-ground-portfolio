@@ -1,103 +1,95 @@
-import React, { useCallback, useEffect } from 'react';
+'use client';
+
+import React, { useCallback, useEffect, useState } from 'react';
 import styles from './alertMessageList.module.scss';
-import { Tables } from '@/shared/supabase/types/supabase';
-import { FetchNextPageOptions, InfiniteQueryObserverResult } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useAlertMessage } from '@/hooks/useAlertMessage';
 import moment from 'moment';
-import { AlertType } from '@/apis/alertMessage';
+import useAuth from '@/hooks/useAuth';
 
 type Props = {
-  messageList: Tables<'alert_message'>[];
-  hasNextPage: boolean;
-  isFetching: boolean;
-  fetchNextPage: (
-    options?: FetchNextPageOptions | undefined
-  ) => Promise<InfiniteQueryObserverResult<(Tables<'alert_message'> | null)[], Error>>;
   setShowMessageList: (value: boolean) => void;
 };
 
-type Alert = {
-  id: string;
-  type: string;
-  target_id: number;
-};
+// type Alert = {
+//   created_at: string;
+//   id: string;
+//   message: string;
+//   status: boolean;
+//   target_id: number;
+//   type: string;
+//   user_id: string;
+// };
 
 const AlertMessageList = ({
-  messageList,
-  hasNextPage,
-  isFetching,
-  fetchNextPage,
+  // messageList,
+  // hasNextPage,
+  // isFetching,
+  // fetchNextPage,
   setShowMessageList
 }: Props) => {
   const router = useRouter();
-  const { updateAlertMessage } = useAlertMessage();
+  const user = useAuth((state) => state.user);
+  const { fetchAlertMessage, updateAlertMessage } = useAlertMessage();
 
   const clickMessage = useCallback(
-    (item: Alert) => {
+    async (item) => {
       let link = '/';
       if (item.type === 'wish') {
         link = `/used-goods/${item.target_id}`;
       } else if (item.type === 'like') {
         link = `/mungstagram/${item.target_id}`;
       }
-      router.push(link).then(() => {
-        updateAlertMessage(item.id); // 각 메시지 항목의 id 사용
-      });
+      await router.push(link);
+      await updateAlertMessage(item.id); // 각 메시지 항목의 id 사용
     },
     [router, updateAlertMessage]
   );
 
-  // const clickMessage = () => {
-  //   router.push(link).then(() => {
-  //     updateAlertMessage(messageList.id);
-  //   });
-  // };
+  const filterAlertMessage = fetchAlertMessage?.data?.filter((message) => {
+    return message.user_id === user?.id;
+  });
 
-  const showMoreButton = () => {
-    if (hasNextPage) fetchNextPage();
-  };
-
-  const closeClickHandler = useCallback(
+  const clickHandler = useCallback(
     (e: MouseEvent) => {
       if ((e.target as HTMLElement).id !== 'previousButton') {
-        setShowMessageList(false);
+        // setShowMessageList(false);
       }
     },
     [setShowMessageList]
   );
 
   useEffect(() => {
-    window.addEventListener('click', closeClickHandler);
+    window.addEventListener('click', clickHandler);
     return () => {
-      window.removeEventListener('click', closeClickHandler);
+      window.removeEventListener('click', clickHandler);
     };
-  }, [closeClickHandler]);
+  }, [clickHandler]);
 
   return (
     <div className={styles.alertContainer}>
-      {messageList.length > 0 && (
+      {filterAlertMessage?.length! > 0 && (
         <div className={styles.messageWrap}>
-          {messageList.map((item) => {
+          {filterAlertMessage?.map((message) => {
             return (
               <div onClick={clickMessage}>
-                <p>{item.message}</p>
-                <p>{moment(item.created_at).format('yyyy-MM-DD HH:mm')}</p>
+                <p>{message.message}</p>
+                <p>{moment(message.created_at).format('yyyy-MM-DD HH:mm')}</p>
               </div>
             );
           })}
-          {isFetching && <p>알림을 가져오는 중입니다</p>}
-          <button
+          {/* {isFetching && <p>알림을 가져오는 중입니다</p>} */}
+          {/* <button
             id="previousButton"
             onClick={showMoreButton}
             disabled={!hasNextPage}
             className={!hasNextPage ? styles.disabled : ''}
           >
             {hasNextPage ? '지난 알림 보기' : '지난 알림이 없습니다'}
-          </button>
+          </button> */}
         </div>
       )}
-      {messageList.length === 0 && <p>알림이 없습니다🙅🏻‍♀️</p>}
+      {filterAlertMessage?.length === 0 && <p>알림이 없습니다🙅🏻‍♀️</p>}
     </div>
   );
 };

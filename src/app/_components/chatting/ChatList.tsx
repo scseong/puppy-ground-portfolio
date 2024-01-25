@@ -191,8 +191,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
                     userProfile={user.id}
                   />
                 ) : null;
-              })}{' '}
-              1
+              })}
             </ul>
           </>
         )}

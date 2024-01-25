@@ -11,28 +11,28 @@ export type AlertType = {
 export const ALERT_MESSAGE_LENGTH = 5;
 
 // alert_message 테이블에서 데이터 가져오기
-export const findAllMessageByUserId = async ({
-  userId,
-  pageParam = 0
-}: {
-  userId: string;
-  pageParam: number;
-}) => {
-  const findAllMessageQuery = await supabase
-    .from('alert_message')
-    .select('*')
-    .order('create_at', { ascending: false })
-    // TODO: 이 부분에 대한 설명 적기
-    .range(
-      pageParam === 0 ? pageParam : pageParam + 1,
-      pageParam === 0 ? 2 : pageParam + ALERT_MESSAGE_LENGTH
-    )
-    .eq('user_id', userId)
-    .returns<Tables<'alert_message'>[]>();
+export const findAllMessageByUserId = async () =>
+  //   userId
+  //   pageParam = 0
+  // }: {
+  //   userId: string;
+  //   pageParam: number;
+  {
+    const findAllMessageQuery = await supabase
+      .from('alert_message')
+      .select('*')
+      .order('create_at', { ascending: false })
+      // TODO: 이 부분에 대한 설명 적기
+      // .range(
+      //   pageParam === 0 ? pageParam : pageParam + 1,
+      //   pageParam === 0 ? 2 : pageParam + ALERT_MESSAGE_LENGTH
+      // )
+      // .eq('user_id', userId)
+      .returns<Tables<'alert_message'>[]>();
 
-  const { data, error } = findAllMessageQuery;
-  return { data, error };
-};
+    const { data, error } = findAllMessageQuery;
+    return { data, error };
+  };
 
 // alert_message 테이블에 데이터 넣기
 export const addAlertMessageByIdAndTarget = async ({
