@@ -284,16 +284,13 @@ const UpdateForm = (props: Props) => {
         lng={inputForm.longitude}
         address={inputForm.address}
       />
-      <div className={styles.detailmap}>
-        <p className={styles.firstWord}>상세주소를 적어주세요.</p> &nbsp;
-        <p className={styles.secondWord}>ex&#41; 교보문고앞</p>
-      </div>
       <div className={styles.location}>
         <input
           className={styles.locationInput}
           name="place_name"
           onChange={handleFormChange}
           value={inputForm.place_name}
+          placeholder="상세주소를 적어주세요. (교보문고앞)"
         />
       </div>
       <div className={styles.buttonBox}>

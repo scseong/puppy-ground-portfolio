@@ -257,13 +257,13 @@ const CreateForm = () => {
 
       <p className={styles.infoMap}>거래 희망 장소 선택하기 (필수)</p>
       <KakaoMapMarker />
-
-      <div className={styles.detailmap}>
-        <p className={styles.firstWord}>상세주소를 적어주세요.</p> &nbsp;
-        <p className={styles.secondWord}>ex&#41; 교보문고앞</p>
-      </div>
       <div className={styles.location}>
-        <input className={styles.locationInput} name="place_name" onChange={handleFormChange} />
+        <input
+          className={styles.locationInput}
+          name="place_name"
+          onChange={handleFormChange}
+          placeholder="상세주소를 적어주세요. (교보문고앞)"
+        />
       </div>
       <div className={styles.buttonBox}>
         <button className={styles.buttonCancel} onClick={onClickCancel}>

@@ -28,6 +28,7 @@ const Header = () => {
     if (!error) {
       successTopRight({ message: '로그아웃 되었습니다.' });
       deleteCookie('access_token');
+      setIsVisible(false);
       router.push('/');
     }
     if (error) {
@@ -51,6 +52,10 @@ const Header = () => {
     setIsVisible(!isVisible);
   };
 
+  const closeToggle = () => {
+    setIsVisible(false);
+  };
+
   if (isLoading) return <Loading />;
 
   return (
@@ -64,20 +69,20 @@ const Header = () => {
             </Link>
           </div>
           <div className={styles.menuBox}>
+            <Link className={styles.menuItem} href="/used-goods">
+              중고거래
+            </Link>
+            <Link className={styles.menuItem} href="/stray-dogs">
+              유기견공고
+            </Link>
+            <Link className={styles.menuItem} href="/facilities">
+              동반시설
+            </Link>
+            <Link className={styles.menuItem} href="/mungstagram">
+              멍스타그램
+            </Link>
             {user ? (
               <>
-                <Link className={styles.menuItem} href="/used-goods">
-                  중고거래
-                </Link>
-                <Link className={styles.menuItem} href="/stray-dogs">
-                  유기견공고
-                </Link>
-                <Link className={styles.menuItem} href="/facilities">
-                  동반시설
-                </Link>
-                <Link className={styles.menuItem} href="/mungstagram">
-                  멍스타그램
-                </Link>
                 <div className={styles.menuEmojiPosition}>
                   <div className={styles.menuEmoji}>
                     <div className={styles.bell}>
@@ -92,28 +97,51 @@ const Header = () => {
                   </div>
                 </div>
                 {isVisible && (
-                  <div className={styles.toggleList}>
-                    <div className={styles.toggleItems}>
-                      <Link className={styles.togglemenu} href="/used-goods">
-                        중고거래
-                      </Link>
-                      <Link className={styles.togglemenu} href="/stray-dogs">
-                        유기견공고
-                      </Link>
-                      <Link className={styles.togglemenu} href="/facilities">
-                        동반시설
-                      </Link>
-                      <Link className={styles.togglemenu} href="/mungstagram">
-                        멍스타그램
-                      </Link>
-                      <Link className={styles.toggleItem} href={`/profile/${user.id}`}>
-                        마이페이지
-                      </Link>
-                      <div className={styles.toggleItem} onClick={signOut}>
-                        로그아웃
+                  <>
+                    <div className={styles.toggleBackground} onClick={handleToggle}></div>
+                    <div className={styles.toggleList}>
+                      <div className={styles.toggleItems}>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/used-goods"
+                        >
+                          중고거래
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/stray-dogs"
+                        >
+                          유기견공고
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/facilities"
+                        >
+                          동반시설
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/mungstagram"
+                        >
+                          멍스타그램
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.toggleItem}
+                          href={`/profile/${user.id}`}
+                        >
+                          마이페이지
+                        </Link>
+                        <div className={styles.toggleItem} onClick={signOut}>
+                          로그아웃
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </>
                 )}
               </>
             ) : (
@@ -130,16 +158,55 @@ const Header = () => {
                   </div>
                 </div>
                 {isVisible && (
-                  <div className={styles.toggleList}>
-                    <div className={styles.toggleItems}>
-                      <Link className={styles.toggleItem} href="/auth/signup">
-                        회원가입
-                      </Link>
-                      <Link className={styles.toggleItem} href="/auth/login">
-                        로그인
-                      </Link>
+                  <>
+                    <div className={styles.toggleBackground} onClick={handleToggle}></div>
+                    <div className={styles.toggleList}>
+                      <div className={styles.toggleItems}>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/used-goods"
+                        >
+                          중고거래
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/stray-dogs"
+                        >
+                          유기견공고
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/facilities"
+                        >
+                          동반시설
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/mungstagram"
+                        >
+                          멍스타그램
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.toggleItem}
+                          href="/auth/signup"
+                        >
+                          회원가입
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.toggleItem}
+                          href="/auth/login"
+                        >
+                          로그인
+                        </Link>
+                      </div>
                     </div>
-                  </div>
+                  </>
                 )}
               </>
             )}
