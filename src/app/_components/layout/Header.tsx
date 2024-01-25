@@ -40,7 +40,7 @@ const Header = () => {
     isLoading,
     data: getChat
   } = useQuery({
-    queryKey: ['getChat'],
+    queryKey: ['chat'],
     queryFn: getChatContent,
     refetchOnWindowFocus: false
   });
