@@ -50,6 +50,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
   } = useQuery({
     queryKey: ['chatRoom'],
     queryFn: () => getChatRoomList(user!.id),
+    enabled: !!user,
     refetchOnWindowFocus: true
   });
 
@@ -67,7 +68,6 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
         .select('*, profiles(user_name)')
         .order('created_at', { ascending: true })
         .returns<Tables<'chat'>[]>();
-      console.log(chat);
       setChat(chat!);
     } catch (error: any) {}
   };
@@ -117,7 +117,6 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
     const chat = supabase
       .channel('custom-all-channel')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat' }, (payload) => {
-        console.log('payload', payload);
         // payload.new에 chat_list_id 속성이 있는지 확인 후 업데이트
         if (payload.new && 'chat_list_id' in payload.new) {
           setChat((prev) => [...prev!, payload.new as Tables<'chat'>]);
