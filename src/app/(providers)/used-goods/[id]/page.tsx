@@ -110,15 +110,19 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
   const [chatListData, setChatListData] = useState<Tables<'chat_list'>>();
   //채팅하기 한번만 할 수 있는.. 눈속임 state(?)
-  // const [userChatList, setUserChatList] = useState(false);
-
-  // const list = chatList?.getChatListData?.filter((chat) => chat?.post_id === Number(id));
+  const [userChatList, setUserChatList] = useState(false);
 
   const clickOpenChat = async () => {
-    // const findUserChatList = list?.filter((chat) => chat.user_id === user?.id);
+    const list = chatList?.getChatListData?.find((chat) => chat?.post_id === Number(id));
 
-    // if (userChatList === true || findUserChatList !== undefined)
-    //   return errorTopRight({ message: '이미 채팅을 보냈습니다', timeout: 2000 });
+    if (data?.user_id === user?.id)
+      return errorTopRight({
+        message: '본인이 쓴 게시글에는 채팅을 보낼 수 없습니다',
+        timeout: 2000
+      });
+
+    if (userChatList === true || !!list !== false)
+      return errorTopRight({ message: '이미 채팅을 보냈습니다', timeout: 2000 });
 
     try {
       const chat = await makeChatListMutation.mutateAsync({
@@ -129,7 +133,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
       if (!chat) return;
       setChatListData(chat);
       setModalIsOpen(true);
-      // setUserChatList(true);
+      setUserChatList(true);
     } catch (error) {
       errorTopRight({ message: '오류가 발생하였습니다', timeout: 2000 });
     }
