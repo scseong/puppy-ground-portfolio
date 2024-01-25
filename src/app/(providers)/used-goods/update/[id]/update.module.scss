@@ -28,7 +28,7 @@
 
 .info {
   margin: 50px 0 20px 0;
-  color: #212529;
+  color: #8c8b8b;
   font-size: 22px;
   font-weight: 700;
   line-height: 32px;
@@ -72,7 +72,7 @@
   border-radius: 5px;
 
   &::placeholder {
-    color: #b0b0b0;
+    color: var(--placeholder-text-color);
   }
 }
 
@@ -218,28 +218,6 @@
   right: 5px;
 }
 
-.detailmap {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  width: 100%;
-
-  .firstWord {
-    font-size: 18px;
-    font-weight: 700;
-    line-height: 20px;
-    letter-spacing: -0.3px;
-    margin-right: 10px;
-  }
-
-  .secondWord {
-    font-size: 18px;
-    line-height: 20px;
-    letter-spacing: -0.3px;
-    font-weight: 400;
-  }
-}
-
 .location {
   display: flex;
   flex-direction: row;
@@ -254,6 +232,10 @@
     border: none;
     border-bottom: 2px solid black;
     outline: none;
+
+    &::placeholder {
+      color: var(--placeholder-text-color);
+    }
   }
 }
 
