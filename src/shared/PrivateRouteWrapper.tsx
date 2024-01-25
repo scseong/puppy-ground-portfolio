@@ -1,3 +1,5 @@
+"use client"
+
 import useAuth from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { useRouter } from 'next/navigation';
@@ -8,6 +10,7 @@ function PrivateRouteWrapper({ children }: { children: React.ReactNode }) {
   const user = useAuth((state) => state.user);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
+  
   useEffect(() => {
     if (!user) {
       errorTopRight({ message: '로그인이 필요한 페이지입니다' });
