@@ -23,15 +23,8 @@ const StrayDogs = () => {
   const [page, setPage] = useState(1);
   const limit = 16;
   const offset = (page - 1) * limit;
-
-  const a = async () => {
-    const {
-      data: { user }
-    } = await supabase.auth.getUser();
-    console.log('유저정보임', user);
-  };
-  a();
-
+  // form 태그로 감싸기.
+  //
   const {
     isLoading,
     isError,
@@ -50,14 +43,7 @@ const StrayDogs = () => {
   const guChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectGu(event.target.value);
   };
-
-  const filterRefreshBtn = () => {
-    setSelectCity('전지역');
-    setSelectGu('');
-    setStartDate(new Date('2023-10-01'));
-    setEndDate(new Date());
-  };
-
+  const [filteredStrayList, setFilteredStrayList] = useState<StrayList[] | undefined>();
   const selectRegion = regionList.find((region) => region.city === selectCity);
   const guList = selectRegion ? selectRegion.gu : [];
 
@@ -68,41 +54,52 @@ const StrayDogs = () => {
     return `${year}년 ${month}월 ${day}일`;
   };
 
-  const cityfilter = strayList?.filter((item) => {
-    const strayCity = item.orgNm.split(' ')[0];
-    const strayGu = item.orgNm.split(' ')[1];
-    if (selectCity === '전지역' || !selectCity) {
-      return item;
-    } else if (selectCity === strayCity && !selectGu) {
-      return true;
-    } else if (selectCity === strayCity && selectGu === '전체') {
-      return true;
-    } else if (selectCity === item.orgNm.split(' ')[0] && selectGu === strayGu) {
-      return true;
-    }
-  });
+  const filterList = () => {
+    const cityfilter = strayList?.filter((item) => {
+      const strayCity = item.orgNm.split(' ')[0];
+      const strayGu = item.orgNm.split(' ')[1];
+      if (selectCity === '전지역' || !selectCity) {
+        return item;
+      } else if (selectCity === strayCity && !selectGu) {
+        return true;
+      } else if (selectCity === strayCity && selectGu === '전체') {
+        return true;
+      } else if (selectCity === item.orgNm.split(' ')[0] && selectGu === strayGu) {
+        return true;
+      }
+    });
+    // const filteredCity =
+    //   selectCity === '전지역'
+    //     ? strayList
+    //     : strayList?.filter((item) => item.orgNm.includes(selectCity));
+    // const filteredGu =
+    //   selectGu === '전체'
+    //     ? filteredCity
+    //     : filteredCity?.filter((item) => item.orgNm.includes(selectGu));
 
-  const filterDate = cityfilter?.filter((item) => {
-    const startYear = startDate?.getFullYear();
-    const startMonth = startDate!.getMonth() + 1;
-    const startDay = startDate!.getDate();
-    const endYear = endDate?.getFullYear();
-    const endMonth = endDate!.getMonth() + 1;
-    const endDay = endDate!.getDate();
+    const filteredDate = cityfilter?.filter((item) => {
+      const startYear = startDate?.getFullYear();
+      const startMonth = startDate!.getMonth() + 1;
+      const startDay = startDate!.getDate();
+      const endYear = endDate?.getFullYear();
+      const endMonth = endDate!.getMonth() + 1;
+      const endDay = endDate!.getDate();
 
-    // 20230101 <- 과 같이 표기
-    const start = `${startYear}${('00' + startMonth.toString()).slice(-2)}${(
-      '00' + startDay.toString()
-    ).slice(-2)}`;
-    const end = `${endYear}${('00' + endMonth.toString()).slice(-2)}${(
-      '00' + endDay.toString()
-    ).slice(-2)}`;
-
-    if (item.noticeEdt >= start && item.noticeEdt <= end) {
-      const total = item.noticeSdt >= start && item.noticeEdt <= end;
-      return true;
-    }
-  });
+      // 20230101 <- 과 같이 표기
+      const start = `${startYear}${('00' + startMonth.toString()).slice(-2)}${(
+        '00' + startDay.toString()
+      ).slice(-2)}`;
+      const end = `${endYear}${('00' + endMonth.toString()).slice(-2)}${(
+        '00' + endDay.toString()
+      ).slice(-2)}`;
+      //
+      if (item.noticeEdt >= start && item.noticeEdt <= end) {
+        const total = item.noticeSdt >= start && item.noticeEdt <= end;
+        return true;
+      }
+    });
+    setFilteredStrayList(filteredDate);
+  };
 
   if (isLoading) {
     return <Loading />;
@@ -162,48 +159,88 @@ const StrayDogs = () => {
                 return <option key={index}>{gu}</option>;
               })}
             </select>
-            <button>
+            <button onClick={filterList}>
               <IoSearch />
             </button>
           </div>
         </div>
         <div className={style.gridContainer}>
-          {filterDate!.slice(offset, offset + limit).map((list, index) => {
-            const formatHappenDt = formatDate(list.happenDt);
-            return (
-              <div key={index}>
-                <div className={style.listCard}>
-                  <Link href={`/stray-dogs/${list.desertionNo}`}>
-                    <div className={style.imageWrap}>
-                      <Image
-                        src={list.popfile}
-                        alt="dog-image"
-                        className={style.image}
-                        width={250}
-                        height={250}
-                      />
-                    </div>
-                  </Link>
-                  <div className={style.explanationWrap}>
-                    <div className={style.titleColumn}>
-                      <p>구조일시</p>
-                      <p>견종</p>
-                      <p>성별</p>
-                      <p>발견장소</p>
-                    </div>
-                    <div className={style.contentColumn}>
-                      <p>{formatHappenDt}</p>
-                      <p>{list.kindCd.slice(3)}</p>
-                      <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
-                      <p>{list.happenPlace}</p>
+          {filteredStrayList
+            ? filteredStrayList.slice(offset, offset + limit).map((list, index) => {
+                const formatHappenDt = formatDate(list.happenDt);
+                return (
+                  <div key={index}>
+                    <div className={style.listCard}>
+                      <Link href={`/stray-dogs/${list.desertionNo}`}>
+                        <div className={style.imageWrap}>
+                          <Image
+                            src={list.popfile}
+                            alt="dog-image"
+                            className={style.image}
+                            width={250}
+                            height={250}
+                          />
+                        </div>
+                      </Link>
+                      <div className={style.explanationWrap}>
+                        <div className={style.titleColumn}>
+                          <p>구조일시</p>
+                          <p>견종</p>
+                          <p>성별</p>
+                          <p>발견장소</p>
+                        </div>
+                        <div className={style.contentColumn}>
+                          <p>{formatHappenDt}</p>
+                          <p>{list.kindCd.slice(3)}</p>
+                          <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
+                          <p>{list.happenPlace}</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            );
-          })}
+                );
+              })
+            : strayList?.slice(offset, offset + limit).map((list, index) => {
+                const formatHappenDt = formatDate(list.happenDt);
+                return (
+                  <div key={index}>
+                    <div className={style.listCard}>
+                      <Link href={`/stray-dogs/${list.desertionNo}`}>
+                        <div className={style.imageWrap}>
+                          <Image
+                            src={list.popfile}
+                            alt="dog-image"
+                            className={style.image}
+                            width={250}
+                            height={250}
+                          />
+                        </div>
+                      </Link>
+                      <div className={style.explanationWrap}>
+                        <div className={style.titleColumn}>
+                          <p>구조일시</p>
+                          <p>견종</p>
+                          <p>성별</p>
+                          <p>발견장소</p>
+                        </div>
+                        <div className={style.contentColumn}>
+                          <p>{formatHappenDt}</p>
+                          <p>{list.kindCd.slice(3)}</p>
+                          <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
+                          <p>{list.happenPlace}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
         </div>
-        <Pagination page={page} setPage={setPage} limit={limit} total={filterDate?.length} />
+        <Pagination
+          page={page}
+          setPage={setPage}
+          limit={limit}
+          total={filteredStrayList ? filteredStrayList.length : strayList?.length}
+        />
       </div>
     </div>
   );

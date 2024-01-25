@@ -2,13 +2,13 @@
 import { supabase } from '@/shared/supabase/supabase';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useRouter } from 'next/navigation';
-
 import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styles from './page.module.scss';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
 import PublicRouteWrapper from '@/shared/PublicRouteWrapper';
+import defaultAvatar from '../../../../../public/images/default_avatar.webp'
 
 export type Inputs = {
   email: string;
