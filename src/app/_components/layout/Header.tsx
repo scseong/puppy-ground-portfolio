@@ -11,19 +11,20 @@ import useAuth from '@/hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import { getChatContent } from '@/apis/chat/chat';
 import Loading from './loading/Loading';
-import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
-import { FaRegBell } from 'react-icons/fa';
 import { deleteCookie } from 'nextjs-cookie';
 import Logo from '../../../../public/images/logo.png';
+import { GoBell } from 'react-icons/go';
+import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
+import { RxHamburgerMenu } from 'react-icons/rx';
 
 const Header = () => {
   const router = useRouter();
   const { errorTopRight, successTopRight } = useToast();
   const user = useAuth((state) => state.user);
-
   const setUser = useAuth((state) => state.setUser);
   const isAuthInitialized = useAuth((state) => state.isAuthInitialized);
   const setIsAuthInitialized = useAuth((state) => state.setIsAuthInitialized);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
@@ -63,6 +64,10 @@ const Header = () => {
 
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
 
+  const handleToggle = () => {
+    setIsVisible(!isVisible);
+  };
+
   if (isLoading) return <Loading />;
 
   if (!isAuthInitialized) {
@@ -70,66 +75,106 @@ const Header = () => {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.navbarBox}>
-        <div className={styles.logoBox}>
-          <Image src={Logo} alt="logo" width={90} height={60} />
-          <Link href="/" className={styles.logoText}>
-            Puppy Ground
-          </Link>
-        </div>
-        <div className={styles.menuBox}>
-          {user ? (
-            <>
-              <Link className={styles.menuItem} href="/used-goods">
-                중고거래
-              </Link>
-              <Link className={styles.menuItem} href="/stray-dogs">
-                유기견공고
-              </Link>
-              <Link className={styles.menuItem} href="/facilities">
-                동반시설
-              </Link>
-              <Link className={styles.menuItem} href="/mungstagram">
-                멍스타그램
-              </Link>
-              <div className={styles.menuItem}>
-                <button className={styles.chat} onClick={() => setModalIsOpen(true)}>
-                  <IoChatbubbleEllipsesOutline />
-                </button>
-                <ChatList
-                  isOpen={isModalOpen}
-                  onClose={() => setModalIsOpen(false)}
-                  ariaHideApp={false}
-                  isChatRoomOpen={false}
-                  listId={0}
-                  getChat={getChat!}
-                />
-              </div>
-              <div className={styles.bell}>
-                <FaRegBell />
-              </div>
-              {/* 일단 임시로 */}
-              <Link className={styles.menuItem} href={`/profile/${user.id}`}>
-                마이페이지
-              </Link>
-              <div className={styles.menuItem} onClick={signOut}>
-                로그아웃
-              </div>
-            </>
-          ) : (
-            <>
-              <Link className={styles.menuItem} href="/auth/signup">
-                회원가입
-              </Link>
-              <Link className={styles.menuItem} href="/auth/login">
-                로그인
-              </Link>
-            </>
-          )}
+    <>
+      <div className={styles.container}>
+        <div className={styles.navbarBox}>
+          <div className={styles.logoBox}>
+            <Image className={styles.logo} src={Logo} alt="logo" width={90} height={60} />
+            <Link href="/" className={styles.logoText}>
+              Puppy Ground
+            </Link>
+          </div>
+          <div className={styles.menuBox}>
+            {user ? (
+              <>
+                <Link className={styles.menuItem} href="/used-goods">
+                  중고거래
+                </Link>
+                <Link className={styles.menuItem} href="/stray-dogs">
+                  유기견공고
+                </Link>
+                <Link className={styles.menuItem} href="/facilities">
+                  동반시설
+                </Link>
+                <Link className={styles.menuItem} href="/mungstagram">
+                  멍스타그램
+                </Link>
+                <div className={styles.menuEmojiPosition}>
+                  <div className={styles.menuEmoji}>
+                    <div className={styles.bell}>
+                      <GoBell />
+                    </div>
+                    <button className={styles.chat} onClick={() => setModalIsOpen(true)}>
+                      <IoChatbubbleEllipsesOutline />
+                    </button>
+                    <div className={styles.toggle}>
+                      <RxHamburgerMenu size={25} onClick={handleToggle} />
+                    </div>
+                  </div>
+                </div>
+                {isVisible && (
+                  <div className={styles.toggleList}>
+                    <div className={styles.toggleItems}>
+                      <Link className={styles.togglemenu} href="/used-goods">
+                        중고거래
+                      </Link>
+                      <Link className={styles.togglemenu} href="/stray-dogs">
+                        유기견공고
+                      </Link>
+                      <Link className={styles.togglemenu} href="/facilities">
+                        동반시설
+                      </Link>
+                      <Link className={styles.togglemenu} href="/mungstagram">
+                        멍스타그램
+                      </Link>
+                      <Link className={styles.toggleItem} href={`/profile/${user.id}`}>
+                        마이페이지
+                      </Link>
+                      <div className={styles.toggleItem} onClick={signOut}>
+                        로그아웃
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                <Link className={styles.menuItem} href="/auth/signup">
+                  회원가입
+                </Link>
+                <Link className={styles.menuItem} href="/auth/login">
+                  로그인
+                </Link>
+                <div className={styles.menuEmojiPosition}>
+                  <div className={styles.logOuttoggle}>
+                    <RxHamburgerMenu size={25} onClick={handleToggle} />
+                  </div>
+                </div>
+                {isVisible && (
+                  <div className={styles.toggleList}>
+                    <div className={styles.toggleItems}>
+                      <Link className={styles.toggleItem} href="/auth/signup">
+                        회원가입
+                      </Link>
+                      <Link className={styles.toggleItem} href="/auth/login">
+                        로그인
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+      <ChatList
+        isOpen={isModalOpen}
+        onClose={() => setModalIsOpen(false)}
+        ariaHideApp={false}
+        isChatRoomOpen={false}
+        getChat={getChat!}
+      />
+    </>
   );
 };
 
