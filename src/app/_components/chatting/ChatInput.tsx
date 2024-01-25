@@ -1,7 +1,7 @@
 'use client';
 
 import { sendChat } from '@/apis/chat/chat';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import styles from './chatInput.module.scss';
 import { User } from '@supabase/supabase-js';
@@ -19,9 +19,12 @@ const ChatInput = ({
   const [chatContent, setChatContent] = useState<string>('');
   const onChangeChatContent = (e: React.ChangeEvent<HTMLInputElement>) =>
     setChatContent(e.target.value);
-
+  const queryClient = useQueryClient();
   const sendChatMutation = useMutation({
-    mutationFn: sendChat
+    mutationFn: sendChat,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chat'] });
+    }
   });
 
   // 채팅 보내기
