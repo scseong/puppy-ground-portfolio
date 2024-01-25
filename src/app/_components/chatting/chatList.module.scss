@@ -1,6 +1,11 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 .chatScroll {
   overflow-y: auto;
-  max-height: 500px;
+  max-height: 600px;
   scroll-behavior: smooth;
 
   &::-webkit-scrollbar {

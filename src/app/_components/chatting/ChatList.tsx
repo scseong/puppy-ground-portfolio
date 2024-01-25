@@ -28,7 +28,7 @@ type ModalProps = {
 const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat }: ModalProps) => {
   // 유저 정보
   const user = useAuth((state) => state.user);
-  // const userProfile = getProfileData?.find((pro) => pro.id === user?.id)!;
+
   const [isChatOpen, setIsChatOpen] = useState<boolean>(isChatRoomOpen);
   //전체 채팅내용
   const [chat, setChat] = useState<Tables<'chat'>[]>(getChat!);
@@ -41,7 +41,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
 
   const chatListRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   const {
     isError,
@@ -54,12 +54,12 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
     refetchOnWindowFocus: true
   });
 
-  const readChatMutation = useMutation({
-    mutationFn: readChat,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getChat'] });
-    }
-  });
+  // const readChatMutation = useMutation({
+  //   mutationFn: readChat,
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ['getChat'] });
+  //   }
+  // });
 
   const chatContents = async () => {
     try {
@@ -85,7 +85,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
     const chatHistory = chat?.filter((chat) => chat.chat_list_id === id);
     //안 읽은 채팅 읽음으로 바꿔야함으
     setChatItem(chatHistory!);
-    readChatMutation.mutate({ list_id: id, other_user });
+    // readChatMutation.mutate({ list_id: id, other_user });
     setChatListId(id);
     setUsedItem(usedItem);
     setIsChatOpen(true);
@@ -176,7 +176,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
             </div>
           </div>
         ) : (
-          <>
+          <div className={styles.container}>
             <div className={styles.chatSearch}>
               채팅 <FaMagnifyingGlass color={'#0AC4B9'} />
             </div>
@@ -192,7 +192,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
                 ) : null;
               })}
             </ul>
-          </>
+          </div>
         )}
       </ChatModal>
     </div>
