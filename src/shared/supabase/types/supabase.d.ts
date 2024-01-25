@@ -188,6 +188,7 @@ export interface Database {
           created_at: string;
           id: number;
           photo_url: string[];
+          tags: string[];
           title: string;
           user_id: string;
         };
@@ -196,6 +197,7 @@ export interface Database {
           created_at?: string;
           id?: number;
           photo_url: string[];
+          tags: string[];
           title: string;
           user_id: string;
         };
@@ -204,6 +206,7 @@ export interface Database {
           created_at?: string;
           id?: number;
           photo_url?: string[];
+          tags?: string[];
           title?: string;
           user_id?: string;
         };
