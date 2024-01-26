@@ -28,6 +28,10 @@ type ModalProps = {
   getChat?: Tables<'chat'>[] | null;
 };
 
+type ChatListWithDate = {
+  [date: string]: Tables<'chat'>[];
+};
+
 const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat }: ModalProps) => {
   // 유저 정보
   const user = useAuth((state) => state.user);
@@ -66,7 +70,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
   });
 
   //채팅나가기
-  const cliskOutChatRoom = ({ userId, chatListId }: { userId: string; chatListId: number }) => {
+  const clickOutChatRoom = ({ userId, chatListId }: { userId: string; chatListId: number }) => {
     Swal.fire({
       title: '방을 나가시겠습니까?',
       text: '대화한 내용이 모두 사라지고 대화를 다시 걸 수도 없습니다',
@@ -127,11 +131,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
     setIsChatOpen(false);
   };
 
-  type ChatListWithDate = {
-    [date: string]: Tables<'chat'>[];
-  };
-
-  function makeSection(chatList: Tables<'chat'>[]): ChatListWithDate {
+  const makeSection = (chatList: Tables<'chat'>[]): ChatListWithDate => {
     const sections: ChatListWithDate = {};
     chatList.forEach((chat) => {
       const monthDate = dayjs(chat.created_at).locale('KO').format('YYYY-MM-DD ddd요일');
@@ -142,7 +142,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
       }
     });
     return sections;
-  }
+  };
 
   useEffect(() => {
     const chat = supabase
@@ -233,7 +233,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
                     chat={chat}
                     clickChatRoom={clickChatRoom}
                     userProfile={user.id}
-                    cliskOutChatRoom={cliskOutChatRoom}
+                    clickOutChatRoom={clickOutChatRoom}
                   />
                 ) : null;
               })}
