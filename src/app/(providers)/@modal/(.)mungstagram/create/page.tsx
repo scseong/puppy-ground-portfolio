@@ -13,6 +13,7 @@ import Image from 'next/image';
 import { TablesInsert } from '@/shared/supabase/types/supabase';
 import useAuth from '@/hooks/useAuth';
 import Swal from 'sweetalert2';
+import { useQueryClient } from '@tanstack/react-query';
 
 type InputForm = TablesInsert<'mung_stagram'> & { inputValue: string };
 
@@ -28,6 +29,7 @@ const MungModal = () => {
   });
   const router = useRouter();
   const { successTopRight, warnTopRight, errorTopRight } = useToast();
+  const queryClient = useQueryClient();
 
   // TODO: input validation
   const handleFormChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -129,6 +131,7 @@ const MungModal = () => {
     const { data, error } = await supabase.from('mung_stagram').insert(mungstaInput).select();
     if (data) {
       successTopRight({ message: '등록되었습니다.' });
+      queryClient.invalidateQueries({ queryKey: ['mungstagram'] });
       router.back();
     }
     if (error) {
