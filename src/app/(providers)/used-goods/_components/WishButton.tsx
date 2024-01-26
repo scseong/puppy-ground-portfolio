@@ -57,7 +57,7 @@ const WishButton = ({ usedItemId, title }: { usedItemId: string; title: string }
     if (data?.user_id !== user!.id) {
       addAlertMessage({
         type: 'wish',
-        message: `등록하신 상품 ${title} 에 관심등록이 추가되었습니다 `,
+        message: `등록하신 상품 [${title}] 에 관심등록이 추가되었습니다 `,
         userId: data!.user_id,
         targetId: +usedItemId
       });

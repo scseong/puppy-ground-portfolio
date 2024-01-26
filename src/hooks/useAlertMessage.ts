@@ -4,14 +4,14 @@ import {
   findAllMessageByUserId,
   updateAlertMessageStatus
 } from '@/apis/alertMessage';
-import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import useAuth from './useAuth';
 
 export const ALERT_MESSAGE_QUERY_LEY = 'alert_message';
-const queryClient = new QueryClient();
 
 export const useAlertMessage = () => {
   const user = useAuth((state) => state.user);
+  const queryClient = useQueryClient();
 
   const { data: fetchAlertMessage } = useQuery({
     queryKey: [ALERT_MESSAGE_QUERY_LEY],

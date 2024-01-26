@@ -8,7 +8,7 @@ import { useState, useEffect, MouseEventHandler } from 'react';
 import ChatList from '../chatting/ChatList';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
-import { QueryClient, useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getChatContent } from '@/apis/chat/chat';
 import Loading from './loading/Loading';
 import { deleteCookie } from 'nextjs-cookie';
@@ -31,7 +31,7 @@ const Header = () => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
 
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
   const { fetchAlertMessage } = useAlertMessage();
 
   useEffect(() => {
@@ -90,7 +90,7 @@ const Header = () => {
         },
         (payload) => {
           const message = payload.new.message;
-          alertBottomRight(message);
+          alertBottomRight({ message, timeout: 2000 });
           queryClient.invalidateQueries({
             queryKey: [ALERT_MESSAGE_QUERY_LEY]
           });
@@ -100,7 +100,7 @@ const Header = () => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [user]);
+  }, []);
 
   const alertListToggle: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation();

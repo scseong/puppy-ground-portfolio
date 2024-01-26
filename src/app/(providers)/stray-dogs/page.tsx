@@ -56,12 +56,9 @@ const StrayDogs = () => {
         ? filteredCity
         : filteredCity?.filter((item) => item.orgNm.includes(selectGu));
 
-    console.log('123');
-
     const filteredDate = filteredGu?.filter((item) => {
       const startDayjs = dayjs(startDate).format('YYYYMMDD');
       const endDayjs = dayjs(endDate).format('YYYYMMDD');
-      console.log('456');
 
       if (item.noticeEdt >= startDayjs && item.noticeEdt <= endDayjs) {
         return true;

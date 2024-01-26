@@ -2,11 +2,8 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './alertMessageList.module.scss';
-import { useRouter } from 'next/navigation';
 import { useAlertMessage } from '@/hooks/useAlertMessage';
-import moment from 'moment';
 import useAuth from '@/hooks/useAuth';
-import { Tables } from '@/shared/supabase/types/supabase';
 import AlertMessageRow from './AlertMessageRow';
 
 type Props = {
