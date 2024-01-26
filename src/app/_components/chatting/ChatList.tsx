@@ -5,7 +5,7 @@ import { supabase } from '@/shared/supabase/supabase';
 import { Tables } from '@/shared/supabase/types/supabase';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
-import { getChatRoomList, readChat } from '@/apis/chat/chat';
+import { getChatRoomList, getOutChatRoom } from '@/apis/chat/chat';
 import useAuth from '@/hooks/useAuth';
 import styles from './chatList.module.scss';
 import Chat from './Chat';
@@ -15,6 +15,9 @@ import { IoIosArrowBack } from 'react-icons/io';
 import ChatListContent from './ChatListContent';
 import { useRouter } from 'next/navigation';
 import UsedItemData from './UsedItemData';
+import Swal from 'sweetalert2';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 
 type ModalProps = {
   isOpen: boolean;
@@ -54,23 +57,35 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
     refetchOnWindowFocus: true
   });
 
-  // const readChatMutation = useMutation({
-  //   mutationFn: readChat,
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ['getChat'] });
-  //   }
-  // });
+  const queryClient = useQueryClient();
 
-  // const chatContents = async () => {
-  //   try {
-  //     const { data: chat } = await supabase
-  //       .from('chat')
-  //       .select('*, profiles(user_name)')
-  //       .order('created_at', { ascending: true })
-  //       .returns<Tables<'chat'>[]>();
-  //     setChat(chat!);
-  //   } catch (error: any) {}
-  // };
+  const getOutChatRoomMutation = useMutation({
+    mutationFn: getOutChatRoom,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chatRoom'] });
+    }
+  });
+
+  //채팅나가기
+  const cliskOutChatRoom = ({ userId, chatListId }: { userId: string; chatListId: number }) => {
+    Swal.fire({
+      title: '방을 나가시겠습니까?',
+      text: '대화한 내용이 모두 사라지고 대화를 다시 걸 수도 없습니다',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#0ac4b9',
+      confirmButtonText: '확인',
+      cancelButtonText: '취소'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: '방을 나갔습니다',
+          icon: 'success'
+        });
+        getOutChatRoomMutation.mutate({ userId, chatListId });
+      }
+    });
+  };
 
   // 클릭 시 채팅방 입장
   const clickChatRoom = ({
@@ -113,6 +128,23 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
     setIsChatOpen(false);
   };
 
+  type ChatListWithDate = {
+    [date: string]: Tables<'chat'>[];
+  };
+
+  function makeSection(chatList: Tables<'chat'>[]): ChatListWithDate {
+    const sections: ChatListWithDate = {};
+    chatList.forEach((chat) => {
+      const monthDate = dayjs(chat.created_at).locale('KO').format('YYYY-MM-DD ddd요일');
+      if (Array.isArray(sections[monthDate])) {
+        sections[monthDate].push(chat);
+      } else {
+        sections[monthDate] = [chat];
+      }
+    });
+    return sections;
+  }
+
   useEffect(() => {
     const chat = supabase
       .channel('custom-all-channel')
@@ -137,8 +169,6 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
       )
       .subscribe();
 
-    // chatContents();
-
     return () => {
       chat.unsubscribe();
     };
@@ -157,6 +187,8 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
 
   if (!user) return;
 
+  const chatListwithDate = makeSection(chatItem);
+
   return (
     <div>
       <ChatModal isOpen={isOpen} onClose={closeModal} ariaHideApp={ariaHideApp}>
@@ -172,16 +204,21 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
               />
               <div ref={chatListRef} className={styles.chatScroll}>
                 <div>
-                  {chatItem.map((chatHistory) => {
-                    return (
-                      <Chat key={chatHistory.id} chatHistory={chatHistory} userProfile={user.id} />
-                    );
-                  })}
+                  {Object.entries(chatListwithDate).map(([date, chatList]) => (
+                    <div key={date}>
+                      <div className={styles.date}>
+                        <p>{date}</p>
+                      </div>
+                      {chatList.map((chat, idx) => (
+                        <Chat key={idx} chatHistory={chat} userProfile={user.id} />
+                      ))}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
             <div>
-              <ChatInput chatListId={chatListId} listId={list?.id!} user={user!} />
+              <ChatInput chatListId={chatListId} listId={list?.id!} user={user} />
             </div>
           </div>
         ) : (
@@ -197,6 +234,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
                     chat={chat}
                     clickChatRoom={clickChatRoom}
                     userProfile={user.id}
+                    cliskOutChatRoom={cliskOutChatRoom}
                   />
                 ) : null;
               })}

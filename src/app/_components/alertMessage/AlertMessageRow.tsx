@@ -16,7 +16,7 @@ const AlertMessageRow = ({ item }: { item: Tables<'alert_message'> }) => {
   }
 
   const clickMessage = async () => {
-    await router.push(link);
+    router.push(link);
     await updateAlertMessage(item.id);
   };
 

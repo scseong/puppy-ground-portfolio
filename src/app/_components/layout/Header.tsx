@@ -78,13 +78,16 @@ const Header = () => {
   // 알림메시지
   useEffect(() => {
     if (!user) return;
-    // let alertMessageChannels: RealtimeChannel | null = null;
-    // alertMessageChannels!.unsubscribe();
     const subscription: RealtimeChannel = supabase
       .channel('alert-message-insert-channel')
       .on(
         'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'alert_message', filter: 'user_id=eq.user.id' },
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'alert_message',
+          filter: `user_id=eq.${user.id}`
+        },
         (payload) => {
           const message = payload.new.message;
           alertBottomRight(message);
@@ -97,9 +100,9 @@ const Header = () => {
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [user]);
 
-  const alertListToggle = (event: MouseEvent) => {
+  const alertListToggle: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation();
     setShowMessageList(!showMessageList);
   };

@@ -49,6 +49,7 @@ export interface Database {
           id: number;
           read_status: boolean;
           user_id: string;
+          profiles: Tables<'profiles'>;
         };
         Insert: {
           chat_list_id: number;
@@ -85,25 +86,27 @@ export interface Database {
       };
       chat_list: {
         Row: {
-          get_out_chat_room: string[] | null;
           id: number;
-          other_user: string;
           post_id: number;
           user_id: string;
+          other_user: string;
+          used_item: Tables<'used_item'>;
+          chat: { read_status: boolean; user_id: string }[];
+          get_out_chat_room: string[] | null;
         };
         Insert: {
-          get_out_chat_room?: string[] | null;
           id?: number;
-          other_user: string;
-          post_id: number;
-          user_id: string;
-        };
-        Update: {
-          get_out_chat_room?: string[] | null;
-          id?: number;
-          other_user?: string;
           post_id?: number;
           user_id?: string;
+          other_user?: string;
+          get_out_chat_room?: string[] | null;
+        };
+        Update: {
+          id?: number;
+          post_id?: number;
+          user_id?: string;
+          other_user?: string;
+          get_out_chat_room?: string[] | null;
         };
         Relationships: [
           {
@@ -185,6 +188,7 @@ export interface Database {
           created_at: string;
           id: number;
           photo_url: string[];
+          tags: string[];
           title: string;
           user_id: string;
         };
@@ -193,6 +197,7 @@ export interface Database {
           created_at?: string;
           id?: number;
           photo_url: string[];
+          tags: string[];
           title: string;
           user_id: string;
         };
@@ -201,6 +206,7 @@ export interface Database {
           created_at?: string;
           id?: number;
           photo_url?: string[];
+          tags?: string[];
           title?: string;
           user_id?: string;
         };
