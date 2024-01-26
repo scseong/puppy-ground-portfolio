@@ -3,7 +3,67 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  width: 100%;
   height: 100%;
-  border: 5px solid red;
-  margin: 0 auto;
+  margin: 50px auto auto 40px;
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+
+  h2 {
+    font-size: 2rem;
+    line-height: 2rem;
+    font-weight: bold;
+  }
+
+  button {
+    margin-left: 1rem;
+    padding: 0.8rem 1rem;
+    border: none;
+    border-radius: 5px;
+    color: #757575;
+    font-size: 1rem;
+    line-height: 1.2rem;
+  }
+}
+
+.cardContainer {
+  width: 100%;
+  margin-top: 2rem;
+
+  .cardWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+    gap: 3.4rem;
+  }
+}
+
+.tab {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  margin-top: 2rem;
+
+  button {
+    padding: 0.8rem 1rem;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 1rem;
+    line-height: 1.2rem;
+    background-color: #d8d4d4;
+    margin-right: 1rem;
+    border-radius: 30px;
+  }
 }
