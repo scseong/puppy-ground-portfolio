@@ -13,7 +13,7 @@ import regionList from '../../../data/regionList.json';
 import { IoSearch } from 'react-icons/io5';
 import Pagination from '@/app/_components/pagination/Pagination';
 import { ko } from 'date-fns/locale';
-import { supabase } from '@/shared/supabase/supabase';
+import dayjs from 'dayjs';
 
 const StrayDogs = () => {
   const [startDate, setStartDate] = useState<Date | null>(new Date('2023-10-01'));
@@ -23,8 +23,7 @@ const StrayDogs = () => {
   const [page, setPage] = useState(1);
   const limit = 16;
   const offset = (page - 1) * limit;
-  // form 태그로 감싸기.
-  //
+
   const {
     isLoading,
     isError,
@@ -47,54 +46,24 @@ const StrayDogs = () => {
   const selectRegion = regionList.find((region) => region.city === selectCity);
   const guList = selectRegion ? selectRegion.gu : [];
 
-  const formatDate = (dateStr: string) => {
-    const year = dateStr.substring(0, 4);
-    const month = dateStr.substring(4, 6);
-    const day = dateStr.substring(6, 8);
-    return `${year}년 ${month}월 ${day}일`;
-  };
-
   const filterList = () => {
-    const cityfilter = strayList?.filter((item) => {
-      const strayCity = item.orgNm.split(' ')[0];
-      const strayGu = item.orgNm.split(' ')[1];
-      if (selectCity === '전지역' || !selectCity) {
-        return item;
-      } else if (selectCity === strayCity && !selectGu) {
-        return true;
-      } else if (selectCity === strayCity && selectGu === '전체') {
-        return true;
-      } else if (selectCity === item.orgNm.split(' ')[0] && selectGu === strayGu) {
-        return true;
-      }
-    });
-    // const filteredCity =
-    //   selectCity === '전지역'
-    //     ? strayList
-    //     : strayList?.filter((item) => item.orgNm.includes(selectCity));
-    // const filteredGu =
-    //   selectGu === '전체'
-    //     ? filteredCity
-    //     : filteredCity?.filter((item) => item.orgNm.includes(selectGu));
+    const filteredCity =
+      selectCity === '전지역'
+        ? strayList
+        : strayList?.filter((item) => item.orgNm.includes(selectCity));
+    const filteredGu =
+      selectGu === '전체'
+        ? filteredCity
+        : filteredCity?.filter((item) => item.orgNm.includes(selectGu));
 
-    const filteredDate = cityfilter?.filter((item) => {
-      const startYear = startDate?.getFullYear();
-      const startMonth = startDate!.getMonth() + 1;
-      const startDay = startDate!.getDate();
-      const endYear = endDate?.getFullYear();
-      const endMonth = endDate!.getMonth() + 1;
-      const endDay = endDate!.getDate();
+    console.log('123');
 
-      // 20230101 <- 과 같이 표기
-      const start = `${startYear}${('00' + startMonth.toString()).slice(-2)}${(
-        '00' + startDay.toString()
-      ).slice(-2)}`;
-      const end = `${endYear}${('00' + endMonth.toString()).slice(-2)}${(
-        '00' + endDay.toString()
-      ).slice(-2)}`;
-      //
-      if (item.noticeEdt >= start && item.noticeEdt <= end) {
-        const total = item.noticeSdt >= start && item.noticeEdt <= end;
+    const filteredDate = filteredGu?.filter((item) => {
+      const startDayjs = dayjs(startDate).format('YYYYMMDD');
+      const endDayjs = dayjs(endDate).format('YYYYMMDD');
+      console.log('456');
+
+      if (item.noticeEdt >= startDayjs && item.noticeEdt <= endDayjs) {
         return true;
       }
     });
@@ -167,7 +136,7 @@ const StrayDogs = () => {
         <div className={style.gridContainer}>
           {filteredStrayList
             ? filteredStrayList.slice(offset, offset + limit).map((list, index) => {
-                const formatHappenDt = formatDate(list.happenDt);
+                const formatHappenDt = dayjs(list.happenDt).format('YYYY[년] MM[월] DD[일]');
                 return (
                   <div key={index}>
                     <div className={style.listCard}>
@@ -201,7 +170,7 @@ const StrayDogs = () => {
                 );
               })
             : strayList?.slice(offset, offset + limit).map((list, index) => {
-                const formatHappenDt = formatDate(list.happenDt);
+                const formatHappenDt = dayjs(list.happenDt).format('YYYY[년] MM[월] DD[일]');
                 return (
                   <div key={index}>
                     <div className={style.listCard}>

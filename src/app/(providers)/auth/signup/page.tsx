@@ -8,7 +8,7 @@ import styles from './page.module.scss';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
 import PublicRouteWrapper from '@/shared/PublicRouteWrapper';
-import defaultAvatar from '../../../../../public/images/default_avatar.webp'
+import defaultAvatar from '../../../../../public/images/default_avatar.webp';
 
 export type Inputs = {
   email: string;

@@ -7,6 +7,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const setUser = useAuth((state) => state.setUser);
   const isAuthInitialized = useAuth((state) => state.isAuthInitialized);
   const setIsAuthInitialized = useAuth((state) => state.setIsAuthInitialized);
+  console.log('너도 두번 도니?');
   useEffect(() => {
     const {
       data: { subscription }

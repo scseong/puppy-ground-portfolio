@@ -28,7 +28,7 @@ type ModalProps = {
 const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat }: ModalProps) => {
   // 유저 정보
   const user = useAuth((state) => state.user);
-  // const userProfile = getProfileData?.find((pro) => pro.id === user?.id)!;
+
   const [isChatOpen, setIsChatOpen] = useState<boolean>(isChatRoomOpen);
   //전체 채팅내용
   const [chat, setChat] = useState<Tables<'chat'>[]>(getChat!);
@@ -41,7 +41,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
 
   const chatListRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   const {
     isError,
@@ -50,27 +50,27 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
   } = useQuery({
     queryKey: ['chatRoom'],
     queryFn: () => getChatRoomList(user!.id),
+    enabled: !!user,
     refetchOnWindowFocus: true
   });
 
-  const readChatMutation = useMutation({
-    mutationFn: readChat,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getChat'] });
-    }
-  });
+  // const readChatMutation = useMutation({
+  //   mutationFn: readChat,
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ['getChat'] });
+  //   }
+  // });
 
-  const chatContents = async () => {
-    try {
-      const { data: chat } = await supabase
-        .from('chat')
-        .select('*, profiles(user_name)')
-        .order('created_at', { ascending: true })
-        .returns<Tables<'chat'>[]>();
-      console.log(chat);
-      setChat(chat!);
-    } catch (error: any) {}
-  };
+  // const chatContents = async () => {
+  //   try {
+  //     const { data: chat } = await supabase
+  //       .from('chat')
+  //       .select('*, profiles(user_name)')
+  //       .order('created_at', { ascending: true })
+  //       .returns<Tables<'chat'>[]>();
+  //     setChat(chat!);
+  //   } catch (error: any) {}
+  // };
 
   // 클릭 시 채팅방 입장
   const clickChatRoom = ({
@@ -85,7 +85,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
     const chatHistory = chat?.filter((chat) => chat.chat_list_id === id);
     //안 읽은 채팅 읽음으로 바꿔야함으
     setChatItem(chatHistory!);
-    readChatMutation.mutate({ list_id: id, other_user });
+    // readChatMutation.mutate({ list_id: id, other_user });
     setChatListId(id);
     setUsedItem(usedItem);
     setIsChatOpen(true);
@@ -116,20 +116,28 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
   useEffect(() => {
     const chat = supabase
       .channel('custom-all-channel')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat' }, (payload) => {
-        console.log('payload', payload);
-        // payload.new에 chat_list_id 속성이 있는지 확인 후 업데이트
-        if (payload.new && 'chat_list_id' in payload.new) {
-          setChat((prev) => [...prev!, payload.new as Tables<'chat'>]);
-          // 특정 채팅방의 채팅 내용 업데이트
-          if (payload.new.chat_list_id === chatListId || payload.new.chat_list_id === list?.id) {
-            setChatItem((prev) => [...prev, payload.new as Tables<'chat'>]);
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'chat' },
+        async (payload) => {
+          const { data: chatData, error } = await supabase
+            .from('chat')
+            .select('*, profiles(user_name)')
+            .eq('id', payload.new.id)
+            .single();
+          // payload.new에 chat_list_id 속성이 있는지 확인 후 업데이트
+          if (chat && 'chat_list_id' in payload.new) {
+            setChat((prev) => [...prev!, chatData as Tables<'chat'>]);
+            // 특정 채팅방의 채팅 내용 업데이트
+            if (chatData?.chat_list_id === chatListId || chatData?.chat_list_id === list?.id) {
+              setChatItem((prev) => [...prev, chatData as Tables<'chat'>]);
+            }
           }
         }
-      })
+      )
       .subscribe();
 
-    chatContents();
+    // chatContents();
 
     return () => {
       chat.unsubscribe();
@@ -177,11 +185,11 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
             </div>
           </div>
         ) : (
-          <>
+          <div className={styles.container}>
             <div className={styles.chatSearch}>
               채팅 <FaMagnifyingGlass color={'#0AC4B9'} />
             </div>
-            <ul className={styles.chatScroll}>
+            <ul className={styles.chatListScroll}>
               {getChatListData?.getChatListData?.map((chat) => {
                 return chat.user_id === user.id || chat.other_user === user.id ? (
                   <ChatListContent
@@ -193,7 +201,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
                 ) : null;
               })}
             </ul>
-          </>
+          </div>
         )}
       </ChatModal>
     </div>
