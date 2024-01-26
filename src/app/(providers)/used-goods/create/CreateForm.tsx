@@ -29,7 +29,6 @@ const CreateForm = () => {
   const user = useAuth((state) => state.user);
   const position = usePosition((state) => state.position);
   const address = useAddress((state) => state.address);
-
   const [inputForm, setInputForm] = useState<TablesInsert<'used_item'>>({
     title: '',
     address: address,
@@ -278,12 +277,13 @@ const CreateForm = () => {
   );
 };
 
-const PrivateCreatePage = () => {
-  return (
-    <PrivateRouteWrapper>
-      <CreateForm />
-    </PrivateRouteWrapper>
-  );
-};
+// const PrivateCreatePage = () => {
+//   console.log('왜 두번되냐 2');
+//   return (
+//     <PrivateRouteWrapper>
+//       <CreateForm />
+//     </PrivateRouteWrapper>
+//   );
+// };
 
-export default PrivateCreatePage;
+export default CreateForm;
