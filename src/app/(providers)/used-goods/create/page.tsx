@@ -1,11 +1,22 @@
+import PrivateRouteWrapper from '@/shared/PrivateRouteWrapper';
 import CreateForm from './_components/CreateForm';
 
-const page = () => {
+
+
+const Page = () => {
   return (
-    <div>
+    <>
       <CreateForm />
-    </div>
+    </>
   );
 };
 
-export default page;
+const PrivateCreatePage = () => {
+  return (
+    <PrivateRouteWrapper>
+      <Page />
+    </PrivateRouteWrapper>
+  );
+};
+
+export default PrivateCreatePage;
