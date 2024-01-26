@@ -33,7 +33,8 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
 
   const { data: chatList } = useQuery({
     queryKey: ['chatRoom'],
-    queryFn: () => getChatRoomList(user!.id)
+    queryFn: () => getChatRoomList(user!.id),
+    enabled: !!user
   });
 
   const { id } = useParams();

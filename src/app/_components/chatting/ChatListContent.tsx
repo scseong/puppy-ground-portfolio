@@ -15,14 +15,14 @@ type PropsType = {
     usedItem: Tables<'used_item'>;
   }) => void;
   userProfile: string;
-  cliskOutChatRoom: ({ userId, chatListId }: { userId: string; chatListId: number }) => void;
+  clickOutChatRoom: ({ userId, chatListId }: { userId: string; chatListId: number }) => void;
 };
 
 const ChatListContent = ({
   chat: chatList,
   clickChatRoom,
   userProfile,
-  cliskOutChatRoom
+  clickOutChatRoom
 }: PropsType) => {
   // const readMessages = chatList.chat
   //   .map((chat) => (chat.user_id !== userProfile ? chat.read_status : undefined))
@@ -63,7 +63,7 @@ const ChatListContent = ({
                 <div className={styles.wastebaseket}>
                   <span
                     onClick={() =>
-                      cliskOutChatRoom({ userId: userProfile, chatListId: chatList.id })
+                      clickOutChatRoom({ userId: userProfile, chatListId: chatList.id })
                     }
                   >
                     <RiLogoutBoxLine color={'#0AC4B9'} />
@@ -100,7 +100,7 @@ const ChatListContent = ({
           </div>
           <div className={styles.wastebaseket}>
             <span
-              onClick={() => cliskOutChatRoom({ userId: userProfile, chatListId: chatList.id })}
+              onClick={() => clickOutChatRoom({ userId: userProfile, chatListId: chatList.id })}
             >
               <RiLogoutBoxLine color={'#0AC4B9'} />
             </span>
