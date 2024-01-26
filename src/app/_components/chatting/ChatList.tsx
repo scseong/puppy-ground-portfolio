@@ -71,6 +71,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
 
   //채팅나가기
   const clickOutChatRoom = ({ userId, chatListId }: { userId: string; chatListId: number }) => {
+    closeModal();
     Swal.fire({
       title: '방을 나가시겠습니까?',
       text: '대화한 내용이 모두 사라지고 대화를 다시 걸 수도 없습니다',
