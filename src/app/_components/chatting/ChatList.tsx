@@ -44,7 +44,6 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
 
   const chatListRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
-  // const queryClient = useQueryClient();
 
   const {
     isError,
