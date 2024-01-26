@@ -140,6 +140,7 @@ const SignUp = () => {
       <form className={styles.form} onSubmit={handleSubmit(signUpOnSubmitHandler)}>
         <div>
           <input
+            className={styles.duplicationInput}
             placeholder="이메일을 입력하세요"
             {...register('email', {
               required: true,
@@ -162,10 +163,11 @@ const SignUp = () => {
         </div>
         <div>
           <input
+            className={styles.duplicationInput}
             placeholder="닉네임을 입력하세요"
             {...register('nickname', { required: true, maxLength: 8 })}
             maxLength={8}
-          />{' '}
+          />
           <button
             className={styles.duplication}
             type="button"
@@ -182,6 +184,7 @@ const SignUp = () => {
         </div>
         <div>
           <input
+            className={styles.pwInput}
             type="password"
             placeholder="비밀번호를 입력하세요"
             {...register('password', { required: true, minLength: 8, pattern: passwordRegex })}
@@ -202,6 +205,7 @@ const SignUp = () => {
         </div>
         <div>
           <input
+            className={styles.pwInput}
             type="password"
             placeholder="비밀번호 확인"
             {...register('password_confirm', {

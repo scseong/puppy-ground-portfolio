@@ -68,6 +68,7 @@ const StrayDogs = () => {
       }
     });
     setFilteredStrayList(filteredDate);
+    setPage(1);
   };
 
   if (isLoading) {

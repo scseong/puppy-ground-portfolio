@@ -18,7 +18,9 @@ const UsedItemData = ({
       <div className={styles.usedItem} onClick={() => clickUsedItem(usedItem?.id as number)}>
         <div className={styles.usedItemTitle}>
           <p className={styles.title}>{usedItem?.title}</p>
-          <p className={styles.soldOut}>{usedItem?.sold_out ? '거래완료' : '판매중'}</p>
+          <p className={usedItem?.sold_out ? styles.soldOut : styles.sell}>
+            {usedItem?.sold_out ? '거래완료' : '판매중'}
+          </p>
         </div>
         <div className={styles.usedItemPrice}>
           <p>{usedItem?.price && addCommasToNumber(usedItem?.price as number)}원</p>
