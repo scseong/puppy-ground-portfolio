@@ -5,7 +5,7 @@ import { supabase } from '@/shared/supabase/supabase';
 import { Tables } from '@/shared/supabase/types/supabase';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
-import { getChatRoomList, getOutChatRoom, readChat } from '@/apis/chat/chat';
+import { getChatRoomList, getOutChatRoom } from '@/apis/chat/chat';
 import useAuth from '@/hooks/useAuth';
 import styles from './chatList.module.scss';
 import Chat from './Chat';
@@ -17,6 +17,7 @@ import { useRouter } from 'next/navigation';
 import UsedItemData from './UsedItemData';
 import Swal from 'sweetalert2';
 import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 
 type ModalProps = {
   isOpen: boolean;
@@ -64,17 +65,6 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
       queryClient.invalidateQueries({ queryKey: ['chatRoom'] });
     }
   });
-
-  // const chatContents = async () => {
-  //   try {
-  //     const { data: chat } = await supabase
-  //       .from('chat')
-  //       .select('*, profiles(user_name)')
-  //       .order('created_at', { ascending: true })
-  //       .returns<Tables<'chat'>[]>();
-  //     setChat(chat!);
-  //   } catch (error: any) {}
-  // };
 
   //채팅나가기
   const cliskOutChatRoom = ({ userId, chatListId }: { userId: string; chatListId: number }) => {
@@ -145,7 +135,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
   function makeSection(chatList: Tables<'chat'>[]): ChatListWithDate {
     const sections: ChatListWithDate = {};
     chatList.forEach((chat) => {
-      const monthDate = dayjs(chat.created_at).format('YYYY-MM-DD');
+      const monthDate = dayjs(chat.created_at).locale('KO').format('YYYY-MM-DD ddd요일');
       if (Array.isArray(sections[monthDate])) {
         sections[monthDate].push(chat);
       } else {
@@ -178,8 +168,6 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
         }
       )
       .subscribe();
-
-    // chatContents();
 
     return () => {
       chat.unsubscribe();
@@ -216,22 +204,11 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
               />
               <div ref={chatListRef} className={styles.chatScroll}>
                 <div>
-                  {/* {chatItem.map((chatHistory) => {
-                    return (
-                      <Chat key={chatHistory.id} chatHistory={chatHistory} userProfile={user.id} />
-                    );
-                  })} */}
-                  {/* {Object.entries(chatListwithDate).map(([date, chatList]) => {
-                    <p>{date}</p>;
-                    {
-                      return chatList.map((chat, idx) => (
-                        <Chat key={idx} chatHistory={chat} userProfile={user.id} />
-                      ));
-                    }
-                  })} */}
                   {Object.entries(chatListwithDate).map(([date, chatList]) => (
                     <div key={date}>
-                      <p>{date}</p>
+                      <div className={styles.date}>
+                        <p>{date}</p>
+                      </div>
                       {chatList.map((chat, idx) => (
                         <Chat key={idx} chatHistory={chat} userProfile={user.id} />
                       ))}
