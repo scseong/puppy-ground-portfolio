@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import style from './page.module.scss';
+import styles from './page.module.scss';
 import { useQuery } from '@tanstack/react-query';
 import { getStrayList } from '@/apis/stray';
 import { useParams } from 'next/navigation';
@@ -55,15 +55,14 @@ const StrayDogsDetail = () => {
   }
 
   return (
-    <div className={style.container}>
-      <div className={style.contentContainer}>
-        <div className={style.firstSection}>
-          <div className={style.imageWrap}>
+    <div className={styles.container}>
+      <div className={styles.contentContainer}>
+        <div className={styles.firstSection}>
+          <div className={styles.imageWrap}>
             <Image src={strayDesertionNo?.popfile!} alt="stray-dog" width={500} height={300} />
           </div>
-
-          <div className={style.dogExplanationWrap}>
-            <div className={style.titleColumn}>
+          <div className={styles.dogExplanationWrap}>
+            <div className={styles.titleColumn}>
               <p>
                 <FaDog />
                 &nbsp;견종
@@ -89,7 +88,7 @@ const StrayDogsDetail = () => {
                 &nbsp;중성화여부
               </p>
             </div>
-            <div className={style.contentColumn}>
+            <div className={styles.contentColumn}>
               <p>{strayDesertionNo?.kindCd.slice(3)}</p>
               <p>{strayDesertionNo?.colorCd}</p>
               <p>{strayDesertionNo?.age}</p>
@@ -105,8 +104,8 @@ const StrayDogsDetail = () => {
             </div>
           </div>
         </div>
-        <div className={style.careExplanationWrap}>
-          <div className={style.titleColumn}>
+        <div className={styles.careExplanationWrap}>
+          <div className={styles.titleColumn}>
             <p>
               <FaCalendarDays />
               &nbsp;접수번호
@@ -136,7 +135,7 @@ const StrayDogsDetail = () => {
               &nbsp;보호소 위치
             </p>
           </div>
-          <div className={style.contentColumn}>
+          <div className={styles.contentColumn}>
             <p>{strayDesertionNo?.noticeNo}</p>
             <p>{strayDesertionNo?.specialMark}</p>
             <p>{formatHappenDt}</p>
@@ -146,7 +145,7 @@ const StrayDogsDetail = () => {
             <p>{strayDesertionNo?.careAddr}</p>
           </div>
         </div>
-        <div className={style.buttonWrap}>
+        <div className={styles.buttonWrap}>
           <KakaoShareButton />
           <ClipBoardButton />
         </div>
