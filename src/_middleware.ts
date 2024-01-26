@@ -4,7 +4,6 @@ import { NextResponse } from 'next/server';
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
-  // const accessToken = req.cookies.get('access_token')?.value;
   const pathname = req.nextUrl.pathname;
 
   const supabase = createMiddlewareClient({ req, res });
@@ -34,5 +33,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/used-goods/create', '/profile/:path*', '/auth/:path*', '/used-goods/update/:path*']
+  matcher: ['/used-goods/create', '/profile/:path*  ', '/auth/:path*', '/used-goods/update/:path*']
 };
