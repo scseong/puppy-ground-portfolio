@@ -12,12 +12,12 @@ import { supabase } from '@/shared/supabase/supabase';
 import Image from 'next/image';
 import { TablesInsert } from '@/shared/supabase/types/supabase';
 import useAuth from '@/hooks/useAuth';
+import Swal from 'sweetalert2';
 
 type InputForm = TablesInsert<'mung_stagram'> & { inputValue: string };
 
 const MungModal = () => {
   const user = useAuth(({ user }) => user);
-
   const [inputForm, setInputForm] = useState<InputForm>({
     title: '',
     tags: [],
@@ -27,7 +27,7 @@ const MungModal = () => {
     photo_url: []
   });
   const router = useRouter();
-  const { warnTopRight, errorTopRight } = useToast();
+  const { successTopRight, warnTopRight, errorTopRight } = useToast();
 
   // TODO: input validation
   const handleFormChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -50,7 +50,19 @@ const MungModal = () => {
   };
 
   const closeModal = () => {
-    router.back();
+    Swal.fire({
+      title: '정말 취소하시겠습니까?',
+      text: '입력하신 정보가 모두 사라집니다.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '네',
+      confirmButtonColor: '#0ac4b9',
+      cancelButtonText: '아니요'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        router.back();
+      } else return;
+    });
   };
 
   const uploadImage = async (file: File) => {
@@ -98,10 +110,30 @@ const MungModal = () => {
     }));
   };
 
-  // TODO: validation Check
   const handleSumbit = async () => {
     const { inputValue, ...mungstaInput } = inputForm;
-    await supabase.from('mung_stagram').insert(mungstaInput).select();
+
+    if (!inputForm.title) {
+      return warnTopRight({ message: '제목을 입력해주세요' });
+    }
+    if (!inputForm.content) {
+      return warnTopRight({ message: '내용을 입력해주세요' });
+    }
+    if (!inputForm.photo_url.length) {
+      return warnTopRight({ message: '사진을 등록해주세요' });
+    }
+    if (!inputForm.tags.length) {
+      return warnTopRight({ message: '해시태그를 등록해주세요' });
+    }
+
+    const { data, error } = await supabase.from('mung_stagram').insert(mungstaInput).select();
+    if (data) {
+      successTopRight({ message: '등록되었습니다.' });
+      router.back();
+    }
+    if (error) {
+      return warnTopRight({ message: '게시글 등록이 실패했습니다. 다시 시도해주세요.' });
+    }
   };
 
   return (
@@ -187,7 +219,7 @@ const MungModal = () => {
             value={inputForm.inputValue}
             onKeyDown={handleKeyDown}
             onChange={handleFormChange}
-            placeholder="해시태그로 작성해주세요 (최대 5개)"
+            placeholder="Enter 키를 통해 해시태그로 작성해주세요 (최대 5개)"
             type="text"
           />
         </div>
@@ -200,7 +232,7 @@ const MungModal = () => {
           />
         </div>
         <div className={styles.btnBox}>
-          <button>취소</button>
+          <button onClick={closeModal}>취소</button>
           <button className={styles.submitBtn} onClick={handleSumbit}>
             등록하기
           </button>
