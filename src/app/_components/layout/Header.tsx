@@ -4,11 +4,11 @@ import styles from './header.module.scss';
 import Image from 'next/image';
 import { supabase } from '@/shared/supabase/supabase';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, MouseEventHandler } from 'react';
 import ChatList from '../chatting/ChatList';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getChatContent } from '@/apis/chat/chat';
 import Loading from './loading/Loading';
 import { deleteCookie } from 'nextjs-cookie';
@@ -16,15 +16,23 @@ import Logo from '../../../../public/images/logo.png';
 import { GoBell } from 'react-icons/go';
 import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
 import { RxHamburgerMenu } from 'react-icons/rx';
+import { RealtimeChannel } from '@supabase/supabase-js';
+import { ALERT_MESSAGE_QUERY_LEY, useAlertMessage } from '@/hooks/useAlertMessage';
+import AlertMessageList from '../alertMessage/AlertMessageList';
 
 const Header = () => {
   const router = useRouter();
-  const { errorTopRight, successTopRight } = useToast();
+  const { alertBottomRight, errorTopRight, successTopRight } = useToast();
   const user = useAuth((state) => state.user);
+  const [showMessageList, setShowMessageList] = useState<boolean>(false);
   const setUser = useAuth((state) => state.setUser);
   const isAuthInitialized = useAuth((state) => state.isAuthInitialized);
   const setIsAuthInitialized = useAuth((state) => state.setIsAuthInitialized);
   const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
+
+  const queryClient = useQueryClient();
+  const { fetchAlertMessage } = useAlertMessage();
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
@@ -63,7 +71,41 @@ const Header = () => {
     refetchOnWindowFocus: false
   });
 
-  const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
+  const filterAlertMessage = fetchAlertMessage?.data?.filter((message) => {
+    return message.user_id === user?.id;
+  });
+
+  // 알림메시지
+  useEffect(() => {
+    if (!user) return;
+    const subscription: RealtimeChannel = supabase
+      .channel('alert-message-insert-channel')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'alert_message',
+          filter: `user_id=eq.${user.id}`
+        },
+        (payload) => {
+          const message = payload.new.message;
+          alertBottomRight({ message, timeout: 2000 });
+          queryClient.invalidateQueries({
+            queryKey: [ALERT_MESSAGE_QUERY_LEY]
+          });
+        }
+      )
+      .subscribe();
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  const alertListToggle: MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.stopPropagation();
+    setShowMessageList(!showMessageList);
+  };
 
   const handleToggle = () => {
     setIsVisible(!isVisible);
@@ -106,9 +148,15 @@ const Header = () => {
               <>
                 <div className={styles.menuEmojiPosition}>
                   <div className={styles.menuEmoji}>
-                    <div className={styles.bell}>
+                    <button className={styles.bell} onClick={alertListToggle}>
                       <GoBell />
-                    </div>
+                      <span className={styles.alarmCount}>
+                        {filterAlertMessage?.filter((item) => !item?.status).length}
+                      </span>
+                    </button>
+                    {showMessageList && (
+                      <AlertMessageList setShowMessageList={setShowMessageList} />
+                    )}
                     <button className={styles.chat} onClick={() => setModalIsOpen(true)}>
                       <IoChatbubbleEllipsesOutline />
                     </button>
