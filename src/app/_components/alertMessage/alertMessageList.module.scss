@@ -1,23 +1,25 @@
 .alertContainer {
   width: 200px;
   height: 300px;
-  background-color: antiquewhite;
+  background-color: white;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
   overflow-y: auto;
   position: absolute;
-  z-index: 9999;
   scroll-behavior: smooth;
   top: 70px;
-  border-radius: 10px;
+  right: 10px;
+  border-radius: 5px;
   box-shadow: 0px 0px 10px 0px #00000033;
-  padding: 10px;
+  padding: 20px 10px;
+  p {
+    font-size: 12px;
+  }
 }
 
 .messageWrap {
   width: 180px;
-  height: 50px;
-  background-color: aquamarine;
+  font-family: pretendard-light;
 }

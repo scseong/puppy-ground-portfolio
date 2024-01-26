@@ -37,6 +37,36 @@
       font-size: 11px;
     }
   }
+  .duplicationInput {
+    width: 313px;
+    height: 72px;
+    border-radius: 5px;
+    border: 1px solid #979797;
+    font-size: 15px;
+    font-family: pretendard-regular;
+    padding-left: 15px;
+  }
+  .pwInput {
+    width: 451px;
+    height: 72px;
+    border-radius: 5px;
+    border: 0.874px solid #979797;
+    font-size: 15px;
+    font-family: pretendard-regular;
+    padding-left: 15px;
+  }
+
+  .duplication {
+    width: 117px;
+    height: 72px;
+    background-color: #0ac4b9;
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    font-family: pretendard-regular;
+    color: #ffffff;
+    margin-left: 20px;
+  }
 
   label {
     img {
@@ -50,18 +80,18 @@
       display: none;
     }
   }
-  button {
-    width: 300px;
-    height: 50px;
-    background-color: #0ac4b9;
-    border: none;
-    border-radius: 5px;
-    font-size: 15px;
-    font-family: pretendard-regular;
-    color: #ffffff;
-  }
 }
 
+.submitBtn {
+  width: 300px;
+  height: 50px;
+  background-color: #0ac4b9;
+  border: none;
+  border-radius: 5px;
+  font-size: 15px;
+  font-family: pretendard-regular;
+  color: #ffffff;
+}
 .moveLogin {
   cursor: pointer;
   color: #979797;

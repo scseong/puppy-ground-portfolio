@@ -8,6 +8,7 @@ import { useState } from 'react';
 import styles from './page.module.scss';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
+import PrivateRouteWrapper from '@/shared/PrivateRouteWrapper';
 
 const Profile = () => {
   const {
@@ -151,4 +152,12 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+const PrivateCreatePage = () => {
+  return (
+    <PrivateRouteWrapper>
+      <Profile />
+    </PrivateRouteWrapper>
+  );
+};
+
+export default PrivateCreatePage;

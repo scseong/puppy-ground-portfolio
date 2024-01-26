@@ -17,9 +17,9 @@ type PropsType = {
 };
 
 const ChatListContent = ({ chat: chatList, clickChatRoom, userProfile }: PropsType) => {
-  const readMessages = chatList.chat
-    .map((chat) => (chat.user_id !== userProfile ? chat.read_status : undefined))
-    .filter((chat) => chat === false);
+  // const readMessages = chatList.chat
+  //   .map((chat) => (chat.user_id !== userProfile ? chat.read_status : undefined))
+  //   .filter((chat) => chat === false);
 
   return (
     <li className={styles.chatList} key={chatList.id}>
@@ -43,9 +43,9 @@ const ChatListContent = ({ chat: chatList, clickChatRoom, userProfile }: PropsTy
           />
           <p>{chatList.used_item.title}</p>
         </div>
-        <div className={readMessages?.length === 0 ? '' : styles.unreadMessages}>
+        {/* <div className={readMessages?.length === 0 ? '' : styles.unreadMessages}>
           {readMessages?.length === 0 ? null : readMessages?.length}
-        </div>
+        </div> */}
       </div>
       {/* <div className={styles.wastebaseket}>
     <span>

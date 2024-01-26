@@ -89,6 +89,7 @@
   width: 17px;
   height: 17px;
   font-size: 10px;
+  line-height: 17px;
   font-family: pretendard-medium;
   top: -7px;
   left: 7px;
@@ -101,6 +102,15 @@
   &:hover {
     color: var(--primary-color);
   }
+}
+
+.toggleBackground {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: inherit;
+  top: 0;
+  left: 0;
 }
 
 .toggleList {

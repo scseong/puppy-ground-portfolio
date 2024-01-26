@@ -1,37 +1,23 @@
 import {
-  ALERT_MESSAGE_LENGTH,
   AlertType,
   addAlertMessageByIdAndTarget,
   findAllMessageByUserId,
   updateAlertMessageStatus
 } from '@/apis/alertMessage';
-import { QueryClient, useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
+import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
+import useAuth from './useAuth';
 
 export const ALERT_MESSAGE_QUERY_LEY = 'alert_message';
 const queryClient = new QueryClient();
 
 export const useAlertMessage = () => {
-  // const {
-  //   data: messageList,
-  //   hasNextPage,
-  //   isFetching,
-  //   fetchNextPage
-  // } = useInfiniteQuery({
-  //   queryKey: [ALERT_MESSAGE_QUERY_LEY, { userId }],
-  //   enabled: userId !== undefined && userId !== '',
-  //   queryFn: ({ pageParam }) => findAllMessageByUserId({ userId: userId ?? '', pageParam }),
-  //   initialPageParam: 0,
-  //   getNextPageParam: (lastPage, lastPageParam) => {
-  //     if (lastPage.data!.length === ALERT_MESSAGE_LENGTH)
-  //       return lastPageParam + ALERT_MESSAGE_LENGTH;
-  //   }
-  //   // select: data => {
-  //   //   return data.pages.map(p => p.data).flat();
-  //   // },
-  // });
+  const user = useAuth((state) => state.user);
+
   const { data: fetchAlertMessage } = useQuery({
     queryKey: [ALERT_MESSAGE_QUERY_LEY],
-    queryFn: findAllMessageByUserId
+    queryFn: () => findAllMessageByUserId(user!.id),
+    // 유저가 있을때만 실행하도록
+    enabled: !!user
   });
 
   const { mutate: addAlertMessage } = useMutation({
@@ -49,10 +35,6 @@ export const useAlertMessage = () => {
   });
 
   return {
-    // messageList,
-    // hasNextPage,
-    // isFetching,
-    // fetchNextPage,
     fetchAlertMessage,
     addAlertMessage,
     updateAlertMessage

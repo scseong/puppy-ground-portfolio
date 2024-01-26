@@ -4,7 +4,7 @@ import styles from './header.module.scss';
 import Image from 'next/image';
 import { supabase } from '@/shared/supabase/supabase';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, MouseEventHandler } from 'react';
 import ChatList from '../chatting/ChatList';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
@@ -25,17 +25,35 @@ const Header = () => {
   const { alertBottomRight, errorTopRight, successTopRight } = useToast();
   const user = useAuth((state) => state.user);
   const [showMessageList, setShowMessageList] = useState<boolean>(false);
+  const setUser = useAuth((state) => state.setUser);
+  const isAuthInitialized = useAuth((state) => state.isAuthInitialized);
+  const setIsAuthInitialized = useAuth((state) => state.setIsAuthInitialized);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
 
   const queryClient = new QueryClient();
   const { fetchAlertMessage } = useAlertMessage();
 
+  useEffect(() => {
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        setUser(session.user);
+      } else {
+        setUser(null);
+      }
+
+      if (!isAuthInitialized) {
+        setIsAuthInitialized(true);
+      }
+    });
+  }, []);
+
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (!error) {
       successTopRight({ message: '로그아웃 되었습니다.' });
       deleteCookie('access_token');
+      setIsVisible(false);
       router.push('/');
     }
     if (error) {
@@ -48,7 +66,7 @@ const Header = () => {
     isLoading,
     data: getChat
   } = useQuery({
-    queryKey: ['getChat'],
+    queryKey: ['chat'],
     queryFn: getChatContent,
     refetchOnWindowFocus: false
   });
@@ -62,15 +80,14 @@ const Header = () => {
     if (!user) return;
     // let alertMessageChannels: RealtimeChannel | null = null;
     // alertMessageChannels!.unsubscribe();
-    const subscription = supabase
+    const subscription: RealtimeChannel = supabase
       .channel('alert-message-insert-channel')
       .on(
         'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'alert_message' },
+        { event: 'INSERT', schema: 'public', table: 'alert_message', filter: 'user_id=eq.user.id' },
         (payload) => {
           const message = payload.new.message;
-          alertBottomRight({ message, timeout: 2000 });
-
+          alertBottomRight(message);
           queryClient.invalidateQueries({
             queryKey: [ALERT_MESSAGE_QUERY_LEY]
           });
@@ -82,7 +99,8 @@ const Header = () => {
     };
   }, []);
 
-  const alertListToggle = () => {
+  const alertListToggle = (event: MouseEvent) => {
+    event.stopPropagation();
     setShowMessageList(!showMessageList);
   };
 
@@ -90,7 +108,15 @@ const Header = () => {
     setIsVisible(!isVisible);
   };
 
+  const closeToggle = () => {
+    setIsVisible(false);
+  };
+
   if (isLoading) return <Loading />;
+
+  if (!isAuthInitialized) {
+    return null;
+  }
 
   return (
     <>
@@ -103,36 +129,30 @@ const Header = () => {
             </Link>
           </div>
           <div className={styles.menuBox}>
+            <Link className={styles.menuItem} href="/used-goods">
+              중고거래
+            </Link>
+            <Link className={styles.menuItem} href="/stray-dogs">
+              유기견공고
+            </Link>
+            <Link className={styles.menuItem} href="/facilities">
+              동반시설
+            </Link>
+            <Link className={styles.menuItem} href="/mungstagram">
+              멍스타그램
+            </Link>
             {user ? (
               <>
-                <Link className={styles.menuItem} href="/used-goods">
-                  중고거래
-                </Link>
-                <Link className={styles.menuItem} href="/stray-dogs">
-                  유기견공고
-                </Link>
-                <Link className={styles.menuItem} href="/facilities">
-                  동반시설
-                </Link>
-                <Link className={styles.menuItem} href="/mungstagram">
-                  멍스타그램
-                </Link>
                 <div className={styles.menuEmojiPosition}>
                   <div className={styles.menuEmoji}>
                     <button className={styles.bell} onClick={alertListToggle}>
                       <GoBell />
                       <span className={styles.alarmCount}>
-                        {filterAlertMessage?.filter((item) => item.status).length}
+                        {filterAlertMessage?.filter((item) => !item?.status).length}
                       </span>
                     </button>
                     {showMessageList && (
-                      <AlertMessageList
-                        // messageList={messageList?.map((p) => p!).flat() ?? []}
-                        // hasNextPage={hasNextPage}
-                        // isFetching={isFetching}
-                        // fetchNextPage={fetchNextPage}
-                        setShowMessageList={setShowMessageList}
-                      />
+                      <AlertMessageList setShowMessageList={setShowMessageList} />
                     )}
                     <button className={styles.chat} onClick={() => setModalIsOpen(true)}>
                       <IoChatbubbleEllipsesOutline />
@@ -143,28 +163,51 @@ const Header = () => {
                   </div>
                 </div>
                 {isVisible && (
-                  <div className={styles.toggleList}>
-                    <div className={styles.toggleItems}>
-                      <Link className={styles.togglemenu} href="/used-goods">
-                        중고거래
-                      </Link>
-                      <Link className={styles.togglemenu} href="/stray-dogs">
-                        유기견공고
-                      </Link>
-                      <Link className={styles.togglemenu} href="/facilities">
-                        동반시설
-                      </Link>
-                      <Link className={styles.togglemenu} href="/mungstagram">
-                        멍스타그램
-                      </Link>
-                      <Link className={styles.toggleItem} href={`/profile/${user.id}`}>
-                        마이페이지
-                      </Link>
-                      <div className={styles.toggleItem} onClick={signOut}>
-                        로그아웃
+                  <>
+                    <div className={styles.toggleBackground} onClick={handleToggle}></div>
+                    <div className={styles.toggleList}>
+                      <div className={styles.toggleItems}>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/used-goods"
+                        >
+                          중고거래
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/stray-dogs"
+                        >
+                          유기견공고
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/facilities"
+                        >
+                          동반시설
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/mungstagram"
+                        >
+                          멍스타그램
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.toggleItem}
+                          href={`/profile/${user.id}`}
+                        >
+                          마이페이지
+                        </Link>
+                        <div className={styles.toggleItem} onClick={signOut}>
+                          로그아웃
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </>
                 )}
               </>
             ) : (
@@ -181,16 +224,55 @@ const Header = () => {
                   </div>
                 </div>
                 {isVisible && (
-                  <div className={styles.toggleList}>
-                    <div className={styles.toggleItems}>
-                      <Link className={styles.toggleItem} href="/auth/signup">
-                        회원가입
-                      </Link>
-                      <Link className={styles.toggleItem} href="/auth/login">
-                        로그인
-                      </Link>
+                  <>
+                    <div className={styles.toggleBackground} onClick={handleToggle}></div>
+                    <div className={styles.toggleList}>
+                      <div className={styles.toggleItems}>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/used-goods"
+                        >
+                          중고거래
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/stray-dogs"
+                        >
+                          유기견공고
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/facilities"
+                        >
+                          동반시설
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.togglemenu}
+                          href="/mungstagram"
+                        >
+                          멍스타그램
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.toggleItem}
+                          href="/auth/signup"
+                        >
+                          회원가입
+                        </Link>
+                        <Link
+                          onClick={closeToggle}
+                          className={styles.toggleItem}
+                          href="/auth/login"
+                        >
+                          로그인
+                        </Link>
+                      </div>
                     </div>
-                  </div>
+                  </>
                 )}
               </>
             )}

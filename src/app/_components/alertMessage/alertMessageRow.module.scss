@@ -1,0 +1,33 @@
+.message {
+  border-bottom: 1px solid #b0b0b0;
+  margin-bottom: 5px;
+  padding: 5px;
+  cursor: pointer;
+  color: black;
+  p {
+    font-size: 12px;
+    line-height: 15px;
+  }
+  span {
+    font-size: 10px;
+  }
+}
+
+.message:hover {
+  color: var(--primary-color);
+}
+
+.read {
+  border-bottom: 1px solid #b0b0b0;
+  margin-bottom: 5px;
+  padding: 5px;
+  cursor: pointer;
+  color: #b0b0b0;
+  p {
+    font-size: 12px;
+    line-height: 15px;
+  }
+  span {
+    font-size: 10px;
+  }
+}

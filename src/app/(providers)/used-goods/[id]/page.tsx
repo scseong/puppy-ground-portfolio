@@ -192,7 +192,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                 isChatRoomOpen={true}
                 list={chatListData}
               />
-              <WishButton usedItemId={params.id} />
+              <WishButton usedItemId={params.id} title={title} />
             </div>
           </div>
         </div>
