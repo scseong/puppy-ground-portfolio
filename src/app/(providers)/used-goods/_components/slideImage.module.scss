@@ -1,20 +1,29 @@
 .wrapper {
   position: relative;
+
 }
 
 .directionBtn {
   position: absolute;
   top: 50%;
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  color: white;
+  opacity: 0.6;
   transform: translate(0, -50%);
-  color: #aaa;
   cursor: pointer;
 }
 
 .leftBtn {
-  left: 0;
+  left: 0.5rem;
 }
 .rightBtn {
-  right: 0;
+  right: 0.5rem;
 }
 
 .indicator {
@@ -26,7 +35,8 @@
   transform: translateX(-50%);
 
   svg {
-    color: #aaa;
+    color: grey;
+    opacity: 0.5;
     cursor: pointer;
   }
 }
