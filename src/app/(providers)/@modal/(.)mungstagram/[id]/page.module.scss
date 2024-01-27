@@ -1,12 +1,96 @@
 .modal {
   padding: 15px;
-  width: 400px;
-  height: 600px;
+  width: 600px;
+  height: 850px;
   position: absolute;
-  top: 15%;
-  left: 41%;
   justify-content: center;
   background-color: white;
   border-radius: 10px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   z-index: 1000;
+}
+
+.mungstaDetail {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.title {
+  padding: 2rem;
+  font-size: 2rem;
+  line-height: 2rem;
+  font-weight: 600;
+}
+
+.images {
+  width: 100%;
+  overflow: hidden;
+
+  img {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+}
+
+.detail {
+  padding: 2rem;
+  flex-grow: 1;
+}
+
+.icons {
+  padding-bottom: 1rem;
+  display: flex;
+  gap: 1rem;
+
+  & > div {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    font-size: 1.8rem;
+
+    svg {
+      cursor: pointer;
+    }
+
+    span {
+      margin-left: 4px;
+    }
+  }
+}
+
+.tags {
+  margin-bottom: 1rem;
+
+  ul {
+    max-height: 5.3rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    overflow: hidden;
+  }
+  li {
+    padding: 0.5rem 0.8rem;
+    background-color: #e6e8e8;
+    border-radius: 6px;
+    font-size: 1.4rem;
+    line-height: 1.4rem;
+    font-weight: bold;
+    color: #757575;
+  }
+}
+
+.contents {
+  font-size: 1.4rem;
+  line-height: 1.8rem;
+
+  p {
+    max-height: 7.2rem;
+    overflow: hidden;
+  }
+
+  .username {
+    margin-right: 1rem;
+    font-weight: 600;
+  }
 }
