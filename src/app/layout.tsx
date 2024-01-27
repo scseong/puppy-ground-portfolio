@@ -5,7 +5,7 @@ import './variables.css';
 import 'react-toastify/dist/ReactToastify.css';
 import Script from 'next/script';
 
-const inter = Inter({ subsets: ['latin'] });
+// const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Puppy Ground',
@@ -17,7 +17,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="ko">
-      <body className={inter.className} suppressHydrationWarning={true}>
+      {/* <body className={inter.className} suppressHydrationWarning={true}> */}
+      <body suppressHydrationWarning={true}>
         <Script strategy="beforeInteractive" src={KAKAO_SDK_URL} />
         {children}
       </body>
