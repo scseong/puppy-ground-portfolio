@@ -1,6 +1,5 @@
 .wrapper {
   position: relative;
-
 }
 
 .directionBtn {
@@ -20,10 +19,10 @@
 }
 
 .leftBtn {
-  left: 0.5rem;
+  left: 0.6rem;
 }
 .rightBtn {
-  right: 0.5rem;
+  right: 0.6rem;
 }
 
 .indicator {
@@ -35,7 +34,7 @@
   transform: translateX(-50%);
 
   svg {
-    color: grey;
+    color: white;
     opacity: 0.5;
     cursor: pointer;
   }
