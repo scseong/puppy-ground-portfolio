@@ -9,7 +9,15 @@ import { useQuery } from '@tanstack/react-query';
 import { SlideImage } from '@/app/(providers)/used-goods/_components';
 import { useState, useEffect } from 'react';
 import { getCountFromTable } from '@/utils/table';
-import { GoHeartFill, GoHeart, GoComment, GoShare } from 'react-icons/go';
+import {
+  GoHeartFill,
+  GoHeart,
+  GoComment,
+  GoShare,
+  GoChevronLeft,
+  GoChevronRight
+} from 'react-icons/go';
+import Link from 'next/link';
 
 const getPosts = async (id: string) => {
   const { data, error } = await supabase
@@ -18,6 +26,21 @@ const getPosts = async (id: string) => {
     .eq('id', id)
     .single();
   return data;
+};
+
+const getPrevAndNextPost = async (id: string) => {
+  const getPrevPost = supabase
+    .from('mung_stagram')
+    .select('id')
+    .lt('id', id)
+    .order('id', { ascending: false })
+    .limit(1)
+    .single();
+  const getNextPost = supabase.from('mung_stagram').select('id').gt('id', id).limit(1).single();
+
+  const response = await Promise.all([getPrevPost, getNextPost]);
+  const [prev, next] = response.map((res) => res.data?.id);
+  return { prev, next };
 };
 
 type PageProps = {
@@ -33,6 +56,11 @@ const MungModal = ({ params }: PageProps) => {
   const { data: post, error } = useQuery({
     queryKey: ['post', id],
     queryFn: () => getPosts(id)
+  });
+
+  const { data: prevAndNextPostId, isLoading } = useQuery({
+    queryKey: ['nextPost', id],
+    queryFn: () => getPrevAndNextPost(id)
   });
 
   const closeModal = () => {
@@ -56,6 +84,10 @@ const MungModal = ({ params }: PageProps) => {
 
   if (!post) return;
 
+  if (isLoading) return;
+
+  const { prev, next } = prevAndNextPostId ?? {};
+
   return (
     <ReactModal
       className={styles.modal}
@@ -66,6 +98,16 @@ const MungModal = ({ params }: PageProps) => {
       style={customStyle}
     >
       <section className={styles.mungstaDetail}>
+        {prev && (
+          <Link className={styles.prevLink} href={`/mungstagram/${prev}`}>
+            <GoChevronLeft size="2.8rem" />
+          </Link>
+        )}
+        {next && (
+          <Link className={styles.nextLink} href={`/mungstagram/${next}`}>
+            <GoChevronRight size="2.8rem" />
+          </Link>
+        )}
         <div className={styles.title}>{post.title}</div>
         <div className={styles.images}>
           <SlideImage images={post.photo_url} sizes={{ width: '600px', height: '450px' }} />
