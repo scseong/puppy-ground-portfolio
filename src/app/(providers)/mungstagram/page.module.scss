@@ -119,3 +119,29 @@
     -webkit-box-orient: vertical;
   }
 }
+
+@media screen and (max-width: 1200px) {
+  .header {
+    padding: 0 2rem;
+  }
+  .mungstaList {
+    padding: 0 2rem;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 820px) {
+  .mungstaList {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .header {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .mungstaList {
+    grid-template-columns: 1fr;
+  }
+}
