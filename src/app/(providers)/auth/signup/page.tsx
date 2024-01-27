@@ -238,12 +238,11 @@ const SignUp = () => {
         <p className={styles.moveLogin}>
           이미 회원이신가요?
           <span
-            className={styles.moveLogin}
             onClick={() => {
               router.push('/auth/login');
             }}
           >
-            로그인 하러가기
+            &nbsp;로그인 하러가기
           </span>
         </p>
       </form>

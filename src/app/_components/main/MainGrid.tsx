@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import style from './mainGrid.module.scss';
+import styles from './mainGrid.module.scss';
 import dogImg from '../../../../public/images/welsh.png';
 import toy from '../../../../public/images/toy.jpg';
 import family from '../../../../public/images/family.jpg';
@@ -15,9 +15,9 @@ import { motion } from 'framer-motion';
 
 const MainGrid = () => {
   return (
-    <div className={style.container}>
+    <div className={styles.container}>
       <motion.div
-        className={style.firstContainer}
+        className={styles.firstContainer}
         initial={{ opacity: 0, x: 100 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: false }}
@@ -27,24 +27,24 @@ const MainGrid = () => {
           x: { duration: 1 }
         }}
       >
-        <div className={style.firstSection}>
-          <div className={style.firstTextWrap}>
+        <div className={styles.firstSection}>
+          <div className={styles.firstTextWrap}>
             <p>
-              <span className={style.bold}>우리 동네</span>에서
+              <span className={styles.bold}>우리 동네</span>에서
             </p>
             <p>
-              다양한 <span className={style.bold}>반려견 정보</span>를
+              다양한 <span className={styles.bold}>반려견 정보</span>를
             </p>
             <p>공유하고 거래하는</p>
           </div>
-          <div className={style.firstImageWrap}>
-            <Image src={dogImg} alt="image" width={800} height={800} className={style.image} />
+          <div className={styles.firstImageWrap}>
+            <Image src={dogImg} alt="image" width={800} height={800} className={styles.image} />
           </div>
         </div>
       </motion.div>
-      <div className={style.secondSection}>
+      <div className={styles.secondSection}>
         <motion.div
-          className={style.secondTextWrap}
+          className={styles.secondTextWrap}
           initial={{ opacity: 0, x: -100 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: false }}
@@ -54,12 +54,12 @@ const MainGrid = () => {
             x: { duration: 1 }
           }}
         >
-          <span className={style.secondBold}>저희 퍼피그라운드는요</span>
+          <span className={styles.secondBold}>저희 퍼피그라운드는요</span>
           <p>우리 아이들이 사용하지 않는 제품을</p>
           <p>가까운 이웃과 손쉽게 거래할 수 있습니다</p>
           <Link href="/used-goods">
             <motion.button
-              className={style.button}
+              className={styles.button}
               whileHover={{ scale: 1.1 }}
               transition={{ type: 'spring', stiffness: 400, damping: 10 }}
             >
@@ -68,7 +68,7 @@ const MainGrid = () => {
           </Link>
         </motion.div>
         <motion.div
-          className={style.secondImageWrap}
+          className={styles.secondImageWrap}
           initial={{ opacity: 0, scale: 0.5 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: false }}
@@ -77,14 +77,14 @@ const MainGrid = () => {
             duration: 1
           }}
         >
-          <Image src={toy} alt="image" width={600} height={600} className={style.image} />
+          <Image src={toy} alt="image" width={600} height={600} className={styles.image} />
         </motion.div>
       </div>
-      <div className={style.thirdSection}>
-        <div className={style.thirdImageWrap}>
-          <Image src={family} alt="image" width={1200} height={600} className={style.image} />
+      <div className={styles.thirdSection}>
+        <div className={styles.thirdImageWrap}>
+          <Image src={family} alt="image" width={1200} height={600} className={styles.image} />
         </div>
-        <div className={style.thirdTextWrap}>
+        <div className={styles.thirdTextWrap}>
           <motion.p
             initial={{ opacity: 0, y: -100 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -99,7 +99,7 @@ const MainGrid = () => {
           </motion.p>
           <Link href="/stray-dogs">
             <motion.button
-              className={style.button}
+              className={styles.button}
               whileHover={{ scale: 1.1 }}
               transition={{ type: 'spring', stiffness: 400, damping: 10 }}
             >
@@ -108,9 +108,9 @@ const MainGrid = () => {
           </Link>
         </div>
       </div>
-      <div className={style.fourthSection}>
+      <div className={styles.fourthSection}>
         <motion.div
-          className={style.fourthImageWrap}
+          className={styles.fourthImageWrap}
           whileInView={{ opacity: [0, 1], scale: [0.6, 1.1, 1] }}
           viewport={{ once: false }}
           transition={{
@@ -118,10 +118,10 @@ const MainGrid = () => {
             duration: 1
           }}
         >
-          <Image src={mungstagram} alt="image" width={800} height={600} className={style.image} />
+          <Image src={mungstagram} alt="image" width={800} height={600} className={styles.image} />
         </motion.div>
         <motion.div
-          className={style.fourthTextWrap}
+          className={styles.fourthTextWrap}
           initial={{ opacity: 0, x: 100 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: false }}
@@ -132,10 +132,10 @@ const MainGrid = () => {
           }}
         >
           <p>사랑스러운,</p>
-          <span className={style.fourthBold}>우리 아이들을 자랑해봐요!</span>
+          <span className={styles.fourthBold}>우리 아이들을 자랑해봐요!</span>
           <Link href="/mungstagram">
             <motion.button
-              className={style.button}
+              className={styles.button}
               whileHover={{ scale: 1.1 }}
               transition={{ type: 'spring', stiffness: 400, damping: 10 }}
             >
@@ -144,9 +144,9 @@ const MainGrid = () => {
           </Link>
         </motion.div>
       </div>
-      <div className={style.fifthContainer}>
+      <div className={styles.fifthContainer}>
         <motion.div
-          className={style.fifthSection}
+          className={styles.fifthSection}
           whileInView={{ opacity: [0, 1], scale: [0.6, 1.1, 1] }}
           viewport={{ once: false }}
           transition={{
@@ -154,13 +154,13 @@ const MainGrid = () => {
             duration: 1
           }}
         >
-          <div className={style.fifthTextWrap}>
+          <div className={styles.fifthTextWrap}>
             <p>
-              아이들과 <span className={style.bold}>함께 여행을</span> 떠나볼까요?
+              아이들과 <span className={styles.bold}>함께 여행을</span> 떠나볼까요?
             </p>
             <Link href="/facilities">
               <motion.button
-                className={style.button}
+                className={styles.button}
                 whileHover={{ scale: 1.1 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 10 }}
               >
@@ -169,17 +169,17 @@ const MainGrid = () => {
             </Link>
           </div>
           <div>
-            <div className={style.fifthImageGrid}>
-              <Image src={walk} alt="image" width={400} height={400} className={style.image} />
-              <Image src={hotel} alt="image" width={400} height={400} className={style.image} />
+            <div className={styles.fifthImageGrid}>
+              <Image src={walk} alt="image" width={400} height={400} className={styles.image} />
+              <Image src={hotel} alt="image" width={400} height={400} className={styles.image} />
               <Image
                 src={restaurant}
                 alt="image"
                 width={400}
                 height={400}
-                className={style.image}
+                className={styles.image}
               />
-              <Image src={travel} alt="image" width={400} height={400} className={style.image} />
+              <Image src={travel} alt="image" width={400} height={400} className={styles.image} />
             </div>
           </div>
         </motion.div>
