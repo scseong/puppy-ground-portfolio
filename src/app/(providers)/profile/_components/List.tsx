@@ -9,12 +9,15 @@ import { getRegisteredUsedGoods } from '@/apis/used-goods/actions';
 
 enum Tab {
   wish = 'wish',
-  registered = 'registered'
+  registered = 'registered',
+  used = 'used',
+  mungstagram = 'mungstagram'
 }
 
 const List = () => {
   const user = useAuth((state) => state.user);
   const [selectedTab, setSelectedTab] = useState<Tab>(Tab.wish);
+  const [selectedTitle, setSelectedTitle] = useState<Tab>(Tab.used);
 
   const { data: wishedData } = useQuery({
     queryKey: ['wish-list'],
@@ -36,21 +39,41 @@ const List = () => {
     <div className={styles.container}>
       <div className={styles.title}>
         <h2>마이페이지</h2>
-        <button>알림 설정</button>
       </div>
-      <div className={styles.tab}>
+      <div className={styles.titleTab}>
         <button
-          className={selectedTab === Tab.wish ? styles.selected : undefined}
-          onClick={() => setSelectedTab(Tab.wish)}
+          className={selectedTitle === Tab.used ? styles.selectedTitle : undefined}
+          onClick={() => setSelectedTitle(Tab.used)}
         >
-          관심상품
+          중고물품
         </button>
         <button
-          className={selectedTab === Tab.registered ? styles.selected : undefined}
-          onClick={() => setSelectedTab(Tab.registered)}
+          className={selectedTitle === Tab.mungstagram ? styles.selectedTitle : undefined}
+          onClick={() => setSelectedTitle(Tab.mungstagram)}
         >
-          등록한 상품
+          멍스타그램
         </button>
+      </div>
+      <div className={styles.line}></div>
+      <div className={styles.space}>
+        <div></div>
+        <div className={styles.tab}>
+          <button
+            className={selectedTab === Tab.wish ? styles.selected : undefined}
+            onClick={() => setSelectedTab(Tab.wish)}
+          >
+            관심상품
+          </button>
+          <button
+            className={selectedTab === Tab.registered ? styles.selected : undefined}
+            onClick={() => setSelectedTab(Tab.registered)}
+          >
+            등록한 상품
+          </button>
+        </div>
+        <div>
+          <button className={styles.alarm}>알림 설정</button>
+        </div>
       </div>
       <div className={styles.cardContainer}>
         <div className={styles.cardWrapper}>
