@@ -3,5 +3,5 @@ export function getCountFromTable(column: unknown) {
     count?: number;
   };
 
-  return _column.count ?? null;
+  return _column?.count ?? null;
 }

@@ -27,3 +27,19 @@ export const getUsedGoodWish = async (user_id: string) => {
 
   return data;
 };
+
+export const addMungStagramLike = async (
+  addMungStagramLike: TablesInsert<'mung_stagram_like'>
+): Promise<void> => {
+  await supabase.from('mung_stagram_like').insert(addMungStagramLike).select();
+};
+
+export const removeMungStagramLike = async (
+  removeMungStagramLike: TablesInsert<'mung_stagram_like'>
+): Promise<void> => {
+  await supabase
+    .from('mung_stagram_like')
+    .delete()
+    .eq('user_id', removeMungStagramLike.user_id)
+    .eq('target_id', removeMungStagramLike.target_id);
+};
