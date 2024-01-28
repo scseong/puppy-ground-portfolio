@@ -39,8 +39,6 @@ const SignUp = () => {
   const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   const passwordRegex = /(?=.*\d)(?=.*[a-zA-ZS]).{8,}/;
 
-  console.log('아바타', defaultAvatar);
-
   useEffect(() => {
     if (image && image.length > 0) {
       const imageFile = image[0];
