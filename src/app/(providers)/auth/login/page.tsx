@@ -7,8 +7,7 @@ import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
 import PublicRouteWrapper from '@/shared/PublicRouteWrapper';
 import Link from 'next/link';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { Database } from '@/shared/supabase/types/supabase';
+import { supabase } from '@/shared/supabase/supabase';
 
 export type Inputs = {
   email: string;
@@ -16,7 +15,6 @@ export type Inputs = {
 };
 
 const LoginPage = () => {
-  const supabase = createClientComponentClient<Database>();
   const { errorTopRight, successTopRight } = useToast();
   const setUser = useAuth((state) => state.setUser);
   const {

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import useAuth from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
-import AuthProvider from './AuthProvider';
 
 function PublicRouteWrapper({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
