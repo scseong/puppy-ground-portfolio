@@ -35,12 +35,9 @@ const Header = () => {
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
-      console.log('useEffect', event, session);
       if (session) {
-        console.log('유저정보 들어옴');
         setUser(session.user);
       } else {
-        console.log('유저정보 널');
         setUser(null);
       }
 
