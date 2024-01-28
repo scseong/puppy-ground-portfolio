@@ -24,3 +24,12 @@ export const getUsedGood = async (id: number): Promise<Tables<'used_item'> | nul
 export const deleteUsedGood = async (id: number): Promise<void> => {
   await supabase.from('used_item').delete().eq('id', id).select();
 };
+
+export const getRegisteredUsedGoods = async (user_id: string) => {
+  const { data } = await supabase
+    .from('used_item')
+    .select(`*, used_item_wish ( count ), chat_list ( count )`)
+    .eq('user_id', user_id);
+
+  return data;
+};

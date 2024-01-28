@@ -1,6 +1,7 @@
 import PrivateRouteWrapper from '@/shared/PrivateRouteWrapper';
-import CreateForm from './CreateForm';
-import KakaoMapMarker from '@/app/_components/kakaoMap/KakaoMapMarker';
+import CreateForm from './_components/CreateForm';
+
+
 
 const Page = () => {
   return (
