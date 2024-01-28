@@ -18,15 +18,8 @@ import {
   GoChevronRight
 } from 'react-icons/go';
 import Link from 'next/link';
-
-const getPosts = async (id: string) => {
-  const { data, error } = await supabase
-    .from('mung_stagram')
-    .select('*, mung_stagram_like(count), profiles(user_name)')
-    .eq('id', id)
-    .single();
-  return data;
-};
+import { getPosts } from '@/apis/mung-stagram/action';
+import LikeButton from '../../_components/LikeButton';
 
 const getPrevAndNextPost = async (id: string) => {
   const getPrevPost = supabase
@@ -114,10 +107,7 @@ const MungModal = ({ params }: PageProps) => {
         </div>
         <div className={styles.detail}>
           <div className={styles.icons}>
-            <div>
-              <GoHeart />
-              <span>{getCountFromTable(post.mung_stagram_like)}</span>
-            </div>
+            <LikeButton mungStargramId={params.id} />
             <div>
               <GoComment />
             </div>
