@@ -23,7 +23,7 @@ const ChatInput = ({
   const sendChatMutation = useMutation({
     mutationFn: sendChat,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['chat'] });
+      queryClient.invalidateQueries({ queryKey: ['chat', { chatListId }] });
     }
   });
 
@@ -31,6 +31,7 @@ const ChatInput = ({
   const clickSendChat = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (chatContent === '') return;
+
     sendChatMutation.mutate({
       content: chatContent,
       id: chatListId === 0 ? listId : chatListId,

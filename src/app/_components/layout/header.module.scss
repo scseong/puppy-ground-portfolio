@@ -103,7 +103,19 @@
     color: var(--primary-color);
   }
 }
-
+.chatAlarmCount {
+  position: absolute;
+  background: var(--primary-color);
+  border-radius: 50%;
+  color: white;
+  width: 17px;
+  height: 17px;
+  font-size: 10px;
+  line-height: 17px;
+  font-family: pretendard-medium;
+  top: 34px;
+  right: 30px;
+}
 .toggleBackground {
   position: fixed;
   width: 100%;
