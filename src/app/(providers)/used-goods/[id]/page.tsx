@@ -51,11 +51,6 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   };
 
   const onClickUpdateSoldOut = async () => {
-    // 본인게시물에만 버튼이 보이기 때문에 이 부분은 삭제해도 될 것 같습니다
-    if (user?.id !== data?.user_id) {
-      errorTopRight({ message: '본인의 상품만 판매완료 처리할 수 있습니다.' });
-      return;
-    }
     Swal.fire({
       title: '판매완료 처리하시겠습니까?',
       showDenyButton: true,
