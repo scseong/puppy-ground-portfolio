@@ -39,7 +39,7 @@ const Header = () => {
       if (session) {
         setUser(session.user);
       } else {
-        setUser(null);
+        // setUser(null);
       }
 
       if (!isAuthInitialized) {

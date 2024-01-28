@@ -9,7 +9,6 @@ import styles from './profile.module.scss';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
 import { CiCamera } from 'react-icons/ci';
-import defaultImg from '../../../../../public/images/my_page_default.svg';
 
 const Profile = () => {
   const { data: getProfileData } = useQuery({
@@ -24,7 +23,7 @@ const Profile = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['getProfile'] });
       setEditProfile(!editProfile);
-      successTopRight({ message: '프로필이 업데이트 되었습니다!', timeout: 2000 });
+      successTopRight({ message: '프로필이 업데이트 되었습니다!'});
     }
   });
 
@@ -61,7 +60,7 @@ const Profile = () => {
     if (editUserName.length > 8)
       return warnTopRight({ message: '닉네임은 8자 이하로 입력해주세요!' });
 
-    if (editUserName === profile?.user_name && !imgFile) {
+    if (editUserName === profile?.user_name && profileImg === profile?.avatar_url) {
       return warnTopRight({ message: '변경된 사항이 없습니다!' });
     }
 
@@ -85,7 +84,6 @@ const Profile = () => {
         id: user?.id!,
         avatar_url: uploadUrl
       });
-
     } catch (error) {
       if (error) errorTopRight({ message: '오류입니다. 다시 시도해주세요!' });
     }
@@ -98,12 +96,7 @@ const Profile = () => {
           <>
             <div className={styles.imgLabel}>
               <div className={styles.wrapper}>
-                <Image
-                  width={150}
-                  height={150}
-                  src={profileImg! || defaultImg}
-                  alt="유저 프로필"
-                />
+                <Image width={150} height={150} src={profileImg! || profile?.avatar_url!} alt="유저 프로필" />
                 <label htmlFor="input-file">
                   <CiCamera size={27} />
                 </label>
@@ -140,7 +133,7 @@ const Profile = () => {
                   width={150}
                   height={150}
                   style={{ border: 'none' }}
-                  src={profileImg! || defaultImg}
+                  src={profileImg! ||  profile?.avatar_url!}
                 />
               </div>
               <div className={styles.userName}>{profile?.user_name}</div>

@@ -3,7 +3,7 @@ import React from 'react';
 import { ToastContainer } from 'react-toastify';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Footer, Header } from '../_components/layout';
-import AuthProvider from '@/shared/AuthProvider';
+import AuthProvider from '@/shared/_AuthProvider';
 
 function ProvidersLayout({
   children,
