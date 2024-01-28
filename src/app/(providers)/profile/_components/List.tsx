@@ -6,9 +6,8 @@ import { getMungStagramLike, getUsedGoodWish } from '@/apis/wishLike/actions';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { getRegisteredUsedGoods } from '@/apis/used-goods/actions';
-import { getMungstaPosts, getMungstaPostsByUserId } from '@/apis/mung-stagram/action';
+import { getMungstaPostsByUserId } from '@/apis/mung-stagram/action';
 import MungstaCard from './MungstaCard';
-import LikeButton from '../../@modal/_components/LikeButton';
 
 export type wishGood = {
   id: number;
@@ -90,7 +89,6 @@ const List = () => {
     queryKey: ['registered-mungstagram'],
     queryFn: () => getMungstaPostsByUserId(user!.id),
     select: (res) => {
-      console.log('res', res);
       return res;
     },
     gcTime: 0
