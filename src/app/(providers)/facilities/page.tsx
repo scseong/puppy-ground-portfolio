@@ -121,7 +121,6 @@ const Facilities = () => {
               <div key={place.id}>
                 <MapMarker
                   position={{ lat: place.latitude, lng: place.longitude }}
-                  // onClick={() => setActiveMarkerId(place.id)}
                   onMouseOver={() => setActiveMarkerId(place.id)}
                   onMouseOut={() => setActiveMarkerId(null)}
                   image={{
