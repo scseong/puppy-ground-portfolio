@@ -22,6 +22,7 @@ import WishButton from '../_components/WishButton';
 import { getUsedGoodDetail } from '@/apis/goods';
 import { Tables } from '@/shared/supabase/types/supabase';
 import { useAlertMessage } from '@/hooks/useAlertMessage';
+import Loading from '@/app/_components/layout/loading/Loading';
 
 const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const queryClient = useQueryClient();
@@ -150,7 +151,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
     }
   };
 
-  if (isLoading) return <span>LOADING</span>;
+  if (isLoading) return <Loading />;
   if (!data) return null;
 
   const {
