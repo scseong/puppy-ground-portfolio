@@ -173,7 +173,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
       <section className={styles.top}>
         <div className={styles.product}>
           <div className={styles.imageContainer}>
-            <SlideImage images={photo_url} />
+            <SlideImage images={photo_url} sizes={{ width: '400px', height: '400px' }} />
           </div>
           <div className={styles.details}>
             <div>
