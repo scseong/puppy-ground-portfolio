@@ -11,14 +11,17 @@ import { useSearchParams } from 'next/navigation';
 
 const UsedGoodsList = () => {
   const { queryObject, generateQueryParameter } = useQueryParam();
-
+  const [currentPage, setCurrentPage] = useState(1);
   const searchParams = useSearchParams();
-  const { data } = useQuery({
+
+  const { data: postList } = useQuery({
     queryKey: getQueryKey(queryObject),
     queryFn: getQueryFunction(queryObject)
   });
-  const pageNumbers = Array.from({ length: 5 }, (_, index) => index + 1);
-  const [currentPage, setCurrentPage] = useState(1);
+
+  const { data, count } = { ...postList };
+  const itemsPerPage = 8;
+  const pageNumbers = count ? Math.ceil(count / itemsPerPage) : 0;
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -27,7 +30,6 @@ const UsedGoodsList = () => {
   useEffect(() => {
     const current = searchParams.get('page');
     if (!current) return setCurrentPage(1);
-    // TODO: 숫자 아닌 값 방지
     setCurrentPage(Number(current));
   }, [searchParams]);
 
@@ -40,7 +42,7 @@ const UsedGoodsList = () => {
       </div>
       {/* TODO: 페이지네이션 컴포넌트 분리*/}
       <div className={styles.pagination}>
-        {pageNumbers.map((number, idx) => (
+        {Array.from({ length: pageNumbers }, (_, index) => index + 1).map((number, idx) => (
           <Link
             key={number}
             href={`${generateQueryParameter('page', number + '')}`}
