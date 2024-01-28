@@ -14,7 +14,6 @@ const AlertMessageRow = ({ item }: { item: Tables<'alert_message'> }) => {
   } else if (item.type === 'like') {
     link = `/mungstagram/${item.target_id}`;
   }
-
   const clickMessage = async () => {
     router.push(link);
     await updateAlertMessage(item.id);

@@ -1,6 +1,7 @@
 import {
   AlertType,
   addAlertMessageByIdAndTarget,
+  deleteAlertMessageType,
   findAllMessageByUserId,
   updateAlertMessageStatus,
   updateChatAlertMessageStatus
@@ -42,10 +43,18 @@ export const useAlertMessage = () => {
     }
   });
 
+  const { mutate: deleteAlertMessage } = useMutation({
+    mutationFn: async (id: string) => deleteAlertMessageType(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [ALERT_MESSAGE_QUERY_LEY] });
+    }
+  });
+
   return {
     fetchAlertMessage,
     addAlertMessage,
     updateAlertMessage,
-    updateChatAlertMessage
+    updateChatAlertMessage,
+    deleteAlertMessage
   };
 };

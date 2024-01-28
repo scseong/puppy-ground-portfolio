@@ -2,6 +2,7 @@
 
 import { getPosts } from '@/apis/mung-stagram/action';
 import { addMungStagramLike, removeMungStagramLike } from '@/apis/wishLike/actions';
+import { useAlertMessage } from '@/hooks/useAlertMessage';
 import useAuth from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { supabase } from '@/shared/supabase/supabase';
@@ -9,10 +10,12 @@ import { getCountFromTable } from '@/utils/table';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { GoHeart, GoHeartFill } from 'react-icons/go';
 
-const LikeButton = ({ mungStargramId }: { mungStargramId: string }) => {
+const LikeButton = ({ mungStargramId, title }: { mungStargramId: string; title: string }) => {
   const queryClient = useQueryClient();
   const user = useAuth((state) => state.user);
   const { errorTopRight } = useToast();
+  const { addAlertMessage } = useAlertMessage();
+
   const { isLoading, isError, data } = useQuery({
     queryKey: ['mung_stagram', mungStargramId],
     queryFn: () => getPosts(mungStargramId)
@@ -50,6 +53,14 @@ const LikeButton = ({ mungStargramId }: { mungStargramId: string }) => {
       };
     });
     queryClient.setQueryData(['my_like', mungStargramId], true);
+    if (data?.user_id !== user!.id) {
+      addAlertMessage({
+        type: 'like',
+        message: `멍스타그램 [${title}] 에 좋아요를 받았습니다 `,
+        userId: data!.user_id,
+        targetId: +mungStargramId
+      });
+    }
   };
 
   const removeMungStagramLikeClient = () => {
