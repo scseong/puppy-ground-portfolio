@@ -2,7 +2,8 @@ import {
   AlertType,
   addAlertMessageByIdAndTarget,
   findAllMessageByUserId,
-  updateAlertMessageStatus
+  updateAlertMessageStatus,
+  updateChatAlertMessageStatus
 } from '@/apis/alertMessage';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import useAuth from './useAuth';
@@ -34,9 +35,17 @@ export const useAlertMessage = () => {
     }
   });
 
+  const { mutate: updateChatAlertMessage } = useMutation({
+    mutationFn: async (type: string) => await updateChatAlertMessageStatus(type),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [ALERT_MESSAGE_QUERY_LEY] });
+    }
+  });
+
   return {
     fetchAlertMessage,
     addAlertMessage,
-    updateAlertMessage
+    updateAlertMessage,
+    updateChatAlertMessage
   };
 };

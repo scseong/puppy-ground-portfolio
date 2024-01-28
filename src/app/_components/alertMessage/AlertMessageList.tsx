@@ -16,7 +16,7 @@ const AlertMessageList = ({ setShowMessageList }: Props) => {
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   const filterAlertMessage = fetchAlertMessage?.data?.filter((message) => {
-    return message.user_id === user?.id;
+    return message.user_id === user?.id && message.type !== 'chat';
   });
 
   // 모달 바깥 클릭 시 닫히게
