@@ -1,11 +1,14 @@
 'use client';
-import { supabase } from '@/shared/supabase/supabase';
+
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import styles from './page.module.scss';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
 import PublicRouteWrapper from '@/shared/PublicRouteWrapper';
+import Link from 'next/link';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { Database } from '@/shared/supabase/types/supabase';
 
 export type Inputs = {
   email: string;
@@ -13,6 +16,7 @@ export type Inputs = {
 };
 
 const LoginPage = () => {
+  const supabase = createClientComponentClient<Database>();
   const { errorTopRight, successTopRight } = useToast();
   const setUser = useAuth((state) => state.setUser);
   const {
@@ -114,16 +118,10 @@ const LoginPage = () => {
           구글 로그인
         </button>
       </div>
-      <p className={styles.moveLogin}>
+      <Link href="/auth/signup" className={styles.moveLogin}>
         처음이신가요?
-        <span
-          onClick={() => {
-            router.push('/auth/signup');
-          }}
-        >
-          &nbsp;회원가입 하러가기
-        </span>
-      </p>
+        <span> 회원가입 하러가기</span>
+      </Link>
     </div>
   );
 };

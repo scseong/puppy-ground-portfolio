@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
 import PublicRouteWrapper from '@/shared/PublicRouteWrapper';
 import defaultAvatar from '../../../../../public/images/default_avatar.webp';
+import Link from 'next/link';
 
 export type Inputs = {
   email: string;
@@ -53,7 +54,6 @@ const SignUp = () => {
       setIsEmailValid(false);
       return false;
     }
-
     const { data, error } = await supabase.from('profiles').select('*').eq('email', email);
 
     if (data!.length >= 1) {
@@ -70,7 +70,7 @@ const SignUp = () => {
       router.refresh();
     }
   };
-
+  // 닉네임 중복검사
   const nicknameCheck = async (nickname: string) => {
     const { data, error } = await supabase.from('profiles').select('*').eq('user_name', nickname);
     if (!nickname) {
@@ -235,16 +235,10 @@ const SignUp = () => {
         <button className={styles.submitBtn} type="submit">
           회원가입
         </button>
-        <p className={styles.moveLogin}>
+        <Link href="/auth/login" className={styles.moveLogin}>
           이미 회원이신가요?
-          <span
-            onClick={() => {
-              router.push('/auth/login');
-            }}
-          >
-            &nbsp;로그인 하러가기
-          </span>
-        </p>
+          <span className={styles.moveLogin}>로그인 하러가기</span>
+        </Link>
       </form>
     </div>
   );
