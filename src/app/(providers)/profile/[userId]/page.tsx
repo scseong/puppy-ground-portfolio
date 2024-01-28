@@ -16,6 +16,7 @@ const Page = () => {
   );
 };
 
+// 지원님 코드 => 에러로 인해 주석처리 함.
 // const PrivateCreatePage = () => {
 //   return (
 //     <PrivateRouteWrapper>

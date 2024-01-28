@@ -8,6 +8,7 @@ import { useState } from 'react';
 import styles from './profile.module.scss';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
+import { CiCamera } from 'react-icons/ci';
 
 const Profile = () => {
   const { data: getProfileData } = useQuery({
@@ -90,17 +91,20 @@ const Profile = () => {
     <div className={styles.container}>
       <div className={styles.profileBox}>
         {editProfile ? (
-          <div>
-            <div>
-              <div className={styles.imgLabel}>
+          <>
+            <div className={styles.imgLabel}>
+              <div className={styles.wrapper}>
                 <Image
                   width={150}
                   height={150}
                   src={profileImg! || profile?.avatar_url!}
                   alt="유저 프로필"
                 />
-                <label htmlFor="input-file">사진 변경</label>
+                <label htmlFor="input-file">
+                  <CiCamera size={27} />
+                </label>
               </div>
+              <div className={styles.userName}>{profile?.user_name}</div>
               <input
                 type="file"
                 id="input-file"
@@ -112,26 +116,36 @@ const Profile = () => {
                 value={editUserName}
                 onChange={onChangeUserName}
                 placeholder="변경할 이름을 입력해주세요"
+                className={styles.nicNameInput}
               />
-              <button onClick={updateProfile}>수정 완료</button>
             </div>
-            <button onClick={() => setEditProfile((state) => !state)}>취소</button>
-          </div>
+            <button className={styles.update} onClick={updateProfile}>
+              수정 완료
+            </button>
+
+            <button className={styles.cancel} onClick={() => setEditProfile((state) => !state)}>
+              취소
+            </button>
+          </>
         ) : (
           <div className={styles.imgLabel}>
-            <div className={styles.wrapper}>
-              <Image
-                alt="유저 프로필"
-                width={150}
-                height={150}
-                style={{ border: 'none' }}
-                src={profile?.avatar_url || ''}
-              />
+            <div className={styles.top}>
+              <div className={styles.wrapper}>
+                <Image
+                  alt="유저 프로필"
+                  width={150}
+                  height={150}
+                  style={{ border: 'none' }}
+                  src={profile?.avatar_url || ''}
+                />
+              </div>
               <div className={styles.userName}>{profile?.user_name}</div>
             </div>
-            <button className={styles.editButton} onClick={() => setEditProfile((state) => !state)}>
-              프로필 수정
-            </button>
+            <div className={styles.top}>
+              <button className={styles.edit} onClick={() => setEditProfile((state) => !state)}>
+                프로필 수정
+              </button>
+            </div>
           </div>
         )}
       </div>

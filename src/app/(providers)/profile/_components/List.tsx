@@ -3,9 +3,9 @@ import Card from './Card';
 import styles from './list.module.scss';
 import useAuth from '@/hooks/useAuth';
 import { getUsedGoodWish } from '@/apis/wishLike/actions';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { getRegisteredUsedGoods, getUsedGood } from '@/apis/used-goods/actions';
+import { getRegisteredUsedGoods } from '@/apis/used-goods/actions';
 
 enum Tab {
   wish = 'wish',
@@ -18,9 +18,12 @@ const List = () => {
 
   const { data: wishedData } = useQuery({
     queryKey: ['wish-list'],
-    queryFn: () => getUsedGoodWish(user!.id),
-    enabled: !!user && selectedTab === Tab.wish,
-    select: (res) => res?.map((value) => value.used_item)
+    queryFn: () => {
+      if (!user) return;
+      return getUsedGoodWish(user!.id);
+    },
+    select: (res) => res?.map((value) => value.used_item),
+    gcTime: 0
   });
 
   const { data: registeredData } = useQuery({
