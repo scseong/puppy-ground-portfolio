@@ -4,6 +4,7 @@ import { FaMapMarkerAlt } from 'react-icons/fa';
 import { addCommasToNumber } from '@/utils/format';
 import { getStringFromNow } from '@/utils/time';
 import { getCountFromTable } from '@/utils/table';
+import Link from 'next/link';
 
 type wishGoodsProps = {
   goods: {
@@ -24,6 +25,7 @@ const Card = ({ goods }: wishGoodsProps) => {
     goods;
 
   return (
+    <Link href={`/used-goods/${id}`}>
     <div className={styles.container}>
       <div className={styles.image}>
         <Image src={photo_url[0]} alt="상품 이미지" width={250} height={250} />
@@ -46,6 +48,7 @@ const Card = ({ goods }: wishGoodsProps) => {
         </div>
       </div>
     </div>
+    </Link>
   );
 };
 
