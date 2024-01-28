@@ -51,6 +51,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   };
 
   const onClickUpdateSoldOut = async () => {
+    // 본인게시물에만 버튼이 보이기 때문에 이 부분은 삭제해도 될 것 같습니다
     if (user?.id !== data?.user_id) {
       errorTopRight({ message: '본인의 상품만 판매완료 처리할 수 있습니다.' });
       return;
@@ -195,7 +196,11 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                     <BsThreeDots size={0} />
                     {showEditToggle && (
                       <div>
-                        {sold_out ? null : <button onClick={onClickUpdateSoldOut}>판매완료</button>}
+                        {sold_out ? (
+                          <button disabled>판매완료</button>
+                        ) : (
+                          <button onClick={onClickUpdateSoldOut}>판매완료</button>
+                        )}
                         <span></span>
                         <Link href={`/used-goods/update/${id}`}>
                           <button className={styles.edit}>수정</button>

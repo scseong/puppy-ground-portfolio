@@ -101,10 +101,10 @@
     .soldOut {
       display: inline-block;
       padding: 0.8rem 1rem;
-      background-color: #27c9fd;
+      background-color: #d2faf8;
       border-radius: 5px;
       font-weight: 600;
-      color: white;
+      color: var(--primary-color);
     }
   }
 
