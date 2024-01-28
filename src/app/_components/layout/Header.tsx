@@ -32,7 +32,7 @@ const Header = () => {
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
 
   const queryClient = useQueryClient();
-  const { fetchAlertMessage } = useAlertMessage();
+  const { fetchAlertMessage, updateChatAlertMessage } = useAlertMessage();
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
@@ -64,6 +64,7 @@ const Header = () => {
   const {
     isError,
     isLoading,
+    refetch,
     data: getChat
   } = useQuery({
     queryKey: ['chat'],
@@ -107,6 +108,16 @@ const Header = () => {
     setShowMessageList(!showMessageList);
   };
 
+  const clickOpenModal = async () => {
+    const chatAlert = filterAlertMessage?.filter(
+      (item) => item.type === 'chat' && item.status === false
+    );
+    if (chatAlert) {
+      await updateChatAlertMessage('chat');
+    }
+    setModalIsOpen(true);
+  };
+
   const handleToggle = () => {
     setIsVisible(!isVisible);
   };
@@ -120,6 +131,8 @@ const Header = () => {
   if (!isAuthInitialized) {
     return null;
   }
+
+  if (filterAlertMessage) refetch();
 
   return (
     <>
@@ -151,14 +164,25 @@ const Header = () => {
                     <button className={styles.bell} onClick={alertListToggle}>
                       <GoBell />
                       <span className={styles.alarmCount}>
-                        {filterAlertMessage?.filter((item) => !item?.status).length}
+                        {
+                          filterAlertMessage?.filter(
+                            (item) => !item?.status && item.type !== 'chat'
+                          ).length
+                        }
                       </span>
                     </button>
                     {showMessageList && (
                       <AlertMessageList setShowMessageList={setShowMessageList} />
                     )}
-                    <button className={styles.chat} onClick={() => setModalIsOpen(true)}>
+                    <button className={styles.chat} onClick={clickOpenModal}>
                       <IoChatbubbleEllipsesOutline />
+                      <span className={styles.chatAlarmCount}>
+                        {
+                          filterAlertMessage?.filter(
+                            (item) => !item?.status && item.type === 'chat'
+                          ).length
+                        }
+                      </span>
                     </button>
                     <div className={styles.toggle}>
                       <RxHamburgerMenu size={25} onClick={handleToggle} />
@@ -287,7 +311,7 @@ const Header = () => {
         onClose={() => setModalIsOpen(false)}
         ariaHideApp={false}
         isChatRoomOpen={false}
-        getChat={getChat!}
+        getChat={getChat}
       />
     </>
   );
