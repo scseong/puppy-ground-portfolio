@@ -15,6 +15,7 @@ import Pagination from '@/app/_components/pagination/Pagination';
 import { ko } from 'date-fns/locale';
 import dayjs from 'dayjs';
 import NoSearchValue from './_component/NoSearchValue';
+import { Main } from '@/app/_components/layout';
 
 const StrayDogs = () => {
   const [startDate, setStartDate] = useState<Date | null>(new Date('2023-10-01'));
@@ -79,9 +80,9 @@ const StrayDogs = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <Main>
       <div className={styles.contentContainer}>
-        <form className={styles.filterWrap}>
+        <form onSubmit={filterList} className={styles.filterWrap}>
           <div className={styles.filterContent}>
             <p>기간</p>
             <div className={styles.calender}>
@@ -128,7 +129,7 @@ const StrayDogs = () => {
                 return <option key={index}>{gu}</option>;
               })}
             </select>
-            <button type="submit">
+            <button type="submit" className={styles.searchButton}>
               <IoSearch />
             </button>
           </div>
@@ -217,7 +218,7 @@ const StrayDogs = () => {
           total={filteredStrayList ? filteredStrayList.length : strayList?.length}
         />
       </div>
-    </div>
+    </Main>
   );
 };
 

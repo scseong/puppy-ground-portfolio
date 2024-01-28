@@ -54,6 +54,7 @@ const Header = () => {
       successTopRight({ message: '로그아웃 되었습니다.' });
       deleteCookie('access_token');
       setIsVisible(false);
+      setUser(null);
       router.push('/');
     }
     if (error) {
