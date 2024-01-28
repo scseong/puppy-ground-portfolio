@@ -61,7 +61,9 @@ const Profile = () => {
     if (editUserName.length > 8)
       return warnTopRight({ message: '닉네임은 8자 이하로 입력해주세요!' });
 
-    if (editUserName === '') return warnTopRight({ message: '닉네임을 입력해주세요!' });
+    if (editUserName === profile?.user_name && !imgFile) {
+      return warnTopRight({ message: '변경된 사항이 없습니다!' });
+    }
 
     let uploadUrl = profileImg!;
     try {
@@ -83,8 +85,9 @@ const Profile = () => {
         id: user?.id!,
         avatar_url: uploadUrl
       });
+
     } catch (error) {
-      if (error) errorTopRight({ message: '오류입니다' });
+      if (error) errorTopRight({ message: '오류입니다. 다시 시도해주세요!' });
     }
   };
 
@@ -98,7 +101,7 @@ const Profile = () => {
                 <Image
                   width={150}
                   height={150}
-                  src={defaultImg ?? profile?.avatar_url}
+                  src={profileImg! || defaultImg}
                   alt="유저 프로필"
                 />
                 <label htmlFor="input-file">
@@ -137,7 +140,7 @@ const Profile = () => {
                   width={150}
                   height={150}
                   style={{ border: 'none' }}
-                  src={defaultImg ?? profile?.avatar_url}
+                  src={profileImg! || defaultImg}
                 />
               </div>
               <div className={styles.userName}>{profile?.user_name}</div>
