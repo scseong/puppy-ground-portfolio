@@ -14,6 +14,7 @@ import { TablesInsert } from '@/shared/supabase/types/supabase';
 import useAuth from '@/hooks/useAuth';
 import Swal from 'sweetalert2';
 import { useQueryClient } from '@tanstack/react-query';
+import { customStyle } from '@/shared/modal';
 
 type InputForm = TablesInsert<'mung_stagram'> & { inputValue: string };
 
@@ -146,27 +147,7 @@ const MungModal = () => {
       onRequestClose={closeModal}
       ariaHideApp={false}
       contentLabel="Modal"
-      style={{
-        overlay: {
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.2)',
-          zIndex: 10
-        },
-        content: {
-          padding: 0,
-          top: '50%',
-          left: '50%',
-          right: 'auto',
-          bottom: 'auto',
-          transform: 'translate(-50%, -50%)',
-          borderRadius: '2rem',
-          backgroundColor: 'white'
-        }
-      }}
+      style={customStyle}
     >
       <div className={styles.container}>
         <div className={styles.title}>
