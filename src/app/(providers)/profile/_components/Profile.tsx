@@ -23,7 +23,7 @@ const Profile = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['getProfile'] });
       setEditProfile(!editProfile);
-      successTopRight({ message: '프로필이 업데이트 되었습니다!'});
+      successTopRight({ message: '프로필이 업데이트 되었습니다!' });
     }
   });
 
@@ -60,10 +60,6 @@ const Profile = () => {
     if (editUserName.length > 8)
       return warnTopRight({ message: '닉네임은 8자 이하로 입력해주세요!' });
 
-    if (editUserName === profile?.user_name && profileImg === profile?.avatar_url) {
-      return warnTopRight({ message: '변경된 사항이 없습니다!' });
-    }
-
     let uploadUrl = profileImg!;
     try {
       if (imgFile) {
@@ -96,7 +92,12 @@ const Profile = () => {
           <>
             <div className={styles.imgLabel}>
               <div className={styles.wrapper}>
-                <Image width={150} height={150} src={profileImg! || profile?.avatar_url!} alt="유저 프로필" />
+                <Image
+                  width={150}
+                  height={150}
+                  src={profileImg! || profile?.avatar_url!}
+                  alt="유저 프로필"
+                />
                 <label htmlFor="input-file">
                   <CiCamera size={27} />
                 </label>
@@ -133,7 +134,7 @@ const Profile = () => {
                   width={150}
                   height={150}
                   style={{ border: 'none' }}
-                  src={profileImg! ||  profile?.avatar_url!}
+                  src={profileImg! || profile?.avatar_url!}
                 />
               </div>
               <div className={styles.userName}>{profile?.user_name}</div>
