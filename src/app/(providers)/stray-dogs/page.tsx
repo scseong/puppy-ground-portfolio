@@ -14,6 +14,7 @@ import { IoSearch } from 'react-icons/io5';
 import Pagination from '@/app/_components/pagination/Pagination';
 import { ko } from 'date-fns/locale';
 import dayjs from 'dayjs';
+import NoSearchValue from './_component/NoSearchValue';
 
 const StrayDogs = () => {
   const [startDate, setStartDate] = useState<Date | null>(new Date('2023-10-01'));
@@ -46,7 +47,8 @@ const StrayDogs = () => {
   const selectRegion = regionList.find((region) => region.city === selectCity);
   const guList = selectRegion ? selectRegion.gu : [];
 
-  const filterList = () => {
+  const filterList = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const filteredCity =
       selectCity === '전지역'
         ? strayList
@@ -79,7 +81,7 @@ const StrayDogs = () => {
   return (
     <div className={styles.container}>
       <div className={styles.contentContainer}>
-        <div className={styles.filterWrap}>
+        <form className={styles.filterWrap}>
           <div className={styles.filterContent}>
             <p>기간</p>
             <div className={styles.calender}>
@@ -126,14 +128,17 @@ const StrayDogs = () => {
                 return <option key={index}>{gu}</option>;
               })}
             </select>
-            <button onClick={filterList} className={styles.searchButton}>
+            <button type="submit">
               <IoSearch />
             </button>
           </div>
-        </div>
+        </form>
         <div className={styles.gridContainer}>
-          {filteredStrayList
-            ? filteredStrayList.slice(offset, offset + limit).map((list, index) => {
+          {filteredStrayList ? (
+            filteredStrayList.length === 0 ? (
+              <NoSearchValue />
+            ) : (
+              filteredStrayList.slice(offset, offset + limit).map((list, index) => {
                 const formatHappenDt = dayjs(list.happenDt).format('YYYY[년] MM[월] DD[일]');
                 return (
                   <div key={index}>
@@ -167,40 +172,43 @@ const StrayDogs = () => {
                   </div>
                 );
               })
-            : strayList?.slice(offset, offset + limit).map((list, index) => {
-                const formatHappenDt = dayjs(list.happenDt).format('YYYY[년] MM[월] DD[일]');
-                return (
-                  <div key={index}>
-                    <div className={styles.listCard}>
-                      <Link href={`/stray-dogs/${list.desertionNo}`}>
-                        <div className={styles.imageWrap}>
-                          <Image
-                            src={list.popfile}
-                            alt="dog-image"
-                            className={styles.image}
-                            width={250}
-                            height={250}
-                          />
-                        </div>
-                      </Link>
-                      <div className={styles.explanationWrap}>
-                        <div className={styles.titleColumn}>
-                          <p>구조일시</p>
-                          <p>견종</p>
-                          <p>성별</p>
-                          <p>발견장소</p>
-                        </div>
-                        <div className={styles.contentColumn}>
-                          <p>{formatHappenDt}</p>
-                          <p>{list.kindCd.slice(3)}</p>
-                          <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
-                          <p>{list.happenPlace}</p>
-                        </div>
+            )
+          ) : (
+            strayList?.slice(offset, offset + limit).map((list, index) => {
+              const formatHappenDt = dayjs(list.happenDt).format('YYYY[년] MM[월] DD[일]');
+              return (
+                <div key={index}>
+                  <div className={styles.listCard}>
+                    <Link href={`/stray-dogs/${list.desertionNo}`}>
+                      <div className={styles.imageWrap}>
+                        <Image
+                          src={list.popfile}
+                          alt="dog-image"
+                          className={styles.image}
+                          width={250}
+                          height={250}
+                        />
+                      </div>
+                    </Link>
+                    <div className={styles.explanationWrap}>
+                      <div className={styles.titleColumn}>
+                        <p>구조일시</p>
+                        <p>견종</p>
+                        <p>성별</p>
+                        <p>발견장소</p>
+                      </div>
+                      <div className={styles.contentColumn}>
+                        <p>{formatHappenDt}</p>
+                        <p>{list.kindCd.slice(3)}</p>
+                        <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
+                        <p>{list.happenPlace}</p>
                       </div>
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              );
+            })
+          )}
         </div>
         <Pagination
           page={page}
