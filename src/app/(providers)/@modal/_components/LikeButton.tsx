@@ -92,8 +92,6 @@ const LikeButton = ({ mungStargramId }: { mungStargramId: string }) => {
     }
   };
 
-  console.log(my_like);
-
   return (
     <div onClick={onClickLike}>
       {my_like ? <GoHeartFill fill="red" /> : <GoHeart color="red" />}
