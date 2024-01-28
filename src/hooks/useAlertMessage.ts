@@ -44,7 +44,7 @@ export const useAlertMessage = () => {
   });
 
   const { mutate: deleteAlertMessage } = useMutation({
-    mutationFn: async (id: string) => deleteAlertMessageType(id),
+    mutationFn: async (targetId: string) => await deleteAlertMessageType(targetId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [ALERT_MESSAGE_QUERY_LEY] });
     }

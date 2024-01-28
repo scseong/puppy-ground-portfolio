@@ -31,7 +31,6 @@ const Facilities = () => {
   });
   const [activeMarkerId, setActiveMarkerId] = useState<number | null>(null);
   const [currentLocationMarker, setCurrentLocationMarker] = useState<boolean>(false);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const { facilitiesData } = useFacilitiesQuery();
   const { warnTopCenter } = useToast();
 

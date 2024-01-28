@@ -77,9 +77,9 @@ const WishButton = ({ usedItemId, title }: { usedItemId: string; title: string }
     });
 
     queryClient.setQueryData(['my_wish', usedItemId], false);
-    // if (data?.user_id !== user!.id) {
-    //   deleteAlertMessage();
-    // }
+    if (data?.user_id !== user!.id) {
+      deleteAlertMessage(usedItemId);
+    }
   };
 
   const wishMutation = useMutation({
