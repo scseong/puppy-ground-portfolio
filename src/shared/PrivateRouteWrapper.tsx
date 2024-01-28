@@ -3,7 +3,6 @@ import useAuth from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import AuthProvider from './_AuthProvider';
 
 function PrivateRouteWrapper({ children }: { children: React.ReactNode }) {
   const { errorTopRight } = useToast();
