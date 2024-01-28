@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styles from './header.module.scss';
 import Image from 'next/image';
 import { supabase } from '@/shared/supabase/supabase';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect, MouseEventHandler } from 'react';
 import ChatList from '../chatting/ChatList';
 import { useToast } from '@/hooks/useToast';
@@ -33,6 +33,8 @@ const Header = () => {
   const queryClient = useQueryClient();
   const { fetchAlertMessage, updateChatAlertMessage } = useAlertMessage();
 
+  const pathName = usePathname();
+  console.log(pathName);
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
@@ -144,16 +146,28 @@ const Header = () => {
             </Link>
           </div>
           <div className={styles.menuBox}>
-            <Link className={styles.menuItem} href="/used-goods">
+            <Link
+              className={pathName === '/used-goods' ? styles.selcetedMenuItem : styles.menuItem}
+              href="/used-goods"
+            >
               중고거래
             </Link>
-            <Link className={styles.menuItem} href="/stray-dogs">
+            <Link
+              className={pathName === '/stray-dogs' ? styles.selcetedMenuItem : styles.menuItem}
+              href="/stray-dogs"
+            >
               유기견공고
             </Link>
-            <Link className={styles.menuItem} href="/facilities">
+            <Link
+              className={pathName === '/facilities' ? styles.selcetedMenuItem : styles.menuItem}
+              href="/facilities"
+            >
               동반시설
             </Link>
-            <Link className={styles.menuItem} href="/mungstagram">
+            <Link
+              className={pathName === '/mungstagram' ? styles.selcetedMenuItem : styles.menuItem}
+              href="/mungstagram"
+            >
               멍스타그램
             </Link>
             {user ? (
@@ -238,10 +252,18 @@ const Header = () => {
               </>
             ) : (
               <>
-                <Link className={styles.menuItem} href="/auth/signup">
+                <Link
+                  className={
+                    pathName === '/auth/signup' ? styles.selcetedMenuItem : styles.menuItem
+                  }
+                  href="/auth/signup"
+                >
                   회원가입
                 </Link>
-                <Link className={styles.menuItem} href="/auth/login">
+                <Link
+                  className={pathName === '/auth/login' ? styles.selcetedMenuItem : styles.menuItem}
+                  href="/auth/login"
+                >
                   로그인
                 </Link>
                 <div className={styles.menuEmojiPosition}>

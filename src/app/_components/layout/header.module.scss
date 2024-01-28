@@ -48,6 +48,11 @@
   }
 }
 
+.selcetedMenuItem {
+  @extend .menuItem;
+  color: var(--primary-color);
+}
+
 .menuEmoji {
   display: flex;
   justify-content: center;
