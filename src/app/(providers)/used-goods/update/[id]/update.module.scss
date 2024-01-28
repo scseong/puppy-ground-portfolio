@@ -18,6 +18,7 @@
 }
 
 .titleInput {
+  background-color: var(--bg-color);
   width: 1100px;
   padding: 0 30px;
   font-size: 20px;
@@ -59,6 +60,7 @@
 }
 
 .textarea {
+  background-color: var(--bg-color);
   width: 550px;
   height: 480px;
   padding: 30px;
@@ -93,6 +95,7 @@
   padding: 0 30px;
 }
 .price {
+  background-color: var(--bg-color);
   border: 0;
   outline: none;
   font-size: 20px;
@@ -226,6 +229,7 @@
   width: 100%;
 
   .locationInput {
+    background-color: var(--bg-color);
     width: 100%;
     padding: 10px;
     font-size: 18px;

@@ -1,5 +1,6 @@
 'use client';
 
+import { BsThreeDots } from 'react-icons/bs';
 import { getChatRoomList, makeChatList } from '@/apis/chat/chat';
 import { deleteUsedGood, updateUsedGood } from '@/apis/used-goods/actions';
 import ChatList from '@/app/_components/chatting/ChatList';
@@ -23,8 +24,10 @@ import { getUsedGoodDetail } from '@/apis/goods';
 import { Tables } from '@/shared/supabase/types/supabase';
 import { useAlertMessage } from '@/hooks/useAlertMessage';
 import Loading from '@/app/_components/layout/loading/Loading';
+import Link from 'next/link';
 
 const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
+  const [showEditToggle, setShowEditToggle] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const user = useAuth((state) => state.user);
   const { addAlertMessage } = useAlertMessage();
@@ -43,11 +46,11 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const { id } = useParams();
   const { errorTopRight } = useToast();
 
+  const editButtonToggle = () => {
+    setShowEditToggle(!showEditToggle);
+  };
+
   const onClickUpdateSoldOut = async () => {
-    if (user?.id !== data?.user_id) {
-      errorTopRight({ message: '본인의 상품만 판매완료 처리할 수 있습니다.' });
-      return;
-    }
     Swal.fire({
       title: '판매완료 처리하시겠습니까?',
       showDenyButton: true,
@@ -178,9 +181,31 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
           </div>
           <div className={styles.details}>
             <div>
-              <div className={styles.info}>
-                <h3 title={title}>{title}</h3>
-                <span className={styles.price}>{addCommasToNumber(price)}원</span>
+              <div className={styles.infoWrap}>
+                <div className={styles.info}>
+                  <h3 title={title}>{title}</h3>
+                  <span className={styles.price}>{addCommasToNumber(price)}원</span>
+                </div>
+                {user?.id === data?.user_id && (
+                  <button className={styles.editButton} onClick={editButtonToggle}>
+                    <BsThreeDots size={0} />
+                    {showEditToggle && (
+                      <div>
+                        {sold_out ? (
+                          <button disabled>판매완료</button>
+                        ) : (
+                          <button onClick={onClickUpdateSoldOut}>판매완료</button>
+                        )}
+                        <span></span>
+                        <Link href={`/used-goods/update/${id}`}>
+                          <button className={styles.edit}>수정</button>
+                        </Link>
+                        <span></span>
+                        <button onClick={onClickDelete}>삭제</button>
+                      </div>
+                    )}
+                  </button>
+                )}
               </div>
               <div className={styles.profile}>
                 {profiles && (
@@ -233,11 +258,11 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
           <TradeLocationMap lat={latitude} lng={longitude} />
         </div>
         {/* TODO: SNS 공유, 링크 복사 */}
-        <KakaoShareButton />
-        <ClipBoardButton />
+        <div className={styles.shareButton}>
+          <KakaoShareButton />
+          <ClipBoardButton />
+        </div>
         {/* 버튼 생기면 옮겨 주세요 */}
-        {sold_out ? null : <button onClick={onClickUpdateSoldOut}>sold-out</button>}
-        <button onClick={onClickDelete}>delete</button>
       </section>
     </main>
   );

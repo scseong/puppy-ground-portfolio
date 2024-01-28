@@ -1,18 +1,18 @@
 .buttonWrapper {
   display: flex;
-  gap: 5px;
+  gap: 32px;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
 .button {
+  font-size: 19px;
   border: none;
   width: 17px;
   height: 17px;
   background-color: transparent;
 }
 .selectedPage {
-  width: 17px;
-  height: 17px;
+  font-size: 19px;
   background-color: transparent;
   border: none;
   color: var(--primary-color);
