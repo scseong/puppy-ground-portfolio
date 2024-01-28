@@ -24,8 +24,10 @@ const Mungstagram = () => {
 
   return (
     <Main>
-      <h2>멍스타그램</h2>
-      <Link href="/mungstagram/create">등록하기</Link>
+      <div className={styles.header}>
+        <h2>멍스타그램</h2>
+        <Link href="/mungstagram/create">등록하기</Link>
+      </div>
       <section className={styles.mungstagram}>
         <div className={styles.mungstaList}>
           {posts &&
@@ -38,30 +40,32 @@ const Mungstagram = () => {
                         <Image
                           src={`${post.profiles!.avatar_url}`}
                           alt="avatar image"
-                          width="30"
-                          height="30"
+                          width="40"
+                          height="40"
                           priority
                         />
                         <span>{post.profiles!.user_name}</span>
                       </div>
-                      <div>
+                      {/* TODO: 추가 작업 버튼 */}
+                      {/* <div>
                         <IoIosMore />
-                      </div>
+                      </div> */}
                     </div>
                     <div className={styles.images}>
                       <Image
                         src={`${post.photo_url[0]}`}
-                        alt=""
+                        alt="게시글 이미지"
                         width="270"
                         height="270"
                         priority
                       />
-                      <span>
+                      {/*  TODO: 좋아요 */}
+                      {/* <span>
                         <GoHeart />
-                      </span>
+                      </span> */}
                     </div>
                     <div className={styles.info}>
-                      <h3>제목제목</h3>
+                      <h3>{post.title}</h3>
                       <div>
                         <ul>{post.tags && post.tags.map((tag) => <li key={tag}>#{tag}</li>)}</ul>
                       </div>

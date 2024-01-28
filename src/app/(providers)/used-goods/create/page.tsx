@@ -1,5 +1,5 @@
 import PrivateRouteWrapper from '@/shared/PrivateRouteWrapper';
-import CreateForm from './CreateForm';
+import CreateForm from './_components/CreateForm';
 
 const Page = () => {
   return (

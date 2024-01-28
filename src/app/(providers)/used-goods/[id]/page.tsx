@@ -163,7 +163,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
       <section className={styles.top}>
         <div className={styles.product}>
           <div className={styles.imageContainer}>
-            <SlideImage images={photo_url} />
+            <SlideImage images={photo_url} sizes={{ width: '400px', height: '400px' }} />
           </div>
           <div className={styles.details}>
             <div>
@@ -197,7 +197,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                 isChatRoomOpen={true}
                 list={chatListData}
               />
-              <WishButton usedItemId={params.id} />
+              <WishButton usedItemId={params.id} title={title} />
             </div>
           </div>
         </div>
