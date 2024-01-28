@@ -38,3 +38,8 @@ export const addAlertMessageByIdAndTarget = async ({
 export const updateAlertMessageStatus = async (id: string) => {
   return await supabase.from('alert_message').update({ status: true }).eq('id', id);
 };
+
+// 채팅 아이콘 클릭 시 읽음상태로 만들기
+export const updateChatAlertMessageStatus = async (type: string) => {
+  await supabase.from('alert_message').update({ status: true }).eq('type', type);
+};

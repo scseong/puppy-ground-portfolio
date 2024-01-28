@@ -21,10 +21,12 @@ import styles from './page.module.scss';
 import WishButton from '../_components/WishButton';
 import { getUsedGoodDetail } from '@/apis/goods';
 import { Tables } from '@/shared/supabase/types/supabase';
+import { useAlertMessage } from '@/hooks/useAlertMessage';
 
 const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const queryClient = useQueryClient();
   const user = useAuth((state) => state.user);
+  const { addAlertMessage } = useAlertMessage();
 
   const { isLoading, isError, data } = useQuery({
     queryKey: ['used-item', params.id],
@@ -132,6 +134,14 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
         other_user: data?.user_id
       });
       if (!chat) return;
+      if (data?.user_id !== user?.id) {
+        addAlertMessage({
+          type: 'chat',
+          message: `등록하신 상품 [${data?.title}] 에 새로운 채팅이 도착했습니다 `,
+          userId: data!.user_id,
+          targetId: +chat.id
+        });
+      }
       setChatListData(chat);
       setModalIsOpen(true);
       setUserChatList(true);
