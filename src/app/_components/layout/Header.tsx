@@ -11,7 +11,6 @@ import useAuth from '@/hooks/useAuth';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getChatContent } from '@/apis/chat/chat';
 import Loading from './loading/Loading';
-import { deleteCookie } from 'nextjs-cookie';
 import Logo from '../../../../public/images/logo.png';
 import { GoBell } from 'react-icons/go';
 import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
@@ -36,9 +35,12 @@ const Header = () => {
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
+      console.log('useEffect', event, session);
       if (session) {
+        console.log('유저정보 들어옴');
         setUser(session.user);
       } else {
+        console.log('유저정보 널');
         setUser(null);
       }
 
@@ -52,8 +54,8 @@ const Header = () => {
     const { error } = await supabase.auth.signOut();
     if (!error) {
       successTopRight({ message: '로그아웃 되었습니다.' });
-      deleteCookie('access_token');
       setIsVisible(false);
+      setUser(null);
       router.push('/');
     }
     if (error) {
