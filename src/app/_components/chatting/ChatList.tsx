@@ -18,6 +18,7 @@ import UsedItemData from './UsedItemData';
 import Swal from 'sweetalert2';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
+import { useAlertMessage } from '@/hooks/useAlertMessage';
 
 type ModalProps = {
   isOpen: boolean;
@@ -35,6 +36,7 @@ type ChatListWithDate = {
 const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat }: ModalProps) => {
   // 유저 정보
   const user = useAuth((state) => state.user);
+  const { fetchAlertMessage } = useAlertMessage();
 
   const [isChatOpen, setIsChatOpen] = useState<boolean>(isChatRoomOpen);
   //전체 채팅내용
@@ -47,11 +49,13 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
   const [usedItem, setUsedItem] = useState<Tables<'used_item'>>();
 
   const chatListRef = useRef<HTMLDivElement | null>(null);
+  const chatAlert = fetchAlertMessage?.data?.filter((item) => item.type === 'chat');
   const router = useRouter();
 
   const {
     isError,
     isLoading,
+    refetch,
     data: getChatListData
   } = useQuery({
     queryKey: ['chatRoom'],
@@ -71,6 +75,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
 
   //채팅나가기
   const clickOutChatRoom = ({ userId, chatListId }: { userId: string; chatListId: number }) => {
+    closeModal();
     Swal.fire({
       title: '방을 나가시겠습니까?',
       text: '대화한 내용이 모두 사라지고 대화를 다시 걸 수도 없습니다',
@@ -185,6 +190,10 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
   if (isError) return <div>오류가 발생하였습니다...</div>;
 
   if (!user) return;
+  if (list || chatAlert) {
+    queryClient.invalidateQueries({ queryKey: ['chatRoom'] }); // 쿼리를 무효화하고
+    refetch();
+  }
 
   const chatListwithDate = makeSection(chatItem);
 
