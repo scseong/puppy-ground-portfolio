@@ -9,6 +9,7 @@ import styles from './profile.module.scss';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
 import { CiCamera } from 'react-icons/ci';
+import defaultImg from '../../../../../public/images/my_page_default.svg';
 
 const Profile = () => {
   const { data: getProfileData } = useQuery({
@@ -97,7 +98,7 @@ const Profile = () => {
                 <Image
                   width={150}
                   height={150}
-                  src={profileImg! || profile?.avatar_url!}
+                  src={defaultImg ?? profile?.avatar_url}
                   alt="유저 프로필"
                 />
                 <label htmlFor="input-file">
@@ -136,7 +137,7 @@ const Profile = () => {
                   width={150}
                   height={150}
                   style={{ border: 'none' }}
-                  src={profile?.avatar_url || ''}
+                  src={defaultImg ?? profile?.avatar_url}
                 />
               </div>
               <div className={styles.userName}>{profile?.user_name}</div>
