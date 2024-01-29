@@ -113,7 +113,7 @@ const StrayDogs = () => {
           </div>
           <div className={styles.filterContent}>
             <p>지역</p>
-            <div>
+            <div className={styles.region}>
               <select name="지역" className={styles.selectCity} onChange={cityChangeHandler}>
                 {regionList.map((region, index) => {
                   return <option key={index}>{region.city}</option>;

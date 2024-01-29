@@ -24,12 +24,12 @@
 
 .filterContent {
   flex-direction: column;
-  div {
+  .region {
     display: flex;
     align-items: center;
   }
   p {
-    font-weight: bold;
+    font-family: Pretendard-Bold;
     font-size: 32px;
     margin-bottom: 30px;
   }
