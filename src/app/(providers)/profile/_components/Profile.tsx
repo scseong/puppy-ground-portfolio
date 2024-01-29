@@ -67,8 +67,6 @@ const Profile = () => {
     if (editUserName === getProfileData?.user_name && profileImg === getProfileData?.avatar_url) {
       return warnTopRight({ message: '변경된 사항이 없습니다!' });
     }
-    console.log(editUserName, getProfileData?.user_name);
-    console.log(profileImg, getProfileData?.avatar_url);
     let uploadUrl = profileImg!;
     try {
       if (imgFile) {
@@ -93,7 +91,7 @@ const Profile = () => {
       setEditProfile(!editProfile);
       successTopRight({ message: '프로필이 업데이트 되었습니다!', timeout: 2000 });
     } catch (error) {
-      if (error) errorTopRight({ message: '오류입니다' });
+      if (error) errorTopRight({ message: '오류입니다. 다시 시도해주세요!' });
     }
   };
 

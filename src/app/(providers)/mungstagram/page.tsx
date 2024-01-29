@@ -3,23 +3,16 @@
 import { Main } from '@/app/_components/layout';
 import Link from 'next/link';
 import Image from 'next/image';
-import { supabase } from '@/shared/supabase/supabase';
 import { useQuery } from '@tanstack/react-query';
 import styles from './page.module.scss';
 import { IoIosMore } from 'react-icons/io';
 import { GoHeartFill, GoHeart } from 'react-icons/go';
-
-const getPosts = async () => {
-  const { data } = await supabase
-    .from('mung_stagram')
-    .select('*, profiles (user_name, avatar_url)');
-  return data;
-};
+import { getMungstaPosts } from '@/apis/mung-stagram/action';
 
 const Mungstagram = () => {
   const { data: posts } = useQuery({
     queryKey: ['mungstagram'],
-    queryFn: getPosts
+    queryFn: getMungstaPosts
   });
 
   return (
