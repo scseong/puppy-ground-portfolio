@@ -10,12 +10,13 @@ import Link from 'next/link';
 import { useState } from 'react';
 import Loading from '@/app/_components/layout/loading/Loading';
 import regionList from '../../../data/regionList.json';
-import { IoSearch } from 'react-icons/io5';
+import { CiSearch } from 'react-icons/ci';
 import Pagination from '@/app/_components/pagination/Pagination';
 import { ko } from 'date-fns/locale';
 import dayjs from 'dayjs';
 import NoSearchValue from './_component/NoSearchValue';
 import { Main } from '@/app/_components/layout';
+import { IoSearch } from 'react-icons/io5';
 
 const StrayDogs = () => {
   const [startDate, setStartDate] = useState<Date | null>(new Date('2023-10-01'));
@@ -114,24 +115,26 @@ const StrayDogs = () => {
           </div>
           <div className={styles.filterContent}>
             <p>지역</p>
-            <select name="지역" className={styles.selectCity} onChange={cityChangeHandler}>
-              {regionList.map((region, index) => {
-                return <option key={index}>{region.city}</option>;
-              })}
-            </select>
-            <select
-              name="시/군/구"
-              className={styles.selectCity}
-              onChange={guChangeHandler}
-              value={selectGu}
-            >
-              {guList?.map((gu, index) => {
-                return <option key={index}>{gu}</option>;
-              })}
-            </select>
-            <button type="submit" className={styles.searchButton}>
-              <IoSearch />
-            </button>
+            <div>
+              <select name="지역" className={styles.selectCity} onChange={cityChangeHandler}>
+                {regionList.map((region, index) => {
+                  return <option key={index}>{region.city}</option>;
+                })}
+              </select>
+              <select
+                name="시/군/구"
+                className={styles.selectCity}
+                onChange={guChangeHandler}
+                value={selectGu}
+              >
+                {guList?.map((gu, index) => {
+                  return <option key={index}>{gu}</option>;
+                })}
+              </select>
+              <button className={styles.searchButton} type="submit">
+                <CiSearch size="1.2rem" />
+              </button>
+            </div>
           </div>
         </form>
         <div className={styles.gridContainer}>

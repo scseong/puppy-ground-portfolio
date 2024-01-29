@@ -5,14 +5,15 @@ export type SearchParams = {
   [key in SearchParamsKeys]?: string;
 };
 
-export const getUsedGoods = async (params: SearchParams) => {
+export const getUsedGoods = async (params: SearchParams, pageSize: number = 8) => {
   const { main, sub, query, page, soldout } = params;
   const ITEMS_PER_PAGE = 8;
 
   let queryFn = supabase
     .from('used_item')
     .select(
-      `id, created_at, title, price, address, sold_out, photo_url, used_item_wish ( count ), chat_list ( count )`
+      `id, created_at, title, price, address, sold_out, photo_url, used_item_wish ( count ), chat_list ( count )`,
+      { count: 'exact' }
     );
 
   if (main) queryFn = queryFn.eq('main_category_id', main);
@@ -29,9 +30,9 @@ export const getUsedGoods = async (params: SearchParams) => {
   }
   queryFn = queryFn.order('created_at', { ascending: false });
 
-  const { data } = await queryFn;
+  const { data, count } = await queryFn;
 
-  return data;
+  return {data, count};
 };
 
 export const usedGoodsKeys = {

@@ -6,6 +6,10 @@
   padding: 2rem 0;
 }
 
+.empty {
+  min-height: 40vh;
+}
+
 .pagination {
   width: 100%;
   display: flex;
@@ -24,5 +28,24 @@
     button {
       color: #0ac4b9;
     }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .wrapper {
+    padding: 2rem;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 820px) {
+  .wrapper {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .wrapper {
+    grid-template-columns: 1fr;
   }
 }

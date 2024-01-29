@@ -9,10 +9,11 @@ import {
   MapTypeControl,
   ZoomControl
 } from 'react-kakao-maps-sdk';
-import { IoIosCloseCircle } from 'react-icons/io';
-import { RiHomeSmile2Fill } from 'react-icons/ri';
 import { MdMyLocation } from 'react-icons/md';
 import { GiSittingDog } from 'react-icons/gi';
+import { RiCalendarCloseFill } from 'react-icons/ri';
+import { FaRegClock } from 'react-icons/fa';
+
 import { useToast } from '@/hooks/useToast';
 import { useFacilitiesQuery } from '@/hooks/useFacilitiesQuery';
 import NearFacilities from '@/app/_components/facilities/NearFacilities';
@@ -61,10 +62,6 @@ const Facilities = () => {
       latitude,
       longitude
     });
-  };
-
-  const markerClickHandler = () => {
-    setActiveMarkerId(null);
   };
 
   // 현재위치를 시작점으로 만들기
@@ -124,7 +121,8 @@ const Facilities = () => {
               <div key={place.id}>
                 <MapMarker
                   position={{ lat: place.latitude, lng: place.longitude }}
-                  onClick={() => setActiveMarkerId(place.id)}
+                  onMouseOver={() => setActiveMarkerId(place.id)}
+                  onMouseOut={() => setActiveMarkerId(null)}
                   image={{
                     // 마커이미지의 주소
                     src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
@@ -140,23 +138,20 @@ const Facilities = () => {
                     yAnchor={1}
                   >
                     <div className={styles.overlayWrap}>
-                      <div className={styles.placeName}>
-                        {place.facilities_name}
-                        <div className={styles.close} onClick={markerClickHandler} title="닫기">
-                          <IoIosCloseCircle />
-                        </div>
-                      </div>
+                      <div className={styles.placeName}>{place.facilities_name}</div>
                       <div className={styles.placeContent}>
                         <p>
                           <GiSittingDog />
                           &nbsp;{place.explanation}
                         </p>
-                        <a href={place.url} target="_blank" rel="noreferrer">
-                          <p className={styles.link}>
-                            <RiHomeSmile2Fill />
-                            &nbsp;홈페이지
-                          </p>
-                        </a>
+                        <p>
+                          <RiCalendarCloseFill />
+                          &nbsp;{place.holiday}
+                        </p>
+                        <p>
+                          <FaRegClock />
+                          &nbsp;{place.open_time}
+                        </p>
                       </div>
                     </div>
                   </CustomOverlayMap>

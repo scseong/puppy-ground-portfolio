@@ -231,9 +231,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
           </div>
         ) : (
           <div className={styles.container}>
-            <div className={styles.chatSearch}>
-              채팅 <FaMagnifyingGlass color={'#0AC4B9'} />
-            </div>
+            <div className={styles.chatSearch}>채팅</div>
             <ul className={styles.chatListScroll}>
               {getChatListData?.getChatListData?.map((chat) => {
                 return chat.user_id === user.id || chat.other_user === user.id ? (
