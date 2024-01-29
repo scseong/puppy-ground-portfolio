@@ -121,7 +121,6 @@ const List = () => {
       </div>
       <div className={styles.line}></div>
       <div className={styles.space}>
-        <div></div>
         {selectedTitle === Tab.used ? (
           <div className={styles.tab}>
             <button
@@ -153,9 +152,6 @@ const List = () => {
             </button>
           </div>
         )}
-        <div>
-          <button className={styles.alarm}>알림 설정</button>
-        </div>
       </div>
       <div className={styles.cardContainer}>
         {selectedTitle === Tab.used ? (
