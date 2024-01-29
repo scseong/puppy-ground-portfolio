@@ -59,7 +59,7 @@ const MungModal = ({ params }: PageProps) => {
 
   useEffect(() => {
     if (!isOpen) {
-      router.back();
+      router.push('/mungstagram');
     }
     return () => {
       setOpen(false);
@@ -81,6 +81,7 @@ const MungModal = ({ params }: PageProps) => {
       ariaHideApp={false}
       contentLabel="Modal"
       style={customStyle}
+      preventScroll
     >
       <section className={styles.mungstaDetail}>
         {prev && (

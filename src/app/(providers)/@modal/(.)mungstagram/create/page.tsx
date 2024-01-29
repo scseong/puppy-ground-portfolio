@@ -46,6 +46,10 @@ const MungModal = () => {
     if (e.key === 'Enter') {
       const { value: newTag } = e.currentTarget;
 
+      if (newTag.length > 6) {
+        return warnTopRight({ message: '6자 이내로 입력해주세요.' });
+      }
+
       if (newTag.trim()) {
         setInputForm((prev) => ({ ...prev, tags: [...prev.tags, newTag], inputValue: '' }));
       }
@@ -159,7 +163,7 @@ const MungModal = () => {
             autoFocus
           />
         </div>
-        <p className={styles.imageDescription}>* 이미지는 필수입니다 (최대 5장)</p>
+        <p className={styles.imageDescription}>* 이미지는 필수입니다 (최대 5장, 2MB 이하)</p>
         <div className={styles.imageBox}>
           {Array.from({ length: 5 }).map((_, index) => (
             <div key={index} className={styles.imageInput}>
@@ -203,7 +207,7 @@ const MungModal = () => {
             value={inputForm.inputValue}
             onKeyDown={handleKeyDown}
             onChange={handleFormChange}
-            placeholder="Enter 키를 통해 해시태그로 작성해주세요 (최대 5개)"
+            placeholder="해시태그를 입력하세요 (최대 5개, 각 해시태그는 6글자 이내 입력 후 Enter 키를 누르세요)"
             type="text"
           />
         </div>
