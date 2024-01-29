@@ -11,11 +11,10 @@ import useAuth from '@/hooks/useAuth';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getChatContent } from '@/apis/chat/chat';
 import Loading from './loading/Loading';
-import Logo from '../../../../public/images/logo.png';
 import { GoBell } from 'react-icons/go';
 import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
 import { RxHamburgerMenu } from 'react-icons/rx';
-import { RealtimeChannel } from '@supabase/supabase-js';
+import { RealtimeChannel, RealtimePostgresInsertPayload } from '@supabase/supabase-js';
 import { ALERT_MESSAGE_QUERY_LEY, useAlertMessage } from '@/hooks/useAlertMessage';
 import AlertMessageList from '../alertMessage/AlertMessageList';
 
@@ -58,7 +57,7 @@ const Header = () => {
       router.push('/');
     }
     if (error) {
-      errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
+      errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요' });
     }
   };
 
@@ -77,6 +76,23 @@ const Header = () => {
     return message.user_id === user?.id;
   });
 
+  const handleRecordInserted = (
+    payload: RealtimePostgresInsertPayload<{
+      [key: string]: any;
+    }>
+  ) => {
+    const message = payload.new.message;
+    alertBottomRight({ message });
+    queryClient.invalidateQueries({
+      queryKey: [ALERT_MESSAGE_QUERY_LEY]
+    });
+  };
+
+  const handleRecordDeleted = () => {
+    queryClient.invalidateQueries({
+      queryKey: [ALERT_MESSAGE_QUERY_LEY]
+    });
+  };
   // 알림메시지
   useEffect(() => {
     if (!user) return;
@@ -90,13 +106,17 @@ const Header = () => {
           table: 'alert_message',
           filter: `user_id=eq.${user.id}`
         },
-        (payload) => {
-          const message = payload.new.message;
-          alertBottomRight({ message, timeout: 2000 });
-          queryClient.invalidateQueries({
-            queryKey: [ALERT_MESSAGE_QUERY_LEY]
-          });
-        }
+        handleRecordInserted
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'DELETE',
+          schema: 'public',
+          table: 'alert_message',
+          filter: `user_id=eq.${user.id}`
+        },
+        handleRecordDeleted
       )
       .subscribe();
     return () => {
@@ -140,7 +160,6 @@ const Header = () => {
       <div className={styles.container}>
         <div className={styles.navbarBox}>
           <div className={styles.logoBox}>
-            <Image className={styles.logo} src={Logo} alt="logo" width={90} height={60} />
             <Link href="/" className={styles.logoText}>
               Puppy Ground
             </Link>
