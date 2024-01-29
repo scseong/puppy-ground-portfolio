@@ -32,9 +32,18 @@ const MungModal = () => {
   const { successTopRight, warnTopRight, errorTopRight } = useToast();
   const queryClient = useQueryClient();
 
-  // TODO: input validation
   const handleFormChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    // TODO: 알림 1개로 제한 or react-hook-form 고려
+    if (name.includes('title') && value.length > 14) {
+      return warnTopRight({ message: '14자 이내로 입력해주세요.' });
+    }
+
+    if (name.includes('content') && value.length > 50) {
+      return warnTopRight({ message: '50자 이내로 입력해주세요.' });
+    }
+
     setInputForm({ ...inputForm, [name]: value });
   };
 
@@ -46,7 +55,7 @@ const MungModal = () => {
     if (e.key === 'Enter') {
       const { value: newTag } = e.currentTarget;
 
-      if (newTag.length > 6) {
+      if (newTag.trim().length > 6) {
         return warnTopRight({ message: '6자 이내로 입력해주세요.' });
       }
 
@@ -159,7 +168,7 @@ const MungModal = () => {
             type="text"
             name="title"
             onChange={handleFormChange}
-            placeholder="제목 (최대 10자)"
+            placeholder="제목을 입력하세요 (최대 14자)"
             autoFocus
           />
         </div>
