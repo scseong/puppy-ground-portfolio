@@ -33,7 +33,6 @@ const Header = () => {
   const { fetchAlertMessage, updateChatAlertMessage } = useAlertMessage();
 
   const pathName = usePathname();
-  console.log(pathName);
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
