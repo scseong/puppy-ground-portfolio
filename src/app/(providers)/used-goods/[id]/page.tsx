@@ -26,7 +26,9 @@ import { useAlertMessage } from '@/hooks/useAlertMessage';
 import Loading from '@/app/_components/layout/loading/Loading';
 import Link from 'next/link';
 
+
 const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
+
   const [showEditToggle, setShowEditToggle] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const user = useAuth((state) => state.user);
