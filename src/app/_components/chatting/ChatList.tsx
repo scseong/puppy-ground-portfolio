@@ -238,17 +238,23 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
               </span>
             </div>
             <ul className={styles.chatListScroll}>
-              {getChatListData?.getChatListData?.map((chat) => {
-                return chat.user_id === user.id || chat.other_user === user.id ? (
-                  <ChatListContent
-                    key={chat.id}
-                    chat={chat}
-                    clickChatRoom={clickChatRoom}
-                    userProfile={user.id}
-                    clickOutChatRoom={clickOutChatRoom}
-                  />
-                ) : null;
-              })}
+              {getChatListData?.getChatListData?.length === 0 ? (
+                <div className={styles.noChatting}>대화 중인 채팅방이 없습니다!</div>
+              ) : (
+                <>
+                  {getChatListData?.getChatListData?.map((chat) => {
+                    return chat.user_id === user.id || chat.other_user === user.id ? (
+                      <ChatListContent
+                        key={chat.id}
+                        chat={chat}
+                        clickChatRoom={clickChatRoom}
+                        userProfile={user.id}
+                        clickOutChatRoom={clickOutChatRoom}
+                      />
+                    ) : null;
+                  })}
+                </>
+              )}
             </ul>
           </div>
         )}
