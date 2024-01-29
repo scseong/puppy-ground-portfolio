@@ -122,6 +122,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const [userChatList, setUserChatList] = useState(false);
 
   const clickOpenChat = async () => {
+
     const list = chatList?.getChatListData?.find((chat) => chat?.post_id === Number(id));
 
     if (data?.user_id === user?.id)
