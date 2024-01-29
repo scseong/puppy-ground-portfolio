@@ -237,7 +237,7 @@ const SignUp = () => {
         </button>
         <Link href="/auth/login" className={styles.moveLogin}>
           이미 회원이신가요?
-          <span className={styles.moveLogin}>로그인 하러가기</span>
+          <span className={styles.moveLogin}> 로그인 하러가기</span>
         </Link>
       </form>
     </div>
