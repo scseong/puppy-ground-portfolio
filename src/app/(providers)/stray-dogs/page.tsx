@@ -81,7 +81,7 @@ const StrayDogs = () => {
   return (
     <div className={styles.container}>
       <div className={styles.contentContainer}>
-        <form className={styles.filterWrap}>
+        <form onSubmit={filterList} className={styles.filterWrap}>
           <div className={styles.filterContent}>
             <p>기간</p>
             <div className={styles.calender}>
