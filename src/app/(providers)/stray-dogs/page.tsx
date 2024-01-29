@@ -81,7 +81,7 @@ const StrayDogs = () => {
   return (
     <div className={styles.container}>
       <div className={styles.contentContainer}>
-        <form className={styles.filterWrap}>
+        <form onSubmit={filterList} className={styles.filterWrap}>
           <div className={styles.filterContent}>
             <p>기간</p>
             <div className={styles.calender}>
@@ -113,7 +113,7 @@ const StrayDogs = () => {
           </div>
           <div className={styles.filterContent}>
             <p>지역</p>
-            <div>
+            <div className={styles.region}>
               <select name="지역" className={styles.selectCity} onChange={cityChangeHandler}>
                 {regionList.map((region, index) => {
                   return <option key={index}>{region.city}</option>;

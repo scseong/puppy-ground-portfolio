@@ -34,7 +34,7 @@
     p {
       color: red;
       margin-top: 10px;
-      font-size: 12px;
+      font-size: 11px;
       white-space: normal;
     }
   }
@@ -42,7 +42,7 @@
     width: 200px;
     height: 50px;
     border-radius: 5px;
-    border: 1px solid #979797;
+    border: 0.7px solid #979797;
     font-size: 15px;
     font-family: pretendard-regular;
     padding-left: 15px;
@@ -51,7 +51,7 @@
     width: 300px;
     height: 50px;
     border-radius: 5px;
-    border: 0.874px solid #979797;
+    border: 0.7px solid #979797;
     font-size: 15px;
     font-family: pretendard-regular;
     padding-left: 15px;
@@ -96,9 +96,9 @@
 .moveLogin {
   cursor: pointer;
   color: #979797;
-  font-weight: 500;
+  font-family: pretendard-light;
   span {
     color: #000000;
-    font-weight: 700;
+    font-family: pretendard-medium;
   }
 }

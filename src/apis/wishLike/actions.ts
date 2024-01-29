@@ -1,4 +1,4 @@
-import { Tables, TablesInsert } from '@/shared/supabase/types/supabase';
+import { TablesInsert } from '@/shared/supabase/types/supabase';
 import { supabase } from '@/shared/supabase/supabase';
 
 export const addUsedGoodWish = async (
@@ -42,4 +42,15 @@ export const removeMungStagramLike = async (
     .delete()
     .eq('user_id', removeMungStagramLike.user_id)
     .eq('target_id', removeMungStagramLike.target_id);
+};
+
+export const getMungStagramLike = async (user_id: string) => {
+  const { data } = await supabase
+    .from('mung_stagram_like')
+    .select(
+      `*, mung_stagram ( id, photo_url, title, content, tags, profiles ( user_name, avatar_url ))`
+    )
+    .eq('user_id', user_id);
+
+  return data;
 };
