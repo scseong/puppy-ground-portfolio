@@ -32,10 +32,8 @@ const LoginPage = () => {
       password: data.password
     });
     if (error) {
-      console.log(error.message === 'Invalid login credentials');
       errorTopRight({
         message: '아이디 또는 비밀번호가 일치하지 않습니다.',
-        timeout: 1500
       });
     }
     if (emailData.user !== null) {
