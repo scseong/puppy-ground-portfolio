@@ -45,7 +45,12 @@
 .chatSearch {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin: 5px 10px;
+
+  & > span {
+    cursor: pointer;
+  }
 }
 .date {
   display: flex;

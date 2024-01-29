@@ -1,5 +1,5 @@
 'use client';
-import { FaMagnifyingGlass } from 'react-icons/fa6';
+
 import ChatModal from './ChatModal';
 import { supabase } from '@/shared/supabase/supabase';
 import { Tables } from '@/shared/supabase/types/supabase';
@@ -11,7 +11,7 @@ import styles from './chatList.module.scss';
 import Chat from './Chat';
 import ChatInput from './ChatInput';
 import Loading from '../layout/loading/Loading';
-import { IoIosArrowBack } from 'react-icons/io';
+import { IoIosArrowBack, IoMdCloseCircleOutline } from 'react-icons/io';
 import ChatListContent from './ChatListContent';
 import { useRouter } from 'next/navigation';
 import UsedItemData from './UsedItemData';
@@ -231,7 +231,12 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
           </div>
         ) : (
           <div className={styles.container}>
-            <div className={styles.chatSearch}>채팅</div>
+            <div className={styles.chatSearch}>
+              채팅
+              <span onClick={closeModal}>
+                <IoMdCloseCircleOutline size={22} color={'#0AC4B9'} />
+              </span>
+            </div>
             <ul className={styles.chatListScroll}>
               {getChatListData?.getChatListData?.map((chat) => {
                 return chat.user_id === user.id || chat.other_user === user.id ? (
