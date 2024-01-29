@@ -89,7 +89,7 @@ const Profile = () => {
       });
 
       setEditProfile(!editProfile);
-      successTopRight({ message: '프로필이 업데이트 되었습니다!', timeout: 2000 });
+      successTopRight({ message: '프로필이 업데이트 되었습니다!' });
     } catch (error) {
       if (error) errorTopRight({ message: '오류입니다. 다시 시도해주세요!' });
     }
