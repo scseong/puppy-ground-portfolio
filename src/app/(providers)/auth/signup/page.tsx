@@ -122,8 +122,11 @@ const SignUp = () => {
         }
       }
     });
-    if (error) {
+    if (error?.message !== 'User already registered') {
       errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요' });
+    }
+    if (error?.message === 'User already registered') {
+      errorTopRight({ message: '이미 존재하는 유저입니다.' });
     }
     if (loginData.user !== null) {
       successTopRight({ message: '회원가입 되었습니다' });
