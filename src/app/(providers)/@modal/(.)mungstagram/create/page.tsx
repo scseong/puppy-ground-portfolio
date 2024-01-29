@@ -17,15 +17,15 @@ import { useQueryClient } from '@tanstack/react-query';
 import { customStyle } from '@/shared/modal';
 
 type InputForm = TablesInsert<'mung_stagram'> & { inputValue: string };
-
 const MungModal = () => {
-  const user = useAuth(({ user }) => user);
+  const user = useAuth((state) => state.user);
+  // TODO: user check
   const [inputForm, setInputForm] = useState<InputForm>({
     title: '',
     tags: [],
     content: '',
     inputValue: '',
-    user_id: user!.id ?? '',
+    user_id: (user && user.id) || '',
     photo_url: []
   });
   const router = useRouter();

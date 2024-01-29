@@ -17,13 +17,14 @@ import { useQueryClient } from '@tanstack/react-query';
 type InputForm = TablesInsert<'mung_stagram'> & { inputValue: string };
 
 const CreateMungsta = () => {
-  const user = useAuth(({ user }) => user);
+  const user = useAuth((state) => state.user);
+  // TODO: user check
   const [inputForm, setInputForm] = useState<InputForm>({
     title: '',
     tags: [],
     content: '',
     inputValue: '',
-    user_id: user!.id ?? '',
+    user_id: (user && user.id) || '',
     photo_url: []
   });
   const router = useRouter();
