@@ -1,28 +1,16 @@
-.header {
-  margin-bottom: 2rem;
+.container {
+  height: 100%;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  h2 {
-    font-size: 2rem;
-    font-family: Pretendard-Bold;
-  }
-  a {
-    padding: 1rem 2rem;
-    background-color: var(--primary-color);
-    border: none;
-    border-radius: 13px;
-    font-size: 1rem;
-    line-height: 1.2rem;
-    color: white;
-    transition: all 0.2s ease-in-out;
-  }
+  justify-content: flex-start;
+  gap: 2rem;
 }
 
 .mungstaList {
   padding: 2rem 0;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
 }
 
@@ -67,8 +55,6 @@
   border-radius: 5px;
 
   img {
-    width: 100%;
-    height: 100%;
     aspect-ratio: 1 / 1;
     border-radius: 1rem;
   }
@@ -86,6 +72,8 @@
 }
 
 .info {
+  width: 250px;
+
   h3 {
     padding: 1rem 0;
     font-size: 1.4rem;
@@ -95,6 +83,8 @@
 
   & > div {
     margin-bottom: 1rem;
+    width: 300px;
+    // 태그가 길어지면 전체 크기가 커지는 문제가 있어서 회의 후 수정 예정(width: 250px;)
     ul {
       max-height: 72px;
       display: flex;

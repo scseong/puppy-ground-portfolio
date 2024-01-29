@@ -19,23 +19,28 @@
   align-items: center;
   justify-content: space-between;
   height: 130px;
-  margin: 100px auto 50px auto;
+  margin: 50px auto;
 }
 
 .filterContent {
   flex-direction: column;
+  .region {
+    display: flex;
+    align-items: center;
+  }
   p {
-    font-family: pretendard-bold;
+    font-family: Pretendard-Bold;
     font-size: 32px;
     margin-bottom: 30px;
   }
 }
+
 .searchButton {
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
+  background-color: #f7f9f9;
   border: 1px solid #979797;
   border-radius: 5px;
-  background-color: #e6e8e8;
 }
 
 .calender {

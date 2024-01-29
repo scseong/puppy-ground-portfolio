@@ -7,8 +7,7 @@ import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
 import PublicRouteWrapper from '@/shared/PublicRouteWrapper';
 import Link from 'next/link';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { Database } from '@/shared/supabase/types/supabase';
+import { supabase } from '@/shared/supabase/supabase';
 
 export type Inputs = {
   email: string;
@@ -16,7 +15,6 @@ export type Inputs = {
 };
 
 const LoginPage = () => {
-  const supabase = createClientComponentClient<Database>();
   const { errorTopRight, successTopRight } = useToast();
   const setUser = useAuth((state) => state.setUser);
   const {
@@ -34,10 +32,8 @@ const LoginPage = () => {
       password: data.password
     });
     if (error) {
-      console.log(error.message === 'Invalid login credentials');
       errorTopRight({
         message: '아이디 또는 비밀번호가 일치하지 않습니다.',
-        timeout: 1500
       });
     }
     if (emailData.user !== null) {
@@ -58,7 +54,7 @@ const LoginPage = () => {
       }
     });
     if (error) {
-      errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
+      errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요' });
     }
   };
 
@@ -75,7 +71,7 @@ const LoginPage = () => {
     });
 
     if (error) {
-      errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
+      errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요' });
     }
   };
 

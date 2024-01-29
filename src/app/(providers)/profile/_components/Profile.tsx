@@ -11,9 +11,12 @@ import useAuth from '@/hooks/useAuth';
 import { CiCamera } from 'react-icons/ci';
 
 const Profile = () => {
-  const { data: getProfileData } = useQuery({
+  const user = useAuth((state) => state.user);
+
+  const { data: getProfileData, isLoading } = useQuery({
     queryKey: ['getProfile'],
-    queryFn: getProfile,
+    queryFn: () => getProfile(user!.id),
+    enabled: !!user,
     refetchOnWindowFocus: false
   });
 
@@ -22,18 +25,13 @@ const Profile = () => {
     mutationFn: updateUserProfile,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['getProfile'] });
-      setEditProfile(!editProfile);
-      successTopRight({ message: '프로필이 업데이트 되었습니다!', timeout: 2000 });
     }
   });
 
-  const user = useAuth((state) => state.user);
-  const profile = getProfileData?.find((pro) => pro.id === user?.id);
-
   const [editProfile, setEditProfile] = useState(false);
-  const [profileImg, setProfileImg] = useState(profile?.avatar_url);
+  const [profileImg, setProfileImg] = useState(getProfileData?.avatar_url);
   const [imgFile, setImgFile] = useState<File>();
-  const [editUserName, setEditUserName] = useState('');
+  const [editUserName, setEditUserName] = useState(getProfileData?.user_name ?? '');
 
   const { successTopRight, errorTopRight, warnTopRight } = useToast();
 
@@ -41,7 +39,7 @@ const Profile = () => {
     if (e.target.files[0]) {
       setImgFile(e.target!.files[0]);
     } else {
-      setProfileImg(profile?.avatar_url!);
+      setProfileImg(getProfileData?.avatar_url!);
       return;
     }
     const reader = new FileReader();
@@ -56,12 +54,19 @@ const Profile = () => {
   const onChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) =>
     setEditUserName(e.target.value);
 
+  const clickEditProfile = () => {
+    setEditUserName(getProfileData?.user_name!);
+    setProfileImg(getProfileData?.avatar_url);
+    setEditProfile(!editProfile);
+  };
+
   const updateProfile = async () => {
     if (editUserName.length > 8)
       return warnTopRight({ message: '닉네임은 8자 이하로 입력해주세요!' });
 
-    if (editUserName === '') return warnTopRight({ message: '닉네임을 입력해주세요!' });
-
+    if (editUserName === getProfileData?.user_name && profileImg === getProfileData?.avatar_url) {
+      return warnTopRight({ message: '변경된 사항이 없습니다!' });
+    }
     let uploadUrl = profileImg!;
     try {
       if (imgFile) {
@@ -82,10 +87,16 @@ const Profile = () => {
         id: user?.id!,
         avatar_url: uploadUrl
       });
+
+      setEditProfile(!editProfile);
+      successTopRight({ message: '프로필이 업데이트 되었습니다!' });
     } catch (error) {
-      if (error) errorTopRight({ message: '오류입니다' });
+      if (error) errorTopRight({ message: '오류입니다. 다시 시도해주세요!' });
     }
   };
+
+  if (isLoading) return;
+  if (!user) return;
 
   return (
     <div className={styles.container}>
@@ -97,14 +108,14 @@ const Profile = () => {
                 <Image
                   width={150}
                   height={150}
-                  src={profileImg! || profile?.avatar_url!}
+                  src={profileImg! || getProfileData?.avatar_url!}
                   alt="유저 프로필"
                 />
                 <label htmlFor="input-file">
                   <CiCamera size={27} />
                 </label>
               </div>
-              <div className={styles.userName}>{profile?.user_name}</div>
+              <div className={styles.userName}>{getProfileData?.user_name}</div>
               <input
                 type="file"
                 id="input-file"
@@ -136,13 +147,13 @@ const Profile = () => {
                   width={150}
                   height={150}
                   style={{ border: 'none' }}
-                  src={profile?.avatar_url || ''}
+                  src={getProfileData?.avatar_url || ''}
                 />
               </div>
-              <div className={styles.userName}>{profile?.user_name}</div>
+              <div className={styles.userName}>{getProfileData?.user_name}</div>
             </div>
             <div className={styles.top}>
-              <button className={styles.edit} onClick={() => setEditProfile((state) => !state)}>
+              <button className={styles.edit} onClick={clickEditProfile}>
                 프로필 수정
               </button>
             </div>

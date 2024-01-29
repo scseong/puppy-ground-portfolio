@@ -17,24 +17,33 @@ import { useQueryClient } from '@tanstack/react-query';
 import { customStyle } from '@/shared/modal';
 
 type InputForm = TablesInsert<'mung_stagram'> & { inputValue: string };
-
 const MungModal = () => {
-  const user = useAuth(({ user }) => user);
+  const user = useAuth((state) => state.user);
+  // TODO: user check
   const [inputForm, setInputForm] = useState<InputForm>({
     title: '',
     tags: [],
     content: '',
     inputValue: '',
-    user_id: user!.id ?? '',
+    user_id: (user && user.id) || '',
     photo_url: []
   });
   const router = useRouter();
   const { successTopRight, warnTopRight, errorTopRight } = useToast();
   const queryClient = useQueryClient();
 
-  // TODO: input validation
   const handleFormChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    // TODO: 알림 1개로 제한 or react-hook-form 고려
+    if (name.includes('title') && value.length > 14) {
+      return warnTopRight({ message: '14자 이내로 입력해주세요.' });
+    }
+
+    if (name.includes('content') && value.length > 50) {
+      return warnTopRight({ message: '50자 이내로 입력해주세요.' });
+    }
+
     setInputForm({ ...inputForm, [name]: value });
   };
 
@@ -45,6 +54,10 @@ const MungModal = () => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       const { value: newTag } = e.currentTarget;
+
+      if (newTag.trim().length > 6) {
+        return warnTopRight({ message: '6자 이내로 입력해주세요.' });
+      }
 
       if (newTag.trim()) {
         setInputForm((prev) => ({ ...prev, tags: [...prev.tags, newTag], inputValue: '' }));
@@ -155,11 +168,11 @@ const MungModal = () => {
             type="text"
             name="title"
             onChange={handleFormChange}
-            placeholder="제목 (최대 10자)"
+            placeholder="제목을 입력하세요 (최대 14자)"
             autoFocus
           />
         </div>
-        <p className={styles.imageDescription}>* 이미지는 필수입니다 (최대 5장)</p>
+        <p className={styles.imageDescription}>* 이미지는 필수입니다 (최대 5장, 2MB 이하)</p>
         <div className={styles.imageBox}>
           {Array.from({ length: 5 }).map((_, index) => (
             <div key={index} className={styles.imageInput}>
@@ -203,7 +216,7 @@ const MungModal = () => {
             value={inputForm.inputValue}
             onKeyDown={handleKeyDown}
             onChange={handleFormChange}
-            placeholder="Enter 키를 통해 해시태그로 작성해주세요 (최대 5개)"
+            placeholder="해시태그를 입력하세요 (최대 5개, 각 해시태그는 6글자 이내 입력 후 Enter 키를 누르세요)"
             type="text"
           />
         </div>

@@ -21,9 +21,7 @@ export type Inputs = {
 
 const SignUp = () => {
   const setUser = useAuth((state) => state.setUser);
-  const [previewImg, setPreviewImg] = useState<string>(
-    'https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png'
-  );
+  const [previewImg, setPreviewImg] = useState<string>(defaultAvatar.src!);
   const { successTopRight, errorTopRight } = useToast();
   const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
   const [isNicknameValid, setIsNicknameValid] = useState<boolean>(false);
@@ -103,7 +101,7 @@ const SignUp = () => {
       return false;
     }
 
-    let imgUrl = 'https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png';
+    let imgUrl = defaultAvatar.src;
     if (data.image[0]) {
       const { data: imgData, error } = await supabase.storage
         .from('profile_avatar')
@@ -237,7 +235,7 @@ const SignUp = () => {
         </button>
         <Link href="/auth/login" className={styles.moveLogin}>
           이미 회원이신가요?
-          <span className={styles.moveLogin}>로그인 하러가기</span>
+          <span className={styles.moveLogin}> 로그인 하러가기</span>
         </Link>
       </form>
     </div>
