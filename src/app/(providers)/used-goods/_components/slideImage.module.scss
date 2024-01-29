@@ -1,5 +1,10 @@
 .wrapper {
   position: relative;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .directionBtn {
@@ -37,5 +42,11 @@
     color: white;
     opacity: 0.5;
     cursor: pointer;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .wrapper {
+    width: 100% !important;
   }
 }

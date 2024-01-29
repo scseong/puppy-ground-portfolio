@@ -76,16 +76,10 @@ const SlideImage = ({ images, sizes }: { images: string[]; sizes?: React.CSSProp
                   paginate(-1);
                 }
               }}
-              style={sizes}
             />
           )}
           {images.length === 1 && (
-            <motion.img
-              key={imageIndex}
-              src={images[imageIndex]}
-              alt={images[imageIndex]}
-              style={sizes}
-            />
+            <motion.img key={imageIndex} src={images[imageIndex]} alt={images[imageIndex]} />
           )}
         </AnimatePresence>
         {/* </motion.div> */}
@@ -100,7 +94,7 @@ const SlideImage = ({ images, sizes }: { images: string[]; sizes?: React.CSSProp
             <div className={styles.indicator}>
               {images.map((_, idx) => (
                 <motion.div key={idx} onClick={() => setPage([idx, 0])}>
-                  {imageIndex === idx ? <GoDotFill  /> : <GoDot />}
+                  {imageIndex === idx ? <GoDotFill /> : <GoDot />}
                 </motion.div>
               ))}
             </div>
