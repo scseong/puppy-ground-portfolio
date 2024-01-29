@@ -49,7 +49,7 @@ const Facilities = () => {
           setCurrentLocationMarker(true);
         },
         () => {
-          warnTopCenter({ message: '현재 위치를 찾지 못하였습니다 🥲', timeout: 2000 });
+          warnTopCenter({ message: '현재 위치를 찾지 못하였습니다 🥲' });
           setCurrentLocationMarker(false);
         }
       );
