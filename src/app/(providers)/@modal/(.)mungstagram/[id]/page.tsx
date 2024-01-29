@@ -59,7 +59,7 @@ const MungModal = ({ params }: PageProps) => {
 
   useEffect(() => {
     if (!isOpen) {
-      router.push('/mungstagram');
+      router.back();
     }
     return () => {
       setOpen(false);
