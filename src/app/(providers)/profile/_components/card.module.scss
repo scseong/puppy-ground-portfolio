@@ -1,0 +1,132 @@
+.container {
+  width: 250px;
+  height: 500px;
+  margin-top: 1.2rem;
+}
+
+.image {
+  border-radius: 5px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 250px;
+  margin-top: 1rem;
+
+  h3 {
+    width: 250px;
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    font-weight: bold;
+    line-height: 2rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-family: Pretendard-Bold;
+  }
+}
+
+.detail {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 0.8rem;
+
+  span {
+    font-size: 1.2rem;
+    line-height: 1.8rem;
+    font-family: Pretendard-Bold;
+  }
+
+  time {
+    color: var(--card-detail-text-color);
+    font-family: Pretendard-Regular;
+  }
+}
+
+.address {
+  margin-bottom: 0.8rem;
+  color: var(--card-detail-text-color);
+  display: flex;
+
+  svg {
+    margin-right: 4px;
+  }
+
+  address {
+    display: inline-block;
+    width: 90%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-family: Pretendard-Regular;
+  }
+}
+
+.divide {
+  margin: 0 4px;
+  line-height: 1rem;
+
+  &:after {
+    content: '|';
+    font-size: 0.8rem;
+    vertical-align: top;
+  }
+}
+
+.count {
+  font-family: Pretendard-Bold;
+  span {
+    font-weight: 600;
+    display: inline-block;
+  }
+}
+
+.goodsImage {
+  position: relative;
+  height: fit-content;
+  overflow: hidden;
+  img {
+    width: 100%;
+    height: unset;
+    object-fit: cover;
+    aspect-ratio: 10 / 9;
+    border-radius: 5px;
+  }
+}
+
+.overlay {
+  &:before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  &:after {
+    content: '판매완료';
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+    height: 70px;
+    top: calc(50% - 35px);
+    left: calc(50% - 35px);
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 100%;
+    text-align: center;
+    font-size: 0.8em;
+    font-weight: bold;
+  }
+}

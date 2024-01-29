@@ -1,40 +1,38 @@
 'use client';
 
+import { BsThreeDots } from 'react-icons/bs';
+import { getChatRoomList, makeChatList } from '@/apis/chat/chat';
 import { deleteUsedGood, updateUsedGood } from '@/apis/used-goods/actions';
+import ChatList from '@/app/_components/chatting/ChatList';
 import ClipBoardButton from '@/app/_components/shareButton/ClipBoardButton';
 import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
+import useAuth from '@/hooks/useAuth';
+import { useToast } from '@/hooks/useToast';
 import { supabase } from '@/shared/supabase/supabase';
-import styles from './page.module.scss';
+import { addCommasToNumber } from '@/utils/format';
+import { getformattedDate } from '@/utils/time';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
-import { getCountFromTable } from '@/utils/table';
-import { getformattedDate } from '@/utils/time';
+import { useParams, useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import { SlideImage, TradeLocationMap } from '../_components';
-import ChatList from '@/app/_components/chatting/ChatList';
-import { useState } from 'react';
-import { getChatList, makeChatList } from '@/apis/chat/chat';
-import useAuth from '@/hooks/useAuth';
-import { useToast } from '@/hooks/useToast';
-import { useRouter } from 'next/navigation';
-import { useParams } from 'next/navigation';
-import { addCommasToNumber } from '@/utils/format';
+import styles from './page.module.scss';
+import WishButton from '../_components/WishButton';
+import { getUsedGoodDetail } from '@/apis/goods';
+import { Tables } from '@/shared/supabase/types/supabase';
+import { useAlertMessage } from '@/hooks/useAlertMessage';
+import Loading from '@/app/_components/layout/loading/Loading';
+import Link from 'next/link';
 
-const getUsedGoodDetail = async (id: string) => {
-  const { data, error } = await supabase
-    .from('used_item')
-    .select(
-      `*, profiles ( * ), main_category ( name ), sub_category ( name ), used_item_wish ( count ), chat_list ( count )`
-    )
-    .eq('id', id)
-    .single();
-
-  return data;
-};
 
 const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
+
+  const [showEditToggle, setShowEditToggle] = useState<boolean>(false);
   const queryClient = useQueryClient();
+  const user = useAuth((state) => state.user);
+  const { addAlertMessage } = useAlertMessage();
 
   const { isLoading, isError, data } = useQuery({
     queryKey: ['used-item', params.id],
@@ -42,19 +40,19 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   });
 
   const { data: chatList } = useQuery({
-    queryKey: ['chat_list'],
-    queryFn: getChatList
+    queryKey: ['chatRoom'],
+    queryFn: () => getChatRoomList(user!.id),
+    enabled: !!user
   });
 
-  const user = useAuth((state) => state.user);
   const { id } = useParams();
   const { errorTopRight } = useToast();
 
+  const editButtonToggle = () => {
+    setShowEditToggle(!showEditToggle);
+  };
+
   const onClickUpdateSoldOut = async () => {
-    if (user?.id !== data?.user_id) {
-      errorTopRight({ message: '본인의 상품만 판매완료 처리할 수 있습니다.' });
-      return;
-    }
     Swal.fire({
       title: '판매완료 처리하시겠습니까?',
       showDenyButton: true,
@@ -114,22 +112,26 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const makeChatListMutation = useMutation({
     mutationFn: makeChatList,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getChatList'] });
+      queryClient.invalidateQueries({ queryKey: ['chatRoom'] });
     }
   });
 
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
-  const [chatListId, setChatListId] = useState(0);
+  const [chatListData, setChatListData] = useState<Tables<'chat_list'>>();
   //채팅하기 한번만 할 수 있는.. 눈속임 state(?)
   const [userChatList, setUserChatList] = useState(false);
 
-  const list = chatList?.getChatListData?.filter((chat) => chat?.post_id === Number(id));
-
   const clickOpenChat = async () => {
-    // const findUserChatList = list?.filter((chat) => chat.user_id === user?.id);
 
-    // if (userChatList === true || findUserChatList !== undefined)
-    //   return errorTopRight({ message: '이미 채팅을 보냈습니다', timeout: 2000 });
+    const list = chatList?.getChatListData?.find((chat) => chat?.post_id === Number(id));
+
+    if (data?.user_id === user?.id)
+      return errorTopRight({
+        message: '본인이 쓴 게시글에는 채팅을 보낼 수 없습니다'
+      });
+
+    if (userChatList === true || !!list !== false)
+      return errorTopRight({ message: '이미 채팅을 보냈습니다' });
 
     try {
       const chat = await makeChatListMutation.mutateAsync({
@@ -137,15 +139,24 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
         user_id: user?.id,
         other_user: data?.user_id
       });
-      setChatListId(chat![0].id);
+      if (!chat) return;
+      if (data?.user_id !== user?.id) {
+        addAlertMessage({
+          type: 'chat',
+          message: `등록하신 상품 [${data?.title}] 에 새로운 채팅이 도착했습니다 `,
+          userId: data!.user_id,
+          targetId: +chat.id
+        });
+      }
+      setChatListData(chat);
       setModalIsOpen(true);
       setUserChatList(true);
     } catch (error) {
-      errorTopRight({ message: '오류가 발생하였습니다', timeout: 2000 });
+      errorTopRight({ message: '오류가 발생하였습니다' });
     }
   };
 
-  if (isLoading) return <span>LOADING</span>;
+  if (isLoading) return <Loading />;
   if (!data) return null;
 
   const {
@@ -160,7 +171,6 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
     place_name,
     main_category,
     sub_category,
-    used_item_wish,
     sold_out
   } = data;
 
@@ -169,13 +179,35 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
       <section className={styles.top}>
         <div className={styles.product}>
           <div className={styles.imageContainer}>
-            <SlideImage images={photo_url} />
+            <SlideImage images={photo_url} sizes={{ width: '400px', height: '400px' }} />
           </div>
           <div className={styles.details}>
             <div>
-              <div className={styles.info}>
-                <h3 title={title}>{title}</h3>
-                <span className={styles.price}>{addCommasToNumber(price)}원</span>
+              <div className={styles.infoWrap}>
+                <div className={styles.info}>
+                  <h3 title={title}>{title}</h3>
+                  <span className={styles.price}>{addCommasToNumber(price)}원</span>
+                </div>
+                {user?.id === data?.user_id && (
+                  <button className={styles.editButton} onClick={editButtonToggle}>
+                    <BsThreeDots size={0} />
+                    {showEditToggle && (
+                      <div>
+                        {sold_out ? (
+                          <button disabled>판매완료</button>
+                        ) : (
+                          <button onClick={onClickUpdateSoldOut}>판매완료</button>
+                        )}
+                        <span></span>
+                        <Link href={`/used-goods/update/${id}`}>
+                          <button className={styles.edit}>수정</button>
+                        </Link>
+                        <span></span>
+                        <button onClick={onClickDelete}>삭제</button>
+                      </div>
+                    )}
+                  </button>
+                )}
               </div>
               <div className={styles.profile}>
                 {profiles && (
@@ -186,18 +218,11 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
               </div>
               <div className={styles.moreInfo}>
                 <time>{getformattedDate(created_at, 'YY년 MM월 DD일')}</time>
-                {sold_out ? (
-                  <div>
-                    <span className={styles.tag}>#{main_category!.name}</span>
-                    <span className={styles.tag}>#{sub_category!.name}</span>
-                    <span className={styles.soldOut}>#판매완료</span>
-                  </div>
-                ) : (
-                  <div>
-                    <span className={styles.tag}>#{main_category!.name}</span>
-                    <span className={styles.tag}>#{sub_category!.name}</span>
-                  </div>
-                )}
+                <div>
+                  <span className={styles.tag}>#{main_category!.name}</span>
+                  <span className={styles.tag}>#{sub_category!.name}</span>
+                  {sold_out && <span className={styles.soldOut}>#판매완료</span>}
+                </div>
               </div>
             </div>
             {/* TODO: 채팅, 찜 기능 동작 */}
@@ -208,10 +233,9 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                 onClose={() => setModalIsOpen(false)}
                 ariaHideApp={false}
                 isChatRoomOpen={true}
-                listId={chatListId}
-                getChat={[]}
+                list={chatListData}
               />
-              <button>찜 {getCountFromTable(used_item_wish)}</button>
+              <WishButton usedItemId={params.id} title={title} />
             </div>
           </div>
         </div>
@@ -236,11 +260,11 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
           <TradeLocationMap lat={latitude} lng={longitude} />
         </div>
         {/* TODO: SNS 공유, 링크 복사 */}
-        <KakaoShareButton />
-        <ClipBoardButton />
+        <div className={styles.shareButton}>
+          <KakaoShareButton />
+          <ClipBoardButton />
+        </div>
         {/* 버튼 생기면 옮겨 주세요 */}
-        {sold_out ? null : <button onClick={onClickUpdateSoldOut}>sold-out</button>}
-        <button onClick={onClickDelete}>delete</button>
       </section>
     </main>
   );

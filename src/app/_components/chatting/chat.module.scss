@@ -11,16 +11,20 @@
   max-width: 300px;
   background-color: var(--primary-color);
   color: white;
-  border-radius: 10px;
-  padding: 5px 10px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  padding: 10px 15px;
   margin-bottom: 5px;
 }
 .otherChat {
   max-width: 300px;
   display: inline-block;
   background-color: rgba(186, 186, 186, 0.22);
-  border-radius: 10px;
-  padding: 5px 10px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 10px 15px;
   margin-bottom: 5px;
 }
 .userName {
@@ -31,6 +35,19 @@
   font-size: 15px;
 }
 .date {
-  margin-bottom: 15px;
-  font-size: 12px;
+  font-size: 10px;
+  color: var(--placeholder-text-color);
+  margin-bottom: 5px;
+}
+.chatDateTrue {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-end;
+  gap: 5px;
+}
+.chatDateFalse {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  margin-bottom: 10px;
 }

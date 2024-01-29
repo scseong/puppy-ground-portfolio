@@ -28,11 +28,45 @@
       font-family: pretendard-regular;
       padding-left: 15px;
     }
+    input:focus {
+      border-color: var(--primary-color);
+    }
     p {
       color: red;
       margin-top: 10px;
-      font-size: 12px;
+      font-size: 11px;
+      white-space: normal;
     }
+  }
+  .duplicationInput {
+    width: 200px;
+    height: 50px;
+    border-radius: 5px;
+    border: 0.7px solid #979797;
+    font-size: 15px;
+    font-family: pretendard-regular;
+    padding-left: 15px;
+  }
+  .pwInput {
+    width: 300px;
+    height: 50px;
+    border-radius: 5px;
+    border: 0.7px solid #979797;
+    font-size: 15px;
+    font-family: pretendard-regular;
+    padding-left: 15px;
+  }
+
+  .duplication {
+    width: 90px;
+    height: 50px;
+    background-color: #0ac4b9;
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    font-family: pretendard-regular;
+    color: #ffffff;
+    margin-left: 10px;
   }
 
   label {
@@ -47,24 +81,24 @@
       display: none;
     }
   }
-  button {
-    width: 300px;
-    height: 50px;
-    background-color: #0ac4b9;
-    border: none;
-    border-radius: 5px;
-    font-size: 15px;
-    font-family: pretendard-regular;
-    color: #ffffff;
-  }
 }
 
+.submitBtn {
+  width: 300px;
+  height: 50px;
+  background-color: #0ac4b9;
+  border: none;
+  border-radius: 5px;
+  font-size: 15px;
+  font-family: pretendard-regular;
+  color: #ffffff;
+}
 .moveLogin {
   cursor: pointer;
   color: #979797;
-  font-weight: 500;
+  font-family: pretendard-light;
   span {
     color: #000000;
-    font-weight: 700;
+    font-family: pretendard-medium;
   }
 }

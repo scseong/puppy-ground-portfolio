@@ -1,0 +1,50 @@
+.usedItemContainer {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+.usedItemImage {
+  & > img {
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+  }
+}
+.usedItem {
+  cursor: pointer;
+}
+.usedItemTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.title {
+  font-size: 18px;
+  width: 245px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 20px;
+}
+.soldOut {
+  font-size: 10px;
+  color: #757575;
+  background-color: #e6e6e6;
+  padding: 5px;
+  border-radius: 5px;
+}
+.sell {
+  font-size: 10px;
+  color: var(--primary-color);
+  background-color: #d2faf8;
+  padding: 5px;
+  border-radius: 5px;
+}
+.usedItemPrice {
+  & > p {
+    font-size: 15px;
+  }
+}

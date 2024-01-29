@@ -1,7 +1,6 @@
 'use client';
 
-import style from './page.module.scss';
-import Script from 'next/script';
+import styles from './page.module.scss';
 import { useEffect, useRef, useState } from 'react';
 import {
   CustomOverlayMap,
@@ -10,15 +9,14 @@ import {
   MapTypeControl,
   ZoomControl
 } from 'react-kakao-maps-sdk';
-import { IoIosCloseCircle } from 'react-icons/io';
-import { RiHomeSmile2Fill } from 'react-icons/ri';
 import { MdMyLocation } from 'react-icons/md';
 import { GiSittingDog } from 'react-icons/gi';
+import { RiCalendarCloseFill } from 'react-icons/ri';
+import { FaRegClock } from 'react-icons/fa';
+
 import { useToast } from '@/hooks/useToast';
 import { useFacilitiesQuery } from '@/hooks/useFacilitiesQuery';
 import NearFacilities from '@/app/_components/facilities/NearFacilities';
-
-const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_KEY}&libraries=services&autoload=false`;
 
 const Facilities = () => {
   const [currentLocation, setCurrentLocation] = useState<{ latitude: number; longitude: number }>({
@@ -51,7 +49,7 @@ const Facilities = () => {
           setCurrentLocationMarker(true);
         },
         () => {
-          warnTopCenter({ message: '현재 위치를 찾지 못하였습니다 🥲', timeout: 2000 });
+          warnTopCenter({ message: '현재 위치를 찾지 못하였습니다 🥲' });
           setCurrentLocationMarker(false);
         }
       );
@@ -64,10 +62,6 @@ const Facilities = () => {
       latitude,
       longitude
     });
-  };
-
-  const markerClickHandler = () => {
-    setActiveMarkerId(null);
   };
 
   // 현재위치를 시작점으로 만들기
@@ -90,9 +84,8 @@ const Facilities = () => {
 
   // onBoundsChanged시 화면 이동 할때마다 데이터를 계속 받아와서 느려짐 -> 디바운싱 이용
   return (
-    <div className={style.mapContainer}>
-      <div id="map" className={style.mapWrap}>
-        <Script src={KAKAO_SDK_URL} strategy="beforeInteractive" />
+    <div className={styles.mapContainer}>
+      <div id="map" className={styles.mapWrap}>
         <Map
           center={{ lat: currentLocation.latitude, lng: currentLocation.longitude }}
           level={3}
@@ -128,7 +121,8 @@ const Facilities = () => {
               <div key={place.id}>
                 <MapMarker
                   position={{ lat: place.latitude, lng: place.longitude }}
-                  onClick={() => setActiveMarkerId(place.id)}
+                  onMouseOver={() => setActiveMarkerId(place.id)}
+                  onMouseOut={() => setActiveMarkerId(null)}
                   image={{
                     // 마커이미지의 주소
                     src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
@@ -143,24 +137,21 @@ const Facilities = () => {
                     position={{ lat: place.latitude, lng: place.longitude }}
                     yAnchor={1}
                   >
-                    <div className={style.overlayWrap}>
-                      <div className={style.placeName}>
-                        {place.facilities_name}
-                        <div className={style.close} onClick={markerClickHandler} title="닫기">
-                          <IoIosCloseCircle />
-                        </div>
-                      </div>
-                      <div className={style.placeContent}>
+                    <div className={styles.overlayWrap}>
+                      <div className={styles.placeName}>{place.facilities_name}</div>
+                      <div className={styles.placeContent}>
                         <p>
                           <GiSittingDog />
                           &nbsp;{place.explanation}
                         </p>
-                        <a href={place.url} target="_blank" rel="noreferrer">
-                          <p className={style.link}>
-                            <RiHomeSmile2Fill />
-                            &nbsp;홈페이지
-                          </p>
-                        </a>
+                        <p>
+                          <RiCalendarCloseFill />
+                          &nbsp;{place.holiday}
+                        </p>
+                        <p>
+                          <FaRegClock />
+                          &nbsp;{place.open_time}
+                        </p>
                       </div>
                     </div>
                   </CustomOverlayMap>
@@ -185,7 +176,7 @@ const Facilities = () => {
           <ZoomControl position={'RIGHT'} />
         </Map>
         <NearFacilities markerFocusHandler={markerFocusHandler} coordinate={coordinate} />
-        <button className={style.currentLocation} onClick={currentButtonHandler}>
+        <button className={styles.currentLocation} onClick={currentButtonHandler}>
           <MdMyLocation />
         </button>
       </div>

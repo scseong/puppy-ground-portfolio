@@ -1,7 +1,7 @@
 'use client';
 
 import { getStrayList } from '@/apis/stray';
-import style from './page.module.scss';
+import styles from './page.module.scss';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import DatePicker from 'react-datepicker';
@@ -10,9 +10,11 @@ import Link from 'next/link';
 import { useState } from 'react';
 import Loading from '@/app/_components/layout/loading/Loading';
 import regionList from '../../../data/regionList.json';
-import { IoSearch } from 'react-icons/io5';
+import { CiSearch } from 'react-icons/ci';
 import Pagination from '@/app/_components/pagination/Pagination';
 import { ko } from 'date-fns/locale';
+import dayjs from 'dayjs';
+import NoSearchValue from './_component/NoSearchValue';
 
 const StrayDogs = () => {
   const [startDate, setStartDate] = useState<Date | null>(new Date('2023-10-01'));
@@ -41,59 +43,32 @@ const StrayDogs = () => {
   const guChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectGu(event.target.value);
   };
-
-  const filterRefreshBtn = () => {
-    setSelectCity('전지역');
-    setSelectGu('');
-    setStartDate(new Date('2023-10-01'));
-    setEndDate(new Date());
-  };
-
+  const [filteredStrayList, setFilteredStrayList] = useState<StrayList[] | undefined>();
   const selectRegion = regionList.find((region) => region.city === selectCity);
   const guList = selectRegion ? selectRegion.gu : [];
 
-  const formatDate = (dateStr: string) => {
-    const year = dateStr.substring(0, 4);
-    const month = dateStr.substring(4, 6);
-    const day = dateStr.substring(6, 8);
-    return `${year}년 ${month}월 ${day}일`;
+  const filterList = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const filteredCity =
+      selectCity === '전지역'
+        ? strayList
+        : strayList?.filter((item) => item.orgNm.includes(selectCity));
+    const filteredGu =
+      selectGu === '전체'
+        ? filteredCity
+        : filteredCity?.filter((item) => item.orgNm.includes(selectGu));
+
+    const filteredDate = filteredGu?.filter((item) => {
+      const startDayjs = dayjs(startDate).format('YYYYMMDD');
+      const endDayjs = dayjs(endDate).format('YYYYMMDD');
+
+      if (item.noticeEdt >= startDayjs && item.noticeEdt <= endDayjs) {
+        return true;
+      }
+    });
+    setFilteredStrayList(filteredDate);
+    setPage(1);
   };
-
-  const cityfilter = strayList?.filter((item) => {
-    const strayCity = item.orgNm.split(' ')[0];
-    const strayGu = item.orgNm.split(' ')[1];
-    if (selectCity === '전지역' || !selectCity) {
-      return item;
-    } else if (selectCity === strayCity && !selectGu) {
-      return true;
-    } else if (selectCity === strayCity && selectGu === '전체') {
-      return true;
-    } else if (selectCity === item.orgNm.split(' ')[0] && selectGu === strayGu) {
-      return true;
-    }
-  });
-
-  const filterDate = cityfilter?.filter((item) => {
-    const startYear = startDate?.getFullYear();
-    const startMonth = startDate!.getMonth() + 1;
-    const startDay = startDate!.getDate();
-    const endYear = endDate?.getFullYear();
-    const endMonth = endDate!.getMonth() + 1;
-    const endDay = endDate!.getDate();
-
-    // 20230101 <- 과 같이 표기
-    const start = `${startYear}${('00' + startMonth.toString()).slice(-2)}${(
-      '00' + startDay.toString()
-    ).slice(-2)}`;
-    const end = `${endYear}${('00' + endMonth.toString()).slice(-2)}${(
-      '00' + endDay.toString()
-    ).slice(-2)}`;
-
-    if (item.noticeEdt >= start && item.noticeEdt <= end) {
-      const total = item.noticeSdt >= start && item.noticeEdt <= end;
-      return true;
-    }
-  });
 
   if (isLoading) {
     return <Loading />;
@@ -104,15 +79,15 @@ const StrayDogs = () => {
   }
 
   return (
-    <div className={style.container}>
-      <div className={style.contentContainer}>
-        <div className={style.filterWrap}>
-          <div className={style.filterContent}>
+    <div className={styles.container}>
+      <div className={styles.contentContainer}>
+        <form className={styles.filterWrap}>
+          <div className={styles.filterContent}>
             <p>기간</p>
-            <div className={style.calender}>
+            <div className={styles.calender}>
               <DatePicker
                 locale={ko}
-                className={style.datePicker}
+                className={styles.datePicker}
                 dateFormat="yyyy-MM-dd"
                 shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
                 minDate={new Date('2023-10-01')} // minDate 이전 날짜 선택 불가
@@ -123,7 +98,7 @@ const StrayDogs = () => {
                 onChange={(date) => setStartDate(date)}
               />
               <DatePicker
-                className={style.datePicker}
+                className={styles.datePicker}
                 locale={ko}
                 dateFormat="yyyy-MM-dd"
                 shouldCloseOnSelect
@@ -136,65 +111,113 @@ const StrayDogs = () => {
               />
             </div>
           </div>
-          <div className={style.filterContent}>
+          <div className={styles.filterContent}>
             <p>지역</p>
-            <select name="지역" className={style.selectCity} onChange={cityChangeHandler}>
-              {regionList.map((region, index) => {
-                return <option key={index}>{region.city}</option>;
-              })}
-            </select>
-            <select
-              name="시/군/구"
-              className={style.selectCity}
-              onChange={guChangeHandler}
-              value={selectGu}
-            >
-              {guList?.map((gu, index) => {
-                return <option key={index}>{gu}</option>;
-              })}
-            </select>
-            <button>
-              <IoSearch />
-            </button>
+            <div className={styles.region}>
+              <select name="지역" className={styles.selectCity} onChange={cityChangeHandler}>
+                {regionList.map((region, index) => {
+                  return <option key={index}>{region.city}</option>;
+                })}
+              </select>
+              <select
+                name="시/군/구"
+                className={styles.selectCity}
+                onChange={guChangeHandler}
+                value={selectGu}
+              >
+                {guList?.map((gu, index) => {
+                  return <option key={index}>{gu}</option>;
+                })}
+              </select>
+              <button className={styles.searchButton} type="submit">
+                <CiSearch size="1.2rem" />
+              </button>
+            </div>
           </div>
-        </div>
-        <div className={style.gridContainer}>
-          {filterDate!.slice(offset, offset + limit).map((list, index) => {
-            const formatHappenDt = formatDate(list.happenDt);
-            return (
-              <div key={index}>
-                <div className={style.listCard}>
-                  <Link href={`/stray-dogs/${list.desertionNo}`}>
-                    <div className={style.imageWrap}>
-                      <Image
-                        src={list.popfile}
-                        alt="dog-image"
-                        className={style.image}
-                        width={250}
-                        height={250}
-                      />
+        </form>
+        <div className={styles.gridContainer}>
+          {filteredStrayList ? (
+            filteredStrayList.length === 0 ? (
+              <NoSearchValue />
+            ) : (
+              filteredStrayList.slice(offset, offset + limit).map((list, index) => {
+                const formatHappenDt = dayjs(list.happenDt).format('YYYY[년] MM[월] DD[일]');
+                return (
+                  <div key={index}>
+                    <div className={styles.listCard}>
+                      <Link href={`/stray-dogs/${list.desertionNo}`}>
+                        <div className={styles.imageWrap}>
+                          <Image
+                            src={list.popfile}
+                            alt="dog-image"
+                            className={styles.image}
+                            width={250}
+                            height={250}
+                          />
+                        </div>
+                      </Link>
+                      <div className={styles.explanationWrap}>
+                        <div className={styles.titleColumn}>
+                          <p>구조일시</p>
+                          <p>견종</p>
+                          <p>성별</p>
+                          <p>발견장소</p>
+                        </div>
+                        <div className={styles.contentColumn}>
+                          <p>{formatHappenDt}</p>
+                          <p>{list.kindCd.slice(3)}</p>
+                          <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
+                          <p>{list.happenPlace}</p>
+                        </div>
+                      </div>
                     </div>
-                  </Link>
-                  <div className={style.explanationWrap}>
-                    <div className={style.titleColumn}>
-                      <p>구조일시</p>
-                      <p>견종</p>
-                      <p>성별</p>
-                      <p>발견장소</p>
-                    </div>
-                    <div className={style.contentColumn}>
-                      <p>{formatHappenDt}</p>
-                      <p>{list.kindCd.slice(3)}</p>
-                      <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
-                      <p>{list.happenPlace}</p>
+                  </div>
+                );
+              })
+            )
+          ) : (
+            strayList?.slice(offset, offset + limit).map((list, index) => {
+              const formatHappenDt = dayjs(list.happenDt).format('YYYY[년] MM[월] DD[일]');
+              return (
+                <div key={index}>
+                  <div className={styles.listCard}>
+                    <Link href={`/stray-dogs/${list.desertionNo}`}>
+                      <div className={styles.imageWrap}>
+                        <Image
+                          src={list.popfile}
+                          alt="dog-image"
+                          className={styles.image}
+                          width={250}
+                          height={250}
+                        />
+                      </div>
+                    </Link>
+                    <div className={styles.explanationWrap}>
+                      <div className={styles.titleColumn}>
+                        <p>구조일시</p>
+                        <p>견종</p>
+                        <p>성별</p>
+                        <p>발견장소</p>
+                      </div>
+                      <div className={styles.contentColumn}>
+                        <p>{formatHappenDt}</p>
+                        <p>{list.kindCd.slice(3)}</p>
+                        <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
+                        <p>{list.happenPlace}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
-        <Pagination page={page} setPage={setPage} limit={limit} total={filterDate?.length} />
+        <Pagination
+          page={page}
+          setPage={setPage}
+          limit={limit}
+          total={filteredStrayList ? filteredStrayList.length : strayList?.length}
+        />
       </div>
     </div>
   );

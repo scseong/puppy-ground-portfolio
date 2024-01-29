@@ -6,28 +6,28 @@ export interface Database {
       alert_message: {
         Row: {
           created_at: string;
-          id: number;
+          id: string;
           message: string;
           status: boolean;
-          target_id: string;
+          target_id: number;
           type: string;
           user_id: string;
         };
         Insert: {
           created_at?: string;
-          id?: number;
+          id?: string;
           message: string;
           status?: boolean;
-          target_id: string;
+          target_id: number;
           type: string;
           user_id: string;
         };
         Update: {
           created_at?: string;
-          id?: number;
+          id?: string;
           message?: string;
           status?: boolean;
-          target_id?: string;
+          target_id?: number;
           type?: string;
           user_id?: string;
         };
@@ -49,7 +49,7 @@ export interface Database {
           id: number;
           read_status: boolean;
           user_id: string;
-          user_name: string;
+          profiles: Tables<'profiles'>;
         };
         Insert: {
           chat_list_id: number;
@@ -58,7 +58,6 @@ export interface Database {
           id?: number;
           read_status?: boolean;
           user_id: string;
-          user_name: string;
         };
         Update: {
           chat_list_id?: number;
@@ -67,7 +66,6 @@ export interface Database {
           id?: number;
           read_status?: boolean;
           user_id?: string;
-          user_name?: string;
         };
         Relationships: [
           {
@@ -93,19 +91,22 @@ export interface Database {
           user_id: string;
           other_user: string;
           used_item: Tables<'used_item'>;
-          chat: Tables<'chat'>;
+          chat: { read_status: boolean; user_id: string }[];
+          get_out_chat_room: string[] | null;
         };
         Insert: {
           id?: number;
           post_id?: number;
           user_id?: string;
           other_user?: string;
+          get_out_chat_room?: string[] | null;
         };
         Update: {
           id?: number;
           post_id?: number;
           user_id?: string;
           other_user?: string;
+          get_out_chat_room?: string[] | null;
         };
         Relationships: [
           {
@@ -187,6 +188,7 @@ export interface Database {
           created_at: string;
           id: number;
           photo_url: string[];
+          tags: string[];
           title: string;
           user_id: string;
         };
@@ -195,6 +197,7 @@ export interface Database {
           created_at?: string;
           id?: number;
           photo_url: string[];
+          tags: string[];
           title: string;
           user_id: string;
         };
@@ -203,6 +206,7 @@ export interface Database {
           created_at?: string;
           id?: number;
           photo_url?: string[];
+          tags?: string[];
           title?: string;
           user_id?: string;
         };
@@ -244,7 +248,7 @@ export interface Database {
             foreignKeyName: 'mung_stagram_like_user_id_fkey';
             columns: ['user_id'];
             isOneToOne: false;
-            referencedRelation: 'profiles';
+            referencedRelation: 'users';
             referencedColumns: ['id'];
           }
         ];
@@ -259,7 +263,7 @@ export interface Database {
         Insert: {
           avatar_url?: string | null;
           email: string;
-          id?: string;
+          id: string;
           user_name: string;
         };
         Update: {
@@ -268,7 +272,15 @@ export interface Database {
           id?: string;
           user_name?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'profiles_id_fkey';
+            columns: ['id'];
+            isOneToOne: true;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       sub_category: {
         Row: {
@@ -386,7 +398,7 @@ export interface Database {
             foreignKeyName: 'used_item_wish_user_id_fkey';
             columns: ['user_id'];
             isOneToOne: false;
-            referencedRelation: 'profiles';
+            referencedRelation: 'users';
             referencedColumns: ['id'];
           }
         ];

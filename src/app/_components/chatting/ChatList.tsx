@@ -5,77 +5,121 @@ import { supabase } from '@/shared/supabase/supabase';
 import { Tables } from '@/shared/supabase/types/supabase';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
-import { getChatList } from '@/apis/chat/chat';
+import { getChatRoomList, getOutChatRoom } from '@/apis/chat/chat';
 import useAuth from '@/hooks/useAuth';
-import { getProfile } from '@/apis/profile/profile';
 import styles from './chatList.module.scss';
 import Chat from './Chat';
 import ChatInput from './ChatInput';
 import Loading from '../layout/loading/Loading';
-import Image from 'next/image';
 import { IoIosArrowBack } from 'react-icons/io';
-import { FaTrashAlt } from 'react-icons/fa';
+import ChatListContent from './ChatListContent';
+import { useRouter } from 'next/navigation';
+import UsedItemData from './UsedItemData';
 import Swal from 'sweetalert2';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
+import { useAlertMessage } from '@/hooks/useAlertMessage';
 
 type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
   ariaHideApp: boolean;
   isChatRoomOpen: boolean;
-  listId: number;
-  getChat: Tables<'chat'>[] | null;
+  list?: Tables<'chat_list'>;
+  getChat?: Tables<'chat'>[] | null;
 };
 
-const ChatList = ({
-  isOpen,
-  onClose,
-  ariaHideApp,
-  isChatRoomOpen,
-  listId,
-  getChat
-}: ModalProps) => {
-  const {
-    isError,
-    isLoading,
-    data: getChatListData
-  } = useQuery({
-    queryKey: ['getChatList'],
-    queryFn: getChatList,
-    refetchOnWindowFocus: false
-  });
-  const { data: getProfileData } = useQuery({
-    queryKey: ['getProfile'],
-    queryFn: getProfile,
-    refetchOnWindowFocus: false
-  });
-  // const queryClient = useQueryClient();
-  // const sendChatMutation = useMutation({
-  //   mutationFn: deleteChatRoom,
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ['getChatList'] });
-  //   }
-  // });
+type ChatListWithDate = {
+  [date: string]: Tables<'chat'>[];
+};
 
-  const chatListRef = useRef<HTMLDivElement | null>(null);
+const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat }: ModalProps) => {
   // 유저 정보
   const user = useAuth((state) => state.user);
-  const userProfile = getProfileData?.find((pro) => pro.id === user?.id)!;
+  const { fetchAlertMessage } = useAlertMessage();
 
   const [isChatOpen, setIsChatOpen] = useState<boolean>(isChatRoomOpen);
   //전체 채팅내용
   const [chat, setChat] = useState<Tables<'chat'>[]>(getChat!);
   //로그인한 사람의 채팅 내역
   const [chatItem, setChatItem] = useState<Tables<'chat'>[]>([]);
-  //중고물품의 아이디
+  //채팅방 아이디
   const [chatListId, setChatListId] = useState<number>(0);
+  //채팅방에서 쓸 중고물품 정보
+  const [usedItem, setUsedItem] = useState<Tables<'used_item'>>();
+
+  const chatListRef = useRef<HTMLDivElement | null>(null);
+  const chatAlert = fetchAlertMessage?.data?.filter((item) => item.type === 'chat');
+  const router = useRouter();
+
+  const {
+    isError,
+    isLoading,
+    refetch,
+    data: getChatListData
+  } = useQuery({
+    queryKey: ['chatRoom'],
+    queryFn: () => getChatRoomList(user!.id),
+    enabled: !!user,
+    refetchOnWindowFocus: true
+  });
+
+  const queryClient = useQueryClient();
+
+  const getOutChatRoomMutation = useMutation({
+    mutationFn: getOutChatRoom,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chatRoom'] });
+    }
+  });
+
+  //채팅나가기
+  const clickOutChatRoom = ({ userId, chatListId }: { userId: string; chatListId: number }) => {
+    closeModal();
+    Swal.fire({
+      title: '방을 나가시겠습니까?',
+      text: '대화한 내용이 모두 사라지고 대화를 다시 걸 수도 없습니다',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#0ac4b9',
+      confirmButtonText: '확인',
+      cancelButtonText: '취소'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: '방을 나갔습니다',
+          icon: 'success'
+        });
+        getOutChatRoomMutation.mutate({ userId, chatListId });
+      }
+    });
+  };
 
   // 클릭 시 채팅방 입장
-  const clickChatRoom = (id: number) => {
+  const clickChatRoom = ({
+    id,
+    other_user,
+    usedItem
+  }: {
+    id: number;
+    other_user: string;
+    usedItem: Tables<'used_item'>;
+  }) => {
     const chatHistory = chat?.filter((chat) => chat.chat_list_id === id);
+    //안 읽은 채팅 읽음으로 바꿔야함으
     setChatItem(chatHistory!);
+    // readChatMutation.mutate({ list_id: id, other_user });
     setChatListId(id);
+    setUsedItem(usedItem);
     setIsChatOpen(true);
   };
+
+  //클릭 시 중고물품 상세페이지로 이동
+  const clickUsedItem = (usedItemId: number) => {
+    router.push(`/used-goods/${usedItemId}`);
+    closeModal();
+  };
+
   // 스크롤
   const scrollToBottom = () => {
     if (chatListRef.current) {
@@ -86,61 +130,53 @@ const ChatList = ({
     }
   };
 
-  //  채팅방 삭제 기능
-  // const clickDeleteChatRoom = (id: number) => {
-  //   Swal.fire({
-  //     title: '삭제하시겠습니까?',
-  //     text: '삭제 시 되돌릴 수 없습니다.',
-  //     icon: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#0AC4B9',
-  //     confirmButtonText: '삭제',
-  //     cancelButtonText: '취소'
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       Swal.fire({
-  //         title: '삭제되었습니다.',
-  //         icon: 'success'
-  //       });
-  //       sendChatMutation.mutate(id);
-  //     }
-  //   });
-  // };
-
-  const chatContents = async () => {
-    try {
-      const { data: chat } = await supabase.from('chat').select('*').returns<Tables<'chat'>[]>();
-      setChat(chat!);
-    } catch (error: any) {}
-  };
-
   // 채팅 모달 닫았을 때 채팅목록으로 나가도록
   const closeModal = () => {
     onClose();
     setIsChatOpen(false);
   };
 
+  const makeSection = (chatList: Tables<'chat'>[]): ChatListWithDate => {
+    const sections: ChatListWithDate = {};
+    chatList.forEach((chat) => {
+      const monthDate = dayjs(chat.created_at).locale('KO').format('YYYY-MM-DD ddd요일');
+      if (Array.isArray(sections[monthDate])) {
+        sections[monthDate].push(chat);
+      } else {
+        sections[monthDate] = [chat];
+      }
+    });
+    return sections;
+  };
+
   useEffect(() => {
     const chat = supabase
       .channel('custom-all-channel')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat' }, (payload) => {
-        // payload.new에 chat_list_id 속성이 있는지 확인 후 업데이트
-        if (payload.new && 'chat_list_id' in payload.new) {
-          setChat((prev) => [...prev!, payload.new as Tables<'chat'>]);
-          // 특정 채팅방의 채팅 내용 업데이트
-          if (payload.new.chat_list_id === chatListId || payload.new.chat_list_id === listId) {
-            setChatItem((prev) => [...prev, payload.new as Tables<'chat'>]);
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'chat' },
+        async (payload) => {
+          const { data: chatData, error } = await supabase
+            .from('chat')
+            .select('*, profiles(user_name)')
+            .eq('id', payload.new.id)
+            .single();
+          // payload.new에 chat_list_id 속성이 있는지 확인 후 업데이트
+          if (chat && 'chat_list_id' in payload.new) {
+            setChat((prev) => [...prev!, chatData as Tables<'chat'>]);
+            // 특정 채팅방의 채팅 내용 업데이트
+            if (chatData?.chat_list_id === chatListId || chatData?.chat_list_id === list?.id) {
+              setChatItem((prev) => [...prev, chatData as Tables<'chat'>]);
+            }
           }
         }
-      })
+      )
       .subscribe();
-
-    chatContents();
 
     return () => {
       chat.unsubscribe();
     };
-  }, [chatListId, listId]);
+  }, [chatListId, list]);
 
   useEffect(() => {
     setChat(getChat || []); // getChat이 변경될 때 업데이트
@@ -148,14 +184,18 @@ const ChatList = ({
 
   useEffect(() => {
     scrollToBottom();
-  }, []);
-
-  useEffect(() => {
-    scrollToBottom();
   }, [chat]);
 
   if (isLoading) return <Loading />;
   if (isError) return <div>오류가 발생하였습니다...</div>;
+
+  if (!user) return;
+  if (list || chatAlert) {
+    queryClient.invalidateQueries({ queryKey: ['chatRoom'] }); // 쿼리를 무효화하고
+    refetch();
+  }
+
+  const chatListwithDate = makeSection(chatItem);
 
   return (
     <div>
@@ -166,57 +206,46 @@ const ChatList = ({
               <button className={styles.backBtn} onClick={() => setIsChatOpen(false)}>
                 <IoIosArrowBack size={20} color={'#0AC4B9'} />
               </button>
+              <UsedItemData
+                usedItem={!!list?.used_item ? list?.used_item : usedItem}
+                clickUsedItem={clickUsedItem}
+              />
               <div ref={chatListRef} className={styles.chatScroll}>
                 <div>
-                  {chatItem.map((chatHistory) => {
-                    return (
-                      <Chat
-                        key={chatHistory.id}
-                        chatHistory={chatHistory}
-                        userProfile={userProfile}
-                      />
-                    );
-                  })}
+                  {Object.entries(chatListwithDate).map(([date, chatList]) => (
+                    <div key={date}>
+                      <div className={styles.date}>
+                        <p>{date}</p>
+                      </div>
+                      {chatList.map((chat, idx) => (
+                        <Chat key={idx} chatHistory={chat} userProfile={user.id} />
+                      ))}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
             <div>
-              <ChatInput
-                chatListId={chatListId}
-                listId={listId}
-                user={user!}
-                userProfile={userProfile}
-              />
+              <ChatInput chatListId={chatListId} listId={list?.id!} user={user} />
             </div>
           </div>
         ) : (
-          <>
-            <div className={styles.chatSearch}>
-              채팅 <FaMagnifyingGlass color={'#0AC4B9'} />
-            </div>
-            <ul className={styles.chatScroll}>
+          <div className={styles.container}>
+            <div className={styles.chatSearch}>채팅</div>
+            <ul className={styles.chatListScroll}>
               {getChatListData?.getChatListData?.map((chat) => {
-                return chat.user_id === userProfile?.id || chat.other_user === userProfile?.id ? (
-                  <li className={styles.chatList} key={chat.id}>
-                    <div onClick={() => clickChatRoom(chat.id)} className={styles.chatContent}>
-                      <Image
-                        width={50}
-                        height={50}
-                        src={`${chat.used_item.photo_url[0]}`}
-                        alt="물건 사진"
-                      />
-                      {chat.used_item.title}
-                    </div>
-                    {/* <div className={styles.wastebaseket}>
-                      <span>
-                        <FaTrashAlt color={'#0AC4B9'} />
-                      </span>
-                    </div> */}
-                  </li>
+                return chat.user_id === user.id || chat.other_user === user.id ? (
+                  <ChatListContent
+                    key={chat.id}
+                    chat={chat}
+                    clickChatRoom={clickChatRoom}
+                    userProfile={user.id}
+                    clickOutChatRoom={clickOutChatRoom}
+                  />
                 ) : null;
               })}
             </ul>
-          </>
+          </div>
         )}
       </ChatModal>
     </div>

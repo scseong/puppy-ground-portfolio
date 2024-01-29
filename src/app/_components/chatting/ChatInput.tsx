@@ -4,30 +4,26 @@ import { sendChat } from '@/apis/chat/chat';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import styles from './chatInput.module.scss';
-import { Tables } from '@/shared/supabase/types/supabase';
 import { User } from '@supabase/supabase-js';
 
 const ChatInput = ({
   chatListId,
   listId,
-  user,
-  userProfile
+  user
 }: {
   chatListId: number;
   listId: number;
   user: User;
-  userProfile: Tables<'profiles'>;
 }) => {
   //채팅보내는 내용
   const [chatContent, setChatContent] = useState<string>('');
   const onChangeChatContent = (e: React.ChangeEvent<HTMLInputElement>) =>
     setChatContent(e.target.value);
-
   const queryClient = useQueryClient();
   const sendChatMutation = useMutation({
     mutationFn: sendChat,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getChat'] });
+      queryClient.invalidateQueries({ queryKey: ['chat', { chatListId }] });
     }
   });
 
@@ -35,11 +31,11 @@ const ChatInput = ({
   const clickSendChat = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (chatContent === '') return;
-    sendChatMutation.mutateAsync({
+
+    sendChatMutation.mutate({
       content: chatContent,
       id: chatListId === 0 ? listId : chatListId,
-      userId: user?.id!,
-      userName: userProfile?.user_name
+      userId: user?.id!
     });
     setChatContent('');
   };

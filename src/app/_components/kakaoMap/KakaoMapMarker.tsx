@@ -1,13 +1,10 @@
 'use client';
 
-import style from './kakaoMapMarker.module.scss';
-import Script from 'next/script';
+import styles from './kakaoMapMarker.module.scss';
 import { Map, MapMarker, MapTypeControl, ZoomControl } from 'react-kakao-maps-sdk';
 import { useState, useEffect } from 'react';
 import { useAddress, usePosition } from '@/hooks/useKakaoMapMarker';
 import { useToast } from '@/hooks/useToast';
-
-const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_KEY}&libraries=services&autoload=false`;
 
 type Props = {
   lat?: number;
@@ -27,7 +24,6 @@ const KakaoMapMarker = (props: Props) => {
   const setAddress = useAddress((state) => state.setAddress);
 
   const position = usePosition((state) => state.position);
-  const address = useAddress((state) => state.address);
 
   // 마커 클릭 시 해당위치 정보 저장
   const mapClickHandler = (_t: any, mouseEvent: any) => {
@@ -81,9 +77,8 @@ const KakaoMapMarker = (props: Props) => {
   }, [props.lat, props.lng, props.address]);
 
   return (
-    <div className={style.container}>
-      <div id="map" className={style.mapWrap}>
-        <Script src={KAKAO_SDK_URL} strategy="beforeInteractive" />
+    <div className={styles.container}>
+      <div id="map" className={styles.mapWrap}>
         <Map
           center={{ lat: currentLocation.latitude, lng: currentLocation.longitude }}
           level={3}

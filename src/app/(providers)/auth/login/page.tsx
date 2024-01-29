@@ -1,11 +1,13 @@
 'use client';
-import { supabase } from '@/shared/supabase/supabase';
+
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import styles from './page.module.scss';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
-import { setCookie } from 'nextjs-cookie';
+import PublicRouteWrapper from '@/shared/PublicRouteWrapper';
+import Link from 'next/link';
+import { supabase } from '@/shared/supabase/supabase';
 
 export type Inputs = {
   email: string;
@@ -30,11 +32,12 @@ const LoginPage = () => {
       password: data.password
     });
     if (error) {
-      errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
+      errorTopRight({
+        message: '아이디 또는 비밀번호가 일치하지 않습니다.',
+      });
     }
     if (emailData.user !== null) {
       setUser(emailData.user);
-      setCookie('access_token', emailData.session.access_token);
       router.push('/');
     }
   };
@@ -51,7 +54,7 @@ const LoginPage = () => {
       }
     });
     if (error) {
-      errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
+      errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요' });
     }
   };
 
@@ -68,7 +71,7 @@ const LoginPage = () => {
     });
 
     if (error) {
-      errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
+      errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요' });
     }
   };
 
@@ -111,17 +114,20 @@ const LoginPage = () => {
           구글 로그인
         </button>
       </div>
-      <p
-        className={styles.moveLogin}
-        onClick={() => {
-          router.push('/auth/signup');
-        }}
-      >
+      <Link href="/auth/signup" className={styles.moveLogin}>
         처음이신가요?
         <span> 회원가입 하러가기</span>
-      </p>
+      </Link>
     </div>
   );
 };
 
-export default LoginPage;
+const PublicLoginPage = () => {
+  return (
+    <PublicRouteWrapper>
+      <LoginPage />
+    </PublicRouteWrapper>
+  );
+};
+
+export default PublicLoginPage;
