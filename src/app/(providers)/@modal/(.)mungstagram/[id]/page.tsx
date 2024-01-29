@@ -81,6 +81,7 @@ const MungModal = ({ params }: PageProps) => {
       ariaHideApp={false}
       contentLabel="Modal"
       style={customStyle}
+      preventScroll
     >
       <section className={styles.mungstaDetail}>
         {prev && (
