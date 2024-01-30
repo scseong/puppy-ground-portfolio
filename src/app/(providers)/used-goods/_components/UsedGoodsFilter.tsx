@@ -120,6 +120,7 @@ const UsedGoodsFilter = () => {
         options={subCategory}
         placeholder="카테고리"
         styles={customStyles}
+        isSearchable={false}
       />
       <CustomSelect
         className={styles.customSelect}
@@ -128,6 +129,7 @@ const UsedGoodsFilter = () => {
         options={mainCategory}
         placeholder="견종 사이즈"
         styles={customStyles}
+        isSearchable={false}
       />
     </div>
   );
