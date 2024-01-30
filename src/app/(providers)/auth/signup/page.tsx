@@ -2,7 +2,7 @@
 import { supabase } from '@/shared/supabase/supabase';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { InputHTMLAttributes, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styles from './page.module.scss';
 import { useToast } from '@/hooks/useToast';
@@ -10,6 +10,7 @@ import useAuth from '@/hooks/useAuth';
 import PublicRouteWrapper from '@/shared/PublicRouteWrapper';
 import defaultAvatar from '../../../../../public/images/my_page_default.svg';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export type Inputs = {
   email: string;
@@ -25,15 +26,18 @@ const SignUp = () => {
   const { successTopRight, errorTopRight } = useToast();
   const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
   const [isNicknameValid, setIsNicknameValid] = useState<boolean>(false);
+  const [imageFile, setImageFile] = useState<FileList>();
   const {
     register,
     watch,
     handleSubmit,
+    setValue,
+    setError,
+    clearErrors,
     formState: { errors }
   } = useForm<Inputs>({ mode: 'onChange' });
   const router: AppRouterInstance = useRouter();
-  const ref = useRef<React.HTMLInputTypeAttribute>();
-  ref.current = watch('password');
+  const { password, password_confirm } = watch();
   const image = watch('image');
 
   const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -44,7 +48,15 @@ const SignUp = () => {
       const imageFile = image[0];
       setPreviewImg(URL.createObjectURL(imageFile));
     }
-  }, [image]);
+    if (password && password !== password_confirm) {
+      setError('password_confirm', {
+        type: 'password-mismatch',
+        message: '비밀번호가 일치하지 않습니다.'
+      });
+    } else {
+      clearErrors('password_confirm');
+    }
+  }, [image, password, password_confirm, setError, clearErrors]);
 
   const emailCheck = async (email: String) => {
     if (!email) {
@@ -92,12 +104,16 @@ const SignUp = () => {
 
   // 이메일 회원가입
   const signUpOnSubmitHandler = async (data: Inputs) => {
+    if (isEmailValid === false) {
+      errorTopRight({ message: '이메일 중복검사를 진행해주세요' });
+      return false;
+    }
     if (isNicknameValid === false) {
       errorTopRight({ message: '닉네임 중복검사를 진행해주세요' });
       return false;
     }
-    if (isEmailValid === false) {
-      errorTopRight({ message: '이메일 중복검사를 진행해주세요' });
+    if (data.image[0] && data.image[0].size >= 2_000_000) {
+      errorTopRight({ message: '파일사이즈는 2MB를 넘지 않아야 합니다.' });
       return false;
     }
 
@@ -122,8 +138,9 @@ const SignUp = () => {
         }
       }
     });
-    if (error?.message !== 'User already registered') {
+    if (error && error?.message !== 'User already registered') {
       errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요' });
+      router.refresh();
     }
     if (error?.message === 'User already registered') {
       errorTopRight({ message: '이미 존재하는 유저입니다.' });
@@ -188,21 +205,19 @@ const SignUp = () => {
             className={styles.pwInput}
             type="password"
             placeholder="비밀번호를 입력하세요"
-            {...register('password', { required: true, minLength: 8, pattern: passwordRegex })}
+            {...register('password', {
+              required: '비밀번호를 입력해주세요',
+              minLength: {
+                value: 8,
+                message: '비밀번호는 문자와 숫자를 포함하여 8자리 이상 입력해야 합니다'
+              },
+              pattern: {
+                value: passwordRegex,
+                message: '비밀번호는 문자와 숫자를 포함하여 8자리 이상 입력해야 합니다'
+              }
+            })}
           />
-          {errors.password?.type === 'required' && (
-            <p className={styles.validP}>비밀번호를 입력해주세요</p>
-          )}
-          {errors.password?.type === 'pattern' && (
-            <p className={styles.validP}>
-              비밀번호는 문자와 숫자를 포함하여 8자리 이상 입력해야 합니다
-            </p>
-          )}
-          {errors.password?.type === 'minLength' && (
-            <p className={styles.validP}>
-              비밀번호는 문자와 숫자를 포함하여 8자리 이상 입력해야 합니다
-            </p>
-          )}
+          <p className={styles.validP}>{errors.password && errors.password.message}</p>
         </div>
         <div>
           <input
@@ -210,26 +225,53 @@ const SignUp = () => {
             type="password"
             placeholder="비밀번호 확인"
             {...register('password_confirm', {
-              required: true,
-              validate: (value) => value === ref.current
+              required: '비밀번호를 입력해주세요',
+              validate: (value) => {
+                if (value != watch('password')) {
+                  return '비밀번호가 일치하지 않습니다.';
+                }
+              }
             })}
           />
-          {errors.password_confirm?.type === 'required' && (
-            <p className={styles.validP}>비밀번호를 입력해주세요</p>
-          )}
-          {errors.password_confirm?.type === 'validate' && (
-            <p className={styles.validP}>비밀번호가 일치하지 않습니다</p>
-          )}
+          <p className={styles.validP}>
+            {errors.password_confirm && errors.password_confirm.message}
+          </p>
         </div>
 
         <label htmlFor="preview">
-          <img alt="이미지 없음" className={styles.previewImg} src={previewImg} />
+          <Image
+            alt="이미지 없음"
+            width={300}
+            height={300}
+            className={styles.previewImg}
+            src={previewImg}
+          />
           <input
             className={styles.imageInput}
+            // defaultValue={defaultAvatar}
             type="file"
             accept="image/*"
             id="preview"
-            {...register('image')}
+            {...register('image', {
+              onChange: (e: Event) => {
+                console.log('aaa');
+                const input = e.target as HTMLInputElement;
+                if (input!.files!.length === 0) {
+                  setValue('image', imageFile);
+                } else {
+                  if (input.files) {
+                    setImageFile(input.files);
+                  }
+                }
+              },
+              validate: (value) => {
+                console.log('너는 벨류', value);
+                if (value.length > 0 && value[0].size >= 2_000_000) {
+                  errorTopRight({ message: '파일사이즈는 2MB를 넘지 않아야 합니다.' });
+                  return value;
+                }
+              }
+            })}
           />
         </label>
         <br />
