@@ -39,6 +39,9 @@ const SignUp = () => {
   const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   const passwordRegex = /(?=.*\d)(?=.*[a-zA-ZS]).{8,}/;
 
+  console.log('업로드 이미지', watch('image'));
+  console.log('프리뷰 이미지', previewImg);
+
   useEffect(() => {
     if (image && image.length > 0) {
       const imageFile = image[0];

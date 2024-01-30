@@ -1,6 +1,6 @@
 .container {
   max-width: 100vw;
-  height: 100%;
+  height: 100hv;
   background-color: #f7f9f9;
 }
 
@@ -12,7 +12,7 @@
 }
 
 .filterWrap {
-  width: 1200px;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -145,6 +145,8 @@
   .filterWrap {
     flex-direction: column;
     align-items: flex-start;
+    justify-content: space-around;
+    width: 100%;
     height: 200px;
     gap: 40px;
     padding: 0 2rem;
@@ -158,4 +160,7 @@
   .gridContainer {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+@media screen and (max-width: 480px) {
 }
