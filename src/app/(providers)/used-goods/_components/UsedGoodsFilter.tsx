@@ -55,7 +55,7 @@ const customStyles: StylesConfig<{ value: string; label: string }, false> = {
     color: isSelected ? '#0ac4a9' : '#333',
     backgroundColor: 'none',
     cursor: 'pointer',
-    fontSize: '14px',
+    fontSize: '0.9rem',
     padding: '0.5rem 1rem',
     '&:hover': {
       color: '#0ac4a9'
@@ -68,10 +68,11 @@ const customStyles: StylesConfig<{ value: string; label: string }, false> = {
     ...styles,
     cursor: 'pointer',
     borderColor: isFocused ? '#0ac4a9' : '#979797',
-
-    fontSize: '13px',
+    borderRadius: '8px',
+    fontSize: '14px',
     lineHeight: '1rem',
     boxShadow: isFocused ? '0 0 0 1px #0ac4a9' : undefined,
+    width: '100%',
     height: '100%',
     '&:hover': {
       color: '#333'

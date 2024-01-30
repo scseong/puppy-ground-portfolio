@@ -7,7 +7,7 @@
     height: 100%;
     background-color: #e6e8e8;
     border: 1px solid #979797;
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     aspect-ratio: 1 / 1;
 
     svg {
@@ -21,7 +21,8 @@
   padding: 0.5rem 1rem;
   outline: none;
   border: 1px solid var(--placeholder-input-border-color);
-  border-radius: 5px;
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
 
   &:placeholder {
     color: var(----placeholder-text-color);
@@ -29,5 +30,18 @@
 
   &:focus {
     border-color: var(--primary-color);
+    border-width: 1px;
+    box-shadow: 0 0 0 1px #0ac4a9;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .searchForm {
+    width: 100%;
+  }
+  .wrapper {
+    input {
+      width: 100%;
+    }
   }
 }

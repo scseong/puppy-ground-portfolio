@@ -1,10 +1,18 @@
 .main {
   margin: 0 auto;
+  min-height: 80dvh;
   padding: 3rem 0;
   max-width: var(--max-width);
+}
+
+.header {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   h2 {
-    margin-bottom: 2rem;
+    width: inline-block;
     font-size: 2rem;
     line-height: 2rem;
     font-family: Pretendard-Bold;
@@ -27,9 +35,9 @@
 }
 
 .createLink {
-  padding: 1rem 2rem;
+  padding: 0.8rem 1.8rem;
   border: none;
-  border-radius: 13px;
+  border-radius: var(--btn-border-radius);
   background-color: var(--primary-color);
   font-size: 1rem;
   line-height: 1.2rem;
@@ -42,10 +50,8 @@
 }
 
 @media screen and (max-width: 1200px) {
-  .main > h2,
-  .subFiltering,
-  .filtering {
-    padding: 0 2rem;
+  .main {
+    padding: 3rem 2rem;
   }
 }
 

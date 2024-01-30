@@ -14,6 +14,7 @@ const UsedGoodsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const searchParams = useSearchParams();
 
+
   const { data: postList } = useQuery({
     queryKey: getQueryKey(queryObject),
     queryFn: getQueryFunction(queryObject)
@@ -35,9 +36,8 @@ const UsedGoodsList = () => {
 
   return (
     <>
+
       <div className={styles.wrapper}>
-        {/*  TODO: Empty Component 만들기 */}
-        {!data || (!data.length && <div className={styles.empty}>상품이 없습니다.</div>)}
         {data?.map((goods) => <UsedGoodsItem key={goods.id} goods={goods} />)}
       </div>
       {/* TODO: 페이지네이션 컴포넌트 분리*/}
