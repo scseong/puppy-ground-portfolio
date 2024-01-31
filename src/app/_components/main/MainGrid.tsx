@@ -54,9 +54,15 @@ const MainGrid = () => {
             x: { duration: 1 }
           }}
         >
-          <span className={styles.secondBold}>저희 퍼피그라운드는요</span>
-          <p>우리 아이들이 사용하지 않는 제품을</p>
-          <p>가까운 이웃과 손쉽게 거래할 수 있습니다</p>
+          <div className={styles.secondBold}>
+            저희 <span>퍼피그라운드는요</span>
+          </div>
+          <p>
+            우리 아이들이 <span>사용하지 않는 제품을</span>
+          </p>
+          <p>
+            가까운 이웃과 <span>손쉽게 거래할 수 있습니다</span>
+          </p>
           <Link href="/used-goods">
             <motion.button
               className={styles.button}
@@ -132,7 +138,9 @@ const MainGrid = () => {
           }}
         >
           <p>사랑스러운,</p>
-          <span className={styles.fourthBold}>우리 아이들을 자랑해봐요!</span>
+          <div className={styles.fourthBold}>
+            우리 아이들을 <span>자랑해봐요!</span>
+          </div>
           <Link href="/mungstagram">
             <motion.button
               className={styles.button}

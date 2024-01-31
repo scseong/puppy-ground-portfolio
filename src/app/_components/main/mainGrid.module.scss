@@ -76,7 +76,7 @@
 .secondTextWrap > p {
   font-family: Pretendard-Light;
   font-size: 25px;
-  line-height: 40px;
+  line-height: 35px;
 }
 
 .button {
@@ -167,7 +167,7 @@
 
 .fifthTextWrap {
   font-family: Pretendard-Medium;
-  font-size: 40px;
+  font-size: 30px;
   text-align: center;
 }
 
@@ -186,10 +186,51 @@
 }
 
 // 반응형디자인
+@media screen and (max-width: 1200px) {
+  .container {
+    width: 100%;
+  }
+  .firstSection {
+    width: 100%;
+    margin: auto auto auto 50px;
+    padding: 0 30px;
+  }
+  .firstTextWrap {
+    width: 50%;
+  }
+  .firstImageWrap {
+    width: 500px;
+  }
+  .secondSection {
+    width: 100%;
+    padding: 0 50px;
+  }
+  .fourthSection {
+    width: 100%;
+    padding: 0 50px;
+  }
+  .fourthImageWrap {
+    width: 400px;
+    img {
+      object-position: left;
+    }
+  }
+  .fifthSection {
+    width: 100%;
+    height: 100%;
+    padding: 50px;
+  }
+  .fifthImageGrid {
+    width: 100%;
+  }
+}
 
 @media screen and (max-width: 820px) {
   .container {
-    width: 820px;
+    width: 100%;
+  }
+  .button {
+    margin: 30px 0;
   }
   .firstContainer {
     width: 100%;
@@ -198,26 +239,27 @@
   }
   .firstSection {
     width: 100%;
-    padding: 0 0 0 30px;
+    padding: 0 0 0 50px;
     margin: 0;
     p {
-      font-size: 40px;
+      font-size: 30px;
+      line-height: 45px;
     }
     .firstImageWrap {
       width: 400px;
     }
   }
   .secondSection {
-    width: 820px;
+    width: 100%;
     margin: auto;
-    padding: 0 30px;
+    padding: 0 50px;
     p {
       font-size: 20px;
       line-height: 30px;
     }
   }
   .secondBold {
-    font-size: 40px;
+    font-size: 30px;
   }
   .secondImageWrap {
     width: 300px;
@@ -227,18 +269,23 @@
     width: 100%;
     height: 100%;
   }
+  .thirdTextWrap {
+    font-size: 30px;
+  }
   .thirdImageWrap {
     width: 100%;
   }
   .fourthSection {
-    width: 820px;
-    padding: 0 30px;
+    width: 100%;
+    padding: 0 50px;
     p {
-      font-size: 40px;
+      font-size: 30px;
+      line-height: 45px;
     }
   }
   .fourthBold {
-    font-size: 40px;
+    font-size: 30px;
+    line-height: 45px;
   }
   .fourthImageWrap {
     width: 300px;
@@ -250,7 +297,7 @@
     width: 100%;
   }
   .fifthSection {
-    width: 820px;
+    width: 100%;
     height: 100%;
     padding: 50px 30px;
     margin: auto;
@@ -259,21 +306,113 @@
     grid-template-columns: repeat(2, 1fr);
     width: 100%;
     height: 100%;
+    img {
+      border-radius: 20px;
+    }
   }
 }
 
 @media screen and (max-width: 480px) {
-  .firstSection {
+  .container {
     width: 100%;
   }
-  .thirdSection {
+  .button {
+    width: 120px;
+    height: 30px;
+    font-size: 13px;
+    margin: 20px 0;
+  }
+  .firstContainer {
     width: 100%;
     height: 100%;
   }
-  .thirdImageWrap {
+  .firstSection {
+    padding: 0 0 0 30px;
+    p {
+      font-size: 19px;
+      line-height: 28px;
+    }
+    .firstImageWrap {
+      width: 200px;
+      height: 300px;
+    }
+  }
+  .secondSection {
+    height: 100%;
+    padding: 30px;
+    p {
+      font-size: 12px;
+      line-height: 17px;
+    }
+  }
+  .secondTextWrap {
+    width: 40%;
+    span {
+      display: block;
+    }
+  }
+  .secondBold {
+    font-size: 19px;
+    line-height: 28px;
+    margin-bottom: 5px;
+  }
+  .secondImageWrap {
+    width: 150px;
+    height: 250px;
+    border-radius: 10px;
+  }
+  .thirdSection {
+    height: 100%;
+  }
+  .thirdTextWrap {
+    font-size: 19px;
+  }
+  .fourthSection {
+    height: 100%;
+    padding: 30px;
+    p {
+      font-size: 19px;
+    }
+  }
+  .fourthTextWrap {
+    width: 45%;
+    font-size: 19px;
+    line-height: 28px;
+    span {
+      display: block;
+    }
+  }
+  .fourthBold {
+    font-size: 19px;
+    line-height: 28px;
+  }
+  .fourthImageWrap {
+    width: 150px;
+    height: 250px;
+    border-radius: 10px;
+
+    img {
+      object-position: left;
+    }
+  }
+  .fifthContainer {
     width: 100%;
   }
   .fifthSection {
     width: 100%;
+    height: 100%;
+    padding: 50px 30px;
+    margin: auto;
+  }
+  .fifthTextWrap {
+    font-size: 19px;
+  }
+  .fifthImageGrid {
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    height: 100%;
+    img {
+      border-radius: 10px;
+    }
   }
 }

@@ -17,6 +17,7 @@ import { RxHamburgerMenu } from 'react-icons/rx';
 import { RealtimeChannel, RealtimePostgresInsertPayload } from '@supabase/supabase-js';
 import { ALERT_MESSAGE_QUERY_LEY, useAlertMessage } from '@/hooks/useAlertMessage';
 import AlertMessageList from '../alertMessage/AlertMessageList';
+import logo from '../../../../public/images/logo.png';
 
 const Header = () => {
   const router = useRouter();
@@ -162,6 +163,7 @@ const Header = () => {
             <Link href="/" className={styles.logoText}>
               Puppy Ground
             </Link>
+            <Image src={logo} alt="logo" width={30} height={30} />
           </div>
           <div className={styles.menuBox}>
             <Link
