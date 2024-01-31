@@ -51,4 +51,8 @@
 
 .left {
   width: 75%;
+
+  @media (max-width: 540px) {
+    width: 80%;
+  }
 }

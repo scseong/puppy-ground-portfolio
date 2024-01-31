@@ -16,8 +16,6 @@ import { useAddress, usePosition } from '@/hooks/useKakaoMapMarker';
 import { MdOutlineCancel } from 'react-icons/md';
 import { LuPencilLine } from 'react-icons/lu';
 import { FiPlus } from 'react-icons/fi';
-import { PiDotsThreeOutlineVerticalFill } from 'react-icons/pi';
-import PrivateRouteWrapper from '@/shared/PrivateRouteWrapper';
 
 const bucketName = 'used_goods';
 const MAINCATEGORY = ['대형견', '중형견', '소형견'];
@@ -172,7 +170,8 @@ const CreateForm = () => {
         <input className={styles.titleInput} name="title" onChange={handleFormChange} autoFocus />
       </div>
       <p className={styles.info}>
-        이미지는 필수입니다. (최대 4장) 드래그하거나 클릭해서 이미지를 선택하세요.
+        이미지는 필수입니다. (최대 4장) <br className={styles.br} />
+        드래그하거나 클릭해서 이미지를 선택하세요.
       </p>
       <div className={styles.containers}>
         <div className={styles.containerLeft}>
@@ -193,10 +192,11 @@ const CreateForm = () => {
                       <MdOutlineCancel size={20} color="black" />
                     </div>
                     <Image
+                      className={styles.image}
                       src={inputForm.photo_url[index] || ''}
                       alt="image"
-                      width={300}
-                      height={300}
+                      width={270}
+                      height={270}
                       style={{ objectFit: 'cover' }}
                     />
                   </>
@@ -220,13 +220,20 @@ const CreateForm = () => {
             onChange={handleFormChange}
           />
           <div className={styles.priceBox}>
-            가격 <input className={styles.price} name="price" onChange={handleFormChange} /> 원
+            가격{' '}
+            <input
+              className={styles.price}
+              name="price"
+              onChange={handleFormChange}
+              type="number"
+            />{' '}
+            원
           </div>
         </div>
       </div>
       <p className={styles.info}>선택해주세요 (최대 1개씩)</p>
       <div className={styles.categoryBox}>
-        <div className={styles.category}>
+        <div className={styles.mainCategory}>
           {MAINCATEGORY.map((category, index) => (
             <div className={styles.radio} key={index}>
               <input
@@ -239,8 +246,8 @@ const CreateForm = () => {
             </div>
           ))}
         </div>
-        <PiDotsThreeOutlineVerticalFill size={25} color="#B0B0B0" />
-        <div className={styles.category}>
+        <div className={styles.divider} />
+        <div className={styles.subCategory}>
           {SUBCATEGORY.map((category, index) => (
             <div className={styles.radio} key={index}>
               <input
@@ -254,7 +261,6 @@ const CreateForm = () => {
           ))}
         </div>
       </div>
-
       <p className={styles.infoMap}>거래 희망 장소 선택하기 (필수)</p>
       <KakaoMapMarker />
       <div className={styles.location}>
