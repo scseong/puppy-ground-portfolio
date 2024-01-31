@@ -15,6 +15,8 @@ import { MdStickyNote2 } from 'react-icons/md';
 import { BiSolidHomeHeart } from 'react-icons/bi';
 import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
 import ClipBoardButton from '@/app/_components/shareButton/ClipBoardButton';
+import dayjs from 'dayjs';
+import { Main } from '@/app/_components/layout';
 
 const StrayDogsDetail = () => {
   const params = useParams();
@@ -37,17 +39,7 @@ const StrayDogsDetail = () => {
     return list.desertionNo === desertionNo;
   });
 
-  const formatDate = (dateStr: string) => {
-    if (!dateStr || dateStr.length < 8) {
-      return '날짜 정보 없음';
-    }
-    const year = dateStr.substring(0, 4);
-    const month = dateStr.substring(4, 6);
-    const day = dateStr.substring(6, 8);
-    return `${year}년 ${month}월 ${day}일`;
-  };
-
-  const formatHappenDt = formatDate(strayDesertionNo?.happenDt!);
+  const happenDt = dayjs(strayDesertionNo?.happenDt).format('YYYY[년] MM[월] DD[일]');
 
   if (isLoading) {
     return <Loading />;
@@ -58,7 +50,7 @@ const StrayDogsDetail = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <Main>
       <div className={styles.contentContainer}>
         <div className={styles.firstSection}>
           <div className={styles.imageWrap}>
@@ -141,7 +133,7 @@ const StrayDogsDetail = () => {
           <div className={styles.contentColumn}>
             <p>{strayDesertionNo?.noticeNo}</p>
             <p>{strayDesertionNo?.specialMark}</p>
-            <p>{formatHappenDt}</p>
+            <p>{happenDt}</p>
             <p>{strayDesertionNo?.happenPlace}</p>
             <p>{strayDesertionNo?.careNm}</p>
             <p>{strayDesertionNo?.careTel}</p>
@@ -153,7 +145,7 @@ const StrayDogsDetail = () => {
           <ClipBoardButton />
         </div>
       </div>
-    </div>
+    </Main>
   );
 };
 
