@@ -12,6 +12,19 @@
   position: relative;
 }
 
+.infoWindow {
+  width: 80px;
+  height: 35px;
+  background-color: white;
+  border: 1px solid #0ac4b9;
+  border-radius: 10px;
+  p {
+    text-align: center;
+    line-height: 35px;
+    font-family: pretendard-medium;
+  }
+}
+
 .overlayWrap {
   position: absolute;
   left: 0;

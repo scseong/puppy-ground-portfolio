@@ -5,26 +5,46 @@
   justify-content: center;
   max-width: 1200px;
   margin: 0 auto;
+
+  @media (max-width: 1200px) {
+    width: 100%;
+  }
 }
 
 .title {
   font-size: 32px;
   font-weight: bold;
-  margin: 50px auto 30px auto;
+  margin: 50px auto auto auto;
   width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  @media (max-width: 1200px) {
+    width: 90%;
+  }
+
+  @media (max-width: 600px) {
+    width: 80%;
+  }
 }
 
 .titleInput {
   background-color: var(--bg-color);
-  width: 1100px;
+  width: 90%;
   padding: 0 30px;
   font-size: 20px;
   border: none;
   border-bottom: 2px dotted #eae7e7;
   outline: none;
+
+  @media (max-width: 1200px) {
+    width: 80%;
+  }
+
+  @media (max-width: 600px) {
+    width: 70%;
+  }
 }
 
 .info {
@@ -35,19 +55,56 @@
   line-height: 32px;
   letter-spacing: -0.3px;
   width: 100%;
-}
 
+  .br {
+    display: none;
+  }
+
+  @media (max-width: 1200px) {
+    width: 90%;
+    .br {
+      display: block;
+    }
+  }
+
+  @media (max-width: 600px) {
+    width: 90%;
+    font-size: 17px;
+  }
+}
 .containers {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
   width: 100%;
+
+  @media (max-width: 1200px) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .containerLeft {
-  width: 650px;
-  height: 625px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: justify-content;
+
+  width: 50%;
+
+  @media (max-width: 1200px) {
+    width: 70%;
+  }
+
+  @media (max-width: 840px) {
+    width: 90%;
+  }
+
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 }
 
 .containerRight {
@@ -55,14 +112,23 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  width: 550px;
-  height: 625px;
+  width: 50%;
+
+  @media (max-width: 1200px) {
+    width: 85%;
+    margin-top: 20px;
+    justify-content: center;
+  }
+
+  @media (max-width: 840px) {
+    width: 90%;
+  }
 }
 
 .textarea {
   background-color: var(--bg-color);
-  width: 550px;
-  height: 480px;
+  width: 100%;
+  height: 475px;
   padding: 30px;
   border: 1px solid #eae7e7;
   outline: none;
@@ -83,16 +149,27 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 550px;
-  height: 100px;
+  width: 100%;
+  height: 80px;
   border: 1.5px solid #0ac4b9;
   font-size: 22px;
   color: #0ac4b9;
+  margin-top: 10px;
   border-radius: 5px;
   font-weight: 700;
   line-height: 41px;
   letter-spacing: -0.3px;
   padding: 0 30px;
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  @media (max-width: 1200px) {
+    font-size: 20px;
+  }
 }
 .price {
   background-color: var(--bg-color);
@@ -100,7 +177,7 @@
   outline: none;
   font-size: 20px;
   text-align: right;
-  width: 400px;
+  width: 80%;
 }
 
 .infoMap {
@@ -111,6 +188,23 @@
   letter-spacing: -0.3px;
   width: 100%;
   margin-top: 50px;
+
+  @media (max-width: 1200px) {
+    width: 90%;
+  }
+}
+
+.divider {
+  height: 30px;
+  border: #eae7e7 1px solid;
+
+  @media (max-width: 1200px) {
+    display: block;
+    width: 90%;
+    height: 1px;
+    background-color: #eae7e7;
+    margin: 20px 0;
+  }
 }
 
 .categoryBox {
@@ -119,48 +213,121 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+
+  @media (max-width: 1200px) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
-.category {
+.mainCategory {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 20px;
-}
 
-.radio {
-  width: 125px;
-  height: 45px;
-  border: 0;
+  @media (max-width: 650px) {
+    justify-content: flex-start;
+    width: 90%;
+  }
 
-  input {
-    position: absolute;
+  .radio {
     width: 125px;
     height: 45px;
-    opacity: 0;
-    cursor: pointer;
+    border: 0;
+
+    input {
+      position: absolute;
+      width: 125px;
+      height: 45px;
+      opacity: 0;
+      cursor: pointer;
+
+      @media (max-width: 650px) {
+        width: 110px;
+      }
+
+      @media (max-width: 375px) {
+        width: 100px;
+      }
+    }
+
+    label {
+      display: block;
+      border-radius: 50px;
+      margin: 0 auto;
+      text-align: center;
+      height: 100%;
+      line-height: 45px;
+    }
+
+    input[type='radio']:checked + label {
+      background: black;
+      color: #fff;
+    }
+
+    input[type='radio'] + label {
+      background: #d8d4d4;
+      color: white;
+      font-weight: 700px;
+    }
+  }
+}
+
+.subCategory {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+
+  @media (max-width: 650px) {
+    justify-content: flex-start;
+    width: 90%;
   }
 
-  label {
-    display: block;
-    border-radius: 50px;
-    margin: 0 auto;
-    text-align: center;
-    height: 100%;
-    line-height: 45px;
-  }
+  .radio {
+    width: 125px;
+    height: 45px;
+    border: 0;
 
-  input[type='radio']:checked + label {
-    background: black;
-    color: #fff;
-  }
+    input {
+      position: absolute;
+      width: 125px;
+      height: 45px;
+      opacity: 0;
+      cursor: pointer;
 
-  input[type='radio'] + label {
-    background: #d8d4d4;
-    color: white;
-    letter-spacing: -0.11px;
-    font-weight: 700px;
+      @media (max-width: 480px) {
+        width: 80px;
+      }
+
+      @media (max-width: 375px) {
+        width: 70px;
+      }
+    }
+
+    label {
+      display: block;
+      border-radius: 50px;
+      margin: 0 auto;
+      text-align: center;
+      height: 100%;
+      line-height: 45px;
+    }
+
+    input[type='radio']:checked + label {
+      background: black;
+      color: #fff;
+    }
+
+    input[type='radio'] + label {
+      background: #d8d4d4;
+      color: white;
+      font-weight: 700px;
+    }
   }
 }
 
@@ -171,29 +338,76 @@
   justify-content: flex-start;
   flex-wrap: wrap;
   gap: 20px;
+
+  @media (max-width: 1200px) {
+    justify-content: center;
+    gap: 10px;
+  }
+
+  @media (max-width: 650px) {
+    justify-content: center;
+    width: 90%;
+  }
 }
 
 .imageInput {
-  width: 304px;
-  height: 304px;
+  width: 274px;
+  height: 274px;
   position: relative;
-  border-radius: 5px;
+  border-radius: 13px;
 
   label {
     position: absolute;
-    width: 300px;
-    height: 300px;
+    width: 270px;
+    height: 270px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     background-color: #e6e8e8;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 13px;
   }
 
   input {
     display: none;
+  }
+
+  @media (max-width: 720px) {
+    width: 204px;
+    height: 204px;
+
+    label {
+      width: 200px;
+      height: 200px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    width: 164px;
+    height: 164px;
+
+    label {
+      width: 160px;
+      height: 160px;
+    }
+  }
+}
+
+.image {
+  width: 270px;
+  height: 270px;
+  border-radius: 13px;
+  object-fit: cover;
+
+  @media (max-width: 720px) {
+    width: 200px;
+    height: 200px;
+  }
+
+  @media (max-width: 480px) {
+    width: 160px;
+    height: 160px;
   }
 }
 
@@ -241,6 +455,10 @@
       color: var(--placeholder-text-color);
     }
   }
+
+  @media (max-width: 1200px) {
+    width: 90%;
+  }
 }
 
 .buttonBox {
@@ -250,6 +468,7 @@
   justify-content: center;
   width: 100%;
   margin: 50px 0;
+  gap: 20px;
 
   .buttonCancel {
     width: 200px;
@@ -261,17 +480,15 @@
     font-size: 20px;
     font-weight: 700;
     line-height: 41px;
-    letter-spacing: -0.3px;
     border-radius: 5px;
     cursor: pointer;
-    margin-right: 20px;
   }
 
   .buttonCancel:hover {
     opacity: 0.8;
   }
 
-  .buttonCreate {
+  .buttonSubmit {
     width: 200px;
     height: 60px;
     border: 0;
@@ -281,12 +498,16 @@
     font-size: 20px;
     font-weight: 700;
     line-height: 41px;
-    letter-spacing: -0.3px;
     border-radius: 5px;
     cursor: pointer;
   }
 
-  .buttonCreate:hover {
+  .buttonSubmit:hover {
     opacity: 0.8;
+  }
+
+  @media (max-width: 1200px) {
+    width: 90%;
+    height: 90%;
   }
 }

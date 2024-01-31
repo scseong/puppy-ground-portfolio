@@ -32,6 +32,7 @@ const Facilities = () => {
   });
   const [activeMarkerId, setActiveMarkerId] = useState<number | null>(null);
   const [currentLocationMarker, setCurrentLocationMarker] = useState<boolean>(false);
+  const [showCurrentInfo, setShowCurrentInfo] = useState<boolean>(true);
   const { facilitiesData } = useFacilitiesQuery();
   const { warnTopCenter } = useToast();
 
@@ -48,6 +49,7 @@ const Facilities = () => {
             longitude: position.coords.longitude
           });
           setCurrentLocationMarker(true);
+          setShowCurrentInfo(true);
         },
         () => {
           warnTopCenter({ message: '현재 위치를 찾지 못하였습니다 🥲' });
@@ -63,6 +65,7 @@ const Facilities = () => {
       latitude,
       longitude
     });
+    setShowCurrentInfo(false);
   };
 
   // 현재위치를 시작점으로 만들기
@@ -173,11 +176,15 @@ const Facilities = () => {
                   }
                 }}
               />
-              <MapInfoWindow
-                position={{ lat: currentLocation.latitude, lng: currentLocation.longitude }}
-                removable={true}
-              />
-              <div>현재위치</div>
+              {showCurrentInfo && (
+                <CustomOverlayMap
+                  position={{ lat: currentLocation.latitude, lng: currentLocation.longitude }}
+                >
+                  <div className={styles.infoWindow}>
+                    <p>현재위치</p>
+                  </div>
+                </CustomOverlayMap>
+              )}
             </>
           )}
           <MapTypeControl position={'TOPRIGHT'} />

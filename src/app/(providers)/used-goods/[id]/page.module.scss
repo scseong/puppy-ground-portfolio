@@ -110,6 +110,9 @@
       font-weight: 600;
       color: white;
     }
+    & > button:hover {
+      opacity: 0.8;
+    }
   }
 }
 
@@ -145,6 +148,7 @@
   display: flex;
   justify-content: center;
   margin-top: 50px;
+  cursor: pointer;
 }
 
 .infoWrap {
