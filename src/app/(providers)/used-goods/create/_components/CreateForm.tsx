@@ -283,14 +283,4 @@ const CreateForm = () => {
   );
 };
 
-// 지원님 코드(보류상태)
-// const PrivateCreatePage = () => {
-//   console.log('왜 두번되냐 2');
-//   return (
-//     <PrivateRouteWrapper>
-//       <CreateForm />
-//     </PrivateRouteWrapper>
-//   );
-// };
-
 export default CreateForm;
