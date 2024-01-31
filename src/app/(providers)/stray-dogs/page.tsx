@@ -81,148 +81,148 @@ const StrayDogs = () => {
 
   return (
     <Main>
-      <div className={styles.contentContainer}>
-        <form onSubmit={filterList} className={styles.filterWrap}>
-          <div className={styles.filterContent}>
-            <p>기간</p>
-            <div className={styles.calender}>
-              <DatePicker
-                locale={ko}
-                className={styles.datePicker}
-                dateFormat="yyyy-MM-dd"
-                shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
-                minDate={new Date('2023-10-01')} // minDate 이전 날짜 선택 불가
-                maxDate={new Date()} // maxDate 이후 날짜 선택 불가
-                selected={startDate}
-                startDate={startDate}
-                endDate={endDate}
-                onChange={(date) => setStartDate(date)}
-              />
+      {/* <div className={styles.contentContainer}> */}
+      <form onSubmit={filterList} className={styles.filterWrap}>
+        <div className={styles.filterContent}>
+          <p>기간</p>
+          <div className={styles.calender}>
+            <DatePicker
+              locale={ko}
+              className={styles.datePicker}
+              dateFormat="yyyy-MM-dd"
+              shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
+              minDate={new Date('2023-10-01')} // minDate 이전 날짜 선택 불가
+              maxDate={new Date()} // maxDate 이후 날짜 선택 불가
+              selected={startDate}
+              startDate={startDate}
+              endDate={endDate}
+              onChange={(date) => setStartDate(date)}
+            />
 
-              <DatePicker
-                className={styles.datePicker}
-                locale={ko}
-                dateFormat="yyyy-MM-dd"
-                shouldCloseOnSelect
-                selected={endDate}
-                startDate={startDate}
-                endDate={endDate}
-                minDate={startDate}
-                maxDate={new Date('2025-01-01')} // maxDate 이후 날짜 선택 불가
-                onChange={(date) => setEndDate(date)}
-              />
-            </div>
+            <DatePicker
+              className={styles.datePicker}
+              locale={ko}
+              dateFormat="yyyy-MM-dd"
+              shouldCloseOnSelect
+              selected={endDate}
+              startDate={startDate}
+              endDate={endDate}
+              minDate={startDate}
+              maxDate={new Date('2025-01-01')} // maxDate 이후 날짜 선택 불가
+              onChange={(date) => setEndDate(date)}
+            />
           </div>
-          <div className={styles.filterContent}>
-            <p>지역</p>
-            <div className={styles.region}>
-              <div className={styles.regionWrapper}>
-                <select name="지역" className={styles.selectCity} onChange={cityChangeHandler}>
-                  {regionList.map((region, index) => {
-                    return <option key={index}>{region.city}</option>;
-                  })}
-                </select>
-                <select
-                  name="시/군/구"
-                  className={styles.selectCity}
-                  onChange={guChangeHandler}
-                  value={selectGu}
-                >
-                  {guList?.map((gu, index) => {
-                    return <option key={index}>{gu}</option>;
-                  })}
-                </select>
-              </div>
-              <button className={styles.searchButton} type="submit">
-                <CiSearch size="1.2rem" />
-              </button>
+        </div>
+        <div className={styles.filterContent}>
+          <p>지역</p>
+          <div className={styles.region}>
+            <div className={styles.regionWrapper}>
+              <select name="지역" className={styles.selectCity} onChange={cityChangeHandler}>
+                {regionList.map((region, index) => {
+                  return <option key={index}>{region.city}</option>;
+                })}
+              </select>
+              <select
+                name="시/군/구"
+                className={styles.selectCity}
+                onChange={guChangeHandler}
+                value={selectGu}
+              >
+                {guList?.map((gu, index) => {
+                  return <option key={index}>{gu}</option>;
+                })}
+              </select>
             </div>
+            <button className={styles.searchButton} type="submit">
+              <CiSearch size="1.2rem" />
+            </button>
           </div>
-        </form>
-        <div className={styles.gridContainer}>
-          {filteredStrayList ? (
-            filteredStrayList.length === 0 ? (
-              <NoSearchValue />
-            ) : (
-              filteredStrayList.slice(offset, offset + limit).map((list, index) => {
-                const formatHappenDt = dayjs(list.happenDt).format('YYYY[년] MM[월] DD[일]');
-                return (
-                  <div key={index}>
-                    <Link href={`/stray-dogs/${list.desertionNo}`}>
-                      <div className={styles.listCard}>
-                        <div className={styles.imageWrap}>
-                          <Image
-                            src={list.popfile}
-                            alt="dog-image"
-                            className={styles.image}
-                            width="273"
-                            height="273"
-                          />
-                        </div>
-                        <div className={styles.explanationWrap}>
-                          <div className={styles.titleColumn}>
-                            <p>구조일시</p>
-                            <p>견종</p>
-                            <p>성별</p>
-                            <p>발견장소</p>
-                          </div>
-                          <div className={styles.contentColumn}>
-                            <p>{formatHappenDt}</p>
-                            <p>{list.kindCd.slice(3)}</p>
-                            <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
-                            <p>{list.happenPlace}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  </div>
-                );
-              })
-            )
+        </div>
+      </form>
+      <div className={styles.gridContainer}>
+        {filteredStrayList ? (
+          filteredStrayList.length === 0 ? (
+            <NoSearchValue />
           ) : (
-            strayList?.slice(offset, offset + limit).map((list, index) => {
+            filteredStrayList.slice(offset, offset + limit).map((list, index) => {
               const formatHappenDt = dayjs(list.happenDt).format('YYYY[년] MM[월] DD[일]');
               return (
                 <div key={index}>
-                  <div className={styles.listCard}>
-                    <Link href={`/stray-dogs/${list.desertionNo}`}>
+                  <Link href={`/stray-dogs/${list.desertionNo}`}>
+                    <div className={styles.listCard}>
                       <div className={styles.imageWrap}>
                         <Image
                           src={list.popfile}
                           alt="dog-image"
                           className={styles.image}
-                          width={250}
-                          height={250}
+                          width="273"
+                          height="273"
                         />
                       </div>
-                    </Link>
-                    <div className={styles.explanationWrap}>
-                      <div className={styles.titleColumn}>
-                        <p>구조일시</p>
-                        <p>견종</p>
-                        <p>성별</p>
-                        <p>발견장소</p>
-                      </div>
-                      <div className={styles.contentColumn}>
-                        <p>{formatHappenDt}</p>
-                        <p>{list.kindCd.slice(3)}</p>
-                        <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
-                        <p>{list.happenPlace}</p>
+                      <div className={styles.explanationWrap}>
+                        <div className={styles.titleColumn}>
+                          <p>구조일시</p>
+                          <p>견종</p>
+                          <p>성별</p>
+                          <p>발견장소</p>
+                        </div>
+                        <div className={styles.contentColumn}>
+                          <p>{formatHappenDt}</p>
+                          <p>{list.kindCd.slice(3)}</p>
+                          <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
+                          <p>{list.happenPlace}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 </div>
               );
             })
-          )}
-        </div>
-        <Pagination
-          page={page}
-          setPage={setPage}
-          limit={limit}
-          total={filteredStrayList ? filteredStrayList.length : strayList?.length}
-        />
+          )
+        ) : (
+          strayList?.slice(offset, offset + limit).map((list, index) => {
+            const formatHappenDt = dayjs(list.happenDt).format('YYYY[년] MM[월] DD[일]');
+            return (
+              <div key={index}>
+                <div className={styles.listCard}>
+                  <Link href={`/stray-dogs/${list.desertionNo}`}>
+                    <div className={styles.imageWrap}>
+                      <Image
+                        src={list.popfile}
+                        alt="dog-image"
+                        className={styles.image}
+                        width={250}
+                        height={250}
+                      />
+                    </div>
+                  </Link>
+                  <div className={styles.explanationWrap}>
+                    <div className={styles.titleColumn}>
+                      <p>구조일시</p>
+                      <p>견종</p>
+                      <p>성별</p>
+                      <p>발견장소</p>
+                    </div>
+                    <div className={styles.contentColumn}>
+                      <p>{formatHappenDt}</p>
+                      <p>{list.kindCd.slice(3)}</p>
+                      <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
+                      <p>{list.happenPlace}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
+      <Pagination
+        page={page}
+        setPage={setPage}
+        limit={limit}
+        total={filteredStrayList ? filteredStrayList.length : strayList?.length}
+      />
+      {/* </div> */}
     </Main>
   );
 };
