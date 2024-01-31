@@ -254,7 +254,6 @@ const SignUp = () => {
             id="preview"
             {...register('image', {
               onChange: (e: Event) => {
-                console.log('aaa');
                 const input = e.target as HTMLInputElement;
                 if (input!.files!.length === 0) {
                   setValue('image', imageFile);
@@ -265,7 +264,6 @@ const SignUp = () => {
                 }
               },
               validate: (value) => {
-                console.log('너는 벨류', value);
                 if (value.length > 0 && value[0].size >= 2_000_000) {
                   errorTopRight({ message: '파일사이즈는 2MB를 넘지 않아야 합니다.' });
                   return value;
