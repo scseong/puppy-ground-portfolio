@@ -92,7 +92,7 @@
 
 .listName {
   font-size: 18px;
-  font-weight: 700;
+  font-family: pretendard-medium;
   color: #0ac4b9;
   margin: 5px 0;
   cursor: pointer;
@@ -110,4 +110,10 @@
   font-size: 13px;
   color: #0ac4b9;
   margin-top: 5px;
+}
+
+.noResult {
+  font-family: pretendard-light;
+  font-size: 15px;
+  padding: 20px;
 }
