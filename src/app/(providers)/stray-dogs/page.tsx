@@ -16,7 +16,6 @@ import { ko } from 'date-fns/locale';
 import dayjs from 'dayjs';
 import NoSearchValue from './_component/NoSearchValue';
 import { Main } from '@/app/_components/layout';
-import { IoSearch } from 'react-icons/io5';
 
 const StrayDogs = () => {
   const [startDate, setStartDate] = useState<Date | null>(new Date('2023-10-01'));
@@ -99,6 +98,7 @@ const StrayDogs = () => {
                 endDate={endDate}
                 onChange={(date) => setStartDate(date)}
               />
+
               <DatePicker
                 className={styles.datePicker}
                 locale={ko}
@@ -146,33 +146,33 @@ const StrayDogs = () => {
                 const formatHappenDt = dayjs(list.happenDt).format('YYYY[년] MM[월] DD[일]');
                 return (
                   <div key={index}>
-                    <div className={styles.listCard}>
-                      <Link href={`/stray-dogs/${list.desertionNo}`}>
+                    <Link href={`/stray-dogs/${list.desertionNo}`}>
+                      <div className={styles.listCard}>
                         <div className={styles.imageWrap}>
                           <Image
                             src={list.popfile}
                             alt="dog-image"
                             className={styles.image}
-                            width={250}
-                            height={250}
+                            width={273}
+                            height={273}
                           />
                         </div>
-                      </Link>
-                      <div className={styles.explanationWrap}>
-                        <div className={styles.titleColumn}>
-                          <p>구조일시</p>
-                          <p>견종</p>
-                          <p>성별</p>
-                          <p>발견장소</p>
-                        </div>
-                        <div className={styles.contentColumn}>
-                          <p>{formatHappenDt}</p>
-                          <p>{list.kindCd.slice(3)}</p>
-                          <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
-                          <p>{list.happenPlace}</p>
+                        <div className={styles.explanationWrap}>
+                          <div className={styles.titleColumn}>
+                            <p>구조일시</p>
+                            <p>견종</p>
+                            <p>성별</p>
+                            <p>발견장소</p>
+                          </div>
+                          <div className={styles.contentColumn}>
+                            <p>{formatHappenDt}</p>
+                            <p>{list.kindCd.slice(3)}</p>
+                            <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
+                            <p>{list.happenPlace}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   </div>
                 );
               })
