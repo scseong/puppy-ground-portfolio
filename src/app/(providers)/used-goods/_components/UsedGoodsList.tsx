@@ -6,13 +6,16 @@ import styles from './usedGoodsList.module.scss';
 import { useQueryParam } from '@/hooks/useQueryParam';
 import { getQueryKey, getQueryFunction } from '@/apis/goods';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import NotFoundImage from '../../../../../public/images/sadpug.png';
 
 const UsedGoodsList = () => {
   const { queryObject, generateQueryParameter } = useQueryParam();
   const [currentPage, setCurrentPage] = useState(1);
   const searchParams = useSearchParams();
+  const searchKeyword = searchParams.get('query');
 
   const { data: postList } = useQuery({
     queryKey: getQueryKey(queryObject),
@@ -35,9 +38,17 @@ const UsedGoodsList = () => {
 
   return (
     <>
+      {searchKeyword && (
+        <h3 className={styles.subTitle}>
+          <span>{searchKeyword}</span>의 검색결과 <span>{count}개</span>
+        </h3>
+      )}
+      {!count && (
+        <div className={styles.empty}>
+          <Image src={NotFoundImage} alt="결과 없음" width={100} height={100} unoptimized />
+        </div>
+      )}
       <div className={styles.wrapper}>
-        {/*  TODO: Empty Component 만들기 */}
-        {!data || (!data.length && <div className={styles.empty}>상품이 없습니다.</div>)}
         {data?.map((goods) => <UsedGoodsItem key={goods.id} goods={goods} />)}
       </div>
       {/* TODO: 페이지네이션 컴포넌트 분리*/}

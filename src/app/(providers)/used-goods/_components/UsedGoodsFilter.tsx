@@ -1,39 +1,13 @@
 'use client';
-import { useEffect, useState, useRef } from 'react';
-import { supabase } from '@/shared/supabase/supabase';
-import { useQuery } from '@tanstack/react-query';
+import { useEffect, useRef, useState } from 'react';
 import styles from './usedGoodsFilter.module.scss';
-import { SingleValue, StylesConfig } from 'react-select';
-import CustomSelect from './CustomSelect';
+import Select, { SingleValue, MultiValue, SelectInstance } from 'react-select';
 import { useQueryParam } from '@/hooks/useQueryParam';
 import { useRouter } from 'next/navigation';
+import { isEqual } from 'lodash';
+import { multiOptions, singleOptions } from './config/selectConfig';
 
-type CategoryObject = {
-  mainCategory: string[];
-  subCategory: string[];
-};
-
-const mainCategoryQuery = supabase.from('main_category').select('*');
-const subCategoryQuery = supabase.from('sub_category').select('*');
-
-// TODO: API 응답 받아 처리
-const getCategories = async (): Promise<CategoryObject> => {
-  const response = await Promise.all([mainCategoryQuery, subCategoryQuery]);
-  const categoryArray: string[][] = response.map((res) => {
-    if (!res.data) return [];
-    return res.data.map((category) => category.name);
-  });
-
-  return categoryArray.reduce((acc, cur, idx) => {
-    if (idx === 0) {
-      acc['mainCategory'] = cur;
-    } else if (idx === 1) {
-      acc['subCategory'] = cur;
-    }
-    return acc;
-  }, {} as CategoryObject);
-};
-
+// TODO: CONSTANT -> API RESPONSE
 const mainCategory = [
   { value: '1', label: '대형견' },
   { value: '2', label: '중형견' },
@@ -49,85 +23,72 @@ const subCategory = [
 
 type SelectOption = (typeof mainCategory)[number];
 
-const customStyles: StylesConfig<{ value: string; label: string }, false> = {
-  option: (styles, { isSelected }) => ({
-    ...styles,
-    color: isSelected ? '#0ac4a9' : '#333',
-    backgroundColor: 'none',
-    cursor: 'pointer',
-    fontSize: '14px',
-    padding: '0.5rem 1rem',
-    '&:hover': {
-      color: '#0ac4a9'
-    }
-  }),
-  indicatorSeparator: () => ({
-    display: 'none'
-  }),
-  control: (styles, { isFocused }) => ({
-    ...styles,
-    cursor: 'pointer',
-    borderColor: isFocused ? '#0ac4a9' : '#979797',
-
-    fontSize: '13px',
-    lineHeight: '1rem',
-    boxShadow: isFocused ? '0 0 0 1px #0ac4a9' : undefined,
-    height: '100%',
-    '&:hover': {
-      color: '#333'
-    },
-    '&:focus': {
-      border: '#0ac4a9'
-    }
-  })
-};
-
 const UsedGoodsFilter = () => {
-  const selectInputRef = useRef(null);
-  const { isSoldout, queryParameter, queryObject, generateQueryParameter } = useQueryParam();
-  const [selectedMain, setSelectedMain] = useState<SelectOption | null>(null);
+  const [selectedMain, setSelectedMain] = useState<SelectOption[] | null>([]);
   const [selectedSub, setSelectedSub] = useState<SelectOption | null>(null);
-  // const { data } = useQuery<CategoryObject>({ queryKey: ['categories'], queryFn: getCategories });
-  // if (!data) return;
+  const { queryObject, generateQueryParameter } = useQueryParam();
+  const mainSelectRef = useRef<SelectInstance<SelectOption, true>>(null);
+  const subSelectRef = useRef<SelectInstance<SelectOption> | null>(null);
+
   const router = useRouter();
-
-  useEffect(() => {
-    const { main, sub } = queryObject;
-    if (main) setSelectedMain(mainCategory.filter((category) => category.value === main)[0]);
-    else setSelectedMain(null);
-    if (sub) setSelectedSub(subCategory.filter((category) => category.value === sub)[0]);
-    else setSelectedSub(null);
-  }, [queryObject]);
-
-  const handleMainSelect = (newValue: SingleValue<SelectOption>) => {
+  const handleMainSelect = (newValue: MultiValue<SelectOption>) => {
     if (!newValue) return;
-    setSelectedMain(newValue);
-    router.push(generateQueryParameter('main', newValue.value));
+    setSelectedMain([...newValue]);
+    mainSelectRef.current?.blur();
+    router.push(
+      generateQueryParameter(
+        'main',
+        newValue.map((option) => option.value)
+      )
+    );
   };
 
   const handleSubSelect = (newValue: SingleValue<SelectOption>) => {
     if (!newValue) return;
     setSelectedSub(newValue);
+    subSelectRef.current?.blur();
     router.push(generateQueryParameter('sub', newValue.value));
   };
 
+  useEffect(() => {
+    const { main, sub } = queryObject;
+    if (main) {
+      const mainQuery = main?.includes('%') ? main?.split('%') : [main];
+      const filtered = mainCategory.filter((category) => mainQuery.includes(category.value));
+
+      if (!isEqual(filtered, selectedMain)) {
+        setSelectedMain(filtered);
+      }
+    } else setSelectedMain(null);
+    if (sub) setSelectedSub(subCategory.filter((category) => category.value === sub)[0]);
+    else setSelectedSub(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queryObject]);
+
   return (
     <div className={styles.wrapper}>
-      <CustomSelect
+      <Select
         className={styles.customSelect}
         value={selectedSub ? selectedSub : null}
         onChange={handleSubSelect}
         options={subCategory}
         placeholder="카테고리"
-        styles={customStyles}
+        styles={singleOptions}
+        isSearchable={false}
+        ref={subSelectRef}
       />
-      <CustomSelect
+      <Select
         className={styles.customSelect}
         value={selectedMain ? selectedMain : null}
         onChange={handleMainSelect}
         options={mainCategory}
         placeholder="견종 사이즈"
-        styles={customStyles}
+        isClearable={false}
+        isSearchable={false}
+        isMulti
+        noOptionsMessage={() => <div>모든 견종 사이즈를 선택했습니다.</div>}
+        styles={multiOptions}
+        ref={mainSelectRef}
       />
     </div>
   );
