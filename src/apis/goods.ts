@@ -16,7 +16,11 @@ export const getUsedGoods = async (params: SearchParams, pageSize: number = 8) =
       { count: 'exact' }
     );
 
-  if (main) queryFn = queryFn.eq('main_category_id', main);
+  if (main) {
+    const mainQuery = main?.includes('%') ? main?.split('%') : [main];
+    queryFn = queryFn.in('main_category_id', mainQuery);
+  }
+
   if (sub) queryFn = queryFn.eq('sub_category_id', sub);
   if (query) queryFn = queryFn.ilike('title', `%${query}%`);
   if (soldout) queryFn = queryFn.eq('sold_out', true);
@@ -32,7 +36,7 @@ export const getUsedGoods = async (params: SearchParams, pageSize: number = 8) =
 
   const { data, count } = await queryFn;
 
-  return {data, count};
+  return { data, count };
 };
 
 export const usedGoodsKeys = {
