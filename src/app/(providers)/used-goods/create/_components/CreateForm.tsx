@@ -275,7 +275,7 @@ const CreateForm = () => {
         <button className={styles.buttonCancel} onClick={onClickCancel}>
           취소하기
         </button>
-        <button className={styles.buttonCreate} onClick={onClickCreate}>
+        <button className={styles.buttonSubmit} onClick={onClickCreate}>
           등록하기
         </button>
       </div>

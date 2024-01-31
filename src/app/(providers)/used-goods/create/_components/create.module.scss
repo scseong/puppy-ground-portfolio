@@ -248,6 +248,10 @@
       @media (max-width: 650px) {
         width: 110px;
       }
+
+      @media (max-width: 375px) {
+        width: 100px;
+      }
     }
 
     label {
@@ -298,6 +302,10 @@
 
       @media (max-width: 480px) {
         width: 80px;
+      }
+
+      @media (max-width: 375px) {
+        width: 70px;
       }
     }
 
@@ -476,7 +484,7 @@
     cursor: pointer;
   }
 
-  .buttonCreate {
+  .buttonSubmit {
     width: 200px;
     height: 60px;
     border: 0;
