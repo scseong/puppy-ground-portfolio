@@ -44,7 +44,7 @@ const LoginPage = () => {
 
   // 구글 로그인
   const googleLoginHandler = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         queryParams: {
@@ -60,7 +60,7 @@ const LoginPage = () => {
 
   // 카카오 로그인
   const kakaoLoginHandler = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'kakao',
       options: {
         queryParams: {

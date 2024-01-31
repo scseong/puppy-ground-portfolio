@@ -13,16 +13,18 @@ const UsedGoodsContainer = async ({ searchParams }: { searchParams: SearchParams
 
   return (
     <main className={styles.main}>
-      <h2>중고물품 리스트</h2>
+      <div className={styles.header}>
+        <h2>중고물품 목록</h2>
+        <Link href="/used-goods/create" className={styles.createLink}>
+          등록하기
+        </Link>
+      </div>
       <div className={styles.filtering}>
         <UsedGoodsFilter />
         <UsedGoodsSearch />
       </div>
       <div className={styles.subFiltering}>
         <UsedGoodsOrder />
-        <Link href="/used-goods/create" className={styles.createLink}>
-          등록하기
-        </Link>
       </div>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <UsedGoodsList />

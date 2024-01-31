@@ -10,23 +10,27 @@ export const useQueryParam = () => {
 
   const isSoldout = 'soldout' in queryObject;
 
-  const generateQueryParameter = (keyword: QueryKeyword, payload?: string) => {
+  const generateQueryParameter = (keyword: QueryKeyword, payload?: string | string[]) => {
     let baseURL = pathname + '?';
 
     const queryString = new URLSearchParams(searchParams);
 
     switch (keyword) {
       case 'sub':
-        queryString.set('sub', payload!);
+        queryString.set('sub', payload as string);
         queryString.delete('main');
         queryString.delete('page');
         queryString.delete('soldout');
         queryString.delete('query');
         break;
       case 'main':
-        queryString.set('main', payload!);
+        if (!Array.isArray(payload)) break;
+        if (!payload.length) {
+          queryString.delete('main');
+          break;
+        }
+        queryString.set('main', payload.join('%'));
         queryString.delete('page');
-        queryString.delete('soldout');
         queryString.delete('query');
         break;
       case 'soldout':
@@ -43,7 +47,7 @@ export const useQueryParam = () => {
         queryString.delete('soldout');
         break;
       case 'page':
-        queryString.set('page', payload!);
+        queryString.set('page', payload as string);
 
       default:
     }

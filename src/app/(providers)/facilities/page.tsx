@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import {
   CustomOverlayMap,
   Map,
+  MapInfoWindow,
   MapMarker,
   MapTypeControl,
   ZoomControl
@@ -31,6 +32,7 @@ const Facilities = () => {
   });
   const [activeMarkerId, setActiveMarkerId] = useState<number | null>(null);
   const [currentLocationMarker, setCurrentLocationMarker] = useState<boolean>(false);
+  const [showCurrentInfo, setShowCurrentInfo] = useState<boolean>(true);
   const { facilitiesData } = useFacilitiesQuery();
   const { warnTopCenter } = useToast();
 
@@ -47,6 +49,7 @@ const Facilities = () => {
             longitude: position.coords.longitude
           });
           setCurrentLocationMarker(true);
+          setShowCurrentInfo(true);
         },
         () => {
           warnTopCenter({ message: '현재 위치를 찾지 못하였습니다 🥲' });
@@ -62,6 +65,7 @@ const Facilities = () => {
       latitude,
       longitude
     });
+    setShowCurrentInfo(false);
   };
 
   // 현재위치를 시작점으로 만들기
@@ -160,17 +164,28 @@ const Facilities = () => {
             );
           })}
           {currentLocationMarker && (
-            <MapMarker
-              position={{ lat: currentLocation.latitude, lng: currentLocation.longitude }}
-              image={{
-                // 마커이미지의 주소
-                src: 'https://i.ibb.co/DYzyv2q/pngegg.png',
-                size: {
-                  width: 20,
-                  height: 20
-                }
-              }}
-            />
+            <>
+              <MapMarker
+                position={{ lat: currentLocation.latitude, lng: currentLocation.longitude }}
+                image={{
+                  // 마커이미지의 주소
+                  src: 'https://i.ibb.co/DYzyv2q/pngegg.png',
+                  size: {
+                    width: 20,
+                    height: 20
+                  }
+                }}
+              />
+              {showCurrentInfo && (
+                <CustomOverlayMap
+                  position={{ lat: currentLocation.latitude, lng: currentLocation.longitude }}
+                >
+                  <div className={styles.infoWindow}>
+                    <p>현재위치</p>
+                  </div>
+                </CustomOverlayMap>
+              )}
+            </>
           )}
           <MapTypeControl position={'TOPRIGHT'} />
           <ZoomControl position={'RIGHT'} />
