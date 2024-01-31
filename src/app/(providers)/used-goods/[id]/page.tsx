@@ -26,7 +26,9 @@ import { useAlertMessage } from '@/hooks/useAlertMessage';
 import Loading from '@/app/_components/layout/loading/Loading';
 import Link from 'next/link';
 
+
 const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
+
   const [showEditToggle, setShowEditToggle] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const user = useAuth((state) => state.user);
@@ -120,16 +122,16 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const [userChatList, setUserChatList] = useState(false);
 
   const clickOpenChat = async () => {
+
     const list = chatList?.getChatListData?.find((chat) => chat?.post_id === Number(id));
 
     if (data?.user_id === user?.id)
       return errorTopRight({
-        message: '본인이 쓴 게시글에는 채팅을 보낼 수 없습니다',
-        timeout: 2000
+        message: '본인이 쓴 게시글에는 채팅을 보낼 수 없습니다'
       });
 
     if (userChatList === true || !!list !== false)
-      return errorTopRight({ message: '이미 채팅을 보냈습니다', timeout: 2000 });
+      return errorTopRight({ message: '이미 채팅을 보냈습니다' });
 
     try {
       const chat = await makeChatListMutation.mutateAsync({
@@ -150,7 +152,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
       setModalIsOpen(true);
       setUserChatList(true);
     } catch (error) {
-      errorTopRight({ message: '오류가 발생하였습니다', timeout: 2000 });
+      errorTopRight({ message: '오류가 발생하였습니다' });
     }
   };
 

@@ -23,7 +23,7 @@ const StrayDogs = () => {
   const [selectCity, setSelectCity] = useState('');
   const [selectGu, setSelectGu] = useState('');
   const [page, setPage] = useState(1);
-  const limit = 16;
+  const limit = 24;
   const offset = (page - 1) * limit;
 
   const {
@@ -115,22 +115,24 @@ const StrayDogs = () => {
           </div>
           <div className={styles.filterContent}>
             <p>지역</p>
-            <div>
-              <select name="지역" className={styles.selectCity} onChange={cityChangeHandler}>
-                {regionList.map((region, index) => {
-                  return <option key={index}>{region.city}</option>;
-                })}
-              </select>
-              <select
-                name="시/군/구"
-                className={styles.selectCity}
-                onChange={guChangeHandler}
-                value={selectGu}
-              >
-                {guList?.map((gu, index) => {
-                  return <option key={index}>{gu}</option>;
-                })}
-              </select>
+            <div className={styles.region}>
+              <div className={styles.regionWrapper}>
+                <select name="지역" className={styles.selectCity} onChange={cityChangeHandler}>
+                  {regionList.map((region, index) => {
+                    return <option key={index}>{region.city}</option>;
+                  })}
+                </select>
+                <select
+                  name="시/군/구"
+                  className={styles.selectCity}
+                  onChange={guChangeHandler}
+                  value={selectGu}
+                >
+                  {guList?.map((gu, index) => {
+                    return <option key={index}>{gu}</option>;
+                  })}
+                </select>
+              </div>
               <button className={styles.searchButton} type="submit">
                 <CiSearch size="1.2rem" />
               </button>
@@ -153,8 +155,8 @@ const StrayDogs = () => {
                             src={list.popfile}
                             alt="dog-image"
                             className={styles.image}
-                            width={273}
-                            height={273}
+                            width="273"
+                            height="273"
                           />
                         </div>
                         <div className={styles.explanationWrap}>

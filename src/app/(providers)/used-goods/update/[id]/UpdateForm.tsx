@@ -170,7 +170,7 @@ const UpdateForm = (props: Props) => {
       latitude: position.lat,
       longitude: position.lng
     }));
-  }, [address, position]);
+  }, [address, position, inputForm.address, inputForm.latitude, inputForm.longitude]);
 
   return (
     <div className={styles.containerBox}>

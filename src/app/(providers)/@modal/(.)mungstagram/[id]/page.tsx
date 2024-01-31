@@ -8,15 +8,7 @@ import { supabase } from '@/shared/supabase/supabase';
 import { useQuery } from '@tanstack/react-query';
 import { SlideImage } from '@/app/(providers)/used-goods/_components';
 import { useState, useEffect } from 'react';
-import { getCountFromTable } from '@/utils/table';
-import {
-  GoHeartFill,
-  GoHeart,
-  GoComment,
-  GoShare,
-  GoChevronLeft,
-  GoChevronRight
-} from 'react-icons/go';
+import { GoComment, GoShare, GoChevronLeft, GoChevronRight } from 'react-icons/go';
 import Link from 'next/link';
 import { getPosts } from '@/apis/mung-stagram/action';
 import LikeButton from '../../_components/LikeButton';
@@ -89,6 +81,7 @@ const MungModal = ({ params }: PageProps) => {
       ariaHideApp={false}
       contentLabel="Modal"
       style={customStyle}
+      preventScroll
     >
       <section className={styles.mungstaDetail}>
         {prev && (

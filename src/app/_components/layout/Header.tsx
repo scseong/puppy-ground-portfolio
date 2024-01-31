@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styles from './header.module.scss';
 import Image from 'next/image';
 import { supabase } from '@/shared/supabase/supabase';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect, MouseEventHandler } from 'react';
 import ChatList from '../chatting/ChatList';
 import { useToast } from '@/hooks/useToast';
@@ -11,11 +11,10 @@ import useAuth from '@/hooks/useAuth';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getChatContent } from '@/apis/chat/chat';
 import Loading from './loading/Loading';
-import Logo from '../../../../public/images/logo.png';
 import { GoBell } from 'react-icons/go';
 import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
 import { RxHamburgerMenu } from 'react-icons/rx';
-import { RealtimeChannel } from '@supabase/supabase-js';
+import { RealtimeChannel, RealtimePostgresInsertPayload } from '@supabase/supabase-js';
 import { ALERT_MESSAGE_QUERY_LEY, useAlertMessage } from '@/hooks/useAlertMessage';
 import AlertMessageList from '../alertMessage/AlertMessageList';
 
@@ -33,12 +32,13 @@ const Header = () => {
   const queryClient = useQueryClient();
   const { fetchAlertMessage, updateChatAlertMessage } = useAlertMessage();
 
+  const pathName = usePathname();
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
         setUser(session.user);
       } else {
-        setUser(null);
+        // setUser(null);
       }
 
       if (!isAuthInitialized) {
@@ -56,7 +56,7 @@ const Header = () => {
       router.push('/');
     }
     if (error) {
-      errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요', timeout: 2000 });
+      errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요' });
     }
   };
 
@@ -75,6 +75,23 @@ const Header = () => {
     return message.user_id === user?.id;
   });
 
+  const handleRecordInserted = (
+    payload: RealtimePostgresInsertPayload<{
+      [key: string]: any;
+    }>
+  ) => {
+    const message = payload.new.message;
+    alertBottomRight({ message });
+    queryClient.invalidateQueries({
+      queryKey: [ALERT_MESSAGE_QUERY_LEY]
+    });
+  };
+
+  const handleRecordDeleted = () => {
+    queryClient.invalidateQueries({
+      queryKey: [ALERT_MESSAGE_QUERY_LEY]
+    });
+  };
   // 알림메시지
   useEffect(() => {
     if (!user) return;
@@ -88,13 +105,17 @@ const Header = () => {
           table: 'alert_message',
           filter: `user_id=eq.${user.id}`
         },
-        (payload) => {
-          const message = payload.new.message;
-          alertBottomRight({ message, timeout: 2000 });
-          queryClient.invalidateQueries({
-            queryKey: [ALERT_MESSAGE_QUERY_LEY]
-          });
-        }
+        handleRecordInserted
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'DELETE',
+          schema: 'public',
+          table: 'alert_message',
+          filter: `user_id=eq.${user.id}`
+        },
+        handleRecordDeleted
       )
       .subscribe();
     return () => {
@@ -138,22 +159,33 @@ const Header = () => {
       <div className={styles.container}>
         <div className={styles.navbarBox}>
           <div className={styles.logoBox}>
-            <Image className={styles.logo} src={Logo} alt="logo" width={90} height={60} />
             <Link href="/" className={styles.logoText}>
               Puppy Ground
             </Link>
           </div>
           <div className={styles.menuBox}>
-            <Link className={styles.menuItem} href="/used-goods">
+            <Link
+              className={pathName === '/used-goods' ? styles.selcetedMenuItem : styles.menuItem}
+              href="/used-goods"
+            >
               중고거래
             </Link>
-            <Link className={styles.menuItem} href="/stray-dogs">
+            <Link
+              className={pathName === '/stray-dogs' ? styles.selcetedMenuItem : styles.menuItem}
+              href="/stray-dogs"
+            >
               유기견공고
             </Link>
-            <Link className={styles.menuItem} href="/facilities">
+            <Link
+              className={pathName === '/facilities' ? styles.selcetedMenuItem : styles.menuItem}
+              href="/facilities"
+            >
               동반시설
             </Link>
-            <Link className={styles.menuItem} href="/mungstagram">
+            <Link
+              className={pathName === '/mungstagram' ? styles.selcetedMenuItem : styles.menuItem}
+              href="/mungstagram"
+            >
               멍스타그램
             </Link>
             {user ? (
@@ -238,10 +270,18 @@ const Header = () => {
               </>
             ) : (
               <>
-                <Link className={styles.menuItem} href="/auth/signup">
+                <Link
+                  className={
+                    pathName === '/auth/signup' ? styles.selcetedMenuItem : styles.menuItem
+                  }
+                  href="/auth/signup"
+                >
                   회원가입
                 </Link>
-                <Link className={styles.menuItem} href="/auth/login">
+                <Link
+                  className={pathName === '/auth/login' ? styles.selcetedMenuItem : styles.menuItem}
+                  href="/auth/login"
+                >
                   로그인
                 </Link>
                 <div className={styles.menuEmojiPosition}>
