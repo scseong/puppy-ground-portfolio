@@ -16,10 +16,4 @@ function PublicRouteWrapper({ children }: { children: React.ReactNode }) {
   return !isLoading && children;
 }
 
-// const AuthProvidedPublicRouteWrapper = ({ children }: { children: React.ReactNode }) => (
-//   <AuthProvider>
-//     <PublicRouteWrapper>{children}</PublicRouteWrapper>
-//   </AuthProvider>
-// );
-
 export default PublicRouteWrapper;
