@@ -15,6 +15,7 @@ import Pagination from '@/app/_components/pagination/Pagination';
 import { ko } from 'date-fns/locale';
 import dayjs from 'dayjs';
 import NoSearchValue from './_component/NoSearchValue';
+import { Main } from '@/app/_components/layout';
 
 const StrayDogs = () => {
   const [startDate, setStartDate] = useState<Date | null>(new Date('2023-10-01'));
@@ -22,7 +23,7 @@ const StrayDogs = () => {
   const [selectCity, setSelectCity] = useState('');
   const [selectGu, setSelectGu] = useState('');
   const [page, setPage] = useState(1);
-  const limit = 16;
+  const limit = 24;
   const offset = (page - 1) * limit;
 
   const {
@@ -79,41 +80,42 @@ const StrayDogs = () => {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.contentContainer}>
-        <form onSubmit={filterList} className={styles.filterWrap}>
-          <div className={styles.filterContent}>
-            <p>기간</p>
-            <div className={styles.calender}>
-              <DatePicker
-                locale={ko}
-                className={styles.datePicker}
-                dateFormat="yyyy-MM-dd"
-                shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
-                minDate={new Date('2023-10-01')} // minDate 이전 날짜 선택 불가
-                maxDate={new Date()} // maxDate 이후 날짜 선택 불가
-                selected={startDate}
-                startDate={startDate}
-                endDate={endDate}
-                onChange={(date) => setStartDate(date)}
-              />
-              <DatePicker
-                className={styles.datePicker}
-                locale={ko}
-                dateFormat="yyyy-MM-dd"
-                shouldCloseOnSelect
-                selected={endDate}
-                startDate={startDate}
-                endDate={endDate}
-                minDate={startDate}
-                maxDate={new Date('2025-01-01')} // maxDate 이후 날짜 선택 불가
-                onChange={(date) => setEndDate(date)}
-              />
-            </div>
+    <Main>
+      <form onSubmit={filterList} className={styles.filterWrap}>
+        <div className={styles.filterContent}>
+          <p>기간</p>
+          <div className={styles.calender}>
+            <DatePicker
+              locale={ko}
+              className={styles.datePicker}
+              dateFormat="yyyy-MM-dd"
+              shouldCloseOnSelect // 날짜를 선택하면 datepicker가 자동으로 닫힘
+              minDate={new Date('2023-10-01')} // minDate 이전 날짜 선택 불가
+              maxDate={new Date()} // maxDate 이후 날짜 선택 불가
+              selected={startDate}
+              startDate={startDate}
+              endDate={endDate}
+              onChange={(date) => setStartDate(date)}
+            />
+
+            <DatePicker
+              className={styles.datePicker}
+              locale={ko}
+              dateFormat="yyyy-MM-dd"
+              shouldCloseOnSelect
+              selected={endDate}
+              startDate={startDate}
+              endDate={endDate}
+              minDate={startDate}
+              maxDate={new Date('2025-01-01')} // maxDate 이후 날짜 선택 불가
+              onChange={(date) => setEndDate(date)}
+            />
           </div>
-          <div className={styles.filterContent}>
-            <p>지역</p>
-            <div className={styles.region}>
+        </div>
+        <div className={styles.filterContent}>
+          <p>지역</p>
+          <div className={styles.region}>
+            <div className={styles.regionWrapper}>
               <select name="지역" className={styles.selectCity} onChange={cityChangeHandler}>
                 {regionList.map((region, index) => {
                   return <option key={index}>{region.city}</option>;
@@ -129,33 +131,33 @@ const StrayDogs = () => {
                   return <option key={index}>{gu}</option>;
                 })}
               </select>
-              <button className={styles.searchButton} type="submit">
-                <CiSearch size="1.2rem" />
-              </button>
             </div>
+            <button className={styles.searchButton} type="submit">
+              <CiSearch size="1.2rem" />
+            </button>
           </div>
-        </form>
-        <div className={styles.gridContainer}>
-          {filteredStrayList ? (
-            filteredStrayList.length === 0 ? (
-              <NoSearchValue />
-            ) : (
-              filteredStrayList.slice(offset, offset + limit).map((list, index) => {
-                const formatHappenDt = dayjs(list.happenDt).format('YYYY[년] MM[월] DD[일]');
-                return (
-                  <div key={index}>
+        </div>
+      </form>
+      <div className={styles.gridContainer}>
+        {filteredStrayList ? (
+          filteredStrayList.length === 0 ? (
+            <NoSearchValue />
+          ) : (
+            filteredStrayList.slice(offset, offset + limit).map((list, index) => {
+              const formatHappenDt = dayjs(list.happenDt).format('YYYY[년] MM[월] DD[일]');
+              return (
+                <div key={index}>
+                  <Link href={`/stray-dogs/${list.desertionNo}`}>
                     <div className={styles.listCard}>
-                      <Link href={`/stray-dogs/${list.desertionNo}`}>
-                        <div className={styles.imageWrap}>
-                          <Image
-                            src={list.popfile}
-                            alt="dog-image"
-                            className={styles.image}
-                            width={250}
-                            height={250}
-                          />
-                        </div>
-                      </Link>
+                      <div className={styles.imageWrap}>
+                        <Image
+                          src={list.popfile}
+                          alt="dog-image"
+                          className={styles.image}
+                          width="273"
+                          height="273"
+                        />
+                      </div>
                       <div className={styles.explanationWrap}>
                         <div className={styles.titleColumn}>
                           <p>구조일시</p>
@@ -171,55 +173,55 @@ const StrayDogs = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })
-            )
-          ) : (
-            strayList?.slice(offset, offset + limit).map((list, index) => {
-              const formatHappenDt = dayjs(list.happenDt).format('YYYY[년] MM[월] DD[일]');
-              return (
-                <div key={index}>
-                  <div className={styles.listCard}>
-                    <Link href={`/stray-dogs/${list.desertionNo}`}>
-                      <div className={styles.imageWrap}>
-                        <Image
-                          src={list.popfile}
-                          alt="dog-image"
-                          className={styles.image}
-                          width={250}
-                          height={250}
-                        />
-                      </div>
-                    </Link>
-                    <div className={styles.explanationWrap}>
-                      <div className={styles.titleColumn}>
-                        <p>구조일시</p>
-                        <p>견종</p>
-                        <p>성별</p>
-                        <p>발견장소</p>
-                      </div>
-                      <div className={styles.contentColumn}>
-                        <p>{formatHappenDt}</p>
-                        <p>{list.kindCd.slice(3)}</p>
-                        <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
-                        <p>{list.happenPlace}</p>
-                      </div>
-                    </div>
-                  </div>
+                  </Link>
                 </div>
               );
             })
-          )}
-        </div>
-        <Pagination
-          page={page}
-          setPage={setPage}
-          limit={limit}
-          total={filteredStrayList ? filteredStrayList.length : strayList?.length}
-        />
+          )
+        ) : (
+          strayList?.slice(offset, offset + limit).map((list, index) => {
+            const formatHappenDt = dayjs(list.happenDt).format('YYYY[년] MM[월] DD[일]');
+            return (
+              <div key={index}>
+                <div className={styles.listCard}>
+                  <Link href={`/stray-dogs/${list.desertionNo}`}>
+                    <div className={styles.imageWrap}>
+                      <Image
+                        src={list.popfile}
+                        alt="dog-image"
+                        className={styles.image}
+                        width={250}
+                        height={250}
+                      />
+                    </div>
+                  </Link>
+                  <div className={styles.explanationWrap}>
+                    <div className={styles.titleColumn}>
+                      <p>구조일시</p>
+                      <p>견종</p>
+                      <p>성별</p>
+                      <p>발견장소</p>
+                    </div>
+                    <div className={styles.contentColumn}>
+                      <p>{formatHappenDt}</p>
+                      <p>{list.kindCd.slice(3)}</p>
+                      <p>{list.sexCd === 'M' ? '수컷' : '암컷'}</p>
+                      <p>{list.happenPlace}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
-    </div>
+      <Pagination
+        page={page}
+        setPage={setPage}
+        limit={limit}
+        total={filteredStrayList ? filteredStrayList.length : strayList?.length}
+      />
+    </Main>
   );
 };
 
