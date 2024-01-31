@@ -96,11 +96,6 @@ const List = () => {
     gcTime: 0
   });
 
-  if (!wishedData) return <div>게시물이 없습니다.</div>;
-  if (!registeredData) return <div>게시물이 없습니다.</div>;
-  if (!likedMungstagram) return <div>게시물이 없습니다.</div>;
-  if (!registeredMungstagram) return <div>게시물이 없습니다.</div>;
-
   return (
     <div className={styles.container}>
       <div className={styles.title}>
@@ -164,7 +159,7 @@ const List = () => {
       <div className={styles.cardContainer}>
         {selectedTitle === Tab.used ? (
           <div className={styles.cardWrapper}>
-            {(selectedTab === Tab.wish ? wishedData : registeredData).length ? (
+            {(selectedTab === Tab.wish ? wishedData : registeredData)?.length ? (
               (selectedTab === Tab.wish ? wishedData : registeredData)?.map((goods) => (
                 <Card key={goods.id} goods={goods} />
               ))
@@ -176,7 +171,7 @@ const List = () => {
           </div>
         ) : (
           <div className={styles.cardWrapper}>
-            {(selectedTab === Tab.like ? likedMungstagram : registeredMungstagram).length ? (
+            {(selectedTab === Tab.like ? likedMungstagram : registeredMungstagram)?.length ? (
               (selectedTab === Tab.like ? likedMungstagram : registeredMungstagram)?.map(
                 (posts) => <MungstaCard key={posts.id} posts={posts} />
               )
