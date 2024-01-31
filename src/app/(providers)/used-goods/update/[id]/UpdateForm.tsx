@@ -236,14 +236,14 @@ const UpdateForm = (props: Props) => {
             value={inputForm.content}
           />
           <div className={styles.priceBox}>
-            가격{' '}
+            가격
             <input
               className={styles.price}
               name="price"
               onChange={handleFormChange}
               type="number"
               value={inputForm.price}
-            />{' '}
+            />
             원
           </div>
         </div>
