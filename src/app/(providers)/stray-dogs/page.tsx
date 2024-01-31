@@ -81,7 +81,6 @@ const StrayDogs = () => {
 
   return (
     <Main>
-      {/* <div className={styles.contentContainer}> */}
       <form onSubmit={filterList} className={styles.filterWrap}>
         <div className={styles.filterContent}>
           <p>기간</p>
@@ -222,7 +221,6 @@ const StrayDogs = () => {
         limit={limit}
         total={filteredStrayList ? filteredStrayList.length : strayList?.length}
       />
-      {/* </div> */}
     </Main>
   );
 };
