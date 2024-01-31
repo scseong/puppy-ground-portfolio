@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { ChangeEvent, DragEvent, useEffect, useState } from 'react';
 import { MdOutlineCancel } from 'react-icons/md';
 import { v4 as uuidv4 } from 'uuid';
-import styles from './update.module.scss';
+import styles from './../../create/_components/create.module.scss';
 import { useToast } from '@/hooks/useToast';
 import Swal from 'sweetalert2';
 import { LuPencilLine } from 'react-icons/lu';
@@ -185,7 +185,8 @@ const UpdateForm = (props: Props) => {
         />
       </div>
       <p className={styles.info}>
-        이미지는 필수입니다. (최대 4장) 드래그하거나 클릭해서 이미지를 선택하세요.
+        이미지는 필수입니다. (최대 4장) <br className={styles.br} />
+        드래그하거나 클릭해서 이미지를 선택하세요.
       </p>
       <div className={styles.containers}>
         <div className={styles.containerLeft}>
@@ -206,10 +207,11 @@ const UpdateForm = (props: Props) => {
                       <MdOutlineCancel size={20} color="black" />
                     </div>
                     <Image
+                      className={styles.image}
                       src={inputForm.photo_url[index] || ''}
                       alt="image"
-                      width={300}
-                      height={300}
+                      width={270}
+                      height={270}
                       style={{ objectFit: 'cover' }}
                     />
                   </>
@@ -234,20 +236,21 @@ const UpdateForm = (props: Props) => {
             value={inputForm.content}
           />
           <div className={styles.priceBox}>
-            가격{' '}
+            가격
             <input
               className={styles.price}
               name="price"
               onChange={handleFormChange}
+              type="number"
               value={inputForm.price}
-            />{' '}
+            />
             원
           </div>
         </div>
       </div>
       <p className={styles.info}>선택해주세요 (최대 1개씩)</p>
       <div className={styles.categoryBox}>
-        <div className={styles.category}>
+        <div className={styles.mainCategory}>
           {MAINCATEGORY.map((category, index) => (
             <div className={styles.radio} key={index}>
               <input
@@ -261,8 +264,8 @@ const UpdateForm = (props: Props) => {
             </div>
           ))}
         </div>
-        <PiDotsThreeOutlineVerticalFill size={25} color="#B0B0B0" />
-        <div className={styles.category}>
+        <div className={styles.divider} />
+        <div className={styles.subCategory}>
           {SUBCATEGORY.map((category, index) => (
             <div className={styles.radio} key={index}>
               <input
@@ -297,7 +300,7 @@ const UpdateForm = (props: Props) => {
         <button className={styles.buttonCancel} onClick={onClickCancel}>
           취소하기
         </button>
-        <button className={styles.buttonUpdate} onClick={onClickUpdate}>
+        <button className={styles.buttonSubmit} onClick={onClickUpdate}>
           수정하기
         </button>
       </div>
