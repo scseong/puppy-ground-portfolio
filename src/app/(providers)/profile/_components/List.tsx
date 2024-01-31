@@ -127,7 +127,7 @@ const List = () => {
               className={selectedTab === Tab.wish ? styles.selected : undefined}
               onClick={() => setSelectedTab(Tab.wish)}
             >
-              관심상품
+              찜한 상품
             </button>
             <button
               className={selectedTab === Tab.registered ? styles.selected : undefined}
