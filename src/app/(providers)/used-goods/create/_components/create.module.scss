@@ -484,6 +484,10 @@
     cursor: pointer;
   }
 
+  .buttonCancel:hover {
+    opacity: 0.8;
+  }
+
   .buttonSubmit {
     width: 200px;
     height: 60px;
@@ -496,6 +500,10 @@
     line-height: 41px;
     border-radius: 5px;
     cursor: pointer;
+  }
+
+  .buttonSubmit:hover {
+    opacity: 0.8;
   }
 
   @media (max-width: 1200px) {

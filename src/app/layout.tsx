@@ -9,7 +9,10 @@ import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: 'Puppy Ground',
-  description: '유기견 분양, 반려동물 용품 판매'
+  description: '유기견 분양, 반려동물 용품 판매',
+  icons: {
+    icon: '/favicon.ico'
+  }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

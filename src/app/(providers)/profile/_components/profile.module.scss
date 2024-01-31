@@ -109,6 +109,9 @@
   font-weight: bold;
   cursor: pointer;
 }
+.update:hover {
+  opacity: 0.8;
+}
 
 .cancel,
 .edit {
@@ -125,4 +128,11 @@
   color: #757575;
   font-weight: bold;
   cursor: pointer;
+}
+
+.cancel:hover {
+  opacity: 0.8;
+}
+.edit:hover {
+  opacity: 0.8;
 }
