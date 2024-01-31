@@ -31,7 +31,6 @@ export const useQueryParam = () => {
         }
         queryString.set('main', payload.join('%'));
         queryString.delete('page');
-        queryString.delete('soldout');
         queryString.delete('query');
         break;
       case 'soldout':
