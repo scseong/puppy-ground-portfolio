@@ -45,7 +45,12 @@
 .chatSearch {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin: 5px 10px;
+
+  & > span {
+    cursor: pointer;
+  }
 }
 .date {
   display: flex;
@@ -57,4 +62,10 @@
     font-size: 12px;
     color: var(--placeholder-text-color);
   }
+}
+.noChatting {
+  display: flex;
+  height: 500px;
+  justify-content: center;
+  align-items: center;
 }
