@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import {
   CustomOverlayMap,
   Map,
+  MapInfoWindow,
   MapMarker,
   MapTypeControl,
   ZoomControl
@@ -160,17 +161,24 @@ const Facilities = () => {
             );
           })}
           {currentLocationMarker && (
-            <MapMarker
-              position={{ lat: currentLocation.latitude, lng: currentLocation.longitude }}
-              image={{
-                // 마커이미지의 주소
-                src: 'https://i.ibb.co/DYzyv2q/pngegg.png',
-                size: {
-                  width: 20,
-                  height: 20
-                }
-              }}
-            />
+            <>
+              <MapMarker
+                position={{ lat: currentLocation.latitude, lng: currentLocation.longitude }}
+                image={{
+                  // 마커이미지의 주소
+                  src: 'https://i.ibb.co/DYzyv2q/pngegg.png',
+                  size: {
+                    width: 20,
+                    height: 20
+                  }
+                }}
+              />
+              <MapInfoWindow
+                position={{ lat: currentLocation.latitude, lng: currentLocation.longitude }}
+                removable={true}
+              />
+              <div>현재위치</div>
+            </>
           )}
           <MapTypeControl position={'TOPRIGHT'} />
           <ZoomControl position={'RIGHT'} />
