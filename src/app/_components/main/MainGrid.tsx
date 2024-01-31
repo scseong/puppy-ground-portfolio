@@ -16,18 +16,18 @@ import { motion } from 'framer-motion';
 const MainGrid = () => {
   return (
     <div className={styles.container}>
-      <motion.div
-        className={styles.firstContainer}
-        initial={{ opacity: 0, x: 100 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: false }}
-        transition={{
-          ease: 'easeInOut',
-          duration: 1,
-          x: { duration: 1 }
-        }}
-      >
-        <div className={styles.firstSection}>
+      <div className={styles.firstContainer}>
+        <motion.div
+          className={styles.firstSection}
+          initial={{ opacity: 0, x: 100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: false }}
+          transition={{
+            ease: 'easeInOut',
+            duration: 1,
+            x: { duration: 1 }
+          }}
+        >
           <div className={styles.firstTextWrap}>
             <p>
               <span className={styles.bold}>우리 동네</span>에서
@@ -38,10 +38,10 @@ const MainGrid = () => {
             <p>공유하고 거래하는</p>
           </div>
           <div className={styles.firstImageWrap}>
-            <Image src={dogImg} alt="image" width={800} height={800} className={styles.image} />
+            <Image src={dogImg} alt="image" width={600} height={600} className={styles.image} />
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
       <div className={styles.secondSection}>
         <motion.div
           className={styles.secondTextWrap}
@@ -77,12 +77,12 @@ const MainGrid = () => {
             duration: 1
           }}
         >
-          <Image src={toy} alt="image" width={600} height={600} className={styles.image} />
+          <Image src={toy} alt="image" width={500} height={500} className={styles.image} />
         </motion.div>
       </div>
       <div className={styles.thirdSection}>
         <div className={styles.thirdImageWrap}>
-          <Image src={family} alt="image" width={1200} height={600} className={styles.image} />
+          <Image src={family} alt="image" width={1000} height={500} className={styles.image} />
         </div>
         <div className={styles.thirdTextWrap}>
           <motion.p
@@ -118,7 +118,7 @@ const MainGrid = () => {
             duration: 1
           }}
         >
-          <Image src={mungstagram} alt="image" width={800} height={600} className={styles.image} />
+          <Image src={mungstagram} alt="image" width={600} height={400} className={styles.image} />
         </motion.div>
         <motion.div
           className={styles.fourthTextWrap}
@@ -170,16 +170,16 @@ const MainGrid = () => {
           </div>
           <div>
             <div className={styles.fifthImageGrid}>
-              <Image src={walk} alt="image" width={400} height={400} className={styles.image} />
-              <Image src={hotel} alt="image" width={400} height={400} className={styles.image} />
+              <Image src={walk} alt="image" width={250} height={300} className={styles.image} />
+              <Image src={hotel} alt="image" width={250} height={300} className={styles.image} />
               <Image
                 src={restaurant}
                 alt="image"
-                width={400}
-                height={400}
+                width={250}
+                height={300}
                 className={styles.image}
               />
-              <Image src={travel} alt="image" width={400} height={400} className={styles.image} />
+              <Image src={travel} alt="image" width={250} height={300} className={styles.image} />
             </div>
           </div>
         </motion.div>
