@@ -1,7 +1,7 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './usedGoodsFilter.module.scss';
-import Select, { SingleValue, MultiValue } from 'react-select';
+import Select, { SingleValue, MultiValue, SelectInstance } from 'react-select';
 import { useQueryParam } from '@/hooks/useQueryParam';
 import { useRouter } from 'next/navigation';
 import { isEqual } from 'lodash';
@@ -27,11 +27,14 @@ const UsedGoodsFilter = () => {
   const [selectedMain, setSelectedMain] = useState<SelectOption[] | null>([]);
   const [selectedSub, setSelectedSub] = useState<SelectOption | null>(null);
   const { queryObject, generateQueryParameter } = useQueryParam();
-  const router = useRouter();
+  const mainSelectRef = useRef<SelectInstance<SelectOption, true>>(null);
+  const subSelectRef = useRef<SelectInstance<SelectOption> | null>(null);
 
+  const router = useRouter();
   const handleMainSelect = (newValue: MultiValue<SelectOption>) => {
     if (!newValue) return;
     setSelectedMain([...newValue]);
+    mainSelectRef.current?.blur();
     router.push(
       generateQueryParameter(
         'main',
@@ -43,6 +46,7 @@ const UsedGoodsFilter = () => {
   const handleSubSelect = (newValue: SingleValue<SelectOption>) => {
     if (!newValue) return;
     setSelectedSub(newValue);
+    subSelectRef.current?.blur();
     router.push(generateQueryParameter('sub', newValue.value));
   };
 
@@ -71,6 +75,7 @@ const UsedGoodsFilter = () => {
         placeholder="카테고리"
         styles={singleOptions}
         isSearchable={false}
+        ref={subSelectRef}
       />
       <Select
         className={styles.customSelect}
@@ -81,7 +86,9 @@ const UsedGoodsFilter = () => {
         isClearable={false}
         isSearchable={false}
         isMulti
+        noOptionsMessage={() => <div>모든 견종 사이즈를 선택했습니다.</div>}
         styles={multiOptions}
+        ref={mainSelectRef}
       />
     </div>
   );
