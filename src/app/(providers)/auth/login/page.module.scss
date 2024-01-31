@@ -57,6 +57,9 @@
     font-family: pretendard-regular;
     color: #ffffff;
   }
+  button:hover {
+    opacity: 0.8;
+  }
 }
 
 .buttonWrapper {
@@ -74,6 +77,9 @@
     font-family: pretendard-regular;
     color: white;
   }
+  .googleBtn:hover {
+    opacity: 0.8;
+  }
   .kakaoBtn {
     border-radius: 5px;
     background: #fae24c;
@@ -82,6 +88,9 @@
     height: 50px;
     font-size: 15px;
     font-family: pretendard-regular;
+  }
+  .kakaoBtn:hover {
+    opacity: 0.8;
   }
 }
 

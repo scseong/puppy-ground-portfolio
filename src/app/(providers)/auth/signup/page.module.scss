@@ -70,6 +70,9 @@
     color: #ffffff;
     margin-left: 10px;
   }
+  .duplication:hover {
+    opacity: 0.8;
+  }
 
   label {
     img {
@@ -99,6 +102,10 @@
   font-family: pretendard-regular;
   color: #ffffff;
 }
+.submitBtn:hover {
+  opacity: 0.8;
+}
+
 .moveLogin {
   cursor: pointer;
   color: #979797;
