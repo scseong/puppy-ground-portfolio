@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { supabase } from '@/shared/supabase/supabase';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect, MouseEventHandler } from 'react';
-import ChatList from '../chatting/ChatList';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -18,6 +17,7 @@ import { RealtimeChannel, RealtimePostgresInsertPayload } from '@supabase/supaba
 import { ALERT_MESSAGE_QUERY_LEY, useAlertMessage } from '@/hooks/useAlertMessage';
 import AlertMessageList from '../alertMessage/AlertMessageList';
 import logo from '../../../../public/images/logo.png';
+import dynamic from 'next/dynamic';
 
 const Header = () => {
   const router = useRouter();
@@ -29,9 +29,12 @@ const Header = () => {
   const setIsAuthInitialized = useAuth((state) => state.setIsAuthInitialized);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
+  //true로 바뀌면 채팅정보를 가져오게 하는 state
+  const [showMore, setShowMore] = useState(false);
 
   const queryClient = useQueryClient();
   const { fetchAlertMessage, updateChatAlertMessage } = useAlertMessage();
+  const ChatList = dynamic(() => import('@/app/_components/chatting/ChatList'));
 
   const pathName = usePathname();
   useEffect(() => {
@@ -137,6 +140,12 @@ const Header = () => {
       await updateChatAlertMessage('chat');
     }
     setModalIsOpen(true);
+    setShowMore(true);
+  };
+
+  const clickCloseModal = () => {
+    setShowMore(false);
+    setModalIsOpen(false);
   };
 
   const handleToggle = () => {
@@ -347,13 +356,15 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <ChatList
-        isOpen={isModalOpen}
-        onClose={() => setModalIsOpen(false)}
-        ariaHideApp={false}
-        isChatRoomOpen={false}
-        getChat={getChat}
-      />
+      {showMore && (
+        <ChatList
+          isOpen={isModalOpen}
+          onClose={clickCloseModal}
+          ariaHideApp={false}
+          isChatRoomOpen={false}
+          getChat={getChat}
+        />
+      )}
     </>
   );
 };
