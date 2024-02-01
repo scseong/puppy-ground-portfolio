@@ -201,7 +201,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
     <div>
       <ChatModal isOpen={isOpen} onClose={closeModal} ariaHideApp={ariaHideApp}>
         {isChatOpen ? (
-          <div>
+          <div className={styles.chatContainer}>
             <div>
               <button className={styles.backBtn} onClick={() => setIsChatOpen(false)}>
                 <IoIosArrowBack size={20} color={'#0AC4B9'} />
@@ -210,24 +210,20 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
                 usedItem={!!list?.used_item ? list?.used_item : usedItem}
                 clickUsedItem={clickUsedItem}
               />
-              <div ref={chatListRef} className={styles.chatScroll}>
-                <div>
-                  {Object.entries(chatListwithDate).map(([date, chatList]) => (
-                    <div key={date}>
-                      <div className={styles.date}>
-                        <p>{date}</p>
-                      </div>
-                      {chatList.map((chat, idx) => (
-                        <Chat key={idx} chatHistory={chat} userProfile={user.id} />
-                      ))}
-                    </div>
+            </div>
+            <div ref={chatListRef} className={styles.chatScroll}>
+              {Object.entries(chatListwithDate).map(([date, chatList]) => (
+                <div key={date}>
+                  <div className={styles.date}>
+                    <p>{date}</p>
+                  </div>
+                  {chatList.map((chat, idx) => (
+                    <Chat key={idx} chatHistory={chat} userProfile={user.id} />
                   ))}
                 </div>
-              </div>
+              ))}
             </div>
-            <div>
-              <ChatInput chatListId={chatListId} listId={list?.id!} user={user} />
-            </div>
+            <ChatInput chatListId={chatListId} listId={list?.id!} user={user} />
           </div>
         ) : (
           <div className={styles.container}>
