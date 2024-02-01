@@ -26,7 +26,7 @@ type FileEvent = React.ChangeEvent<HTMLInputElement> & {
 type Inputs = {
   content: string;
   files: File[];
-  tags: string[];
+  tag: string;
   title: string;
 };
 
@@ -49,16 +49,11 @@ const isDuplicateImage = (files: File[], newFile: File) => {
 
 const MungstaCreateModal = () => {
   const [imagePreview, setImagePreview] = useState<string[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
   const user = useAuth((state) => state.user);
   const { warnTopRight } = useToast();
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-  } = useForm<Inputs>({
+  const { register, handleSubmit, watch, setValue } = useForm<Inputs>({
     defaultValues: {
-      tags: [],
       files: []
     }
   });
@@ -85,19 +80,23 @@ const MungstaCreateModal = () => {
       }
 
       if (isDuplicateImage(files, file)) {
-        warnTopRight({ message: `${file.name} 이미 추가된 파일입니다.`, timeout: 3000 });
+        warnTopRight({ message: `${file.name} 이미 추가된 파일입니다.` });
         return;
       }
 
       return file;
     });
 
-    const concatFiles = [...files, ...filteredFiles];
-    const previews = concatFiles
+    const uploadFiles = [...files, ...filteredFiles];
+    const previews = uploadFiles
       .map((file) => getImagePreview(file))
       .filter((url): url is string => url !== undefined);
-    setValue('files', concatFiles);
+    setValue('files', uploadFiles);
     setImagePreview(previews);
+  };
+
+  const removeTag = (index: number) => {
+    setTags((tags) => tags.filter((_, i) => i !== index));
   };
 
   const removeImage = (index: number) => {
@@ -106,6 +105,15 @@ const MungstaCreateModal = () => {
       files.filter((_, i) => i !== index)
     );
     setImagePreview((images) => images.filter((_, i) => i !== index));
+  };
+
+  const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.nativeEvent.isComposing) return;
+    if (e.key === 'Enter') {
+      const { value } = e.currentTarget;
+      setTags((prev) => [...prev, value]);
+      setValue('tag', '');
+    }
   };
 
   const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
@@ -123,7 +131,7 @@ const MungstaCreateModal = () => {
         <div className={styles.title}>
           <input {...register('title')} placeholder="제목을 입력하세요 (최대 14자)" autoFocus />
         </div>
-        <p className={styles.imageDescription}>* 이미지는 필수입니다 (최대 5장, 2MB 이하)</p>
+        <p className={styles.imageDescription}>이미지는 필수입니다 (최대 5장, 2MB 이하)</p>
         <div className={styles.imageBox}>
           {Array.from({ length: MAX_IMAGE_COUNT }).map((_, index) => (
             <div key={index} className={styles.imageInput}>
@@ -152,6 +160,24 @@ const MungstaCreateModal = () => {
               )}
             </div>
           ))}
+        </div>
+        <div className={styles.tags}>
+          <ul>
+            {tags &&
+              tags.map((tag, index) => (
+                <li key={`${tag}-${index}`} onClick={() => removeTag(index)}>
+                  #{tag}
+                </li>
+              ))}
+          </ul>
+        </div>
+        <div className={styles.tagForm}>
+          <input
+            {...register('tag')}
+            onKeyDown={handleTagInputKeyDown}
+            placeholder="해시태그를 입력하세요 (최대 5개, 각 해시태그는 6글자 이내 입력 후 Enter 키를 누르세요)"
+            type="text"
+          />
         </div>
       </form>
     </ReactModal>

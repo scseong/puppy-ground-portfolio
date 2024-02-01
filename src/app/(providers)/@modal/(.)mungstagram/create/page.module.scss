@@ -6,16 +6,23 @@
 }
 
 .title {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 
   input {
     width: 100%;
-    font-size: 2rem;
+    font-size: 1.6rem;
     font-weight: bold;
     line-height: 2rem;
     background: inherit;
     border: none;
+    text-decoration: underline;
+    text-decoration-color: #aaa;
+    text-underline-position: under;
     outline: none;
+
+    &::placeholder {
+      color: #aaa;
+    }
   }
 }
 
