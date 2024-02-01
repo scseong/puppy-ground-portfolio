@@ -25,10 +25,9 @@ import { Tables } from '@/shared/supabase/types/supabase';
 import { useAlertMessage } from '@/hooks/useAlertMessage';
 import Loading from '@/app/_components/layout/loading/Loading';
 import Link from 'next/link';
-
+import kakaotalk from './../../../../../public/images/kakaoLogo.png';
 
 const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
-
   const [showEditToggle, setShowEditToggle] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const user = useAuth((state) => state.user);
@@ -122,7 +121,6 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const [userChatList, setUserChatList] = useState(false);
 
   const clickOpenChat = async () => {
-
     const list = chatList?.getChatListData?.find((chat) => chat?.post_id === Number(id));
 
     if (data?.user_id === user?.id)
@@ -225,7 +223,6 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                 </div>
               </div>
             </div>
-            {/* TODO: 채팅, 찜 기능 동작 */}
             <div className={styles.btns}>
               <button onClick={clickOpenChat}>채팅하기</button>
               <ChatList
@@ -259,12 +256,14 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
         <div className={styles.content}>
           <TradeLocationMap lat={latitude} lng={longitude} />
         </div>
-        {/* TODO: SNS 공유, 링크 복사 */}
         <div className={styles.shareButton}>
-          <KakaoShareButton />
+          <KakaoShareButton>
+            <button className={styles.kakaoButton}>
+              <Image src={kakaotalk} alt="kakaotalk" width={45} height={45} />
+            </button>
+          </KakaoShareButton>
           <ClipBoardButton />
         </div>
-        {/* 버튼 생기면 옮겨 주세요 */}
       </section>
     </main>
   );

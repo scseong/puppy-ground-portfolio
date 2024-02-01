@@ -17,6 +17,7 @@ import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
 import ClipBoardButton from '@/app/_components/shareButton/ClipBoardButton';
 import dayjs from 'dayjs';
 import { Main } from '@/app/_components/layout';
+import kakaotalk from './../../../../../public/images/kakaoLogo.png';
 
 const StrayDogsDetail = () => {
   const params = useParams();
@@ -137,7 +138,11 @@ const StrayDogsDetail = () => {
           </div>
         </div>
         <div className={styles.buttonWrap}>
-          <KakaoShareButton />
+          <KakaoShareButton>
+            <button className={styles.kakaoButton}>
+              <Image src={kakaotalk} alt="kakaotalk" width={45} height={45} />
+            </button>
+          </KakaoShareButton>
           <ClipBoardButton />
         </div>
       </div>
