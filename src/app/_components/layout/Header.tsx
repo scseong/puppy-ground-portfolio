@@ -18,6 +18,8 @@ import { RealtimeChannel, RealtimePostgresInsertPayload } from '@supabase/supaba
 import { ALERT_MESSAGE_QUERY_LEY, useAlertMessage } from '@/hooks/useAlertMessage';
 import AlertMessageList from '../alertMessage/AlertMessageList';
 import logo from '../../../../public/images/logo.png';
+import { Database } from '@/shared/supabase/types/supabase';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 const Header = () => {
   const router = useRouter();
@@ -29,13 +31,15 @@ const Header = () => {
   const setIsAuthInitialized = useAuth((state) => state.setIsAuthInitialized);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
+  const supabaseAuth = createClientComponentClient<Database>();
 
   const queryClient = useQueryClient();
   const { fetchAlertMessage, updateChatAlertMessage } = useAlertMessage();
 
   const pathName = usePathname();
   useEffect(() => {
-    supabase.auth.onAuthStateChange((event, session) => {
+    supabaseAuth.auth.onAuthStateChange((event, session) => {
+      console.log(event, session);
       if (session) {
         setUser(session.user);
       } else {
@@ -49,7 +53,7 @@ const Header = () => {
   }, []);
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabaseAuth.auth.signOut();
     if (!error) {
       successTopRight({ message: '로그아웃 되었습니다.' });
       setIsVisible(false);

@@ -1,5 +1,6 @@
 'use client';
-import { supabase } from '@/shared/supabase/supabase';
+// import { supabase } from '@/shared/supabase/supabase';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -11,6 +12,7 @@ import PublicRouteWrapper from '@/shared/PublicRouteWrapper';
 import defaultAvatar from '../../../../../public/images/my_page_default.svg';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Database } from '@/shared/supabase/types/supabase';
 
 export type Inputs = {
   email: string;
@@ -21,6 +23,7 @@ export type Inputs = {
 };
 
 const SignUp = () => {
+  const supabase = createClientComponentClient<Database>();
   const setUser = useAuth((state) => state.setUser);
   const [previewImg, setPreviewImg] = useState<string>(defaultAvatar.src!);
   const { successTopRight, errorTopRight } = useToast();
@@ -43,6 +46,7 @@ const SignUp = () => {
   const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   const passwordRegex = /(?=.*\d)(?=.*[a-zA-ZS]).{8,}/;
 
+  // 실시간 유효성 검사, 프로필 미리보기
   useEffect(() => {
     if (image && image.length > 0) {
       const imageFile = image[0];
@@ -135,7 +139,8 @@ const SignUp = () => {
         data: {
           display_name: data.nickname,
           avatar_url: imgUrl
-        }
+        },
+        emailRedirectTo: `${location.origin}/auth/callback`
       }
     });
     if (error && error?.message !== 'User already registered') {
