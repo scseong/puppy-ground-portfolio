@@ -48,3 +48,8 @@ export const updateChatAlertMessageStatus = async (type: string) => {
 export const deleteAlertMessageType = async (targetId: string) => {
   return await supabase.from('alert_message').delete().eq('target_id', targetId);
 };
+
+//테이블에서 채팅 알림 내역 삭제하기
+export const deleteChatAlertMessageType = async (userId: string) => {
+  return await supabase.from('alert_message').delete().eq('user_id', userId);
+};
