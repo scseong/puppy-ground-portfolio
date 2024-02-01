@@ -11,7 +11,7 @@ declare global {
   }
 }
 
-const KakaoShareButton = () => {
+const KakaoShareButton = ({ children }: { children: React.ReactNode }) => {
   const clickShare = () => {
     window.Kakao.Link.sendDefault({
       objectType: 'feed',
@@ -45,9 +45,7 @@ const KakaoShareButton = () => {
           window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_API_KEY);
         }}
       />
-      <button onClick={clickShare} className={style.kakaoButton}>
-        <Image src={kakaotalk} alt="kakaotalk" width={45} height={45} />
-      </button>
+      <div onClick={clickShare}>{children}</div>
     </>
   );
 };
