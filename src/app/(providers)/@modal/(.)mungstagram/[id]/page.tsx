@@ -12,6 +12,7 @@ import { GoComment, GoShare, GoChevronLeft, GoChevronRight } from 'react-icons/g
 import Link from 'next/link';
 import { getPosts } from '@/apis/mung-stagram/action';
 import LikeButton from '../../_components/LikeButton';
+import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
 
 const getPrevAndNextPost = async (id: string) => {
   const getPrevPost = supabase
@@ -101,12 +102,13 @@ const MungModal = ({ params }: PageProps) => {
         <div className={styles.detail}>
           <div className={styles.icons}>
             <LikeButton mungStargramId={params.id} title={post.title} />
-            {/* <div>
-              <GoComment />
-            </div>
+            {/* 구현예정
             <div>
-              <GoShare />
+              <GoComment />
             </div> */}
+            <KakaoShareButton>
+              <GoShare />
+            </KakaoShareButton>
           </div>
           <div className={styles.tags}>
             <ul>
