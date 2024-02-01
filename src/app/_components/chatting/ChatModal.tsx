@@ -14,7 +14,7 @@ const ChatModal = ({ isOpen, onClose, children }: ModalProps) => {
       onRequestClose={onClose}
       ariaHideApp={false}
       contentLabel="Modal"
-      className={styles.modalContainer}
+      className={styles.modal}
       style={{
         overlay: {
           position: 'fixed',
