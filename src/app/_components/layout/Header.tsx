@@ -33,8 +33,10 @@ const Header = () => {
   const [showMore, setShowMore] = useState(false);
 
   const queryClient = useQueryClient();
-  const { fetchAlertMessage, updateChatAlertMessage } = useAlertMessage();
-  const ChatList = dynamic(() => import('@/app/_components/chatting/ChatList'));
+  const { fetchAlertMessage, updateChatAlertMessage, deleteChatAlertMessage } = useAlertMessage();
+  const ChatList = dynamic(() => import('@/app/_components/chatting/ChatList'), {
+    loading: () => <Loading />
+  });
 
   const pathName = usePathname();
   useEffect(() => {
@@ -133,11 +135,18 @@ const Header = () => {
   };
 
   const clickOpenModal = async () => {
+    if (!user) return;
     const chatAlert = filterAlertMessage?.filter(
       (item) => item.type === 'chat' && item.status === false
     );
+    const chatReadAlert = filterAlertMessage?.filter(
+      (item) => item.type === 'chat' && item.status === true
+    );
     if (chatAlert) {
       await updateChatAlertMessage('chat');
+    }
+    if (chatReadAlert) {
+      await deleteChatAlertMessage(user.id);
     }
     setModalIsOpen(true);
     setShowMore(true);
@@ -162,7 +171,7 @@ const Header = () => {
     return null;
   }
 
-  if (filterAlertMessage) refetch();
+  if (filterAlertMessage?.length !== 0) refetch();
 
   return (
     <>
