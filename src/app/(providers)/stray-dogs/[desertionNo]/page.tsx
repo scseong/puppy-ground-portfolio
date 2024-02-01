@@ -15,6 +15,8 @@ import { MdStickyNote2 } from 'react-icons/md';
 import { BiSolidHomeHeart } from 'react-icons/bi';
 import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
 import ClipBoardButton from '@/app/_components/shareButton/ClipBoardButton';
+import dayjs from 'dayjs';
+import { Main } from '@/app/_components/layout';
 
 const StrayDogsDetail = () => {
   const params = useParams();
@@ -37,14 +39,7 @@ const StrayDogsDetail = () => {
     return list.desertionNo === desertionNo;
   });
 
-  const formatDate = (dateStr: string) => {
-    const year = dateStr.substring(0, 4);
-    const month = dateStr.substring(4, 6);
-    const day = dateStr.substring(6, 8);
-    return `${year}년 ${month}월 ${day}일`;
-  };
-
-  const formatHappenDt = formatDate(strayDesertionNo?.happenDt!);
+  const happenDt = dayjs(strayDesertionNo?.happenDt).format('YYYY[년] MM[월] DD[일]');
 
   if (isLoading) {
     return <Loading />;
@@ -55,45 +50,43 @@ const StrayDogsDetail = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <Main>
       <div className={styles.contentContainer}>
         <div className={styles.firstSection}>
           <div className={styles.imageWrap}>
             <Image src={strayDesertionNo?.popfile!} alt="stray-dog" width={500} height={300} />
           </div>
           <div className={styles.dogExplanationWrap}>
-            <div className={styles.titleColumn}>
-              <p>
+            <div className={styles.textWrapper}>
+              <h3>
                 <FaDog />
                 &nbsp;견종
-              </p>
-              <p>
+              </h3>
+              <p>{strayDesertionNo?.kindCd.slice(3)}</p>
+              <h3>
                 <IoMdColorPalette />
                 &nbsp;색상
-              </p>
-              <p>
+              </h3>
+              <p>{strayDesertionNo?.colorCd}</p>
+              <h3>
                 <FaCakeCandles />
                 &nbsp;나이
-              </p>
-              <p>
+              </h3>
+              <p>{strayDesertionNo?.age}</p>
+              <h3>
                 <GiWeight />
                 &nbsp;몸무게
-              </p>
-              <p>
+              </h3>
+              <p>{strayDesertionNo?.weight}</p>
+              <h3>
                 <PiGenderIntersexFill />
                 &nbsp;성별
-              </p>
-              <p>
+              </h3>
+              <p>{strayDesertionNo?.sexCd === 'M' ? '수컷' : '암컷'}</p>
+              <h3>
                 <FaUserDoctor />
                 &nbsp;중성화여부
-              </p>
-            </div>
-            <div className={styles.contentColumn}>
-              <p>{strayDesertionNo?.kindCd.slice(3)}</p>
-              <p>{strayDesertionNo?.colorCd}</p>
-              <p>{strayDesertionNo?.age}</p>
-              <p>{strayDesertionNo?.weight}</p>
-              <p>{strayDesertionNo?.sexCd === 'M' ? '수컷' : '암컷'}</p>
+              </h3>
               <p>
                 {strayDesertionNo?.neuterYn === 'Y'
                   ? '중성화 O'
@@ -105,43 +98,41 @@ const StrayDogsDetail = () => {
           </div>
         </div>
         <div className={styles.careExplanationWrap}>
-          <div className={styles.titleColumn}>
-            <p>
+          <div className={styles.textWrapper}>
+            <h3>
               <FaCalendarDays />
               &nbsp;접수번호
-            </p>
-            <p>
+            </h3>
+            <p>{strayDesertionNo?.noticeNo}</p>
+            <h3>
               <MdStickyNote2 />
               &nbsp;특이사항
-            </p>
-            <p>
+            </h3>
+            <p>{strayDesertionNo?.specialMark}</p>
+            <h3>
               <FaHandsHelping />
               &nbsp;구조일시
-            </p>
-            <p>
+            </h3>
+            <p>{happenDt}</p>
+            <h3>
               <FaMapMarkerAlt />
               &nbsp;구조장소
-            </p>
-            <p>
+            </h3>
+            <p>{strayDesertionNo?.happenPlace}</p>
+            <h3>
               <BiSolidHomeHeart />
               &nbsp;보호소 이름
-            </p>
-            <p>
+            </h3>
+            <p>{strayDesertionNo?.careNm}</p>
+            <h3>
               <FaSquarePhone />
               &nbsp;보호소 전화번호
-            </p>
-            <p>
+            </h3>
+            <p>{strayDesertionNo?.careTel}</p>
+            <h3>
               <FaMapMarkerAlt />
               &nbsp;보호소 위치
-            </p>
-          </div>
-          <div className={styles.contentColumn}>
-            <p>{strayDesertionNo?.noticeNo}</p>
-            <p>{strayDesertionNo?.specialMark}</p>
-            <p>{formatHappenDt}</p>
-            <p>{strayDesertionNo?.happenPlace}</p>
-            <p>{strayDesertionNo?.careNm}</p>
-            <p>{strayDesertionNo?.careTel}</p>
+            </h3>
             <p>{strayDesertionNo?.careAddr}</p>
           </div>
         </div>
@@ -150,7 +141,7 @@ const StrayDogsDetail = () => {
           <ClipBoardButton />
         </div>
       </div>
-    </div>
+    </Main>
   );
 };
 

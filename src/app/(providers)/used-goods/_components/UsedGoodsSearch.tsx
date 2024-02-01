@@ -5,7 +5,7 @@ import styles from './usedGoodsSearch.module.scss';
 // TODO: 클라이언트 컴포넌트로 변경 - input 상태 관리
 const UsedGoodsSearch = () => {
   return (
-    <form action={handleSearch}>
+    <form action={handleSearch} className={styles.searchForm}>
       <div className={styles.wrapper}>
         <input
           className={styles.input}

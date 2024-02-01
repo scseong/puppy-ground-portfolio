@@ -101,12 +101,12 @@ const MungModal = ({ params }: PageProps) => {
         <div className={styles.detail}>
           <div className={styles.icons}>
             <LikeButton mungStargramId={params.id} title={post.title} />
-            <div>
+            {/* <div>
               <GoComment />
             </div>
             <div>
               <GoShare />
-            </div>
+            </div> */}
           </div>
           <div className={styles.tags}>
             <ul>

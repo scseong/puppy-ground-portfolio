@@ -20,3 +20,9 @@
 .container p {
   text-align: center;
 }
+
+@media screen and (max-width: 480px) {
+  .image {
+    height: 23%;
+  }
+}
