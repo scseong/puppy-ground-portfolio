@@ -132,4 +132,4 @@ const PublicLoginPage = () => {
   );
 };
 
-export default PublicLoginPage;
+export default LoginPage;
