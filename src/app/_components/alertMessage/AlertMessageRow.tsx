@@ -25,7 +25,10 @@ const AlertMessageRow = ({ item }: { item: Tables<'alert_message'> }) => {
       className={[item.status === true ? styles.read : styles.message].join('')}
     >
       <p>{item.message}</p>
-      <span>{moment(item.created_at).format('yyyy-MM-DD HH:mm')}</span>
+      <div className={styles.deleteRow}>
+        <span>{moment(item.created_at).format('yyyy-MM-DD HH:mm')}</span>
+        <button>X</button>
+      </div>
     </div>
   );
 };
