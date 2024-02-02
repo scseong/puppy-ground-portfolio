@@ -1,0 +1,48 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.right {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+
+  img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+  }
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  .name {
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 10px 0 0 0;
+  }
+}
+
+.contentBox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  
+  .content {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+  
+  time {
+    padding: 5px 0 0 0;
+    font-size: 0.8rem;
+    color: #a5a5a5;
+  }
+}

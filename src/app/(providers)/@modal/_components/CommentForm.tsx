@@ -1,9 +1,15 @@
+'use client';
+
 import { createComment } from '@/apis/mung-stagram/action';
+import { getProfile } from '@/apis/profile/profile';
 import useAuth from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { TablesInsert } from '@/shared/supabase/types/supabase';
+import { useQuery } from '@tanstack/react-query';
+import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
+import styles from './commetForm.module.scss';
 
 const CommentForm = () => {
   const user = useAuth((state) => state.user);
@@ -14,6 +20,13 @@ const CommentForm = () => {
     content: '',
     user_id: user?.id!,
     mung_stagram_id: Number(parmas.id)
+  });
+
+  const { data: profiles } = useQuery({
+    queryKey: ['profiles', user?.id],
+    queryFn: () => {
+      return getProfile(user?.id!);
+    }
   });
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +45,8 @@ const CommentForm = () => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
+      <Image src={profiles?.avatar_url ?? ''} alt="comment" width={35} height={35}/>
       <input
         name="content"
         value={inputForm.content}
@@ -40,6 +54,7 @@ const CommentForm = () => {
         onKeyDown={(e) => {
           if (e.key === 'Enter') onClickCreate();
         }}
+        autoFocus
       />
       <button onClick={onClickCreate}>등록</button>
     </div>
