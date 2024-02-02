@@ -96,19 +96,9 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
   };
 
   // 클릭 시 채팅방 입장
-  const clickChatRoom = ({
-    id,
-    other_user,
-    usedItem
-  }: {
-    id: number;
-    other_user: string;
-    usedItem: Tables<'used_item'>;
-  }) => {
+  const clickChatRoom = ({ id, usedItem }: { id: number; usedItem: Tables<'used_item'> }) => {
     const chatHistory = chat?.filter((chat) => chat.chat_list_id === id);
-    //안 읽은 채팅 읽음으로 바꿔야함으
     setChatItem(chatHistory!);
-    // readChatMutation.mutate({ list_id: id, other_user });
     setChatListId(id);
     setUsedItem(usedItem);
     setIsChatOpen(true);
@@ -190,7 +180,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
   if (isError) return <div>오류가 발생하였습니다...</div>;
 
   if (!user) return;
-  if (list || chatAlert) {
+  if (!!list === true || chatAlert?.length !== 0) {
     queryClient.invalidateQueries({ queryKey: ['chatRoom'] }); // 쿼리를 무효화하고
     refetch();
   }
@@ -234,11 +224,11 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
               </span>
             </div>
             <ul className={styles.chatListScroll}>
-              {getChatListData?.getChatListData?.length === 0 ? (
+              {getChatListData?.length === 0 ? (
                 <div className={styles.noChatting}>대화 중인 채팅방이 없습니다!</div>
               ) : (
                 <>
-                  {getChatListData?.getChatListData?.map((chat) => {
+                  {getChatListData?.map((chat) => {
                     return chat.user_id === user.id || chat.other_user === user.id ? (
                       <ChatListContent
                         key={chat.id}

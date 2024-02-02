@@ -3,15 +3,14 @@ import { Tables } from '@/shared/supabase/types/supabase';
 
 // 채팅방 가져오기
 export const getChatRoomList = async (id: string) => {
-  const getChatListQuery = await supabase
+  const { data: getChatListData } = await supabase
     .from('chat_list')
     .select('*, used_item(*), chat(read_status, user_id), profiles(*)')
     .or(`user_id.eq.${id}, other_user.eq.${id}`)
     .order('id', { ascending: false })
     .returns<Tables<'chat_list'>[]>();
 
-  const { data: getChatListData, error } = getChatListQuery;
-  return { getChatListData, error };
+  return getChatListData;
 };
 
 // 채팅 가져오기
