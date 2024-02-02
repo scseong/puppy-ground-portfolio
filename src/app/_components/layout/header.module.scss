@@ -28,7 +28,7 @@
 
 .logoText {
   font-size: 20px;
-  font-family: GmarketSansBold;
+  font-family: var(--logo-font);
 }
 
 .menuBox {
@@ -43,8 +43,6 @@
   font-size: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-family: Pretendard-Regular;
-  font-weight: 400;
 
   &:hover {
     color: var(--primary-color);
@@ -100,7 +98,7 @@
   height: 17px;
   font-size: 10px;
   line-height: 17px;
-  font-family: pretendard-medium;
+  font-weight: 500;
   top: -7px;
   left: 7px;
   right: 0;
@@ -123,7 +121,7 @@
   height: 17px;
   font-size: 10px;
   line-height: 17px;
-  font-family: pretendard-medium;
+  font-weight: 500;
   top: -7px;
   left: 7px;
   right: 0;
@@ -157,7 +155,6 @@
   .toggleItem {
     padding: 10px;
     font-size: 16px;
-    font-family: Pretendard-Regular;
     transition: all 0.3s ease-in-out;
     cursor: pointer;
 
@@ -169,7 +166,6 @@
   .togglemenu {
     padding: 10px;
     font-size: 16px;
-    font-family: Pretendard-Regular;
     transition: all 0.3s ease-in-out;
     cursor: pointer;
     display: none;

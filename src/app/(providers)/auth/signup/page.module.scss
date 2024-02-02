@@ -10,7 +10,7 @@
   h1 {
     color: #000;
     font-size: 32px;
-    font-family: pretendard-bold;
+    font-weight: 700;
   }
 }
 
@@ -27,7 +27,6 @@
       border-radius: 5px;
       border: 1px solid #979797;
       font-size: 15px;
-      font-family: pretendard-regular;
       padding-left: 15px;
     }
     input:focus {
@@ -46,7 +45,6 @@
     border-radius: 5px;
     border: 0.7px solid #979797;
     font-size: 15px;
-    font-family: pretendard-regular;
     padding-left: 15px;
   }
   .pwInput {
@@ -55,7 +53,6 @@
     border-radius: 5px;
     border: 0.7px solid #979797;
     font-size: 15px;
-    font-family: pretendard-regular;
     padding-left: 15px;
   }
 
@@ -66,7 +63,6 @@
     border: none;
     border-radius: 5px;
     font-size: 15px;
-    font-family: pretendard-regular;
     color: #ffffff;
     margin-left: 10px;
   }
@@ -99,7 +95,6 @@
   border: none;
   border-radius: 5px;
   font-size: 15px;
-  font-family: pretendard-regular;
   color: #ffffff;
 }
 .submitBtn:hover {
@@ -109,10 +104,10 @@
 .moveLogin {
   cursor: pointer;
   color: #979797;
-  font-family: pretendard-light;
+  font-weight: 300;
   span {
     color: #000000;
-    font-family: pretendard-medium;
+    font-weight: 500;
   }
 }
 
