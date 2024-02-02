@@ -174,7 +174,7 @@ body {
   color: var(--text-color);
   background: var(--bg-color);
   min-height: 100vh;
-  font-family: Pretendard-Light;
+  /* font-family: Pretendard-Light; */
 }
 button {
   outline: none;
