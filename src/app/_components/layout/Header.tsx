@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styles from './header.module.scss';
 import Image from 'next/image';
 import { supabase } from '@/shared/supabase/supabase';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect, MouseEventHandler } from 'react';
 import ChatList from '../chatting/ChatList';
 import { useToast } from '@/hooks/useToast';
@@ -23,7 +23,7 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 const Header = () => {
   const router = useRouter();
-  const { alertBottomRight, errorTopRight, successTopRight } = useToast();
+  const { alertBottomRight, errorTopRight, successTopRight, warnTopCenter } = useToast();
   const user = useAuth((state) => state.user);
   const [showMessageList, setShowMessageList] = useState<boolean>(false);
   const setUser = useAuth((state) => state.setUser);
@@ -32,11 +32,20 @@ const Header = () => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
   const supabaseAuth = createClientComponentClient<Database>();
-
   const queryClient = useQueryClient();
   const { fetchAlertMessage, updateChatAlertMessage } = useAlertMessage();
 
   const pathName = usePathname();
+  const searchParams = useSearchParams();
+  const alertMessage = searchParams.get('alert');
+
+  useEffect(() => {
+    if (alertMessage) {
+      warnTopCenter({ message: alertMessage });
+      router.push(pathName);
+    }
+  }, []);
+
   useEffect(() => {
     supabaseAuth.auth.onAuthStateChange((event, session) => {
       console.log(event, session);

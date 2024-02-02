@@ -290,12 +290,12 @@ const SignUp = () => {
   );
 };
 
-const PublicSignUpPage = () => {
-  return (
-    <PublicRouteWrapper>
-      <SignUp />
-    </PublicRouteWrapper>
-  );
-};
+// const PublicSignUpPage = () => {
+//   return (
+//     <PublicRouteWrapper>
+//       <SignUp />
+//     </PublicRouteWrapper>
+//   );
+// };
 
-export default PublicSignUpPage;
+export default SignUp;

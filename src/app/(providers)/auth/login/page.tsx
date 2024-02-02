@@ -135,12 +135,12 @@ const LoginPage = () => {
   );
 };
 
-const PublicLoginPage = () => {
-  return (
-    <PublicRouteWrapper>
-      <LoginPage />
-    </PublicRouteWrapper>
-  );
-};
+// const PublicLoginPage = () => {
+//   return (
+//     <PublicRouteWrapper>
+//       <LoginPage />
+//     </PublicRouteWrapper>
+//   );
+// };
 
 export default LoginPage;
