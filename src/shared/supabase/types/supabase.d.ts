@@ -49,7 +49,6 @@ export interface Database {
           id: number;
           read_status: boolean;
           user_id: string;
-          profiles: Tables<'profiles'>;
         };
         Insert: {
           chat_list_id: number;
@@ -86,27 +85,25 @@ export interface Database {
       };
       chat_list: {
         Row: {
+          get_out_chat_room: string[] | null;
           id: number;
+          other_user: string;
           post_id: number;
           user_id: string;
-          other_user: string;
-          used_item: Tables<'used_item'>;
-          chat: { read_status: boolean; user_id: string }[];
-          get_out_chat_room: string[] | null;
         };
         Insert: {
-          id?: number;
-          post_id?: number;
-          user_id?: string;
-          other_user?: string;
           get_out_chat_room?: string[] | null;
+          id?: number;
+          other_user: string;
+          post_id: number;
+          user_id: string;
         };
         Update: {
+          get_out_chat_room?: string[] | null;
           id?: number;
+          other_user?: string;
           post_id?: number;
           user_id?: string;
-          other_user?: string;
-          get_out_chat_room?: string[] | null;
         };
         Relationships: [
           {
@@ -216,6 +213,45 @@ export interface Database {
             columns: ['user_id'];
             isOneToOne: false;
             referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
+      mung_stagram_comment: {
+        Row: {
+          content: string;
+          created_at: string;
+          id: number;
+          mung_stagram_id: number;
+          user_id: string;
+        };
+        Insert: {
+          content: string;
+          created_at?: string;
+          id?: number;
+          mung_stagram_id: number;
+          user_id: string;
+        };
+        Update: {
+          content?: string;
+          created_at?: string;
+          id?: number;
+          mung_stagram_id?: number;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'mung_stagram_comment_mung_stagram_id_fkey';
+            columns: ['mung_stagram_id'];
+            isOneToOne: false;
+            referencedRelation: 'mung_stagram';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'mung_stagram_comment_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
             referencedColumns: ['id'];
           }
         ];
