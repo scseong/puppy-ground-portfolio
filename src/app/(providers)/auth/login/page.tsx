@@ -27,16 +27,6 @@ const LoginPage = () => {
     formState: { errors }
   } = useForm<Inputs>({ mode: 'onChange' });
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const alertMessage = searchParams.get('alert');
-  const pathname = usePathname();
-
-  useEffect(() => {
-    if (alertMessage) {
-      warnTopCenter({ message: alertMessage });
-      router.push(pathname);
-    }
-  });
 
   //  이메일 로그인
   const emailLoginHandler = async (data: Inputs) => {
