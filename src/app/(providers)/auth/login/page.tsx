@@ -1,6 +1,6 @@
 'use client';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import styles from './page.module.scss';
 import { useToast } from '@/hooks/useToast';
@@ -8,6 +8,7 @@ import useAuth from '@/hooks/useAuth';
 import PublicRouteWrapper from '@/shared/PublicRouteWrapper';
 import Link from 'next/link';
 import type { Database } from '@/shared/supabase/types/supabase';
+import { useEffect } from 'react';
 // import { supabase } from '@/shared/supabase/supabase';
 
 export type Inputs = {
@@ -17,7 +18,7 @@ export type Inputs = {
 
 const LoginPage = () => {
   const supabase = createClientComponentClient<Database>();
-  const { errorTopRight, successTopRight } = useToast();
+  const { errorTopRight, warnTopCenter } = useToast();
   const setUser = useAuth((state) => state.setUser);
   const {
     register,
@@ -26,6 +27,16 @@ const LoginPage = () => {
     formState: { errors }
   } = useForm<Inputs>({ mode: 'onChange' });
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const alertMessage = searchParams.get('alert');
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (alertMessage) {
+      warnTopCenter({ message: alertMessage });
+      router.push(pathname);
+    }
+  });
 
   //  이메일 로그인
   const emailLoginHandler = async (data: Inputs) => {

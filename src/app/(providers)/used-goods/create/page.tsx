@@ -17,4 +17,4 @@ const PrivateCreatePage = () => {
   );
 };
 
-export default PrivateCreatePage;
+export default Page;
