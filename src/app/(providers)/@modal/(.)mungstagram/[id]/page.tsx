@@ -17,14 +17,14 @@ import CommentList from '../../_components/CommentList';
 import CommentForm from '../../_components/CommentForm';
 
 const getPrevAndNextPost = async (id: string) => {
-  const getPrevPost = supabase
-    .from('mung_stagram')
-    .select('id')
-    .lt('id', id)
-    .order('id', { ascending: false })
-    .limit(1)
-    .single();
-  const getNextPost = supabase.from('mung_stagram').select('id').gt('id', id).limit(1).single();
+  const getPrevPost =  supabase.from('mung_stagram').select('id').gt('id', id).limit(1).single();
+  const getNextPost = supabase
+  .from('mung_stagram')
+  .select('id')
+  .lt('id', id)
+  .order('id', { ascending: false })
+  .limit(1)
+  .single();
 
   const response = await Promise.all([getPrevPost, getNextPost]);
   const [prev, next] = response.map((res) => res.data?.id);
@@ -87,14 +87,14 @@ const MungModal = ({ params }: PageProps) => {
       preventScroll
     >
       <section className={styles.mungstaDetail}>
+        {next && (
+          <Link className={styles.nextLink} href={`/mungstagram/${next}`}>
+              <GoChevronRight size="2.8rem" />
+          </Link>
+        )}
         {prev && (
           <Link className={styles.prevLink} href={`/mungstagram/${prev}`}>
             <GoChevronLeft size="2.8rem" />
-          </Link>
-        )}
-        {next && (
-          <Link className={styles.nextLink} href={`/mungstagram/${next}`}>
-            <GoChevronRight size="2.8rem" />
           </Link>
         )}
         <div className={styles.title}>{post.title}</div>

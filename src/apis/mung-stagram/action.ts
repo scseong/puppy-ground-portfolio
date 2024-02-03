@@ -13,7 +13,17 @@ export const getPosts = async (id: string) => {
 export const getMungstaPosts = async () => {
   const { data } = await supabase
     .from('mung_stagram')
-    .select('*, profiles (user_name, avatar_url)');
+    .select('*, profiles (user_name, avatar_url)')
+    .order('id', { ascending: false });
+  return data;
+};
+
+export const getMungstaPost = async (id: string) => {
+  const { data, error } = await supabase
+    .from('mung_stagram')
+    .select('*, mung_stagram_like(count), profiles(*)')
+    .eq('id', id)
+    .single();
   return data;
 };
 
