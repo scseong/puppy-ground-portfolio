@@ -169,7 +169,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, list }: ModalProps) => {
   }
 
   const chatListwithDate = makeSection(chat);
-  //채팅방 나온 갯수
+  //채팅방 나왔는지 안 나왔는지 확인
   const outRoom = fetchChatRoom?.filter((room) => {
     if (room.get_out_chat_room) {
       return room.get_out_chat_room[0] === user.id || room.get_out_chat_room[1] === user.id;
