@@ -31,13 +31,12 @@
 }
 
 .firstTextWrap > p {
-  font-family: Pretendard-Medium;
   font-size: 45px;
   line-height: 65px;
 }
 
 .bold {
-  font-family: Pretendard-ExtraBold;
+  font-weight: 700;
 }
 
 .firstImageWrap {
@@ -68,13 +67,12 @@
 }
 
 .secondBold {
-  font-family: Pretendard-ExtraBold;
+  font-weight: 800;
   font-size: 45px;
   line-height: 100px;
 }
 
 .secondTextWrap > p {
-  font-family: Pretendard-Light;
   font-size: 25px;
   line-height: 35px;
 }
@@ -88,7 +86,7 @@
   color: white;
   margin: 50px auto;
   font-size: 17px;
-  font-family: Pretendard-Medium;
+  font-weight: 500;
 }
 
 .thirdSection {
@@ -108,7 +106,7 @@
 }
 
 .thirdTextWrap {
-  font-family: Pretendard-ExtraBold;
+  font-weight: 800;
   text-align: center;
   font-size: 45px;
   position: absolute;
@@ -140,13 +138,13 @@
 .fourthTextWrap {
   display: flex;
   flex-direction: column;
-  font-family: Pretendard-Medium;
+  font-weight: 500;
   font-size: 45px;
   line-height: 65px;
 }
 
 .fourthBold {
-  font-family: Pretendard-ExtraBold;
+  font-weight: 800;
 }
 
 .fifthContainer {
@@ -166,7 +164,7 @@
 }
 
 .fifthTextWrap {
-  font-family: Pretendard-Medium;
+  font-weight: 500;
   font-size: 30px;
   text-align: center;
 }

@@ -17,6 +17,13 @@ import { ALERT_MESSAGE_QUERY_LEY, useAlertMessage } from '@/hooks/useAlertMessag
 import AlertMessageList from '../alertMessage/AlertMessageList';
 import logo from '../../../../public/images/logo.png';
 import dynamic from 'next/dynamic';
+import localFont from 'next/font/local';
+
+const gmarket = localFont({
+  src: '../../assets/fonts/GmarketSansBold.woff2',
+  display: 'swap',
+  variable: '--logo-font'
+});
 
 const Header = () => {
   const router = useRouter();
@@ -168,7 +175,7 @@ const Header = () => {
     <>
       <div className={styles.container}>
         <div className={styles.navbarBox}>
-          <div className={styles.logoBox}>
+          <div className={`${styles.logoBox} ${gmarket.variable}`}>
             <Link href="/" className={styles.logoText}>
               Puppy Ground
             </Link>
