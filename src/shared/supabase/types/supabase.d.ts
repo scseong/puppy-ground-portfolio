@@ -49,6 +49,7 @@ export interface Database {
           id: number;
           read_status: boolean;
           user_id: string;
+          profiles: Tables<'profiles'>;
         };
         Insert: {
           chat_list_id: number;
