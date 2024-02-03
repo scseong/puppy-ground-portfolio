@@ -56,7 +56,7 @@ const Header = () => {
       warnTopCenter({ message: alertMessage });
       router.push(pathName);
     }
-  }, []);
+  }, [alertMessage]);
 
   useEffect(() => {
     supabaseAuth.auth.onAuthStateChange((event, session) => {
