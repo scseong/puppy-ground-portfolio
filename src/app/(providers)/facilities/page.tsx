@@ -1,5 +1,4 @@
 'use client';
-
 import styles from './page.module.scss';
 import { useEffect, useState } from 'react';
 import { MdMyLocation } from 'react-icons/md';
@@ -8,6 +7,7 @@ import NearFacilities from '@/app/_components/facilities/NearFacilities';
 import FacilitiesMapComponent from '@/app/_components/facilities/FacilitiesMapComponent';
 
 const Facilities = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [currentLocation, setCurrentLocation] = useState<{ latitude: number; longitude: number }>({
     latitude: 33.450701,
     longitude: 126.570667
@@ -67,7 +67,11 @@ const Facilities = () => {
         }
       );
     }
+
+    setIsLoading(false);
   }, []);
+
+  if (isLoading) return <div>Loading...!!</div>;
 
   return (
     <div className={styles.mapContainer}>

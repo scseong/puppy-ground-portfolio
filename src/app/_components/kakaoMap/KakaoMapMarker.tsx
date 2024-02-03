@@ -82,7 +82,7 @@ const KakaoMapMarker = (props: Props) => {
         <Map
           center={{ lat: currentLocation.latitude, lng: currentLocation.longitude }}
           level={3}
-          style={{ width: '100%', height: '100%' }}
+          style={{ width: '100%', height: '100%', borderRadius: '15px' }}
           onClick={mapClickHandler}
         >
           <MapTypeControl position={'TOPRIGHT'} />
