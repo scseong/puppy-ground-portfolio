@@ -39,7 +39,7 @@ const globalFont = localFont({
 });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const KAKAO_SDK_URL = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_KEY}&libraries=services&autoload=false`;
+  const KAKAO_SDK_URL = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_KEY}&libraries=services&autoload=false`;
 
   return (
     <html lang="ko" className={globalFont.variable}>

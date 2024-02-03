@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './alertMessageList.module.scss';
 import { useAlertMessage } from '@/hooks/useAlertMessage';
