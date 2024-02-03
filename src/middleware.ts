@@ -43,11 +43,12 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    '/auth/:path*',
     '/used-goods/create',
     '/profile',
     '/used-goods/update/:path*',
-    '/mungstagram/create'
+    '/mungstagram/create',
+    '/auth/login',
+    '/auth/signup'
     /*
      * Match all request paths except for the ones starting with:
      * - _next/static (static files)
