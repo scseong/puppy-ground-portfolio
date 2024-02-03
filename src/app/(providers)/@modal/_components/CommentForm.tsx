@@ -47,6 +47,7 @@ const CommentForm = () => {
     }
   });
 
+  if (!user) return null;
   return (
     <div className={styles.container}>
       <Image src={profiles?.avatar_url ?? ''} alt="comment" width={35} height={35} />
