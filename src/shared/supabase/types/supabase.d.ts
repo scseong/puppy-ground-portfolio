@@ -85,25 +85,27 @@ export interface Database {
       };
       chat_list: {
         Row: {
-          get_out_chat_room: string[] | null;
           id: number;
-          other_user: string;
           post_id: number;
           user_id: string;
+          other_user: string;
+          used_item: Tables<'used_item'>;
+          chat: { read_status: boolean; user_id: string }[];
+          get_out_chat_room: string[] | null;
         };
         Insert: {
-          get_out_chat_room?: string[] | null;
           id?: number;
-          other_user: string;
-          post_id: number;
-          user_id: string;
-        };
-        Update: {
-          get_out_chat_room?: string[] | null;
-          id?: number;
-          other_user?: string;
           post_id?: number;
           user_id?: string;
+          other_user?: string;
+          get_out_chat_room?: string[] | null;
+        };
+        Update: {
+          id?: number;
+          post_id?: number;
+          user_id?: string;
+          other_user?: string;
+          get_out_chat_room?: string[] | null;
         };
         Relationships: [
           {
