@@ -9,7 +9,6 @@ import styles from './facilitiesMapComponent.module.scss';
 import { GiSittingDog } from 'react-icons/gi';
 import { RiCalendarCloseFill } from 'react-icons/ri';
 import { FaRegClock } from 'react-icons/fa';
-import { useRef } from 'react';
 import { useFacilitiesQuery } from '@/hooks/useFacilitiesQuery';
 import useDebounce from '@/hooks/useDebounce';
 
