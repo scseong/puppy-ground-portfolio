@@ -52,6 +52,9 @@
 //반응형
 
 @media screen and (max-width: 480px) {
+  .usedItemContainer {
+    justify-content: center;
+  }
   .title {
     width: 230px;
   }
