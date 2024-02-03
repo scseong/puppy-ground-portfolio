@@ -13,6 +13,8 @@ import Link from 'next/link';
 import { getPosts } from '@/apis/mung-stagram/action';
 import LikeButton from '../../_components/LikeButton';
 import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
+import CommentList from '../../_components/CommentList';
+import CommentForm from '../../_components/CommentForm';
 
 const getPrevAndNextPost = async (id: string) => {
   const getPrevPost = supabase
@@ -102,10 +104,9 @@ const MungModal = ({ params }: PageProps) => {
         <div className={styles.detail}>
           <div className={styles.icons}>
             <LikeButton mungStargramId={params.id} title={post.title} />
-            {/* 구현예정
             <div>
               <GoComment />
-            </div> */}
+            </div>
             <KakaoShareButton>
               <GoShare />
             </KakaoShareButton>
@@ -122,6 +123,8 @@ const MungModal = ({ params }: PageProps) => {
               <span className={styles.username}>{post.profiles!.user_name}</span> {post.content}
             </p>
           </div>
+          <CommentForm />
+          <CommentList />
         </div>
       </section>
     </ReactModal>
