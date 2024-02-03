@@ -1,5 +1,5 @@
 import { supabase } from '@/shared/supabase/supabase';
-import { Tables, TablesInsert } from '@/shared/supabase/types/supabase';
+import { TablesInsert, TablesUpdate } from '@/shared/supabase/types/supabase';
 
 export const getPosts = async (id: string) => {
   const { data, error } = await supabase
@@ -37,4 +37,15 @@ export const getComments = async (mung_stagram_id: number) => {
     .select('*, profiles (user_name, avatar_url)')
     .eq('mung_stagram_id', mung_stagram_id);
   return data;
+};
+
+export const deleteComment = async (id: number) => {
+  await supabase.from('mung_stagram_comment').delete().eq('id', id);
+};
+
+export const updateComment = async (
+  id: number,
+  updateCommentInput: TablesUpdate<'mung_stagram_comment'>
+): Promise<void> => {
+  await supabase.from('mung_stagram_comment').update(updateCommentInput).eq('id', id).select();
 };

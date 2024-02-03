@@ -5,7 +5,7 @@ import { getProfile } from '@/apis/profile/profile';
 import useAuth from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { TablesInsert } from '@/shared/supabase/types/supabase';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
@@ -15,6 +15,7 @@ const CommentForm = () => {
   const user = useAuth((state) => state.user);
   const parmas = useParams();
   const { warnTopRight, successTopRight } = useToast();
+  const queryClient = useQueryClient();
 
   const [inputForm, setInputForm] = useState<TablesInsert<'mung_stagram_comment'>>({
     content: '',
@@ -34,29 +35,31 @@ const CommentForm = () => {
     setInputForm({ ...inputForm, [name]: value });
   };
 
-  const onClickCreate = () => {
-    if (!inputForm.content) {
-      warnTopRight({ message: '내용을 입력해주세요' });
-      return;
+  const createCommentMutation = useMutation({
+    mutationFn: (comment: TablesInsert<'mung_stagram_comment'>) => createComment(comment),
+    onSuccess: () => {
+      successTopRight({ message: '댓글이 등록되었습니다.' });
+      setInputForm({ ...inputForm, content: '' });
+      queryClient.invalidateQueries({ queryKey: ['mung_stagram_comments', parmas.id] });
+    },
+    onError: () => {
+      warnTopRight({ message: '댓글 등록에 실패했습니다.' });
     }
-    createComment(inputForm);
-    successTopRight({ message: '댓글이 등록되었습니다.' });
-    setInputForm({ ...inputForm, content: '' });
-  };
+  });
 
   return (
     <div className={styles.container}>
-      <Image src={profiles?.avatar_url ?? ''} alt="comment" width={35} height={35}/>
+      <Image src={profiles?.avatar_url ?? ''} alt="comment" width={35} height={35} />
       <input
         name="content"
         value={inputForm.content}
         onChange={handleFormChange}
         onKeyDown={(e) => {
-          if (e.key === 'Enter') onClickCreate();
+          if (e.key === 'Enter') createCommentMutation.mutate(inputForm);
         }}
         autoFocus
       />
-      <button onClick={onClickCreate}>등록</button>
+      <button onClick={() => createCommentMutation.mutate(inputForm)}>등록</button>
     </div>
   );
 };
