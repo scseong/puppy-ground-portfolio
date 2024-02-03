@@ -3,9 +3,7 @@
 import ChatModal from './ChatModal';
 import { supabase } from '@/shared/supabase/supabase';
 import { Tables } from '@/shared/supabase/types/supabase';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
-import { getChatRoomList, getOutChatRoom } from '@/apis/chat/chat';
 import useAuth from '@/hooks/useAuth';
 import styles from './chatList.module.scss';
 import Chat from './Chat';
@@ -19,63 +17,50 @@ import Swal from 'sweetalert2';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import { useAlertMessage } from '@/hooks/useAlertMessage';
+import { useChat } from '@/hooks/useChat';
+import { useChatStore } from '@/shared/zustand/ChatStore';
 
 type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
   ariaHideApp: boolean;
-  isChatRoomOpen: boolean;
   list?: Tables<'chat_list'>;
-  getChat?: Tables<'chat'>[] | null;
 };
 
 type ChatListWithDate = {
   [date: string]: Tables<'chat'>[];
 };
 
-const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat }: ModalProps) => {
+const ChatList = ({ isOpen, onClose, ariaHideApp, list }: ModalProps) => {
+  const { isChatRoomModalOpen, setChatRoomModalOpen } = useChatStore();
   // 유저 정보
   const user = useAuth((state) => state.user);
+  const router = useRouter();
+  //알림메세지 가져오기
   const { fetchAlertMessage } = useAlertMessage();
-
-  const [isChatOpen, setIsChatOpen] = useState<boolean>(isChatRoomOpen);
-  //전체 채팅내용
-  const [chat, setChat] = useState<Tables<'chat'>[]>(getChat!);
-  //로그인한 사람의 채팅 내역
-  const [chatItem, setChatItem] = useState<Tables<'chat'>[]>([]);
+  //특정 채팅방의 채팅내용
+  const [chat, setChat] = useState<Tables<'chat'>[]>([]);
   //채팅방 아이디
   const [chatListId, setChatListId] = useState<number>(0);
   //채팅방에서 쓸 중고물품 정보
   const [usedItem, setUsedItem] = useState<Tables<'used_item'>>();
-
   const chatListRef = useRef<HTMLDivElement | null>(null);
+  //채팅알람만 필터링
   const chatAlert = fetchAlertMessage?.data?.filter((item) => item.type === 'chat');
-  const router = useRouter();
-
+  //채팅 커스텀훅
   const {
     isError,
     isLoading,
-    refetch,
-    data: getChatListData
-  } = useQuery({
-    queryKey: ['chatRoom'],
-    queryFn: () => getChatRoomList(user!.id),
-    enabled: !!user,
-    refetchOnWindowFocus: true
-  });
-
-  const queryClient = useQueryClient();
-
-  const getOutChatRoomMutation = useMutation({
-    mutationFn: getOutChatRoom,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['chatRoom'] });
-    }
-  });
+    chatRoomRefetch,
+    fetchChatRoom,
+    useChatContent,
+    getOutChatRoomMutate,
+    chatRoomInvalidateQuery
+  } = useChat();
+  const { data: getChat } = useChatContent(list?.id || chatListId);
 
   //채팅나가기
   const clickOutChatRoom = ({ userId, chatListId }: { userId: string; chatListId: number }) => {
-    closeModal();
     Swal.fire({
       title: '방을 나가시겠습니까?',
       text: '대화한 내용이 모두 사라지고 대화를 다시 걸 수도 없습니다',
@@ -90,18 +75,16 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
           title: '방을 나갔습니다',
           icon: 'success'
         });
-        getOutChatRoomMutation.mutate({ userId, chatListId });
+        getOutChatRoomMutate({ userId, chatListId });
       }
     });
   };
 
   // 클릭 시 채팅방 입장
   const clickChatRoom = ({ id, usedItem }: { id: number; usedItem: Tables<'used_item'> }) => {
-    const chatHistory = chat?.filter((chat) => chat.chat_list_id === id);
-    setChatItem(chatHistory!);
     setChatListId(id);
     setUsedItem(usedItem);
-    setIsChatOpen(true);
+    setChatRoomModalOpen(true);
   };
 
   //클릭 시 중고물품 상세페이지로 이동
@@ -123,12 +106,13 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
   // 채팅 모달 닫았을 때 채팅목록으로 나가도록
   const closeModal = () => {
     onClose();
-    setIsChatOpen(false);
+    setChatRoomModalOpen(false);
   };
 
-  const makeSection = (chatList: Tables<'chat'>[]): ChatListWithDate => {
+  //날짜마다 세션 나누기
+  const makeSection = (chat: Tables<'chat'>[]): ChatListWithDate => {
     const sections: ChatListWithDate = {};
-    chatList.forEach((chat) => {
+    chat.forEach((chat) => {
       const monthDate = dayjs(chat.created_at).locale('KO').format('YYYY-MM-DD ddd요일');
       if (Array.isArray(sections[monthDate])) {
         sections[monthDate].push(chat);
@@ -139,6 +123,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
     return sections;
   };
 
+  //채팅 실시간 업데이트
   useEffect(() => {
     const chat = supabase
       .channel('custom-all-channel')
@@ -153,10 +138,9 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
             .single();
           // payload.new에 chat_list_id 속성이 있는지 확인 후 업데이트
           if (chat && 'chat_list_id' in payload.new) {
-            setChat((prev) => [...prev!, chatData as Tables<'chat'>]);
             // 특정 채팅방의 채팅 내용 업데이트
             if (chatData?.chat_list_id === chatListId || chatData?.chat_list_id === list?.id) {
-              setChatItem((prev) => [...prev, chatData as Tables<'chat'>]);
+              setChat((prev) => [...prev, chatData as Tables<'chat'>]);
             }
           }
         }
@@ -176,24 +160,23 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
     scrollToBottom();
   }, [chat]);
 
+  if (!user) return;
   if (isLoading) return <Loading />;
   if (isError) return <div>오류가 발생하였습니다...</div>;
-
-  if (!user) return;
   if (!!list === true || chatAlert?.length !== 0) {
-    queryClient.invalidateQueries({ queryKey: ['chatRoom'] }); // 쿼리를 무효화하고
-    refetch();
+    chatRoomInvalidateQuery(); // 채팅방 쿼리 무효화
+    chatRoomRefetch();
   }
 
-  const chatListwithDate = makeSection(chatItem);
+  const chatListwithDate = makeSection(chat);
 
   return (
     <div>
       <ChatModal isOpen={isOpen} onClose={closeModal} ariaHideApp={ariaHideApp}>
-        {isChatOpen ? (
+        {isChatRoomModalOpen ? (
           <div className={styles.chatContainer}>
             <div>
-              <button className={styles.backBtn} onClick={() => setIsChatOpen(false)}>
+              <button className={styles.backBtn} onClick={() => setChatRoomModalOpen(false)}>
                 <IoIosArrowBack size={20} color={'#0AC4B9'} />
               </button>
               <UsedItemData
@@ -207,7 +190,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
                   <div className={styles.date}>
                     <p>{date}</p>
                   </div>
-                  {chatList.map((chat, idx) => (
+                  {chat.map((chat, idx) => (
                     <Chat key={idx} chatHistory={chat} userProfile={user.id} />
                   ))}
                 </div>
@@ -224,11 +207,11 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, isChatRoomOpen, list, getChat 
               </span>
             </div>
             <ul className={styles.chatListScroll}>
-              {getChatListData?.length === 0 ? (
+              {fetchChatRoom?.length === 0 ? (
                 <div className={styles.noChatting}>대화 중인 채팅방이 없습니다!</div>
               ) : (
                 <>
-                  {getChatListData?.map((chat) => {
+                  {fetchChatRoom?.map((chat) => {
                     return chat.user_id === user.id || chat.other_user === user.id ? (
                       <ChatListContent
                         key={chat.id}
