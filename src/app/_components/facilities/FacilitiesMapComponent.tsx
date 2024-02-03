@@ -11,6 +11,7 @@ import { RiCalendarCloseFill } from 'react-icons/ri';
 import { FaRegClock } from 'react-icons/fa';
 import { useRef } from 'react';
 import { useFacilitiesQuery } from '@/hooks/useFacilitiesQuery';
+import useDebounce from '@/hooks/useDebounce';
 
 type FacilitiesMapComponentProps = {
   currentLocation: {
@@ -38,10 +39,14 @@ const FacilitiesMapComponent: React.FC<FacilitiesMapComponentProps> = ({
 }) => {
   const { facilitiesData } = useFacilitiesQuery();
 
-  // map 이동 debouncing을 위한 timer 생성
-  const timer = useRef<number | null>(null);
-
   // onBoundsChanged시 화면 이동 할때마다 데이터를 계속 받아와서 느려짐 -> 디바운싱 이용
+  const debouncedSetCoordinate = useDebounce((map) => {
+    setCoordinate({
+      sw: map.getBounds().getSouthWest().toString().replace(/\(|\)/g, '').split(',').map(Number),
+      ne: map.getBounds().getNorthEast().toString().replace(/\(|\)/g, '').split(',').map(Number)
+    });
+  }, 1000);
+
   return (
     <div className={styles.mapContainer}>
       <div id="map" className={styles.mapWrap}>
@@ -49,31 +54,7 @@ const FacilitiesMapComponent: React.FC<FacilitiesMapComponentProps> = ({
           center={{ lat: currentLocation.latitude, lng: currentLocation.longitude }}
           level={3}
           style={{ width: '100%', height: '100%' }}
-          onBoundsChanged={(map) => {
-            // 디바운싱 구현
-            if (timer.current) {
-              clearTimeout(timer.current);
-            }
-
-            timer.current = window.setTimeout(() => {
-              setCoordinate({
-                sw: map
-                  .getBounds()
-                  .getSouthWest()
-                  .toString()
-                  .replace(/\(|\)/g, '')
-                  .split(',')
-                  .map(Number),
-                ne: map
-                  .getBounds()
-                  .getNorthEast()
-                  .toString()
-                  .replace(/\(|\)/g, '')
-                  .split(',')
-                  .map(Number)
-              });
-            }, 1000);
-          }}
+          onBoundsChanged={(map) => debouncedSetCoordinate(map)}
         >
           {facilitiesData?.data?.map((place) => {
             return (
