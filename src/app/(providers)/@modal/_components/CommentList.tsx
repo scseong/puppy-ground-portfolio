@@ -8,11 +8,13 @@ import { getStringFromNow } from '@/utils/time';
 import { ChangeEvent, Fragment, useState } from 'react';
 import { useToast } from '@/hooks/useToast';
 import { Tables } from '@/shared/supabase/types/supabase';
+import useAuth from '@/hooks/useAuth';
 
 const CommentList = () => {
   const params = useParams();
-  const { successTopRight, warnTopRight, errorTopRight } = useToast();
+  const { successTopRight, errorTopRight } = useToast();
   const queryClient = useQueryClient();
+  const user = useAuth((state) => state.user);
 
   const [editComment, setEditComment] = useState<Tables<'mung_stagram_comment'>>();
 
@@ -98,18 +100,20 @@ const CommentList = () => {
               </div>
             </div>
           </div>
-          <div className={styles.buttonBox}>
-            {editComment?.id === comment.id ? (
-              <button onClick={() => updateCommentMutation.mutate(comment.id)}>확인</button>
-            ) : (
-              <button onClick={() => clickEdit(comment)}>수정</button>
-            )}
-            {editComment?.id === comment.id ? (
-              <button onClick={onClickCancel}>취소</button>
-            ) : (
-              <button onClick={() => deleteCommentMutation.mutate(comment.id)}>삭제</button>
-            )}
-          </div>
+          {comment.user_id === user?.id && (
+            <div className={styles.buttonBox}>
+              {editComment?.id === comment.id ? (
+                <button onClick={() => updateCommentMutation.mutate(comment.id)}>확인</button>
+              ) : (
+                <button onClick={() => clickEdit(comment)}>수정</button>
+              )}
+              {editComment?.id === comment.id ? (
+                <button onClick={onClickCancel}>취소</button>
+              ) : (
+                <button onClick={() => deleteCommentMutation.mutate(comment.id)}>삭제</button>
+              )}
+            </div>
+          )}
         </div>
       ))}
     </Fragment>
