@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styles from './header.module.scss';
 import Image from 'next/image';
 import { supabase } from '@/shared/supabase/supabase';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect, MouseEventHandler } from 'react';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
@@ -16,6 +16,8 @@ import { RealtimeChannel, RealtimePostgresInsertPayload } from '@supabase/supaba
 import { ALERT_MESSAGE_QUERY_LEY, useAlertMessage } from '@/hooks/useAlertMessage';
 import AlertMessageList from '../alertMessage/AlertMessageList';
 import logo from '../../../../public/images/logo.png';
+import { Database } from '@/shared/supabase/types/supabase';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import dynamic from 'next/dynamic';
 import localFont from 'next/font/local';
 
@@ -27,7 +29,7 @@ const gmarket = localFont({
 
 const Header = () => {
   const router = useRouter();
-  const { alertBottomRight, errorTopRight, successTopRight } = useToast();
+  const { alertBottomRight, errorTopRight, successTopRight, warnTopCenter } = useToast();
   const user = useAuth((state) => state.user);
   const [showMessageList, setShowMessageList] = useState<boolean>(false);
   const setUser = useAuth((state) => state.setUser);
@@ -35,6 +37,7 @@ const Header = () => {
   const setIsAuthInitialized = useAuth((state) => state.setIsAuthInitialized);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
+  const supabaseAuth = createClientComponentClient<Database>();
   //true로 바뀌면 채팅정보를 가져오게 하는 state
   const [showMore, setShowMore] = useState(false);
   const queryClient = useQueryClient();
@@ -45,12 +48,22 @@ const Header = () => {
   });
 
   const pathName = usePathname();
+  const searchParams = useSearchParams();
+  const alertMessage = searchParams.get('alert');
+
   useEffect(() => {
-    supabase.auth.onAuthStateChange((event, session) => {
+    if (alertMessage) {
+      warnTopCenter({ message: alertMessage });
+      router.push(pathName);
+    }
+  }, []);
+
+  useEffect(() => {
+    supabaseAuth.auth.onAuthStateChange((event, session) => {
       if (session) {
         setUser(session.user);
       } else {
-        // setUser(null);
+        setUser(null);
       }
 
       if (!isAuthInitialized) {
@@ -60,7 +73,7 @@ const Header = () => {
   }, []);
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabaseAuth.auth.signOut();
     if (!error) {
       successTopRight({ message: '로그아웃 되었습니다.' });
       setIsVisible(false);
