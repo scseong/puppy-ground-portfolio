@@ -14,7 +14,7 @@ const Profile = () => {
   const user = useAuth((state) => state.user);
 
   const { data: getProfileData, isLoading } = useQuery({
-    queryKey: ['getProfile'],
+    queryKey: ['getProfile', user?.id],
     queryFn: () => getProfile(user!.id),
     enabled: !!user,
     refetchOnWindowFocus: false
@@ -35,9 +35,13 @@ const Profile = () => {
 
   const { successTopRight, errorTopRight, warnTopRight } = useToast();
 
-  const onChangeImg = (e: React.ChangeEvent<HTMLInputElement | HTMLFormElement>) => {
+  const onChangeImg = async (e: React.ChangeEvent<HTMLInputElement | HTMLFormElement>) => {
     if (e.target.files[0]) {
-      setImgFile(e.target!.files[0]);
+      if (e.target.files[0].size >= 2000000) {
+        warnTopRight({ message: '파일 사이즈가 너무 큽니다. (2MB 이하)' });
+        return false;
+      }
+      setImgFile(e.target.files[0]);
     } else {
       setProfileImg(getProfileData?.avatar_url!);
       return;

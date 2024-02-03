@@ -3,24 +3,25 @@ import { Tables } from '@/shared/supabase/types/supabase';
 
 // 채팅방 가져오기
 export const getChatRoomList = async (id: string) => {
-  const getChatListQuery = await supabase
+  const { data: getChatListData } = await supabase
     .from('chat_list')
     .select('*, used_item(*), chat(read_status, user_id), profiles(*)')
     .or(`user_id.eq.${id}, other_user.eq.${id}`)
     .order('id', { ascending: false })
     .returns<Tables<'chat_list'>[]>();
 
-  const { data: getChatListData, error } = getChatListQuery;
-  return { getChatListData, error };
+  return getChatListData;
 };
 
 // 채팅 가져오기
-export const getChatContent = async () => {
+export const getChatContent = async (chatListId: number) => {
   const { data: chat, error } = await supabase
     .from('chat')
     .select('*, profiles(user_name)')
     .order('created_at', { ascending: true })
+    .eq('chat_list_id', chatListId)
     .returns<Tables<'chat'>[]>();
+
   return chat;
 };
 
@@ -58,13 +59,6 @@ export const makeChatList = async ({
     .single();
   return data;
 };
-
-// // 채팅방 삭제 - 보류..
-// export const deleteChatRoom = async (id: number) => {
-//   await supabase.from('chat_list').delete().eq('id', id);
-
-//   await supabase.from('chat').delete().eq('chat_list_id', id);
-// };
 
 //채팅 읽기
 export const readChat = async ({
