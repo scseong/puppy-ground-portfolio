@@ -169,6 +169,12 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, list }: ModalProps) => {
   }
 
   const chatListwithDate = makeSection(chat);
+  //채팅방 나온 갯수
+  const outRoom = fetchChatRoom?.filter((room) => {
+    if (room.get_out_chat_room) {
+      return room.get_out_chat_room[0] === user.id || room.get_out_chat_room[1] === user.id;
+    }
+  });
 
   return (
     <div>
@@ -207,7 +213,7 @@ const ChatList = ({ isOpen, onClose, ariaHideApp, list }: ModalProps) => {
               </span>
             </div>
             <ul className={styles.chatListScroll}>
-              {fetchChatRoom?.length === 0 ? (
+              {fetchChatRoom?.length === 0 || outRoom?.length !== 0 ? (
                 <div className={styles.noChatting}>대화 중인 채팅방이 없습니다!</div>
               ) : (
                 <>
