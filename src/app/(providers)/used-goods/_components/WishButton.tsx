@@ -15,7 +15,7 @@ const WishButton = ({ usedItemId, title }: { usedItemId: string; title: string }
   const queryClient = useQueryClient();
   const user = useAuth((state) => state.user);
   const { errorTopRight } = useToast();
-  const { addAlertMessage, deleteAlertMessage } = useAlertMessage();
+  const { addAlertMessage, deleteAlertMessageType } = useAlertMessage();
   const { isLoading, isError, data } = useQuery({
     queryKey: ['used-item', usedItemId],
     queryFn: () => getUsedGoodDetail(usedItemId)
@@ -78,7 +78,7 @@ const WishButton = ({ usedItemId, title }: { usedItemId: string; title: string }
 
     queryClient.setQueryData(['my_wish', usedItemId], false);
     if (data?.user_id !== user!.id) {
-      deleteAlertMessage(usedItemId);
+      deleteAlertMessageType(usedItemId);
     }
   };
 

@@ -19,12 +19,11 @@
     width: 250px;
     margin-bottom: 1rem;
     font-size: 1.4rem;
-    font-weight: bold;
     line-height: 2rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    font-family: Pretendard-Bold;
+    font-weight: 500;
   }
 }
 
@@ -39,12 +38,11 @@
   span {
     font-size: 1.2rem;
     line-height: 1.8rem;
-    font-family: Pretendard-Bold;
+    font-weight: 500;
   }
 
   time {
     color: var(--card-detail-text-color);
-    font-family: Pretendard-Regular;
   }
 }
 
@@ -63,7 +61,6 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    font-family: Pretendard-Regular;
   }
 }
 
@@ -79,7 +76,7 @@
 }
 
 .count {
-  font-family: Pretendard-Bold;
+  font-weight: 500;
   span {
     font-weight: 600;
     display: inline-block;
@@ -126,6 +123,6 @@
     border-radius: 100%;
     text-align: center;
     font-size: 0.8em;
-    font-weight: bold;
+    font-weight: 500;
   }
 }

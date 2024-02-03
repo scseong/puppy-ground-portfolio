@@ -9,12 +9,4 @@ const Page = () => {
   );
 };
 
-const PrivateCreatePage = () => {
-  return (
-    <PrivateRouteWrapper>
-      <Page />
-    </PrivateRouteWrapper>
-  );
-};
-
-export default PrivateCreatePage;
+export default Page;

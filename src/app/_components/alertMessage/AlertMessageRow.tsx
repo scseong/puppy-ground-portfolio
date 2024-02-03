@@ -3,10 +3,13 @@ import { useRouter } from 'next/navigation';
 import styles from './alertMessageRow.module.scss';
 import { Tables } from '@/shared/supabase/types/supabase';
 import moment from 'moment';
+import { useToast } from '@/hooks/useToast';
 
 const AlertMessageRow = ({ item }: { item: Tables<'alert_message'> }) => {
-  const { updateAlertMessage } = useAlertMessage();
+  const { updateAlertMessage, deleteAlertMessageId } = useAlertMessage();
+  const { successTopRight } = useToast();
   const router = useRouter();
+
   let link = '/';
 
   if (item.type === 'wish') {
@@ -19,13 +22,25 @@ const AlertMessageRow = ({ item }: { item: Tables<'alert_message'> }) => {
     await updateAlertMessage(item.id);
   };
 
+  const deleteReadMessageButton = async () => {
+    await deleteAlertMessageId(item.id);
+    successTopRight({ message: '메시지가 삭제되었습니다' });
+  };
+
   return (
-    <div
-      onClick={clickMessage}
-      className={[item.status === true ? styles.read : styles.message].join('')}
-    >
-      <p>{item.message}</p>
-      <span>{moment(item.created_at).format('yyyy-MM-DD HH:mm')}</span>
+    <div className={[item.status === true ? styles.read : styles.container].join('')}>
+      <div onClick={clickMessage} className={styles.messageWrap}>
+        <p>{item.message}</p>
+      </div>
+      <div className={styles.deleteRow}>
+        <span>{moment(item.created_at).format('yyyy-MM-DD HH:mm')}</span>
+        <button
+          onClick={deleteReadMessageButton}
+          className={[item.status === true ? styles.button : styles.none].join('')}
+        >
+          X
+        </button>
+      </div>
     </div>
   );
 };

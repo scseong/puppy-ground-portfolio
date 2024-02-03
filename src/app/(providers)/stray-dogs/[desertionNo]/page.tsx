@@ -17,6 +17,7 @@ import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
 import ClipBoardButton from '@/app/_components/shareButton/ClipBoardButton';
 import dayjs from 'dayjs';
 import { Main } from '@/app/_components/layout';
+import kakaotalk from './../../../../../public/images/kakaoLogo.png';
 
 const StrayDogsDetail = () => {
   const params = useParams();
@@ -57,38 +58,36 @@ const StrayDogsDetail = () => {
             <Image src={strayDesertionNo?.popfile!} alt="stray-dog" width={500} height={300} />
           </div>
           <div className={styles.dogExplanationWrap}>
-            <div className={styles.titleColumn}>
-              <p>
+            <div className={styles.textWrapper}>
+              <h3>
                 <FaDog />
                 &nbsp;견종
-              </p>
-              <p>
+              </h3>
+              <p>{strayDesertionNo?.kindCd.slice(3)}</p>
+              <h3>
                 <IoMdColorPalette />
                 &nbsp;색상
-              </p>
-              <p>
+              </h3>
+              <p>{strayDesertionNo?.colorCd}</p>
+              <h3>
                 <FaCakeCandles />
                 &nbsp;나이
-              </p>
-              <p>
+              </h3>
+              <p>{strayDesertionNo?.age}</p>
+              <h3>
                 <GiWeight />
                 &nbsp;몸무게
-              </p>
-              <p>
+              </h3>
+              <p>{strayDesertionNo?.weight}</p>
+              <h3>
                 <PiGenderIntersexFill />
                 &nbsp;성별
-              </p>
-              <p>
+              </h3>
+              <p>{strayDesertionNo?.sexCd === 'M' ? '수컷' : '암컷'}</p>
+              <h3>
                 <FaUserDoctor />
                 &nbsp;중성화여부
-              </p>
-            </div>
-            <div className={styles.contentColumn}>
-              <p>{strayDesertionNo?.kindCd.slice(3)}</p>
-              <p>{strayDesertionNo?.colorCd}</p>
-              <p>{strayDesertionNo?.age}</p>
-              <p>{strayDesertionNo?.weight}</p>
-              <p>{strayDesertionNo?.sexCd === 'M' ? '수컷' : '암컷'}</p>
+              </h3>
               <p>
                 {strayDesertionNo?.neuterYn === 'Y'
                   ? '중성화 O'
@@ -100,48 +99,50 @@ const StrayDogsDetail = () => {
           </div>
         </div>
         <div className={styles.careExplanationWrap}>
-          <div className={styles.titleColumn}>
-            <p>
+          <div className={styles.textWrapper}>
+            <h3>
               <FaCalendarDays />
               &nbsp;접수번호
-            </p>
-            <p>
+            </h3>
+            <p>{strayDesertionNo?.noticeNo}</p>
+            <h3>
               <MdStickyNote2 />
               &nbsp;특이사항
-            </p>
-            <p>
+            </h3>
+            <p>{strayDesertionNo?.specialMark}</p>
+            <h3>
               <FaHandsHelping />
               &nbsp;구조일시
-            </p>
-            <p>
+            </h3>
+            <p>{happenDt}</p>
+            <h3>
               <FaMapMarkerAlt />
               &nbsp;구조장소
-            </p>
-            <p>
+            </h3>
+            <p>{strayDesertionNo?.happenPlace}</p>
+            <h3>
               <BiSolidHomeHeart />
               &nbsp;보호소 이름
-            </p>
-            <p>
+            </h3>
+            <p>{strayDesertionNo?.careNm}</p>
+            <h3>
               <FaSquarePhone />
               &nbsp;보호소 전화번호
-            </p>
-            <p>
+            </h3>
+            <p>{strayDesertionNo?.careTel}</p>
+            <h3>
               <FaMapMarkerAlt />
               &nbsp;보호소 위치
-            </p>
-          </div>
-          <div className={styles.contentColumn}>
-            <p>{strayDesertionNo?.noticeNo}</p>
-            <p>{strayDesertionNo?.specialMark}</p>
-            <p>{happenDt}</p>
-            <p>{strayDesertionNo?.happenPlace}</p>
-            <p>{strayDesertionNo?.careNm}</p>
-            <p>{strayDesertionNo?.careTel}</p>
+            </h3>
             <p>{strayDesertionNo?.careAddr}</p>
           </div>
         </div>
         <div className={styles.buttonWrap}>
-          <KakaoShareButton />
+          <KakaoShareButton>
+            <button className={styles.kakaoButton}>
+              <Image src={kakaotalk} alt="kakaotalk" width={45} height={45} />
+            </button>
+          </KakaoShareButton>
           <ClipBoardButton />
         </div>
       </div>

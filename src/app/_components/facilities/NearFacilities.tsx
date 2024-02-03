@@ -1,12 +1,10 @@
 import style from './nearFacilities.module.scss';
 import { useEffect, useState } from 'react';
 import { Tables } from '@/shared/supabase/types/supabase';
-import { FaMapMarkerAlt } from 'react-icons/fa';
-import { RiCalendarCloseFill } from 'react-icons/ri';
-import { FaRegClock } from 'react-icons/fa';
-import { FaExternalLinkAlt } from 'react-icons/fa';
-import { TbCategory } from 'react-icons/tb';
 import { useFacilitiesQuery } from '@/hooks/useFacilitiesQuery';
+import { FaMapMarkerAlt, FaRegClock, FaExternalLinkAlt } from 'react-icons/fa';
+import { RiCalendarCloseFill } from 'react-icons/ri';
+import { TbCategory } from 'react-icons/tb';
 
 type NearFacilitiesProps = {
   markerFocusHandler: ({ latitude, longitude }: { latitude: number; longitude: number }) => void;

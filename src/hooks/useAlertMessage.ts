@@ -1,7 +1,9 @@
 import {
   AlertType,
   addAlertMessageByIdAndTarget,
-  deleteAlertMessageType,
+  deleteAlertMessageById,
+  deleteAlertMessageByType,
+  deleteChatAlertMessageType,
   findAllMessageByUserId,
   updateAlertMessageStatus,
   updateChatAlertMessageStatus
@@ -43,8 +45,22 @@ export const useAlertMessage = () => {
     }
   });
 
-  const { mutate: deleteAlertMessage } = useMutation({
-    mutationFn: async (targetId: string) => await deleteAlertMessageType(targetId),
+  const { mutate: deleteAlertMessageType } = useMutation({
+    mutationFn: async (targetId: string) => await deleteAlertMessageByType(targetId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [ALERT_MESSAGE_QUERY_LEY] });
+    }
+  });
+
+  const { mutate: deleteAlertMessageId } = useMutation({
+    mutationFn: async (id: string) => await deleteAlertMessageById(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [ALERT_MESSAGE_QUERY_LEY] });
+    }
+  });
+
+  const { mutate: deleteChatAlertMessage } = useMutation({
+    mutationFn: async (userId: string) => await deleteChatAlertMessageType(userId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [ALERT_MESSAGE_QUERY_LEY] });
     }
@@ -55,6 +71,8 @@ export const useAlertMessage = () => {
     addAlertMessage,
     updateAlertMessage,
     updateChatAlertMessage,
-    deleteAlertMessage
+    deleteAlertMessageType,
+    deleteAlertMessageId,
+    deleteChatAlertMessage
   };
 };

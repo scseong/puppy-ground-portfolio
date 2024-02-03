@@ -22,8 +22,7 @@
   h2 {
     font-size: 2rem;
     line-height: 2rem;
-    font-weight: bold;
-    font-family: Pretendard-Bold;
+    font-weight: 700;
   }
 
   @media (max-width: 1200px) {
@@ -95,7 +94,7 @@
 
   .selectedTitle {
     color: black;
-    font-weight: bold;
+    font-weight: 700;
     border-bottom: 1px solid black;
     padding-bottom: 0.5rem;
   }
@@ -123,4 +122,19 @@
   flex-direction: row;
   width: 100%;
   justify-content: space-evenly;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 40px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    max-width: 400px;
+    max-height: 400px;
+  }
 }
