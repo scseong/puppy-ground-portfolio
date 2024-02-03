@@ -1,13 +1,15 @@
-.container {
+.chatContainer {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  height: 100%;
+  width: 100%;
 }
 .chatScroll {
   overflow-y: auto;
-  max-height: 500px;
   scroll-behavior: smooth;
-  height: calc(100dvh - 120px);
+  max-height: calc(100vh - 120px);
+  height: 100%;
 
   &::-webkit-scrollbar {
     width: 5px;
@@ -47,7 +49,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 5px 10px;
+  width: 100%;
 
   & > span {
     cursor: pointer;
@@ -69,23 +71,4 @@
   height: 500px;
   justify-content: center;
   align-items: center;
-}
-
-//반응형
-
-@media screen and (max-width: 480px) {
-  .container {
-    width: 100%;
-  }
-  .chatContainer {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-  }
-
-  .chatScroll {
-    height: calc(100dvh - 120px);
-    max-height: none;
-  }
 }

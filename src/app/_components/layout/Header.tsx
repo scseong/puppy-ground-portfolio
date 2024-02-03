@@ -8,7 +8,6 @@ import { useState, useEffect, MouseEventHandler } from 'react';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getChatContent } from '@/apis/chat/chat';
 import Loading from './loading/Loading';
 import { GoBell } from 'react-icons/go';
 import { IoChatbubbleEllipsesOutline } from 'react-icons/io5';
@@ -41,11 +40,11 @@ const Header = () => {
   const supabaseAuth = createClientComponentClient<Database>();
   //true로 바뀌면 채팅정보를 가져오게 하는 state
   const [showMore, setShowMore] = useState(false);
-
   const queryClient = useQueryClient();
   const { fetchAlertMessage, updateChatAlertMessage, deleteChatAlertMessage } = useAlertMessage();
   const ChatList = dynamic(() => import('@/app/_components/chatting/ChatList'), {
-    loading: () => <Loading />
+    loading: () => <Loading />,
+    ssr: false
   });
 
   const pathName = usePathname();
@@ -87,14 +86,8 @@ const Header = () => {
     }
   };
 
-  const {
-    isError,
-    isLoading,
-    refetch,
-    data: getChat
-  } = useQuery({
+  const { isLoading } = useQuery({
     queryKey: ['chat'],
-    queryFn: getChatContent,
     refetchOnWindowFocus: false
   });
 
@@ -191,8 +184,6 @@ const Header = () => {
   if (!isAuthInitialized) {
     return null;
   }
-
-  if (filterAlertMessage?.length !== 0) refetch();
 
   return (
     <>
@@ -386,15 +377,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      {showMore && (
-        <ChatList
-          isOpen={isModalOpen}
-          onClose={clickCloseModal}
-          ariaHideApp={false}
-          isChatRoomOpen={false}
-          getChat={getChat}
-        />
-      )}
+      {showMore && <ChatList isOpen={isModalOpen} onClose={clickCloseModal} ariaHideApp={false} />}
     </>
   );
 };
