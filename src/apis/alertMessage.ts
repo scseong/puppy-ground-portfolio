@@ -44,9 +44,14 @@ export const updateChatAlertMessageStatus = async (type: string) => {
   await supabase.from('alert_message').update({ status: true }).eq('type', type);
 };
 
-// 테이블에서 찜 내역 삭제하기
-export const deleteAlertMessageType = async (targetId: string) => {
+// 테이블에서 찜, 좋아요 내역 삭제하기
+export const deleteAlertMessageByType = async (targetId: string) => {
   return await supabase.from('alert_message').delete().eq('target_id', targetId);
+};
+
+// 테이블에서 읽은 메시지 삭제하기
+export const deleteAlertMessageById = async (id: string) => {
+  return await supabase.from('alert_message').delete().eq('id', id);
 };
 
 //테이블에서 채팅 알림 내역 삭제하기

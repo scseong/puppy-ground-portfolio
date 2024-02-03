@@ -20,6 +20,13 @@ import logo from '../../../../public/images/logo.png';
 import { Database } from '@/shared/supabase/types/supabase';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import dynamic from 'next/dynamic';
+import localFont from 'next/font/local';
+
+const gmarket = localFont({
+  src: '../../assets/fonts/GmarketSansBold.woff2',
+  display: 'swap',
+  variable: '--logo-font'
+});
 
 const Header = () => {
   const router = useRouter();
@@ -191,7 +198,7 @@ const Header = () => {
     <>
       <div className={styles.container}>
         <div className={styles.navbarBox}>
-          <div className={styles.logoBox}>
+          <div className={`${styles.logoBox} ${gmarket.variable}`}>
             <Link href="/" className={styles.logoText}>
               Puppy Ground
             </Link>

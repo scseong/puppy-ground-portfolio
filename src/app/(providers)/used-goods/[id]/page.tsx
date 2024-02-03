@@ -14,7 +14,7 @@ import { getformattedDate } from '@/utils/time';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { MouseEventHandler, useCallback, useEffect, useRef, useState } from 'react';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import { SlideImage, TradeLocationMap } from '../_components';
@@ -32,7 +32,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const queryClient = useQueryClient();
   const user = useAuth((state) => state.user);
   const { addAlertMessage } = useAlertMessage();
-
+  const modalRef = useRef<HTMLDivElement | null>(null);
   const { isLoading, isError, data } = useQuery({
     queryKey: ['used-item', params.id],
     queryFn: () => getUsedGoodDetail(params.id)
@@ -47,9 +47,22 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const { id } = useParams();
   const { errorTopRight } = useToast();
 
-  const editButtonToggle = () => {
+  const editButtonToggle: MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.stopPropagation();
     setShowEditToggle(!showEditToggle);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        setShowEditToggle(false);
+      }
+    };
+    window.addEventListener('click', handleClickOutside);
+    return () => {
+      window.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   const onClickUpdateSoldOut = async () => {
     Swal.fire({
@@ -198,7 +211,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                         )}
                         <span></span>
                         <Link href={`/used-goods/update/${id}`}>
-                          <button className={styles.edit}>수정</button>
+                          <button>수정</button>
                         </Link>
                         <span></span>
                         <button onClick={onClickDelete}>삭제</button>

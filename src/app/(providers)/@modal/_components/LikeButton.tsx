@@ -14,7 +14,7 @@ const LikeButton = ({ mungStargramId, title }: { mungStargramId: string; title: 
   const queryClient = useQueryClient();
   const user = useAuth((state) => state.user);
   const { errorTopRight } = useToast();
-  const { addAlertMessage, deleteAlertMessage } = useAlertMessage();
+  const { addAlertMessage, deleteAlertMessageType } = useAlertMessage();
 
   const { isLoading, isError, data } = useQuery({
     queryKey: ['mung_stagram', mungStargramId],
@@ -76,7 +76,7 @@ const LikeButton = ({ mungStargramId, title }: { mungStargramId: string; title: 
     });
     queryClient.setQueryData(['my_like', mungStargramId], false);
     if (data?.user_id !== user!.id) {
-      deleteAlertMessage(mungStargramId);
+      deleteAlertMessageType(mungStargramId);
     }
   };
 
