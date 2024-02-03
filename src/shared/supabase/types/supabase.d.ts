@@ -220,6 +220,45 @@ export interface Database {
           }
         ];
       };
+      mung_stagram_comment: {
+        Row: {
+          content: string;
+          created_at: string;
+          id: number;
+          mung_stagram_id: number;
+          user_id: string;
+        };
+        Insert: {
+          content: string;
+          created_at?: string;
+          id?: number;
+          mung_stagram_id: number;
+          user_id: string;
+        };
+        Update: {
+          content?: string;
+          created_at?: string;
+          id?: number;
+          mung_stagram_id?: number;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'mung_stagram_comment_mung_stagram_id_fkey';
+            columns: ['mung_stagram_id'];
+            isOneToOne: false;
+            referencedRelation: 'mung_stagram';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'mung_stagram_comment_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
       mung_stagram_like: {
         Row: {
           id: number;
