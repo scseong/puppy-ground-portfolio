@@ -35,6 +35,7 @@ export const getComments = async (mung_stagram_id: number) => {
   const { data } = await supabase
     .from('mung_stagram_comment')
     .select('*, profiles (user_name, avatar_url,id)')
+    .order('created_at', { ascending: false })
     .eq('mung_stagram_id', mung_stagram_id);
   return data;
 };
