@@ -60,11 +60,10 @@ const Header = () => {
 
   useEffect(() => {
     supabaseAuth.auth.onAuthStateChange((event, session) => {
-      console.log(event, session);
       if (session) {
         setUser(session.user);
       } else {
-        // setUser(null);
+        setUser(null);
       }
 
       if (!isAuthInitialized) {
