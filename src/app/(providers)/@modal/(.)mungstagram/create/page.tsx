@@ -5,18 +5,16 @@ import { useRouter, usePathname } from 'next/navigation';
 import styles from './page.module.scss';
 import { useState, useEffect } from 'react';
 import { FiPlus } from 'react-icons/fi';
-import { MdOutlineCancel } from 'react-icons/md';
 import { useToast } from '@/hooks/useToast';
 import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '@/shared/supabase/supabase';
-import Image from 'next/image';
-import { TablesInsert } from '@/shared/supabase/types/supabase';
 import useAuth from '@/hooks/useAuth';
 import Swal from 'sweetalert2';
 import { useQueryClient } from '@tanstack/react-query';
 import { customStyle } from '@/shared/modal';
-import { debounce, isEmpty } from 'lodash';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { ONE_MEGABYTE } from '@/shared/constant/constant';
+import { getImagePreview, isFileSizeExceeded, isDuplicateImage } from '@/utils/file';
 
 type FileEvent = React.ChangeEvent<HTMLInputElement> & {
   target: EventTarget & { files: FileList };
@@ -29,32 +27,16 @@ type Inputs = {
   title: string;
 };
 
-const MAX_IMAGE_COUNT = 5;
-export const ONE_MEGABYTE = 1_048_576;
-
-const getImagePreview = (file: File) => {
-  if (!file) return;
-  return URL.createObjectURL(file);
-};
-
-const isFileSizeExceeded = (file: File, limit: number) => {
-  if (file.size > limit) return true;
-  return false;
-};
-
-const isDuplicateImage = (files: File[], newFile: File) => {
-  return files.some((file) => file.name === newFile.name);
-};
-
 const MungstaCreateModal = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [imagePreview, setImagePreview] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
-  const [photoURL, setPhotoURL] = useState([]);
   const user = useAuth((state) => state.user);
   const queryClient = useQueryClient();
   const router = useRouter();
   const pathname = usePathname();
+
+  const MAX_IMAGE_COUNT = 5;
 
   const { successTopRight, errorTopRight, warnTopRight } = useToast();
   const {
@@ -170,7 +152,7 @@ const MungstaCreateModal = () => {
       const { data, error } = await supabase.storage.from('mungstagram').upload(uuidv4(), file);
 
       if (error) {
-        warnTopRight({
+        errorTopRight({
           message: `${file.name} 파일 업로드 중 오류가 발생했습니다.`,
           timeout: 3000
         });
@@ -190,7 +172,7 @@ const MungstaCreateModal = () => {
       content,
       tags,
       photo_url,
-      user_id: user.id
+      user_id: user!.id
     };
 
     const { data, error } = await supabase.from('mung_stagram').insert(formData).select();
@@ -200,7 +182,7 @@ const MungstaCreateModal = () => {
       router.push('/mungstagram');
     }
     if (error) {
-      return warnTopRight({ message: '게시글 등록이 실패했습니다. 다시 시도해주세요.' });
+      return errorTopRight({ message: '게시글 등록이 실패했습니다. 다시 시도해주세요.' });
     }
   };
 
