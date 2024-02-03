@@ -1,5 +1,5 @@
 // ChatStore.ts
-import create, { SetState } from 'zustand';
+import { SetState, create } from 'zustand';
 
 type ChatStore = {
   isChatModalOpen: boolean;
