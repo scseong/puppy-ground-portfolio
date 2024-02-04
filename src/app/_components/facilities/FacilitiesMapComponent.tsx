@@ -12,7 +12,6 @@ import { RiCalendarCloseFill } from 'react-icons/ri';
 import { FaRegClock } from 'react-icons/fa';
 import { useFacilitiesQuery } from '@/hooks/useFacilitiesQuery';
 import useDebounce from '@/hooks/useDebounce';
-import { useSearchParams } from 'next/navigation';
 
 type FacilitiesMapComponentProps = {
   currentLocation: {
@@ -40,7 +39,6 @@ const FacilitiesMapComponent: React.FC<FacilitiesMapComponentProps> = ({
   showCurrentInfo
 }) => {
   const { facilitiesData } = useFacilitiesQuery();
-  const searchParams = useSearchParams();
 
   // onBoundsChanged시 화면 이동 할때마다 데이터를 계속 받아와서 느려짐 -> 디바운싱 이용
   const debouncedSetCoordinate = useDebounce((map) => {

@@ -12,10 +12,8 @@ import restaurant from '../../../../public/images/restaurant.jpg';
 import travel from '../../../../public/images/travel.jpg';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { useSearchParams } from 'next/navigation';
 
 const MainGrid = () => {
-  const searchParams = useSearchParams();
   return (
     <div className={styles.container}>
       <div className={styles.firstContainer}>
