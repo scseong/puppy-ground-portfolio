@@ -48,15 +48,15 @@ const Header = () => {
   });
 
   const pathName = usePathname();
-  const searchParams = useSearchParams();
-  const alertMessage = searchParams.get('alert');
+  // const searchParams = useSearchParams();
+  // const alertMessage = searchParams.get('alert');
 
-  useEffect(() => {
-    if (alertMessage) {
-      warnTopCenter({ message: alertMessage });
-      router.push(pathName);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (alertMessage) {
+  //     warnTopCenter({ message: alertMessage });
+  //     router.push(pathName);
+  //   }
+  // }, []);
 
   useEffect(() => {
     supabaseAuth.auth.onAuthStateChange((event, session) => {
