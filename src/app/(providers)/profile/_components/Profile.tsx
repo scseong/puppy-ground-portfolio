@@ -99,8 +99,8 @@ const Profile = () => {
     }
   };
 
-  if (isLoading) return <div></div>;
-  if (!user) return <div></div>;
+  if (isLoading) return;
+  if (!user) return;
 
   return (
     <div className={styles.container}>
