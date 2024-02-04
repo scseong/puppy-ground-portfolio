@@ -13,7 +13,7 @@ export async function middleware(req: NextRequest) {
   // 현재 세션 정보 가져오기
   const { data } = await supabase.auth.getSession();
 
-  // 분기처리 부분 : 멍스타그램 작성/수정, 중고물품 작성/수정 , 마이페이지
+  // 분기처리 부분 : 멍스타그램 작성/수정, 중고물품 작성/수정, 마이페이지
   if (data.session !== null && pathname.startsWith('/auth')) {
     return NextResponse.redirect(new URL('/', req.url));
   }

@@ -28,6 +28,7 @@ type FacilitiesMapComponentProps = {
   currentLocationMarker: boolean;
   showCurrentInfo: boolean;
 };
+
 const FacilitiesMapComponent: React.FC<FacilitiesMapComponentProps> = ({
   currentLocation,
   setCoordinate,

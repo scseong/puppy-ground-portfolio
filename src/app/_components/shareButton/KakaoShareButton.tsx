@@ -1,9 +1,6 @@
 'use client';
 
-import Image from 'next/image';
 import Script from 'next/script';
-import kakaotalk from '../../../../public/images/kakaoLogo.png';
-import style from './kakaoShareButton.module.scss';
 
 declare global {
   interface Window {
