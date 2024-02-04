@@ -141,3 +141,36 @@ a {
   font-family: var(--main-font);
   font-weight: 400;
 }
+
+/* React Slick */
+.slick-dots li button:before {
+  color: white !important;
+}
+.slick-dots li {
+  margin: 0;
+}
+.slick-dots {
+  bottom: 20px !important;
+}
+.slick-prev {
+  left: 1.5rem !important;
+  z-index: 1000;
+}
+.slick-next {
+  right: 1.5rem !important;
+}
+.slick-arrow {
+  width: 30px !important;
+  height: 30px !important;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  font-size: 2rem !important;
+}
+.slick-dots li button:before {
+  font-size: 10px !important;
+}
+.slick-prev:before, .slick-next:before {
+  color: #eee !important;
+}

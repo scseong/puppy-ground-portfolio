@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 import './variables.css';
 import 'react-toastify/dist/ReactToastify.css';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import Script from 'next/script';
 import localFont from 'next/font/local';
 

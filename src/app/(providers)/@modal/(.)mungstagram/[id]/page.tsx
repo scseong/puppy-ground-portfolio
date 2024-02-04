@@ -15,16 +15,17 @@ import LikeButton from '../../_components/LikeButton';
 import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
 import CommentList from '../../_components/CommentList';
 import CommentForm from '../../_components/CommentForm';
+import ImageSlider from '@/app/_components/lib/ImageSlider';
 
 const getPrevAndNextPost = async (id: string) => {
-  const getPrevPost =  supabase.from('mung_stagram').select('id').gt('id', id).limit(1).single();
+  const getPrevPost = supabase.from('mung_stagram').select('id').gt('id', id).limit(1).single();
   const getNextPost = supabase
-  .from('mung_stagram')
-  .select('id')
-  .lt('id', id)
-  .order('id', { ascending: false })
-  .limit(1)
-  .single();
+    .from('mung_stagram')
+    .select('id')
+    .lt('id', id)
+    .order('id', { ascending: false })
+    .limit(1)
+    .single();
 
   const response = await Promise.all([getPrevPost, getNextPost]);
   const [prev, next] = response.map((res) => res.data?.id);
@@ -89,7 +90,7 @@ const MungModal = ({ params }: PageProps) => {
       <section className={styles.mungstaDetail}>
         {next && (
           <Link className={styles.nextLink} href={`/mungstagram/${next}`}>
-              <GoChevronRight size="2.8rem" />
+            <GoChevronRight size="2.8rem" />
           </Link>
         )}
         {prev && (
@@ -99,7 +100,8 @@ const MungModal = ({ params }: PageProps) => {
         )}
         <div className={styles.title}>{post.title}</div>
         <div className={styles.images}>
-          <SlideImage images={post.photo_url} sizes={{ width: '600px', height: '450px' }} />
+          <ImageSlider images={post.photo_url} width={600} height={450} />
+          {/* <SlideImage images={post.photo_url} sizes={{ width: '600px', height: '450px' }} /> */}
         </div>
         <div className={styles.detail}>
           <div className={styles.icons}>

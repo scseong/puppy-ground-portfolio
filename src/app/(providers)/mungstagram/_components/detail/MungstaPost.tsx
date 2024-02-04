@@ -16,6 +16,7 @@ import Image from 'next/image';
 import ImageSlider from '@/app/_components/lib/ImageSlider';
 import { getStringFromNow } from '@/utils/time';
 import CommentForm from '@/app/(providers)/@modal/_components/CommentForm';
+import { SlideImage } from '@/app/(providers)/used-goods/_components';
 
 const MungstaPost = ({ postId }: { postId: string }) => {
   const [mounted, setMounted] = useState<boolean>(false);
@@ -56,7 +57,10 @@ const MungstaPost = ({ postId }: { postId: string }) => {
           </div>
         </header>
         <div className={styles.images}>
-          {photo_url.length > 1 && <ImageSlider images={photo_url} styles={customStyle} />}
+          {photo_url.length > 1 && (
+            <ImageSlider images={photo_url} styles={customStyle} width={500} height={500} />
+            // <SlideImage images={photo_url} width={500} height={500}/>
+          )}
           {photo_url.length === 1 && (
             <Image
               src={photo_url[0]}
