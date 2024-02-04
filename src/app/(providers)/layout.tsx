@@ -1,5 +1,5 @@
 import ReactQueryProviders from '@/utils/ReactQueryProviders';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Footer, Header } from '../_components/layout';
@@ -14,7 +14,9 @@ function ProvidersLayout({
   return (
     <ReactQueryProviders>
       <ReactQueryDevtools initialIsOpen={false} />
-      <Header />
+      <Suspense>
+        <Header />
+      </Suspense>
       {children}
       {modal}
       <ToastContainer />
