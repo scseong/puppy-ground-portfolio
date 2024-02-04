@@ -181,10 +181,12 @@
       height: 100%;
       aspect-ratio: 5 / 4;
     }
-    .contents {
-      font-size: 1.2rem;
-      line-height: 1.4rem;
-    }
+  }
+  .contents {
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    line-height: 1.4rem;
+    min-height: 3rem;
   }
   .detail {
     overflow: visible;
@@ -199,6 +201,19 @@
   }
   .nextLink {
     right: 0 !important;
+  }
+  .tags {
+    ul {
+      max-height: 5.3rem;
+    }
+    li {
+      padding: 0.3rem 0.8rem;
+      background-color: #e6e8e8;
+      border-radius: 6px;
+      font-size: 1rem;
+      line-height: 1.2rem;
+      color: #757575;
+    }
   }
 }
 
@@ -217,19 +232,6 @@
     img {
       width: 100%;
       height: 100%;
-    }
-  }
-  .tags {
-    ul {
-      max-height: 5.3rem;
-    }
-    li {
-      padding: 0.5rem 0.8rem;
-      background-color: #e6e8e8;
-      border-radius: 6px;
-      font-size: 1rem;
-      line-height: 1.2rem;
-      color: #757575;
     }
   }
 }
