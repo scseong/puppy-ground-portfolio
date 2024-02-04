@@ -3,7 +3,7 @@
 import ReactModal from 'react-modal';
 import { useRouter, usePathname } from 'next/navigation';
 import styles from './page.module.scss';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { FiPlus } from 'react-icons/fi';
 import { useToast } from '@/hooks/useToast';
 import { v4 as uuidv4 } from 'uuid';
@@ -15,6 +15,8 @@ import { customStyle } from '@/shared/modal';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { ONE_MEGABYTE } from '@/shared/constant/constant';
 import { getImagePreview, isFileSizeExceeded, isDuplicateImage } from '@/utils/file';
+import { debounce, throttle } from 'lodash';
+import { MdOutlineCancel } from 'react-icons/md';
 
 type FileEvent = React.ChangeEvent<HTMLInputElement> & {
   target: EventTarget & { files: FileList };
@@ -44,6 +46,7 @@ const MungstaCreateModal = () => {
     handleSubmit,
     watch,
     setValue,
+    setFocus,
     formState: { errors }
   } = useForm<Inputs>({
     defaultValues: {
@@ -110,7 +113,8 @@ const MungstaCreateModal = () => {
     const value = e.currentTarget.value.trim();
 
     if (value.length > 6) {
-      warnTopRight({ message: '해시태그는 6자 이내로 입력해주세요' });
+      throttleddWarning('해시태그는 6자 이내로 입력해주세요');
+      // warnTopRight({ message: '해시태그는 6자 이내로 입력해주세요' });
       return;
     }
 
@@ -164,8 +168,27 @@ const MungstaCreateModal = () => {
     return photoURLs;
   };
 
+  const throttleddWarning = useCallback(
+    throttle((message: string) => {
+      warnTopRight({ message });
+    }, 1000),
+    []
+  );
+
   const onSubmit: SubmitHandler<Inputs> = async (inputData) => {
     const { title, content, files } = inputData;
+
+    if (!files.length) {
+      throttleddWarning('이미지를 하나 이상 첨부해주세요.');
+      return;
+    }
+
+    if (!tags.length) {
+      throttleddWarning('해시태그를 하나 이상 작성해주세요');
+      setFocus('tag');
+      return;
+    }
+
     const photo_url = await uploadImage(files);
     const formData = {
       title,
@@ -227,12 +250,16 @@ const MungstaCreateModal = () => {
             <div key={index} className={styles.imageInput}>
               {files.length > index ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  key={index}
-                  src={imagePreview[index]}
-                  alt="preview"
-                  onClick={() => removeImage(index)}
-                />
+                <>
+                  <div className={styles.cancelIcon} onClick={() => removeImage(index)}>
+                    <MdOutlineCancel size={20} color="black" />
+                  </div>
+                  <img
+                    key={index}
+                    src={imagePreview[index]}
+                    alt="preview"
+                  />
+                </>
               ) : (
                 <div>
                   <label htmlFor="file">
