@@ -5,8 +5,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import Script from 'next/script';
 import localFont from 'next/font/local';
 
-// const inter = Inter({ subsets: ['latin'] });
-
 export const metadata: Metadata = {
   title: 'Puppy Ground',
   description: '유기견 분양, 반려동물 용품 판매',
@@ -43,7 +41,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="ko" className={globalFont.variable}>
-      {/* <body className={inter.className} suppressHydrationWarning={true}> */}
       <body suppressHydrationWarning={true}>
         <Script strategy="beforeInteractive" src={KAKAO_SDK_URL} />
         {children}

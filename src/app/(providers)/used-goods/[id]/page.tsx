@@ -205,7 +205,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                   <button className={styles.editButton} onClick={editButtonToggle}>
                     <BsThreeDots size={0} />
                     {showEditToggle && (
-                      <div>
+                      <div ref={modalRef}>
                         {sold_out ? (
                           <button disabled>판매완료</button>
                         ) : (
