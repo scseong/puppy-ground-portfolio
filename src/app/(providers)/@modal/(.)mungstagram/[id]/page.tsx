@@ -1,36 +1,17 @@
 'use client';
 
-import ReactModal from 'react-modal';
-import { useRouter } from 'next/navigation';
-import styles from './page.module.scss';
-import { customStyle } from '@/shared/modal';
-import { supabase } from '@/shared/supabase/supabase';
-import { useQuery } from '@tanstack/react-query';
-import { SlideImage } from '@/app/(providers)/used-goods/_components';
 import { useState, useEffect } from 'react';
-import { GoComment, GoShare, GoChevronLeft, GoChevronRight } from 'react-icons/go';
 import Link from 'next/link';
-import { getPosts } from '@/apis/mung-stagram/action';
-import LikeButton from '../../_components/LikeButton';
-import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
-import CommentList from '../../_components/CommentList';
-import CommentForm from '../../_components/CommentForm';
+import { useRouter } from 'next/navigation';
+import ReactModal from 'react-modal';
+import { GoComment, GoShare, GoChevronLeft, GoChevronRight } from 'react-icons/go';
+import { useQuery } from '@tanstack/react-query';
+import { getPosts, getPrevAndNextPost } from '@/apis/mung-stagram/action';
 import ImageSlider from '@/app/_components/lib/ImageSlider';
-
-const getPrevAndNextPost = async (id: string) => {
-  const getPrevPost = supabase.from('mung_stagram').select('id').gt('id', id).limit(1).single();
-  const getNextPost = supabase
-    .from('mung_stagram')
-    .select('id')
-    .lt('id', id)
-    .order('id', { ascending: false })
-    .limit(1)
-    .single();
-
-  const response = await Promise.all([getPrevPost, getNextPost]);
-  const [prev, next] = response.map((res) => res.data?.id);
-  return { prev, next };
-};
+import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
+import { customStyle } from '@/shared/modal';
+import { CommentList, CommentForm, LikeButton } from '../../_components';
+import styles from './page.module.scss';
 
 type PageProps = {
   params: { [slug: string]: string };
@@ -72,9 +53,7 @@ const MungModal = ({ params }: PageProps) => {
   }, [isOpen, router]);
 
   if (!post) return;
-
   if (isLoading) return;
-
   const { prev, next } = prevAndNextPostId ?? {};
 
   return (
@@ -82,33 +61,31 @@ const MungModal = ({ params }: PageProps) => {
       className={styles.modal}
       isOpen={isOpen}
       onRequestClose={closeModal}
-      ariaHideApp={false}
       contentLabel="Modal"
       style={customStyle}
-      preventScroll
+      // preventScroll
     >
       <section className={styles.mungstaDetail}>
         {next && (
-          <Link className={styles.nextLink} href={`/mungstagram/${next}`}>
+          <Link className={styles.nextLink} href={`/mungstagram/${next}`} replace>
             <GoChevronRight size="2.8rem" />
           </Link>
         )}
         {prev && (
-          <Link className={styles.prevLink} href={`/mungstagram/${prev}`}>
+          <Link className={styles.prevLink} href={`/mungstagram/${prev}`} replace>
             <GoChevronLeft size="2.8rem" />
           </Link>
         )}
         <div className={styles.title}>{post.title}</div>
         <div className={styles.images}>
           <ImageSlider images={post.photo_url} width={600} height={450} />
-          {/* <SlideImage images={post.photo_url} sizes={{ width: '600px', height: '450px' }} /> */}
         </div>
         <div className={styles.detail}>
           <div className={styles.icons}>
             <LikeButton mungStargramId={params.id} title={post.title} />
-            <div>
+            {/* <div>
               <GoComment />
-            </div>
+            </div> */}
             <KakaoShareButton>
               <GoShare />
             </KakaoShareButton>
@@ -125,8 +102,11 @@ const MungModal = ({ params }: PageProps) => {
               <span className={styles.username}>{post.profiles!.user_name}</span> {post.content}
             </p>
           </div>
-          <CommentForm />
-          <CommentList />
+          <div className={styles.comments}>
+            <h3>댓글</h3>
+            <CommentForm />
+            <CommentList />
+          </div>
         </div>
       </section>
     </ReactModal>

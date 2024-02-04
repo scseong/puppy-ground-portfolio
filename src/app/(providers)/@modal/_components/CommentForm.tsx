@@ -58,7 +58,6 @@ const CommentForm = () => {
         onKeyDown={(e) => {
           if (e.key === 'Enter') createCommentMutation.mutate(inputForm);
         }}
-        autoFocus
       />
       <button onClick={() => createCommentMutation.mutate(inputForm)}>등록</button>
     </div>

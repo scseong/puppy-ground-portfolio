@@ -35,6 +35,21 @@ export const getMungstaPostsByUserId = async (user_id: string) => {
   return data;
 };
 
+export const getPrevAndNextPost = async (id: string) => {
+  const getPrevPost = supabase.from('mung_stagram').select('id').gt('id', id).limit(1).single();
+  const getNextPost = supabase
+    .from('mung_stagram')
+    .select('id')
+    .lt('id', id)
+    .order('id', { ascending: false })
+    .limit(1)
+    .single();
+
+  const response = await Promise.all([getPrevPost, getNextPost]);
+  const [prev, next] = response.map((res) => res.data?.id);
+  return { prev, next };
+};
+
 export const createComment = async (
   createCommentInput: TablesInsert<'mung_stagram_comment'>
 ): Promise<void> => {

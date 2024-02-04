@@ -27,7 +27,7 @@ const MungstaPosts = () => {
             posts.map((post) => {
               return (
                 <div className={styles.mungstaItem} key={post.id}>
-                  <Link href={`/mungstagram/${post.id}`}>
+                  <Link href={`/mungstagram/${post.id}`} scroll={false}>
                     <div className={styles.profile}>
                       <div>
                         <Image

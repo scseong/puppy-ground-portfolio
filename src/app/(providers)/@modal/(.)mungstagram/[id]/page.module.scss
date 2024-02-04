@@ -34,6 +34,10 @@
     background-color: rgb(255, 255, 255);
     border-radius: 50%;
     color: black;
+
+    svg:hover {
+      color: var(--primary-color);
+    }
   }
 
   .prevLink {
@@ -61,7 +65,7 @@
 }
 
 .detail {
-  padding: 2rem;
+  padding: 1.5rem 2rem;
   flex-grow: 1;
   overflow: auto;
   & {
@@ -117,6 +121,7 @@
 }
 
 .contents {
+  margin-bottom: 0.5rem;
   font-size: 1.4rem;
   line-height: 1.8rem;
   min-height: 80px;
@@ -128,8 +133,12 @@
 
   .username {
     margin-right: 1rem;
-    font-weight: 600;
+    font-weight: 700;
   }
+}
+
+.comments {
+  font-size: 1.1rem;
 }
 
 @media screen and (max-width: 1200px) {
@@ -143,14 +152,84 @@
 
 @media screen and (max-width: 820px) {
   .title {
+    padding: 1rem;
     text-align: center;
   }
   .prevLink {
-    top: 3rem !important;
+    top: 2rem !important;
     left: 2.5rem !important;
   }
   .nextLink {
-    top: 3rem !important;
+    top: 2rem !important;
     right: 0 !important;
+  }
+}
+
+@media screen and (max-height: 820px) {
+  .modal {
+    width: 450px;
+    height: 90dvh;
+    overflow: auto;
+  }
+  .title {
+    padding: 1rem;
+    text-align: center;
+  }
+  .images {
+    img {
+      width: 100% !important;
+      height: 100%;
+      aspect-ratio: 5 / 4;
+    }
+    .contents {
+      font-size: 1.2rem;
+      line-height: 1.4rem;
+    }
+  }
+  .detail {
+    overflow: visible;
+  }
+  .prevLink,
+  .nextLink {
+    top: 2rem !important;
+    z-index: 9999;
+  }
+  .prevLink {
+    left: 2.5rem !important;
+  }
+  .nextLink {
+    right: 0 !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .modal {
+    width: 100%;
+  }
+  .title {
+    padding: 1rem;
+  }
+  .prevLink,
+  .nextLink {
+    top: 2rem !important;
+  }
+  .images {
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .tags {
+    ul {
+      max-height: 5.3rem;
+    }
+    li {
+      padding: 0.5rem 0.8rem;
+      background-color: #e6e8e8;
+      border-radius: 6px;
+      font-size: 1rem;
+      line-height: 1.2rem;
+      color: #757575;
+    }
   }
 }
