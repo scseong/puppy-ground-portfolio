@@ -1,71 +1,138 @@
 'use client';
 
 import ReactModal from 'react-modal';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import styles from './page.module.scss';
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { FiPlus } from 'react-icons/fi';
-import { MdOutlineCancel } from 'react-icons/md';
 import { useToast } from '@/hooks/useToast';
 import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '@/shared/supabase/supabase';
-import Image from 'next/image';
-import { TablesInsert } from '@/shared/supabase/types/supabase';
 import useAuth from '@/hooks/useAuth';
 import Swal from 'sweetalert2';
 import { useQueryClient } from '@tanstack/react-query';
 import { customStyle } from '@/shared/modal';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { ONE_MEGABYTE } from '@/shared/constant/constant';
+import { getImagePreview, isFileSizeExceeded, isDuplicateImage } from '@/utils/file';
+import { debounce, throttle } from 'lodash';
+import { MdOutlineCancel } from 'react-icons/md';
 
-type InputForm = TablesInsert<'mung_stagram'> & { inputValue: string };
-const MungModal = () => {
+type FileEvent = React.ChangeEvent<HTMLInputElement> & {
+  target: EventTarget & { files: FileList };
+};
+
+type Inputs = {
+  content: string;
+  files: File[];
+  tag: string;
+  title: string;
+};
+
+const MungstaCreateModal = () => {
+  const [isOpen, setIsOpen] = useState(true);
+  const [imagePreview, setImagePreview] = useState<string[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
   const user = useAuth((state) => state.user);
-  // TODO: user check
-  const [inputForm, setInputForm] = useState<InputForm>({
-    title: '',
-    tags: [],
-    content: '',
-    inputValue: '',
-    user_id: (user && user.id) || '',
-    photo_url: []
-  });
-  const router = useRouter();
-  const { successTopRight, warnTopRight, errorTopRight } = useToast();
   const queryClient = useQueryClient();
+  const router = useRouter();
+  const pathname = usePathname();
 
-  const handleFormChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const MAX_IMAGE_COUNT = 5;
 
-    // TODO: 알림 1개로 제한 or react-hook-form 고려
-    if (name.includes('title') && value.length > 14) {
-      return warnTopRight({ message: '14자 이내로 입력해주세요.' });
+  const { successTopRight, errorTopRight, warnTopRight } = useToast();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    setFocus,
+    formState: { errors }
+  } = useForm<Inputs>({
+    defaultValues: {
+      files: [],
+      tag: ''
+    }
+  });
+  const { tag, files } = watch();
+
+  const uploadMultiFiles = (e: FileEvent) => {
+    const newFiles = e.target.files;
+
+    if (newFiles.length + files.length > MAX_IMAGE_COUNT) {
+      warnTopRight({
+        message: `이미지는 최대 ${MAX_IMAGE_COUNT}장까지 업로드 가능합니다.`
+      });
+      return;
     }
 
-    if (name.includes('content') && value.length > 50) {
-      return warnTopRight({ message: '50자 이내로 입력해주세요.' });
-    }
+    const filteredFiles = Array.from(newFiles).filter((file) => {
+      const fileSizeExceeded = isFileSizeExceeded(file, ONE_MEGABYTE * 2);
+      if (fileSizeExceeded) {
+        warnTopRight({
+          message: `${file.name}의 파일 사이즈가 너무 큽니다. (2MB 이하)`,
+          timeout: 3000
+        });
+        return;
+      }
 
-    setInputForm({ ...inputForm, [name]: value });
+      if (isDuplicateImage(files, file)) {
+        warnTopRight({ message: `${file.name} 이미 추가된 파일입니다.` });
+        return;
+      }
+
+      return file;
+    });
+
+    const uploadFiles = [...files, ...filteredFiles];
+    const previews = uploadFiles
+      .map((file) => getImagePreview(file))
+      .filter((url): url is string => url !== undefined);
+    setValue('files', uploadFiles);
+    setImagePreview(previews);
   };
 
   const removeTag = (index: number) => {
-    setInputForm((prev) => ({ ...prev, tags: prev.tags.filter((_, i) => i !== index) }));
+    setTags((tags) => tags.filter((_, i) => i !== index));
+  };
+
+  const removeImage = (index: number) => {
+    setValue(
+      'files',
+      files.filter((_, i) => i !== index)
+    );
+    setImagePreview((images) => images.filter((_, i) => i !== index));
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      const { value: newTag } = e.currentTarget;
+      e.preventDefault();
+    }
+  };
+  const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value.trim();
 
-      if (newTag.trim().length > 6) {
-        return warnTopRight({ message: '6자 이내로 입력해주세요.' });
+    if (value.length > 6) {
+      throttleddWarning('해시태그는 6자 이내로 입력해주세요');
+      // warnTopRight({ message: '해시태그는 6자 이내로 입력해주세요' });
+      return;
+    }
+
+    if (e.nativeEvent.isComposing) return;
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (tags.length >= 5) {
+        warnTopRight({ message: '해시태그는 5개까지 사용할 수 있습니다' });
+        return;
       }
 
-      if (newTag.trim()) {
-        setInputForm((prev) => ({ ...prev, tags: [...prev.tags, newTag], inputValue: '' }));
-      }
+      if (!value.length) return;
+      setTags((prev) => [...prev, value]);
+      setValue('tag', '');
     }
   };
 
-  const closeModal = () => {
+  const handleCloseModal = () => {
     Swal.fire({
       title: '정말 취소하시겠습니까?',
       text: '입력하신 정보가 모두 사라집니다.',
@@ -76,126 +143,135 @@ const MungModal = () => {
       cancelButtonText: '아니요'
     }).then((result) => {
       if (result.isConfirmed) {
-        router.back();
+        setIsOpen(false);
+        router.push('/mungstagram');
       } else return;
     });
   };
 
-  const uploadImage = async (file: File) => {
-    if (file.size >= 2_000_000) {
-      warnTopRight({ message: '파일 사이즈가 너무 큽니다. (2MB 이하)' });
+  const uploadImage = async (files: File[]) => {
+    const photoURLs = [];
+
+    for (const file of files) {
+      const { data, error } = await supabase.storage.from('mungstagram').upload(uuidv4(), file);
+
+      if (error) {
+        errorTopRight({
+          message: `${file.name} 파일 업로드 중 오류가 발생했습니다.`,
+          timeout: 3000
+        });
+      } else {
+        const filePath = `${process.env.NEXT_PUBLIC_IMAGE_PREFIX}/mungstagram/${data.path}`;
+        photoURLs.push(filePath);
+      }
+    }
+    return photoURLs;
+  };
+
+  const throttleddWarning = useCallback(
+    throttle((message: string) => {
+      warnTopRight({ message });
+    }, 1000),
+    []
+  );
+
+  const onSubmit: SubmitHandler<Inputs> = async (inputData) => {
+    const { title, content, files } = inputData;
+
+    if (!files.length) {
+      throttleddWarning('이미지를 하나 이상 첨부해주세요.');
       return;
     }
 
-    const { data, error } = await supabase.storage.from('mungstagram').upload(uuidv4(), file);
-
-    if (data) {
-      setInputForm((prev) => ({
-        ...prev,
-        photo_url: [
-          ...prev.photo_url,
-          `${process.env.NEXT_PUBLIC_IMAGE_PREFIX}/mungstagram/${data.path}`
-        ]
-      }));
-    } else {
-      errorTopRight({ message: error?.message });
-    }
-  };
-
-  const dropImage = async (e: React.DragEvent<HTMLLabelElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const file = e.dataTransfer?.files?.length ? e.dataTransfer?.files[0] : null;
-    if (!file) return;
-
-    await uploadImage(file);
-  };
-
-  const addImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.length ? e.target.files[0] : null;
-    if (!file) return;
-
-    await uploadImage(file);
-  };
-
-  const removeImage = (index: number) => {
-    setInputForm((prev) => ({
-      ...prev,
-      photo_url: prev.photo_url.filter((_, i) => i !== index)
-    }));
-  };
-
-  const handleSumbit = async () => {
-    const { inputValue, ...mungstaInput } = inputForm;
-
-    if (!inputForm.title) {
-      return warnTopRight({ message: '제목을 입력해주세요' });
-    }
-    if (!inputForm.content) {
-      return warnTopRight({ message: '내용을 입력해주세요' });
-    }
-    if (!inputForm.photo_url.length) {
-      return warnTopRight({ message: '사진을 등록해주세요' });
-    }
-    if (!inputForm.tags.length) {
-      return warnTopRight({ message: '해시태그를 등록해주세요' });
+    if (!tags.length) {
+      throttleddWarning('해시태그를 하나 이상 작성해주세요');
+      setFocus('tag');
+      return;
     }
 
-    const { data, error } = await supabase.from('mung_stagram').insert(mungstaInput).select();
+    const photo_url = await uploadImage(files);
+    const formData = {
+      title,
+      content,
+      tags,
+      photo_url,
+      user_id: user!.id
+    };
+
+    const { data, error } = await supabase.from('mung_stagram').insert(formData).select();
     if (data) {
       successTopRight({ message: '등록되었습니다.' });
       queryClient.invalidateQueries({ queryKey: ['mungstagram'] });
-      router.back();
+      router.push('/mungstagram');
     }
     if (error) {
-      return warnTopRight({ message: '게시글 등록이 실패했습니다. 다시 시도해주세요.' });
+      return errorTopRight({ message: '게시글 등록이 실패했습니다. 다시 시도해주세요.' });
     }
   };
+
+  useEffect(() => {
+    if (pathname !== '/mungstagram/create') {
+      setIsOpen(false);
+      return;
+    }
+    setIsOpen(true);
+    return () => {
+      setIsOpen(false);
+    };
+  }, [isOpen, pathname]);
 
   return (
     <ReactModal
       className={styles.modal}
-      isOpen={true}
-      onRequestClose={closeModal}
+      isOpen={isOpen}
+      onRequestClose={handleCloseModal}
       ariaHideApp={false}
       contentLabel="Modal"
       style={customStyle}
     >
-      <div className={styles.container}>
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.container}>
         <div className={styles.title}>
           <input
-            type="text"
-            name="title"
-            onChange={handleFormChange}
+            {...register('title', {
+              required: '제목을 입력해주세요 (최대 14자)',
+              maxLength: {
+                value: 14,
+                message: '제목은 최대 14글자까지 입력 가능합니다'
+              }
+            })}
+            onKeyDown={handleKeyDown}
             placeholder="제목을 입력하세요 (최대 14자)"
             autoFocus
           />
         </div>
-        <p className={styles.imageDescription}>* 이미지는 필수입니다 (최대 5장, 2MB 이하)</p>
+        <p className={styles.imageDescription}>이미지는 필수입니다 (최대 5장, 2MB 이하)</p>
         <div className={styles.imageBox}>
-          {Array.from({ length: 5 }).map((_, index) => (
+          {Array.from({ length: MAX_IMAGE_COUNT }).map((_, index) => (
             <div key={index} className={styles.imageInput}>
-              {inputForm.photo_url[index] && (
+              {files.length > index ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <>
                   <div className={styles.cancelIcon} onClick={() => removeImage(index)}>
                     <MdOutlineCancel size={20} color="black" />
                   </div>
-                  <Image
-                    src={inputForm.photo_url[index] || ''}
-                    alt="image"
-                    sizes="160"
-                    fill
-                    priority
+                  <img
+                    key={index}
+                    src={imagePreview[index]}
+                    alt="preview"
                   />
                 </>
-              )}
-              {!inputForm.photo_url[index] && (
+              ) : (
                 <div>
-                  <label htmlFor="file" onDragOver={(e) => e.preventDefault()} onDrop={dropImage}>
+                  <label htmlFor="file">
                     <FiPlus size={27} color="#B0B0B0" />
                   </label>
-                  <input id="file" type="file" accept=".gif, .jpg, .png" onChange={addImage} />
+                  <input
+                    {...register('files', { onChange: uploadMultiFiles })}
+                    id="file"
+                    type="file"
+                    accept=".gif, .jpg, .png"
+                    multiple
+                  />
                 </div>
               )}
             </div>
@@ -203,40 +279,43 @@ const MungModal = () => {
         </div>
         <div className={styles.tags}>
           <ul>
-            {inputForm.tags.map((tag, idx) => (
-              <li key={`${tag}-${idx}`} onClick={() => removeTag(idx)}>
-                #{tag}
-              </li>
-            ))}
+            {tags &&
+              tags.map((tag, index) => (
+                <li key={`${tag}-${index}`} onClick={() => removeTag(index)}>
+                  #{tag}
+                </li>
+              ))}
           </ul>
         </div>
         <div className={styles.tagForm}>
           <input
-            name="inputValue"
-            value={inputForm.inputValue}
-            onKeyDown={handleKeyDown}
-            onChange={handleFormChange}
-            placeholder="해시태그를 입력하세요 (최대 5개, 각 해시태그는 6글자 이내 입력 후 Enter 키를 누르세요)"
+            {...register('tag')}
+            value={tag}
+            onKeyDown={handleTagInputKeyDown}
+            placeholder="해시태그를 입력하세요 (최대 5개, 각 해시태그는 6글자 이내 입력 후 Enter로 입력)"
             type="text"
           />
         </div>
         <div className={styles.content}>
           <textarea
-            name="content"
+            {...register('content', {
+              required: '내용을 입력해주세요 (최대 50자)',
+              maxLength: {
+                value: 50,
+                message: '내용은 최대 50자까지 입력 가능합니다'
+              }
+            })}
             id="content"
             placeholder="내용 (최대 50자)"
-            onChange={handleFormChange}
           />
         </div>
         <div className={styles.btnBox}>
-          <button onClick={closeModal}>취소</button>
-          <button className={styles.submitBtn} onClick={handleSumbit}>
-            등록하기
-          </button>
+          <button className={styles.submitBtn}>등록하기</button>
+          <button onClick={handleCloseModal}>취소</button>
         </div>
-      </div>
+      </form>
     </ReactModal>
   );
 };
 
-export default MungModal;
+export default MungstaCreateModal;
