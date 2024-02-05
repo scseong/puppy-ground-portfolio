@@ -245,15 +245,14 @@ const SignUp = () => {
 
         <label htmlFor="preview">
           <Image
+            src={previewImg}
             alt="이미지 없음"
             width={300}
             height={300}
             className={styles.previewImg}
-            src={previewImg}
           />
           <input
             className={styles.imageInput}
-            // defaultValue={defaultAvatar}
             type="file"
             accept="image/*"
             id="preview"
