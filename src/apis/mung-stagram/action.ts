@@ -13,7 +13,17 @@ export const getPosts = async (id: string) => {
 export const getMungstaPosts = async () => {
   const { data } = await supabase
     .from('mung_stagram')
-    .select('*, profiles (user_name, avatar_url)');
+    .select('*, profiles (user_name, avatar_url)')
+    .order('id', { ascending: false });
+  return data;
+};
+
+export const getMungstaPost = async (id: string) => {
+  const { data, error } = await supabase
+    .from('mung_stagram')
+    .select('*, mung_stagram_like(count), profiles(*)')
+    .eq('id', id)
+    .single();
   return data;
 };
 
@@ -23,6 +33,21 @@ export const getMungstaPostsByUserId = async (user_id: string) => {
     .select('*, profiles (user_name, avatar_url)')
     .eq('user_id', user_id);
   return data;
+};
+
+export const getPrevAndNextPost = async (id: string) => {
+  const getPrevPost = supabase.from('mung_stagram').select('id').gt('id', id).limit(1).single();
+  const getNextPost = supabase
+    .from('mung_stagram')
+    .select('id')
+    .lt('id', id)
+    .order('id', { ascending: false })
+    .limit(1)
+    .single();
+
+  const response = await Promise.all([getPrevPost, getNextPost]);
+  const [prev, next] = response.map((res) => res.data?.id);
+  return { prev, next };
 };
 
 export const createComment = async (

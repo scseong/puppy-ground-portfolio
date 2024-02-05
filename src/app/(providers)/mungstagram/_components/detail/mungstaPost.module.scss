@@ -1,0 +1,176 @@
+.main {
+  padding: 3rem 0;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.mungsta {
+  max-width: 500px;
+  height: 700px;
+  background-color: white;
+  border: 2px solid #e6e8e8;
+  border-radius: 23px;
+  overflow: hidden;
+}
+
+.header {
+  padding: 1rem 1.4rem;
+  & > div {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    span {
+      font-size: 1.4rem;
+    }
+  }
+  img {
+    width: 45px;
+    height: 45px;
+    border: 1px solid #eee;
+    border-radius: 50%;
+  }
+}
+
+.details {
+  padding: 1rem 1.4rem;
+}
+
+.top {
+  .hashtags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    max-height: 4.25rem;
+    overflow: hidden;
+
+    span {
+      display: inline-block;
+      padding: 0.5rem 0.8rem;
+      background-color: #e6e8e8;
+      border-radius: 6px;
+      font-weight: 500;
+      color: #757575;
+    }
+  }
+
+  .icons {
+    display: flex;
+    gap: 4px;
+    float: right;
+
+    button {
+      display: block;
+      width: 35px;
+      height: 35px;
+      background-color: transparent;
+      border: none;
+      border-radius: 5px;
+
+      svg {
+        transform: translateY(2px);
+      }
+    }
+  }
+}
+
+.postInfo {
+  padding-top: 1rem;
+  min-height: 130px;
+
+  span {
+    margin-bottom: 0.5rem;
+    display: block;
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+
+  p {
+    font-size: 1.1rem;
+    line-height: 1.8rem;
+  }
+}
+
+.comments {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  height: 700px;
+  background-color: white;
+  border: 2px solid #e6e8e8;
+  border-radius: 23px;
+  overflow: hidden;
+
+  .header {
+    padding: 1rem 1.4rem;
+
+    span {
+      display: inline-block;
+      height: 45px;
+      line-height: 45px;
+      font-size: 1.4rem;
+    }
+  }
+}
+
+.commentList {
+  padding: 0 2rem;
+  flex-grow: 2;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #aaa;
+    border-radius: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #ddd;
+    border-radius: 5px;
+  }
+}
+
+.comment {
+  display: flex;
+  .avatar {
+    padding: 4px;
+    img {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+    }
+  }
+
+  .detail {
+    padding: 1rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 2;
+
+    .username {
+      margin-bottom: 0.8rem;
+      display: inline-block;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    .content {
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+      line-height: 1.8rem;
+    }
+    .createdAt {
+      color: #c1c1c1;
+    }
+  }
+}
+
+.commentForm {
+  padding: 1rem 2rem;
+  display: flex;
+  &  > div {
+    width: 100%;
+  }
+}
