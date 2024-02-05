@@ -9,6 +9,7 @@
   display: flex;
   flex-direction: row;
   gap: 10px;
+  flex-grow: 2;
 }
 
 .right {
@@ -27,7 +28,7 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
-  width: 410px;
+  width: 100%;
 
   .name {
     font-size: 1rem;
@@ -64,12 +65,15 @@
 }
 
 .buttonBox {
+  margin-left: 4px;
   display: flex;
   flex-direction: row;
+  width: 55px;
   gap: 10px;
   padding: 10px 0 0 0;
 
   button {
+    min-width: 23px;
     font-size: 0.8rem;
     font-weight: 400;
     color: #a5a5a5;
