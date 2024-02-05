@@ -6,11 +6,11 @@
 }
 
 .mungsta {
-  max-width: 500px;
+  width: 500px;
   height: 700px;
   background-color: white;
   border: 2px solid #e6e8e8;
-  border-radius: 23px;
+  border-radius: 23px 0 0 23px;
   overflow: hidden;
 }
 
@@ -57,20 +57,26 @@
 
   .icons {
     display: flex;
-    gap: 4px;
     float: right;
+    gap: 8px;
+    cursor: pointer;
 
-    button {
-      display: block;
-      width: 35px;
-      height: 35px;
-      background-color: transparent;
-      border: none;
-      border-radius: 5px;
-
-      svg {
-        transform: translateY(2px);
+    & > div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &:hover {
+        color: red !important;
       }
+      span {
+        margin-left: 2px;
+        font-size: 1.5rem;
+        transform: translate(1px)
+      }
+    }
+    svg {
+      stroke-width: 1.2;
+      font-size: 1.8rem;
     }
   }
 }
@@ -99,7 +105,7 @@
   height: 700px;
   background-color: white;
   border: 2px solid #e6e8e8;
-  border-radius: 23px;
+  border-radius: 0 23px 23px 0;
   overflow: hidden;
 
   .header {
@@ -130,6 +136,11 @@
   &::-webkit-scrollbar-track {
     background-color: #ddd;
     border-radius: 5px;
+  }
+}
+
+.commentList {
+  & > div {
   }
 }
 
@@ -170,7 +181,7 @@
 .commentForm {
   padding: 1rem 2rem;
   display: flex;
-  &  > div {
+  & > div {
     width: 100%;
   }
 }
