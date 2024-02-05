@@ -37,6 +37,7 @@ const Header = () => {
   const setIsAuthInitialized = useAuth((state) => state.setIsAuthInitialized);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
+  const [isLoading, setisLoading] = useState<boolean>(true);
   const supabaseAuth = createClientComponentClient<Database>();
   //true로 바뀌면 채팅정보를 가져오게 하는 state
   const [showMore, setShowMore] = useState(false);
@@ -84,11 +85,6 @@ const Header = () => {
       errorTopRight({ message: '오류가 발생했습니다. 다시 시도해주세요' });
     }
   };
-
-  const { isLoading } = useQuery({
-    queryKey: ['chat'],
-    refetchOnWindowFocus: false
-  });
 
   const filterAlertMessage = fetchAlertMessage?.data?.filter((message) => {
     return message.user_id === user?.id;
@@ -178,6 +174,10 @@ const Header = () => {
     setIsVisible(false);
   };
 
+  useEffect(() => {
+    setisLoading(false);
+  }, []);
+
   if (isLoading) return <Loading />;
 
   if (!isAuthInitialized) {
@@ -186,197 +186,209 @@ const Header = () => {
 
   return (
     <>
-      <div className={styles.container}>
-        <div className={styles.navbarBox}>
-          <div className={`${styles.logoBox} ${gmarket.variable}`}>
-            <Link href="/" className={styles.logoText}>
-              Puppy Ground
-            </Link>
-            <Image src={logo} alt="logo" width={30} height={30} />
-          </div>
-          <div className={styles.menuBox}>
-            <Link
-              className={pathName === '/used-goods' ? styles.selcetedMenuItem : styles.menuItem}
-              href="/used-goods"
-            >
-              중고거래
-            </Link>
-            <Link
-              className={pathName === '/stray-dogs' ? styles.selcetedMenuItem : styles.menuItem}
-              href="/stray-dogs"
-            >
-              유기견공고
-            </Link>
-            <Link
-              className={pathName === '/facilities' ? styles.selcetedMenuItem : styles.menuItem}
-              href="/facilities"
-            >
-              동반시설
-            </Link>
-            <Link
-              className={pathName === '/mungstagram' ? styles.selcetedMenuItem : styles.menuItem}
-              href="/mungstagram"
-            >
-              멍스타그램
-            </Link>
-            {user ? (
-              <>
-                <div className={styles.menuEmojiPosition}>
-                  <div className={styles.menuEmoji}>
-                    <button className={styles.bell} onClick={alertListToggle}>
-                      <GoBell />
-                      <span className={styles.alarmCount}>
-                        {
-                          filterAlertMessage?.filter(
-                            (item) => !item?.status && item.type !== 'chat'
-                          ).length
-                        }
-                      </span>
-                    </button>
-                    {showMessageList && (
-                      <AlertMessageList setShowMessageList={setShowMessageList} />
-                    )}
-                    <button className={styles.chat} onClick={clickOpenModal}>
-                      <IoChatbubbleEllipsesOutline />
-                      <span className={styles.chatAlarmCount}>
-                        {
-                          filterAlertMessage?.filter(
-                            (item) => !item?.status && item.type === 'chat'
-                          ).length
-                        }
-                      </span>
-                    </button>
-                    <div className={styles.toggle}>
-                      <RxHamburgerMenu size={25} onClick={handleToggle} />
-                    </div>
-                  </div>
-                </div>
-                {isVisible && (
+      {!isLoading && (
+        <>
+          <div className={styles.container}>
+            <div className={styles.navbarBox}>
+              <div className={`${styles.logoBox} ${gmarket.variable}`}>
+                <Link href="/" className={styles.logoText}>
+                  Puppy Ground
+                </Link>
+                <Image src={logo} alt="logo" width={30} height={30} />
+              </div>
+              <div className={styles.menuBox}>
+                <Link
+                  className={pathName === '/used-goods' ? styles.selcetedMenuItem : styles.menuItem}
+                  href="/used-goods"
+                >
+                  중고거래
+                </Link>
+                <Link
+                  className={pathName === '/stray-dogs' ? styles.selcetedMenuItem : styles.menuItem}
+                  href="/stray-dogs"
+                >
+                  유기견공고
+                </Link>
+                <Link
+                  className={pathName === '/facilities' ? styles.selcetedMenuItem : styles.menuItem}
+                  href="/facilities"
+                >
+                  동반시설
+                </Link>
+                <Link
+                  className={
+                    pathName === '/mungstagram' ? styles.selcetedMenuItem : styles.menuItem
+                  }
+                  href="/mungstagram"
+                >
+                  멍스타그램
+                </Link>
+                {user ? (
                   <>
-                    <div className={styles.toggleBackground} onClick={handleToggle}></div>
-                    <div className={styles.toggleList}>
-                      <div className={styles.toggleItems}>
-                        <Link
-                          onClick={closeToggle}
-                          className={styles.togglemenu}
-                          href="/used-goods"
-                        >
-                          중고거래
-                        </Link>
-                        <Link
-                          onClick={closeToggle}
-                          className={styles.togglemenu}
-                          href="/stray-dogs"
-                        >
-                          유기견공고
-                        </Link>
-                        <Link
-                          onClick={closeToggle}
-                          className={styles.togglemenu}
-                          href="/facilities"
-                        >
-                          동반시설
-                        </Link>
-                        <Link
-                          onClick={closeToggle}
-                          className={styles.togglemenu}
-                          href="/mungstagram"
-                        >
-                          멍스타그램
-                        </Link>
-                        <Link
-                          onClick={closeToggle}
-                          className={styles.toggleItem}
-                          href={`/profile/${user.id}`}
-                        >
-                          마이페이지
-                        </Link>
-                        <div className={styles.toggleItem} onClick={signOut}>
-                          로그아웃
+                    <div className={styles.menuEmojiPosition}>
+                      <div className={styles.menuEmoji}>
+                        <button className={styles.bell} onClick={alertListToggle}>
+                          <GoBell />
+                          <span className={styles.alarmCount}>
+                            {
+                              filterAlertMessage?.filter(
+                                (item) => !item?.status && item.type !== 'chat'
+                              ).length
+                            }
+                          </span>
+                        </button>
+                        {showMessageList && (
+                          <AlertMessageList setShowMessageList={setShowMessageList} />
+                        )}
+                        <button className={styles.chat} onClick={clickOpenModal}>
+                          <IoChatbubbleEllipsesOutline />
+                          <span className={styles.chatAlarmCount}>
+                            {
+                              filterAlertMessage?.filter(
+                                (item) => !item?.status && item.type === 'chat'
+                              ).length
+                            }
+                          </span>
+                        </button>
+                        <div className={styles.toggle}>
+                          <RxHamburgerMenu size={25} onClick={handleToggle} />
                         </div>
                       </div>
                     </div>
+                    {isVisible && (
+                      <>
+                        <div className={styles.toggleBackground} onClick={handleToggle}></div>
+                        <div className={styles.toggleList}>
+                          <div className={styles.toggleItems}>
+                            <Link
+                              onClick={closeToggle}
+                              className={styles.togglemenu}
+                              href="/used-goods"
+                            >
+                              중고거래
+                            </Link>
+                            <Link
+                              onClick={closeToggle}
+                              className={styles.togglemenu}
+                              href="/stray-dogs"
+                            >
+                              유기견공고
+                            </Link>
+                            <Link
+                              onClick={closeToggle}
+                              className={styles.togglemenu}
+                              href="/facilities"
+                            >
+                              동반시설
+                            </Link>
+                            <Link
+                              onClick={closeToggle}
+                              className={styles.togglemenu}
+                              href="/mungstagram"
+                            >
+                              멍스타그램
+                            </Link>
+                            <Link
+                              onClick={closeToggle}
+                              className={styles.toggleItem}
+                              href={`/profile/${user.id}`}
+                            >
+                              마이페이지
+                            </Link>
+                            <div className={styles.toggleItem} onClick={signOut}>
+                              로그아웃
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </>
-                )}
-              </>
-            ) : (
-              <>
-                <Link
-                  className={
-                    pathName === '/auth/signup' ? styles.selcetedMenuItem : styles.menuItem
-                  }
-                  href="/auth/signup"
-                >
-                  회원가입
-                </Link>
-                <Link
-                  className={pathName === '/auth/login' ? styles.selcetedMenuItem : styles.menuItem}
-                  href="/auth/login"
-                >
-                  로그인
-                </Link>
-                <div className={styles.menuEmojiPosition}>
-                  <div className={styles.logOuttoggle}>
-                    <RxHamburgerMenu size={25} onClick={handleToggle} />
-                  </div>
-                </div>
-                {isVisible && (
+                ) : (
                   <>
-                    <div className={styles.toggleBackground} onClick={handleToggle}></div>
-                    <div className={styles.toggleList}>
-                      <div className={styles.toggleItems}>
-                        <Link
-                          onClick={closeToggle}
-                          className={styles.togglemenu}
-                          href="/used-goods"
-                        >
-                          중고거래
-                        </Link>
-                        <Link
-                          onClick={closeToggle}
-                          className={styles.togglemenu}
-                          href="/stray-dogs"
-                        >
-                          유기견공고
-                        </Link>
-                        <Link
-                          onClick={closeToggle}
-                          className={styles.togglemenu}
-                          href="/facilities"
-                        >
-                          동반시설
-                        </Link>
-                        <Link
-                          onClick={closeToggle}
-                          className={styles.togglemenu}
-                          href="/mungstagram"
-                        >
-                          멍스타그램
-                        </Link>
-                        <Link
-                          onClick={closeToggle}
-                          className={styles.toggleItem}
-                          href="/auth/signup"
-                        >
-                          회원가입
-                        </Link>
-                        <Link
-                          onClick={closeToggle}
-                          className={styles.toggleItem}
-                          href="/auth/login"
-                        >
-                          로그인
-                        </Link>
+                    <Link
+                      className={
+                        pathName === '/auth/signup' ? styles.selcetedMenuItem : styles.menuItem
+                      }
+                      href="/auth/signup"
+                    >
+                      회원가입
+                    </Link>
+                    <Link
+                      className={
+                        pathName === '/auth/login' ? styles.selcetedMenuItem : styles.menuItem
+                      }
+                      href="/auth/login"
+                    >
+                      로그인
+                    </Link>
+                    <div className={styles.menuEmojiPosition}>
+                      <div className={styles.logOuttoggle}>
+                        <RxHamburgerMenu size={25} onClick={handleToggle} />
                       </div>
                     </div>
+                    {isVisible && (
+                      <>
+                        <div className={styles.toggleBackground} onClick={handleToggle}></div>
+                        <div className={styles.toggleList}>
+                          <div className={styles.toggleItems}>
+                            <Link
+                              onClick={closeToggle}
+                              className={styles.togglemenu}
+                              href="/used-goods"
+                            >
+                              중고거래
+                            </Link>
+                            <Link
+                              onClick={closeToggle}
+                              className={styles.togglemenu}
+                              href="/stray-dogs"
+                            >
+                              유기견공고
+                            </Link>
+                            <Link
+                              onClick={closeToggle}
+                              className={styles.togglemenu}
+                              href="/facilities"
+                            >
+                              동반시설
+                            </Link>
+                            <Link
+                              onClick={closeToggle}
+                              className={styles.togglemenu}
+                              href="/mungstagram"
+                            >
+                              멍스타그램
+                            </Link>
+                            <Link
+                              onClick={closeToggle}
+                              className={styles.toggleItem}
+                              href="/auth/signup"
+                            >
+                              회원가입
+                            </Link>
+                            <Link
+                              onClick={closeToggle}
+                              className={styles.toggleItem}
+                              href="/auth/login"
+                            >
+                              로그인
+                            </Link>
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </>
                 )}
-              </>
-            )}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      {showMore && <ChatList isOpen={isModalOpen} onClose={clickCloseModal} ariaHideApp={false} />}
+          <>
+            {showMore && (
+              <ChatList isOpen={isModalOpen} onClose={clickCloseModal} ariaHideApp={false} />
+            )}
+          </>
+        </>
+      )}
     </>
   );
 };
