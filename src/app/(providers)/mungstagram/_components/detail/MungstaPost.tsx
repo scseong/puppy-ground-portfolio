@@ -13,12 +13,12 @@ import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
 
 const MungstaPost = ({ postId }: { postId: string }) => {
   const [mounted, setMounted] = useState<boolean>(false);
-  const { data } = useQuery({
+  const { data: mungstaPosts } = useQuery({
     queryKey: ['munstagram', postId],
     queryFn: () => getMungstaPost(postId)
   });
 
-  const { data: comments, error } = useQuery({
+  const { data: comments } = useQuery({
     queryKey: ['mung_stagram_comments', postId],
     queryFn: () => {
       return getComments(Number(postId));
@@ -29,10 +29,10 @@ const MungstaPost = ({ postId }: { postId: string }) => {
     setMounted(true);
   }, []);
 
-  if (!data || !comments) return;
+  if (!mungstaPosts || !comments) return;
 
-  const { title, content, created_at, id, mung_stagram_like, photo_url, tags } = data;
-  const { avatar_url, user_name } = data?.profiles ?? {};
+  const { title, content, photo_url, tags } = mungstaPosts;
+  const { avatar_url, user_name } = mungstaPosts?.profiles ?? {};
 
   const customStyle: React.CSSProperties = {
     width: '100%',
