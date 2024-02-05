@@ -17,7 +17,6 @@ const Profile = () => {
   const [profileImg, setProfileImg] = useState(fetchProfile?.avatar_url);
   const [imgFile, setImgFile] = useState<File>();
   const [editUserName, setEditUserName] = useState(fetchProfile?.user_name ?? '');
-
   const { successTopRight, errorTopRight, warnTopRight } = useToast();
 
   const onChangeImg = async (e: React.ChangeEvent<HTMLInputElement | HTMLFormElement>) => {
@@ -114,7 +113,6 @@ const Profile = () => {
             <button className={styles.update} onClick={updateProfile}>
               수정 완료
             </button>
-
             <button className={styles.cancel} onClick={() => setEditProfile((state) => !state)}>
               취소
             </button>
