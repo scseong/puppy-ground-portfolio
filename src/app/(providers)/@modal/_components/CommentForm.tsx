@@ -47,6 +47,11 @@ const CommentForm = () => {
     }
   });
 
+  const onClickCreateComment = () => {
+    if (inputForm.content === '') return warnTopRight({ message: '댓글을 입력해주세요.' });
+    createCommentMutation.mutate(inputForm);
+  };
+
   if (!user) return null;
   return (
     <div className={styles.container}>
@@ -59,7 +64,7 @@ const CommentForm = () => {
           if (e.key === 'Enter') createCommentMutation.mutate(inputForm);
         }}
       />
-      <button onClick={() => createCommentMutation.mutate(inputForm)}>등록</button>
+      <button onClick={onClickCreateComment}>등록</button>
     </div>
   );
 };
