@@ -15,7 +15,7 @@ import { customStyle } from '@/shared/modal';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { ONE_MEGABYTE } from '@/shared/constant/constant';
 import { getImagePreview, isFileSizeExceeded, isDuplicateImage } from '@/utils/file';
-import { debounce, throttle } from 'lodash';
+import { throttle } from 'lodash';
 import { MdOutlineCancel } from 'react-icons/md';
 
 type FileEvent = React.ChangeEvent<HTMLInputElement> & {
@@ -46,6 +46,7 @@ const MungstaCreateModal = () => {
     handleSubmit,
     watch,
     setValue,
+    reset,
     setFocus,
     formState: { errors }
   } = useForm<Inputs>({
@@ -114,7 +115,6 @@ const MungstaCreateModal = () => {
 
     if (value.length > 6) {
       throttleddWarning('해시태그는 6자 이내로 입력해주세요');
-      // warnTopRight({ message: '해시태그는 6자 이내로 입력해주세요' });
       return;
     }
 
@@ -143,6 +143,9 @@ const MungstaCreateModal = () => {
       cancelButtonText: '아니요'
     }).then((result) => {
       if (result.isConfirmed) {
+        reset();
+        setImagePreview([])
+            setTags([])
         setIsOpen(false);
         router.push('/mungstagram');
       } else return;
@@ -254,11 +257,7 @@ const MungstaCreateModal = () => {
                   <div className={styles.cancelIcon} onClick={() => removeImage(index)}>
                     <MdOutlineCancel size={20} color="black" />
                   </div>
-                  <img
-                    key={index}
-                    src={imagePreview[index]}
-                    alt="preview"
-                  />
+                  <img key={index} src={imagePreview[index]} alt="preview" />
                 </>
               ) : (
                 <div>
