@@ -4,7 +4,7 @@ import { getMungstaPost, getComments } from '@/apis/mung-stagram/action';
 import { useQuery } from '@tanstack/react-query';
 import styles from './mungstaPost.module.scss';
 import { useEffect, useState } from 'react';
-import { GoShare, GoChevronLeft, GoChevronRight } from 'react-icons/go';
+import { GoShare } from 'react-icons/go';
 import Image from 'next/image';
 import ImageSlider from '@/app/_components/lib/ImageSlider';
 import CommentForm from '@/app/(providers)/@modal/_components/CommentForm';
