@@ -124,6 +124,7 @@ table {
 body {
   color: var(--text-color);
   background: var(--bg-color);
+  font-family: var(--main-font);
   min-height: 100vh;
 }
 button {
