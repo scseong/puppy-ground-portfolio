@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import NotFoundImage from '../../../../../public/images/sadpug.png';
+import NotFoundImage from '../../../../../public/images/sadpug (1).svg';
 
 const UsedGoodsList = () => {
   const { queryObject, generateQueryParameter } = useQueryParam();
