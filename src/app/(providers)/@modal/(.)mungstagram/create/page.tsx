@@ -196,7 +196,6 @@ const MungstaCreateModal = () => {
   );
 
   const onSubmit: SubmitHandler<Inputs> = async (inputData) => {
-    console.log(inputData);
     const { title, content, files } = inputData;
     if (title.trim().length > 14) {
       throttleddWarning('제목은 14자 이내로 입력해주세요');
