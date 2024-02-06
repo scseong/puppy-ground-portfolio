@@ -105,22 +105,39 @@ const MungstaCreateModal = () => {
     setImagePreview((images) => images.filter((_, i) => i !== index));
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value.trim();
+
+    if (value.length > 14) {
+      throttleddWarning('제목은 14자 이내로 입력해주세요');
+      return;
+    }
+
     if (e.key === 'Enter') {
       e.preventDefault();
     }
   };
-  const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+
+  const handleContentKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const value = e.currentTarget.value.trim();
 
-    if (value.length > 6) {
-      throttleddWarning('해시태그는 6자 이내로 입력해주세요');
+    if (value.length > 100) {
+      throttleddWarning('내용은 100자 이내로 입력해주세요');
       return;
     }
+  };
+
+  const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value.trim();
 
     if (e.nativeEvent.isComposing) return;
     if (e.key === 'Enter') {
       e.preventDefault();
+      if (value.length > 6) {
+        throttleddWarning('해시태그는 6자 이내로 입력해주세요');
+        return;
+      }
+
       if (tags.length >= 5) {
         warnTopRight({ message: '해시태그는 5개까지 사용할 수 있습니다' });
         return;
@@ -144,8 +161,8 @@ const MungstaCreateModal = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         reset();
-        setImagePreview([])
-            setTags([])
+        setImagePreview([]);
+        setTags([]);
         setIsOpen(false);
         router.push('/mungstagram');
       } else return;
@@ -174,12 +191,17 @@ const MungstaCreateModal = () => {
   const throttleddWarning = useCallback(
     throttle((message: string) => {
       warnTopRight({ message });
-    }, 1000),
+    }, 2000),
     []
   );
 
   const onSubmit: SubmitHandler<Inputs> = async (inputData) => {
+    console.log(inputData);
     const { title, content, files } = inputData;
+    if (title.trim().length > 14) {
+      throttleddWarning('제목은 14자 이내로 입력해주세요');
+      return;
+    }
 
     if (!files.length) {
       throttleddWarning('이미지를 하나 이상 첨부해주세요.');
@@ -219,9 +241,12 @@ const MungstaCreateModal = () => {
     }
     setIsOpen(true);
     return () => {
+      reset();
+      setImagePreview([]);
+      setTags([]);
       setIsOpen(false);
     };
-  }, [isOpen, pathname]);
+  }, [isOpen, pathname, reset]);
 
   return (
     <ReactModal
@@ -242,7 +267,7 @@ const MungstaCreateModal = () => {
                 message: '제목은 최대 14글자까지 입력 가능합니다'
               }
             })}
-            onKeyDown={handleKeyDown}
+            onKeyDown={handleTitleKeyDown}
             placeholder="제목을 입력하세요 (최대 14자)"
             autoFocus
           />
@@ -298,19 +323,22 @@ const MungstaCreateModal = () => {
         <div className={styles.content}>
           <textarea
             {...register('content', {
-              required: '내용을 입력해주세요 (최대 50자)',
+              required: '내용을 입력해주세요 (최대 100자)',
               maxLength: {
-                value: 50,
-                message: '내용은 최대 50자까지 입력 가능합니다'
+                value: 100,
+                message: '내용은 최대 100자까지 입력 가능합니다'
               }
             })}
+            onKeyDown={handleContentKeyDown}
             id="content"
-            placeholder="내용 (최대 50자)"
+            placeholder="내용 (최대 100자)"
           />
         </div>
         <div className={styles.btnBox}>
           <button className={styles.submitBtn}>등록하기</button>
-          <button onClick={handleCloseModal}>취소</button>
+          <button onClick={handleCloseModal} type="button">
+            취소
+          </button>
         </div>
       </form>
     </ReactModal>
