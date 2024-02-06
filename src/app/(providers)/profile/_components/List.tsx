@@ -9,7 +9,7 @@ import { getRegisteredUsedGoods } from '@/apis/used-goods/actions';
 import { getMungstaPostsByUserId } from '@/apis/mung-stagram/action';
 import MungstaCard from './MungstaCard';
 import Image from 'next/image';
-import NotFoundImage from '../../../../../public/images/sadpug.png';
+import NotFoundImage from '../../../../../public/images/sadpug (1).svg';
 
 export type wishGood = {
   id: number;

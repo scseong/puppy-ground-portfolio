@@ -24,9 +24,6 @@ const ChatListContent = ({
   userProfile,
   clickOutChatRoom
 }: PropsType) => {
-  // const readMessages = chatList.chat
-  //   .map((chat) => (chat.user_id !== userProfile ? chat.read_status : undefined))
-  //   .filter((chat) => chat === false);
   return (
     <>
       {!!chatList.get_out_chat_room ? (
@@ -56,9 +53,6 @@ const ChatListContent = ({
                     />
                     <p>{chatList.used_item.title}</p>
                   </div>
-                  {/* <div className={readMessages?.length === 0 ? '' : styles.unreadMessages}>
-        {readMessages?.length === 0 ? null : readMessages?.length}
-      </div> */}
                 </div>
                 <div className={styles.wastebaseket}>
                   <span
@@ -94,9 +88,6 @@ const ChatListContent = ({
               />
               <p>{chatList.used_item.title}</p>
             </div>
-            {/* <div className={readMessages?.length === 0 ? '' : styles.unreadMessages}>
-          {readMessages?.length === 0 ? null : readMessages?.length}
-        </div> */}
           </div>
           <div className={styles.wastebaseket}>
             <span

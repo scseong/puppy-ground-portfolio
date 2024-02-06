@@ -62,7 +62,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 30px 0 10px 20px;
+  margin: 30px auto;
 }
 
 .listInput {
@@ -92,7 +92,7 @@
 
 .listName {
   font-size: 18px;
-  font-family: pretendard-medium;
+  font-weight: 500;
   color: #0ac4b9;
   margin: 5px 0;
   cursor: pointer;
@@ -113,7 +113,7 @@
 }
 
 .noResult {
-  font-family: pretendard-light;
+  font-weight: 300;
   font-size: 15px;
   padding: 20px;
 }

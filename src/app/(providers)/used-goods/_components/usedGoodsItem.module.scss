@@ -23,7 +23,7 @@
   h3 {
     margin-bottom: 1rem;
     font-size: 1.4rem;
-    font-weight: bold;
+    font-weight: 500;
     line-height: 2rem;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -45,7 +45,7 @@
     align-items: flex-end;
     span {
       font-size: 1.4rem;
-      font-weight: bold;
+      font-weight: 500;
     }
     time {
       color: var(--card-detail-text-color);
@@ -115,6 +115,6 @@
     border-radius: 100%;
     text-align: center;
     font-size: 0.8em;
-    font-weight: bold;
+    font-weight: 500;
   }
 }

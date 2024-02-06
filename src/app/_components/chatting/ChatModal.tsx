@@ -14,7 +14,7 @@ const ChatModal = ({ isOpen, onClose, children }: ModalProps) => {
       onRequestClose={onClose}
       ariaHideApp={false}
       contentLabel="Modal"
-      className={styles.modalContainer}
+      className={styles.modal}
       style={{
         overlay: {
           position: 'fixed',
@@ -23,7 +23,7 @@ const ChatModal = ({ isOpen, onClose, children }: ModalProps) => {
           right: 0,
           bottom: 0,
           backgroundColor: 'rgba(255, 255, 255, 0.75)',
-          zIndex: '3000'
+          zIndex: '1000'
         }
       }}
     >

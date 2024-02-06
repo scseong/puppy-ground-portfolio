@@ -48,3 +48,26 @@
     font-size: 15px;
   }
 }
+
+//반응형
+
+@media screen and (max-width: 480px) {
+  .usedItemContainer {
+    justify-content: center;
+  }
+  .title {
+    width: 230px;
+  }
+}
+@media screen and (max-width: 280px) {
+  .usedItemContainer {
+    display: block;
+    gap: 0px;
+  }
+  .title {
+    width: 220px;
+  }
+  .usedItemTitle {
+    gap: 5px;
+  }
+}

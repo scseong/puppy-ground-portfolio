@@ -1,83 +1,3 @@
-@font-face {
-  font-family: Pretendard-Light;
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Light.woff')
-    format(woff);
-  font-weight: 300;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: Pretendard-Regular;
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff')
-    format(woff);
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: Pretendard-Medium;
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Medium.woff')
-    format(woff);
-  font-weight: 500;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: Pretendard-SemiBold;
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-SemiBold.woff')
-    format(woff);
-  font-weight: 600;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: Pretendard-Bold;
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff')
-    format(woff);
-  font-weight: 700;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: Pretendard-ExtraBold;
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraBold.woff')
-    format(woff);
-  font-weight: 800;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: GmarketSansMedium;
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff')
-    format(woff);
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: GmarketSansBold;
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff')
-    format(woff);
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'GmarketSans';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff')
-    format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'GmarketSans';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff')
-    format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
 html,
 body,
 div,
@@ -204,8 +124,8 @@ table {
 body {
   color: var(--text-color);
   background: var(--bg-color);
+  font-family: var(--main-font);
   min-height: 100vh;
-  font-family: Pretendard-Light;
 }
 button {
   outline: none;
@@ -219,5 +139,40 @@ a {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  font-family: Pretendard-Regular;
+  font-family: var(--main-font);
+  font-weight: 400;
+}
+
+/* React Slick */
+.slick-dots li button:before {
+  color: white !important;
+}
+.slick-dots li {
+  margin: 0;
+}
+.slick-dots {
+  bottom: 20px !important;
+}
+.slick-prev {
+  left: 1.5rem !important;
+  z-index: 1000;
+}
+.slick-next {
+  right: 1.5rem !important;
+}
+.slick-arrow {
+  width: 30px !important;
+  height: 30px !important;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  font-size: 2rem !important;
+}
+.slick-dots li button:before {
+  font-size: 10px !important;
+}
+.slick-prev:before,
+.slick-next:before {
+  color: #eee !important;
 }

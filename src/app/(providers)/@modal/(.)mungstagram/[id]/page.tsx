@@ -1,32 +1,17 @@
 'use client';
 
-import ReactModal from 'react-modal';
-import { useRouter } from 'next/navigation';
-import styles from './page.module.scss';
-import { customStyle } from '@/shared/modal';
-import { supabase } from '@/shared/supabase/supabase';
-import { useQuery } from '@tanstack/react-query';
-import { SlideImage } from '@/app/(providers)/used-goods/_components';
 import { useState, useEffect } from 'react';
-import { GoComment, GoShare, GoChevronLeft, GoChevronRight } from 'react-icons/go';
 import Link from 'next/link';
-import { getPosts } from '@/apis/mung-stagram/action';
-import LikeButton from '../../_components/LikeButton';
-
-const getPrevAndNextPost = async (id: string) => {
-  const getPrevPost = supabase
-    .from('mung_stagram')
-    .select('id')
-    .lt('id', id)
-    .order('id', { ascending: false })
-    .limit(1)
-    .single();
-  const getNextPost = supabase.from('mung_stagram').select('id').gt('id', id).limit(1).single();
-
-  const response = await Promise.all([getPrevPost, getNextPost]);
-  const [prev, next] = response.map((res) => res.data?.id);
-  return { prev, next };
-};
+import { useRouter } from 'next/navigation';
+import ReactModal from 'react-modal';
+import { GoComment, GoShare, GoChevronLeft, GoChevronRight } from 'react-icons/go';
+import { useQuery } from '@tanstack/react-query';
+import { getPosts, getPrevAndNextPost } from '@/apis/mung-stagram/action';
+import ImageSlider from '@/app/_components/lib/ImageSlider';
+import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
+import { customStyle } from '@/shared/modal';
+import { CommentList, CommentForm, LikeButton } from '../../_components';
+import styles from './page.module.scss';
 
 type PageProps = {
   params: { [slug: string]: string };
@@ -59,7 +44,7 @@ const MungModal = ({ params }: PageProps) => {
 
   useEffect(() => {
     if (!isOpen) {
-      router.push('/mungstagram');
+      router.back();
     }
     return () => {
       setOpen(false);
@@ -68,9 +53,7 @@ const MungModal = ({ params }: PageProps) => {
   }, [isOpen, router]);
 
   if (!post) return;
-
   if (isLoading) return;
-
   const { prev, next } = prevAndNextPostId ?? {};
 
   return (
@@ -78,35 +61,35 @@ const MungModal = ({ params }: PageProps) => {
       className={styles.modal}
       isOpen={isOpen}
       onRequestClose={closeModal}
-      ariaHideApp={false}
       contentLabel="Modal"
       style={customStyle}
-      preventScroll
+      ariaHideApp={false}
+      // preventScroll
     >
       <section className={styles.mungstaDetail}>
-        {prev && (
-          <Link className={styles.prevLink} href={`/mungstagram/${prev}`}>
-            <GoChevronLeft size="2.8rem" />
+        {next && (
+          <Link className={styles.nextLink} href={`/mungstagram/${next}`} replace>
+            <GoChevronRight size="2.8rem" />
           </Link>
         )}
-        {next && (
-          <Link className={styles.nextLink} href={`/mungstagram/${next}`}>
-            <GoChevronRight size="2.8rem" />
+        {prev && (
+          <Link className={styles.prevLink} href={`/mungstagram/${prev}`} replace>
+            <GoChevronLeft size="2.8rem" />
           </Link>
         )}
         <div className={styles.title}>{post.title}</div>
         <div className={styles.images}>
-          <SlideImage images={post.photo_url} sizes={{ width: '600px', height: '450px' }} />
+          <ImageSlider images={post.photo_url} width={600} height={450} />
         </div>
         <div className={styles.detail}>
           <div className={styles.icons}>
             <LikeButton mungStargramId={params.id} title={post.title} />
             {/* <div>
               <GoComment />
-            </div>
-            <div>
-              <GoShare />
             </div> */}
+            <KakaoShareButton>
+              <GoShare />
+            </KakaoShareButton>
           </div>
           <div className={styles.tags}>
             <ul>
@@ -119,6 +102,11 @@ const MungModal = ({ params }: PageProps) => {
             <p>
               <span className={styles.username}>{post.profiles!.user_name}</span> {post.content}
             </p>
+          </div>
+          <div className={styles.comments}>
+            <h3>댓글</h3>
+            <CommentForm />
+            <CommentList />
           </div>
         </div>
       </section>

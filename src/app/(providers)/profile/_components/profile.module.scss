@@ -36,10 +36,10 @@
 
 .userName {
   font-size: 20px;
-  font-weight: bold;
+  font-weight: 700;
   margin: 20px 0 20px 0;
-  font-family: pretendard-regular;
   text-align: center;
+  font-weight: 500;
 }
 
 .wrapper {
@@ -83,7 +83,6 @@
   width: 100%;
   padding: 10px;
   margin: 10px 0 10px 0;
-  font-family: Pretendard-Regular;
   font-size: 15px;
   outline: none;
   height: 55px;
@@ -101,12 +100,10 @@
   width: 100%;
   padding: 10px;
   margin: 10px 0 10px 0;
-  font-family: Pretendard-Regular;
   font-size: 15px;
   outline: none;
   height: 55px;
   color: white;
-  font-weight: bold;
   cursor: pointer;
 }
 .update:hover {
@@ -121,12 +118,10 @@
   width: 100%;
   padding: 10px;
   margin: 10px 0 10px 0;
-  font-family: Pretendard-Regular;
   font-size: 15px;
   outline: none;
   height: 55px;
   color: #757575;
-  font-weight: bold;
   cursor: pointer;
 }
 

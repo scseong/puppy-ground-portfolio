@@ -13,7 +13,6 @@ import { useToast } from '@/hooks/useToast';
 import Swal from 'sweetalert2';
 import { LuPencilLine } from 'react-icons/lu';
 import { FiPlus } from 'react-icons/fi';
-import { PiDotsThreeOutlineVerticalFill } from 'react-icons/pi';
 import KakaoMapMarker from '@/app/_components/kakaoMap/KakaoMapMarker';
 import useAuth from '@/hooks/useAuth';
 import { useAddress, usePosition } from '@/hooks/useKakaoMapMarker';

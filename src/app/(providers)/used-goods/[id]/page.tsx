@@ -1,7 +1,6 @@
 'use client';
 
 import { BsThreeDots } from 'react-icons/bs';
-import { getChatRoomList, makeChatList } from '@/apis/chat/chat';
 import { deleteUsedGood, updateUsedGood } from '@/apis/used-goods/actions';
 import ChatList from '@/app/_components/chatting/ChatList';
 import ClipBoardButton from '@/app/_components/shareButton/ClipBoardButton';
@@ -11,10 +10,10 @@ import { useToast } from '@/hooks/useToast';
 import { supabase } from '@/shared/supabase/supabase';
 import { addCommasToNumber } from '@/utils/format';
 import { getformattedDate } from '@/utils/time';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { MouseEventHandler, useCallback, useEffect, useRef, useState } from 'react';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import { SlideImage, TradeLocationMap } from '../_components';
@@ -25,32 +24,44 @@ import { Tables } from '@/shared/supabase/types/supabase';
 import { useAlertMessage } from '@/hooks/useAlertMessage';
 import Loading from '@/app/_components/layout/loading/Loading';
 import Link from 'next/link';
-
+import kakaotalk from './../../../../../public/images/kakaoLogo.png';
+import { useChat } from '@/hooks/useChat';
+import { useChatStore } from '@/shared/zustand/ChatStore';
 
 const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
-
   const [showEditToggle, setShowEditToggle] = useState<boolean>(false);
+  const [chatListData, setChatListData] = useState<Tables<'chat_list'> | undefined>();
   const queryClient = useQueryClient();
   const user = useAuth((state) => state.user);
   const { addAlertMessage } = useAlertMessage();
+  const { makeChatRoomMutateAsync, fetchChatRoom } = useChat();
+  const { isChatModalOpen, setChatModalOpen, setChatRoomModalOpen } = useChatStore();
 
+  const modalRef = useRef<HTMLDivElement | null>(null);
   const { isLoading, isError, data } = useQuery({
     queryKey: ['used-item', params.id],
     queryFn: () => getUsedGoodDetail(params.id)
   });
 
-  const { data: chatList } = useQuery({
-    queryKey: ['chatRoom'],
-    queryFn: () => getChatRoomList(user!.id),
-    enabled: !!user
-  });
-
   const { id } = useParams();
-  const { errorTopRight } = useToast();
+  const { errorTopRight, warnTopRight } = useToast();
 
-  const editButtonToggle = () => {
+  const editButtonToggle: MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.stopPropagation();
     setShowEditToggle(!showEditToggle);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        setShowEditToggle(false);
+      }
+    };
+    window.addEventListener('click', handleClickOutside);
+    return () => {
+      window.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   const onClickUpdateSoldOut = async () => {
     Swal.fire({
@@ -109,32 +120,34 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
     });
   };
 
-  const makeChatListMutation = useMutation({
-    mutationFn: makeChatList,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['chatRoom'] });
-    }
-  });
-
-  const [isModalOpen, setModalIsOpen] = useState<boolean>(false);
-  const [chatListData, setChatListData] = useState<Tables<'chat_list'>>();
-  //채팅하기 한번만 할 수 있는.. 눈속임 state(?)
-  const [userChatList, setUserChatList] = useState(false);
+  const clickCloseModal = () => {
+    setChatListData(undefined);
+    setChatRoomModalOpen(false);
+    setChatModalOpen(false);
+  };
 
   const clickOpenChat = async () => {
-
-    const list = chatList?.getChatListData?.find((chat) => chat?.post_id === Number(id));
+    if (!user) {
+      return warnTopRight({ message: '로그인 후 이용해주세요' });
+    }
 
     if (data?.user_id === user?.id)
       return errorTopRight({
         message: '본인이 쓴 게시글에는 채팅을 보낼 수 없습니다'
       });
 
-    if (userChatList === true || !!list !== false)
-      return errorTopRight({ message: '이미 채팅을 보냈습니다' });
-
     try {
-      const chat = await makeChatListMutation.mutateAsync({
+      const existingChatRoom = fetchChatRoom?.find((chat) => chat?.post_id === Number(id));
+
+      // 채팅방이 이미 있는 경우
+      if (existingChatRoom) {
+        setChatListData(existingChatRoom);
+        setChatModalOpen(true);
+        setChatRoomModalOpen(true);
+        return false;
+      }
+
+      const chat = await makeChatRoomMutateAsync({
         post_id: data?.id,
         user_id: user?.id,
         other_user: data?.user_id
@@ -149,8 +162,8 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
         });
       }
       setChatListData(chat);
-      setModalIsOpen(true);
-      setUserChatList(true);
+      setChatModalOpen(true);
+      setChatRoomModalOpen(true);
     } catch (error) {
       errorTopRight({ message: '오류가 발생하였습니다' });
     }
@@ -192,7 +205,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                   <button className={styles.editButton} onClick={editButtonToggle}>
                     <BsThreeDots size={0} />
                     {showEditToggle && (
-                      <div>
+                      <div ref={modalRef}>
                         {sold_out ? (
                           <button disabled>판매완료</button>
                         ) : (
@@ -200,7 +213,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                         )}
                         <span></span>
                         <Link href={`/used-goods/update/${id}`}>
-                          <button className={styles.edit}>수정</button>
+                          <button>수정</button>
                         </Link>
                         <span></span>
                         <button onClick={onClickDelete}>삭제</button>
@@ -225,14 +238,12 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                 </div>
               </div>
             </div>
-            {/* TODO: 채팅, 찜 기능 동작 */}
             <div className={styles.btns}>
               <button onClick={clickOpenChat}>채팅하기</button>
               <ChatList
-                isOpen={isModalOpen}
-                onClose={() => setModalIsOpen(false)}
+                isOpen={isChatModalOpen}
+                onClose={clickCloseModal}
                 ariaHideApp={false}
-                isChatRoomOpen={true}
                 list={chatListData}
               />
               <WishButton usedItemId={params.id} title={title} />
@@ -259,12 +270,14 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
         <div className={styles.content}>
           <TradeLocationMap lat={latitude} lng={longitude} />
         </div>
-        {/* TODO: SNS 공유, 링크 복사 */}
         <div className={styles.shareButton}>
-          <KakaoShareButton />
+          <KakaoShareButton>
+            <button className={styles.kakaoButton}>
+              <Image src={kakaotalk} alt="kakaotalk" width={45} height={45} />
+            </button>
+          </KakaoShareButton>
           <ClipBoardButton />
         </div>
-        {/* 버튼 생기면 옮겨 주세요 */}
       </section>
     </main>
   );

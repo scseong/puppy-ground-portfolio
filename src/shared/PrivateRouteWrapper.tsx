@@ -21,10 +21,4 @@ function PrivateRouteWrapper({ children }: { children: React.ReactNode }) {
   return !isLoading && children;
 }
 
-// const AuthProvidedPrivateRouteWrapper = ({ children }: { children: React.ReactNode }) => (
-//   <AuthProvider>
-//     <PrivateRouteWrapper>{children}</PrivateRouteWrapper>
-//   </AuthProvider>
-// );
-
 export default PrivateRouteWrapper;
