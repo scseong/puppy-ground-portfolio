@@ -5,6 +5,7 @@ import { useFacilitiesQuery } from '@/hooks/useFacilitiesQuery';
 import { FaMapMarkerAlt, FaRegClock, FaExternalLinkAlt } from 'react-icons/fa';
 import { RiCalendarCloseFill } from 'react-icons/ri';
 import { TbCategory } from 'react-icons/tb';
+import useMapBounds from '@/hooks/useMapBounds';
 
 type NearFacilitiesProps = {
   markerFocusHandler: ({ latitude, longitude }: { latitude: number; longitude: number }) => void;

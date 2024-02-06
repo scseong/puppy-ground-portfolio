@@ -96,7 +96,7 @@ const CommentList = () => {
                 ) : (
                   <div className={styles.content}>{comment.content}</div>
                 )}
-                <time>{getStringFromNow(comment.created_at)}</time>
+                <time suppressHydrationWarning>{getStringFromNow(comment.created_at)}</time>
               </div>
             </div>
           </div>

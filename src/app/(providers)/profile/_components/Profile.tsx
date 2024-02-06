@@ -55,10 +55,10 @@ const Profile = () => {
     if (editUserName === fetchProfile?.user_name && profileImg === fetchProfile?.avatar_url) {
       return warnTopRight({ message: '변경된 사항이 없습니다!' });
     }
-    let uploadUrl = profileImg!;
     try {
+      let uploadUrl = profileImg!;
       if (imgFile) {
-        await uploadImage(imgFile);
+        uploadUrl = (await uploadImage(imgFile)) ?? profileImg!;
         setProfileImg(uploadUrl);
       }
 
