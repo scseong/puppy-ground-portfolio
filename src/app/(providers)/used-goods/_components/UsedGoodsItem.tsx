@@ -35,7 +35,7 @@ const UsedGoodsItem = ({ goods }: UsedGoodsItemProps) => {
           <h3>{title}</h3>
           <div className={styles.detail}>
             <span>{addCommasToNumber(price)}원</span>
-            <time>{getStringFromNow(created_at)}</time>
+            <time suppressHydrationWarning>{getStringFromNow(created_at)}</time>
           </div>
           <div className={styles.address}>
             <FaMapMarkerAlt />

@@ -162,6 +162,12 @@ const UpdateForm = (props: Props) => {
     });
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+      e.preventDefault();
+    }
+  };
+
   useEffect(() => {
     setInputForm((prev) => ({
       ...prev,
@@ -242,6 +248,9 @@ const UpdateForm = (props: Props) => {
               onChange={handleFormChange}
               type="number"
               value={inputForm.price}
+              min={0}
+              onKeyDown={handleKeyDown}
+              onWheel={(e) => e.currentTarget.blur()}
             />
             원
           </div>

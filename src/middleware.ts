@@ -1,10 +1,12 @@
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextRequest } from 'next/server';
 import { Database } from './shared/supabase/types/supabase';
+import { request } from 'http';
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
+  const cookie = res.cookies.get('sb-mbcnyqlazlnrnrncctns-auth-token')?.value;
 
   // Create a Supabase client configured to use cookies
   const supabase = createMiddlewareClient<Database>({ req, res });
@@ -43,6 +45,7 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
+    '/facilities',
     '/used-goods/create',
     '/profile',
     '/used-goods/update/:path*',
