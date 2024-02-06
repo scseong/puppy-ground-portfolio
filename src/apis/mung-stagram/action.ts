@@ -35,6 +35,10 @@ export const getMungstaPostsByUserId = async (user_id: string) => {
   return data;
 };
 
+export const deleteMungstaPost = async (postId: string) => {
+  return await supabase.from('mung_stagram').delete().eq('id', postId);
+};
+
 export const getPrevAndNextPost = async (id: string) => {
   const getPrevPost = supabase.from('mung_stagram').select('id').gt('id', id).limit(1).single();
   const getNextPost = supabase

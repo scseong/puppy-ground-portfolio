@@ -1,3 +1,4 @@
+'use client';
 import {
   CustomOverlayMap,
   Map,
@@ -6,46 +7,35 @@ import {
   ZoomControl
 } from 'react-kakao-maps-sdk';
 import styles from './facilitiesMapComponent.module.scss';
-import { GiSittingDog } from 'react-icons/gi';
-import { RiCalendarCloseFill } from 'react-icons/ri';
-import { FaRegClock } from 'react-icons/fa';
 import { useFacilitiesQuery } from '@/hooks/useFacilitiesQuery';
-import useDebounce from '@/hooks/useDebounce';
+import { useState } from 'react';
 
-type FacilitiesMapComponentProps = {
-  currentLocation: {
-    latitude: number;
-    longitude: number;
-  };
-  setCoordinate: React.Dispatch<
-    React.SetStateAction<{
-      sw: number[];
-      ne: number[];
-    }>
-  >;
-  setActiveMarkerId: React.Dispatch<React.SetStateAction<number | null>>;
-  activeMarkerId: number | null;
-  currentLocationMarker: boolean;
-  showCurrentInfo: boolean;
-};
+import NearFacilities from '@/app/_components/facilities/NearFacilities';
+import CurrentLocationButton from './CurrentLocationButton';
+import FacilitiesOverlay from './FacilitiesOverlay';
+import useCurrentLocation from '@/hooks/useCurrentLocation';
+import useMapBounds from '@/hooks/useMapBounds';
 
-const FacilitiesMapComponent: React.FC<FacilitiesMapComponentProps> = ({
-  currentLocation,
-  setCoordinate,
-  setActiveMarkerId,
-  activeMarkerId,
-  currentLocationMarker,
-  showCurrentInfo
-}) => {
+const FacilitiesMapComponent = () => {
+  const [activeMarkerId, setActiveMarkerId] = useState<number | null>(null);
   const { facilitiesData } = useFacilitiesQuery();
+  const { debouncedSetCoordinate, coordinate } = useMapBounds();
+  const {
+    showCurrentInfo,
+    setCurrentLocation,
+    setShowCurrentInfo,
+    currentLocation,
+    currentLocationMarker
+  } = useCurrentLocation();
 
-  // onBoundsChanged시 화면 이동 할때마다 데이터를 계속 받아와서 느려짐 -> 디바운싱 이용
-  const debouncedSetCoordinate = useDebounce((map) => {
-    setCoordinate({
-      sw: map.getBounds().getSouthWest().toString().replace(/\(|\)/g, '').split(',').map(Number),
-      ne: map.getBounds().getNorthEast().toString().replace(/\(|\)/g, '').split(',').map(Number)
+  // 장소이름 클릭 시 해당 마커로 이동
+  const markerFocusHandler = ({ latitude, longitude }: { latitude: number; longitude: number }) => {
+    setCurrentLocation({
+      latitude,
+      longitude
     });
-  }, 1000);
+    setShowCurrentInfo(false);
+  };
 
   return (
     <div className={styles.mapContainer}>
@@ -72,30 +62,7 @@ const FacilitiesMapComponent: React.FC<FacilitiesMapComponentProps> = ({
                     }
                   }}
                 />
-                {activeMarkerId === place.id && (
-                  <CustomOverlayMap
-                    position={{ lat: place.latitude, lng: place.longitude }}
-                    yAnchor={1}
-                  >
-                    <div className={styles.overlayWrap}>
-                      <div className={styles.placeName}>{place.facilities_name}</div>
-                      <div className={styles.placeContent}>
-                        <p>
-                          <GiSittingDog />
-                          &nbsp;{place.explanation}
-                        </p>
-                        <p>
-                          <RiCalendarCloseFill />
-                          &nbsp;{place.holiday}
-                        </p>
-                        <p>
-                          <FaRegClock />
-                          &nbsp;{place.open_time}
-                        </p>
-                      </div>
-                    </div>
-                  </CustomOverlayMap>
-                )}
+                <FacilitiesOverlay place={place} activeMarkerId={activeMarkerId} />
               </div>
             );
           })}
@@ -127,6 +94,8 @@ const FacilitiesMapComponent: React.FC<FacilitiesMapComponentProps> = ({
           <ZoomControl position={'RIGHT'} />
         </Map>
       </div>
+      <NearFacilities markerFocusHandler={markerFocusHandler} coordinate={coordinate} />
+      <CurrentLocationButton />
     </div>
   );
 };
