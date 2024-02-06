@@ -316,7 +316,7 @@ const MungstaCreateModal = () => {
             {...register('tag')}
             value={tag}
             onKeyDown={handleTagInputKeyDown}
-            placeholder="해시태그를 입력하세요 (최대 5개, 각 해시태그는 6글자 이내 입력 후 Enter로 입력)"
+            placeholder="해시태그를 입력하세요. (6글자 이내 최대 5개 Enter로 입력)"
             type="text"
           />
         </div>
