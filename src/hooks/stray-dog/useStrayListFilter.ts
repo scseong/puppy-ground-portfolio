@@ -39,7 +39,6 @@ const useFilterStrayList = ({ strayList, selectCity, selectGu, endDate, startDat
 
     return filteredDate;
   };
-
   return {
     limit,
     offset,

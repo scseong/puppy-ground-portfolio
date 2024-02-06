@@ -54,9 +54,6 @@ const StrayDogs = () => {
   const { limit, offset, page, setPage, filterList, setFilteredStrayList, filteredStrayList } =
     useFilterStrayList(filterNeedData);
 
-  console.log('시티', selectCity);
-  console.log('구', selectGu);
-
   const selectRegion = regionList.find((region) => region.city === selectCity);
   const guList = selectRegion ? selectRegion.gu : [];
 
