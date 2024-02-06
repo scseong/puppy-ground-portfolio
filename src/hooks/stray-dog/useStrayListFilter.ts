@@ -12,12 +12,10 @@ type NeedData = {
 };
 
 const useFilterStrayList = ({ strayList, selectCity, selectGu, endDate, startDate }: NeedData) => {
+  const [filteredStrayList, setFilteredStrayList] = useState<StrayList[] | undefined>();
   const [page, setPage] = useState(1);
   const limit = 24;
-
   const offset = (page - 1) * limit;
-
-  const [filteredStrayList, setFilteredStrayList] = useState<StrayList[] | undefined>();
 
   const filterList = () => {
     const filteredCity =

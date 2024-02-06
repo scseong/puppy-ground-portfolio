@@ -50,13 +50,15 @@ const StrayDogs = () => {
     endDate,
     setEndDate
   };
-
+  // 필터링 커스텀 훅
   const { limit, offset, page, setPage, filterList, setFilteredStrayList, filteredStrayList } =
     useFilterStrayList(filterNeedData);
 
+  // 시/구
   const selectRegion = regionList.find((region) => region.city === selectCity);
   const guList = selectRegion ? selectRegion.gu : [];
 
+  // 필터링
   const handeFilter = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const filterStrayList = filterList();
