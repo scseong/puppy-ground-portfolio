@@ -43,6 +43,7 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
+    '/facilities',
     '/used-goods/create',
     '/profile',
     '/used-goods/update/:path*',

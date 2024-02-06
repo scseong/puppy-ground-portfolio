@@ -2,14 +2,14 @@
 
 import Image from 'next/image';
 import styles from './mainGrid.module.scss';
-import dogImg from '../../../../public/images/welsh.png';
-import toy from '../../../../public/images/toy.jpg';
-import family from '../../../../public/images/family.jpg';
-import mungstagram from '../../../../public/images/mungstagram.jpg';
-import walk from '../../../../public/images/walk.jpg';
-import hotel from '../../../../public/images/hotel.jpg';
-import restaurant from '../../../../public/images/restaurant.jpg';
-import travel from '../../../../public/images/travel.jpg';
+import dogImg from '../../../../public/images/welsh.webp';
+import toy from '../../../../public/images/toy.webp';
+import family from '../../../../public/images/family.webp';
+import mungstagram from '../../../../public/images/mungstagram.webp';
+import walk from '../../../../public/images/walk.webp';
+import hotel from '../../../../public/images/hotel.webp';
+import restaurant from '../../../../public/images/restaurant.webp';
+import travel from '../../../../public/images/travel.webp';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
