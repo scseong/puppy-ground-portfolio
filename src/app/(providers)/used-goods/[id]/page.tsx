@@ -246,7 +246,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
                 ariaHideApp={false}
                 list={chatListData}
               />
-              <WishButton usedItemId={params.id} title={title} />
+              {sold_out ? null : <WishButton usedItemId={params.id} title={title} />}
             </div>
           </div>
         </div>
