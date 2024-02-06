@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import ReactModal from 'react-modal';
-import { GoComment, GoShare, GoChevronLeft, GoChevronRight } from 'react-icons/go';
+import { GoShare, GoChevronLeft, GoChevronRight } from 'react-icons/go';
 import { useQuery } from '@tanstack/react-query';
 import { getPosts, getPrevAndNextPost } from '@/apis/mung-stagram/action';
 import ImageSlider from '@/app/_components/lib/ImageSlider';
