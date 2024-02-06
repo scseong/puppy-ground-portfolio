@@ -3,11 +3,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 30px auto 50px;
+  // margin: 30px auto 50px;
+  margin: auto;
 }
 
 .filterContent {
   flex-direction: column;
+
   .region {
     display: flex;
     align-items: center;
@@ -35,7 +37,7 @@
 }
 
 .calender {
-  width: 100%;
+  // width: 100%;
   margin: auto;
   display: flex;
   gap: 15px;
@@ -46,7 +48,7 @@
   height: 45px;
   border: 1px solid #979797;
   border-radius: 5px;
-  padding-left: 5px;
+  padding: 10px;
   text-align: center;
   cursor: pointer;
 }
@@ -137,7 +139,7 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-evenly;
-    width: 100%;
+    // width: 100%;
     height: 250px;
     gap: 40px;
     padding: 0 2rem;
@@ -166,21 +168,30 @@
     grid-template-columns: repeat(1, 1fr);
   }
   .filterContent {
+    width: 100%;
     p {
       font-size: 25px;
       margin-bottom: 15px;
     }
   }
+  .calender {
+    width: 100%;
+  }
+  .regionWrapper {
+    width: 100%;
+  }
   .datePicker {
-    width: 160px;
+    width: 100%;
     height: 45px;
   }
   .selectCity {
-    width: 160px;
+    width: 100%;
     height: 45px;
   }
   .region {
     flex-direction: column;
+    width: 100%;
+
     .searchButton {
       width: 100%;
     }
