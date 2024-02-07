@@ -341,8 +341,27 @@
   .tagForm {
     margin-bottom: 6px;
     input {
-      padding: 0;
+      padding: 0.5rem;
       font-size: 0.9rem;
     }
+  }
+}
+
+// Update
+.updateMain {
+  max-width: var(--max-width);
+  padding: 3rem 0;
+  margin: 0 auto;
+
+  h2 {
+    font-size: 2rem;
+    line-height: 2rem;
+    font-weight: 700;
+  }
+
+  .container {
+    margin: 0 auto;
+    padding: 0 1rem;
+    width: 100dvw;
   }
 }

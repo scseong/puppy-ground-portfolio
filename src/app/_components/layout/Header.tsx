@@ -172,11 +172,11 @@ const Header = () => {
     setisLoading(false);
   }, []);
 
-  if (isLoading) return <Loading />;
-
   return (
     <>
-      {!isLoading && (
+      {isLoading ? (
+        <div className={styles.loading}></div>
+      ) : (
         <>
           <div className={styles.container}>
             <div className={styles.navbarBox}>
