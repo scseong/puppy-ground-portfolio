@@ -1,4 +1,4 @@
-# 내일배움캠프 React 3기 최종프로젝트 A-4조
+## 내일배움캠프 React 3기 최종프로젝트 A-4조
 
 ## 📝 프로젝트 개요
 
@@ -9,6 +9,8 @@
 **소개** : 반려견 중고 물품 거래 및 정보공유 플랫폼
 
 **설명** : 반려동물을 키우는 사람이 많아진 만큼 사용하지 않는 반려동물 용품을 가까운 이웃과 중고거래 할 수 있는 서비스를 만들어 보고자 하였습니다. 그와 더불어 유기동물 또한 많아져서 사지말고 입양을 권하는 취지로 전국 유기견보호소에 있는 아이들에 대한 정보를 제공하고자 하였고 반려견과 함께 할 수 있는 내 주변 장소를 공유하고 반려인들과 소통할 수 있는 플랫폼을 만들어보고자 하였습니다.
+
+
 
 ## 👥 팀소개
 
@@ -26,17 +28,25 @@
 
 <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white"><img src="https://img.shields.io/badge/next%20js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white"><img src="https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white"><img src="https://img.shields.io/badge/React_Query-FF4154?style=for-the-badge&logo=React_Query&logoColor=white">
 
+
+
 ### 서버리스 DB
 
 <img src="https://img.shields.io/badge/Supabase-181818?style=for-the-badge&logo=supabase&logoColor=white"><img src="https://img.shields.io/badge/axios-671ddf?&style=for-the-badge&logo=axios&logoColor=white">
+
+
 
 ### 버전 관리
 
 <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"><img src="https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white">
 
+
+
 ### 협업 툴
 
 <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"><img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white"><img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
+
+
 
 ### 배포
 
@@ -49,10 +59,12 @@
 | 사용기술       | 선택한 이유                                                  |
 | -------------- | ------------------------------------------------------------ |
 | Next.js        | SSG와 SSR의 지원으로 검색엔진 최적화와 초기로딩 성능 향상, 이미지 최적화 등 |
-| Typescript     | 런타임 환경에서의 오류를 예방하고 타입에러를 방지<br/>자동완성 기능제공으로 휴먼에러를 줄이고 개발생산성 향상 |
-| Zustand        | Redux와 유사하나 Redux에 비해 보일러플레이트가 적고 러닝커브가 낮음 <br/> pasist와 같은 부가 기능을 지원함 |
-| Tanstack Query | 비동기 작업과 상태를 관리 - 데이터를 가져오는 로직이 심플하고, 데이터 업데이트가 신속하게 반영됨 <br/>Devtool이 내장되어 있어서 디버깅에 용이 |
+| Typescript     | - 런타임 환경에서의 오류를 예방하고 타입에러를 방지  - 자동완성 기능제공으로 휴먼에러를 줄이고 개발생산성 향상 |
+| Zustand        | \- Redux와 유사하나 Redux에 비해 보일러플레이트가 적고 러닝커브가 낮음 - pasist와 같은 부가 기능을 지원함 |
+| Tanstack Query | \- 비동기 작업과 상태를 관리 - 데이터를 가져오는 로직이 심플하고, 데이터 업데이트가 신속하게 반영됨 - Devtool이 내장되어 있어서 디버깅에 용이 |
 | Supabase       | 관계형 데이터베이스를 기반으로 하여 중복되는 데이터를 한 테이블에서 관리할 수 있고 firebase에 비해 코드가 직관적이며 Query를 사용해서 비교적 자유롭게 데이터를 사용할 수 있음 |
+
+
 
 ## 주요기능
 
@@ -62,7 +74,7 @@
    - Supabase Auth를 활용한 이메일 회원가입 및 로그인
    - 소셜 로그인(카카오톡, 구글)
    - react-hook-form 을 사용한 실시간 유효성 검사
-2. **메인페이지 **
+2. **메인 페이지**
    - 각 페이지 소개 및 이동버튼
    - framer-motion 적용
    - 헤더
@@ -109,6 +121,8 @@
    - 프로필 사진 , 닉네임 변경
    - 중고거래 등록한상품, 찜한상품 확인가능
    - 멍스타그램 좋아요한 게시물, 등록한 게시물 확인가능
+
+
 
 ## ⚖️ 역할분담
 
