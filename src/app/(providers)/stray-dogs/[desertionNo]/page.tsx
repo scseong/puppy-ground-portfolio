@@ -55,7 +55,7 @@ const StrayDogsDetail = () => {
       <div className={styles.contentContainer}>
         <div className={styles.firstSection}>
           <div className={styles.imageWrap}>
-            <Image src={strayDesertionNo?.popfile!} alt="stray-dog" width={500} height={300} />
+            <Image src={strayDesertionNo?.popfile1!} alt="stray-dog" width={500} height={300} />
           </div>
           <div className={styles.dogExplanationWrap}>
             <div className={styles.textWrapper}>

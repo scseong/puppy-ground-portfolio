@@ -146,7 +146,7 @@ const StrayDogs = () => {
                   <div className={styles.listCard}>
                     <div className={styles.imageWrap}>
                       <Image
-                        src={list.popfile}
+                        src={list.popfile1}
                         alt="dog-image"
                         className={styles.image}
                         width="273"

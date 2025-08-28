@@ -7,14 +7,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'placehold.co',
-        port: '',
-        pathname: '/*'
-      },
-      {
-        protocol: 'https',
-        hostname: 'hcrhbxcasvjdyigarqal.supabase.co',
-        pathname: '/**'
+        hostname: '**'
       },
       {
         protocol: 'http',
@@ -22,13 +15,8 @@ const nextConfig = {
         pathname: '/**'
       },
       {
-        protocol: 'https',
-        hostname: 'lh3.googleusercontent.com',
-        pathname: '/**'
-      },
-      {
-        protocol: 'https',
-        hostname: 'cdn.pixabay.com',
+        protocol: 'http',
+        hostname: 'openapi.animal.go.kr',
         pathname: '/**'
       }
     ]

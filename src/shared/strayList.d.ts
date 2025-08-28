@@ -11,6 +11,8 @@ type StrayList = {
   noticeSdt: string;
   noticeEdt: string;
   popfile: string;
+  popfile1: string;
+  popfile2: string;
   processState: string;
   sexCd: string;
   neuterYn: string;
