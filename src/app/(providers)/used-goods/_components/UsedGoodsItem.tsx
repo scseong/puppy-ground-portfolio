@@ -28,7 +28,7 @@ const UsedGoodsItem = ({ goods }: UsedGoodsItemProps) => {
     <div className={styles.container}>
       <Link href={`used-goods/${id}`}>
         <div className={styles.goodsImage}>
-          <Image src={photo_url[0]} alt="상품 이미지" width={350} height={320} />
+          <Image src={photo_url[0] + '?'} alt="상품 이미지" width={350} height={320} />
           {sold_out && <div className={styles.overlay}></div>}
         </div>
         <div className={styles.goodsInfo}>

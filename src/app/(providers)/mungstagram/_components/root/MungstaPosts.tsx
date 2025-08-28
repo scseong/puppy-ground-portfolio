@@ -21,7 +21,7 @@ const MungstaPosts = () => {
               <div className={styles.profile}>
                 <div>
                   <Image
-                    src={`${post.profiles!.avatar_url}`}
+                    src={`${post.profiles!.avatar_url}?`}
                     alt="avatar image"
                     width="40"
                     height="40"
@@ -35,7 +35,7 @@ const MungstaPosts = () => {
               </div>
               <div className={styles.images}>
                 <Image
-                  src={`${post.photo_url[0]}`}
+                  src={`${post.photo_url[0]}?`}
                   alt="게시글 이미지"
                   width="270"
                   height="270"

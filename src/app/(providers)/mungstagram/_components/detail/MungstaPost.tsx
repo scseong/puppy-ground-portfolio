@@ -96,7 +96,7 @@ const MungstaPost = ({ postId }: { postId: string }) => {
           )}
           {photo_url.length === 1 && (
             <Image
-              src={photo_url[0]}
+              src={photo_url[0] + '?'}
               alt="image"
               style={{ ...customStyle }}
               draggable={false}
