@@ -1,135 +1,102 @@
-## 내일배움캠프 React 3기 최종프로젝트 A-4조
+# 🐶 Puppy Ground (퍼피 그라운드)
 
-## 📝 프로젝트 개요
+> **반려견 중고 물품 거래 & 정보공유 플랫폼**
+> 내일배움캠프 React 3기 최종프로젝트 | **A-4조 막내 온 TOP**
 
-**기간** : 24. 01. 04 ~ 02. 08
+## 📅 프로젝트 개요
 
-**프로젝트명** : Puppy Ground(**퍼**피 **그**라운드)
+- **기간** : 2024.01.04 ~ 2024.02.08
+- **프로젝트명** : Puppy Ground (**퍼**피 **그**라운드)
+- **기획 의도** :
+  반려동물을 키우는 인구가 늘어나면서, 사용하지 않는 반려견 용품을 지역 커뮤니티 내에서 손쉽게 중고 거래할 수 있는 플랫폼을 기획했습니다.
+  또한 **"사지 말고 입양하자"**는 취지를 담아 전국 유기견 보호소의 입양 정보를 제공하고, 반려견과 함께할 수 있는 장소를 공유하며 반려인 간 교류할 수 있는 커뮤니티형 서비스를 구축했습니다.
 
-**소개** : 반려견 중고 물품 거래 및 정보공유 플랫폼
+***
 
-**설명** : 반려동물을 키우는 사람이 많아진 만큼 사용하지 않는 반려동물 용품을 가까운 이웃과 중고거래 할 수 있는 서비스를 만들어 보고자 하였습니다. 그와 더불어 유기동물 또한 많아져서 사지말고 입양을 권하는 취지로 전국 유기견보호소에 있는 아이들에 대한 정보를 제공하고자 하였고 반려견과 함께 할 수 있는 내 주변 장소를 공유하고 반려인들과 소통할 수 있는 플랫폼을 만들어보고자 하였습니다.
+## 🌐 포트폴리오 링크
+- [포트폴리오 웹사이트](https://puppy-ground-portpolio.vercel.app/)  
+- [GitHub 저장소](https://github.com/nbcamp-mot/puppy-ground)  
+- [Github Wiki](https://github.com/nbcamp-mot/puppy-ground/wiki)
 
+------
 
+## 👥 팀 소개
 
-## 👥 팀소개
+- **팀명** : 막내 온 TOP
+- **팀원**
+  - 염혜원(팀장) — 마이페이지 / 1:1 채팅 / 채팅 알림
+  - 천영륜 — 중고거래 등록 / 좋아요&찜 / 공유하기 / 멍스타그램 댓글 CRUD
+  - 손지원 — 회원가입/로그인(이메일, 소셜) / 로그인 유무 분기처리 / 유기견 공고 필터링
+  - **손창성 — 중고 물품 & 상세 데이터 연동 및 UI / 키워드 검색 & 다중 필터 & 페이지네이션 / 멍스타그램 데이터 및 모달**
+  - 이예지 — 메인페이지 / 반려견 동반 시설 / 유기견 공고 상세 / 실시간 알림
+- **디자이너** : 박애리
 
-**팀명** : 막내 온 TOP
+------
 
-**팀원** : 염혜원, 천영륜, 손지원, 손창성, 이예지
+## 🌟 주요 기능
 
-**디자이너** : 박애리
+- **회원가입/로그인** : Supabase Auth, 소셜 로그인(카카오/구글), 실시간 유효성 검사
+- **중고거래** : 상품 리스트, 상세 정보 CRUD, 지도 기반 거래장소, 찜/채팅/SNS 공유 기능
+- **멍스타그램** : 피드 리스트, 이미지 멀티 업로드, 태그 등록, 좋아요/댓글 CRUD, SNS 공유, 상세 모달 
+- **반려견 동반 시설** : Kakao Map API 활용, 주변 시설 마커 표시 및 키워드 검색
+- **유기견 공고** : 공공 API 연동 → 전국 유기견 보호소 공고, 지역/날짜별 필터링
+- **마이페이지** : 프로필 수정, 내가 등록·찜한 상품, 좋아요한 게시물 관리
+- **실시간 알림 및 채팅** : 거래 및 커뮤니티 내 사용자 경험 강화
 
+------
 
+## 🎥 Demo
 
-## 사용기술
+| 메인페이지                                                   | 유기견 공고                                                  | 유기견 공고 상세                                             |
+| :----------------------------------------------------------- | :----------------------------------------------------------- | :----------------------------------------------------------- |
+| <img src="https://github.com/nbcamp-mot/.github/assets/82589401/9311e4e4-799f-4eee-9603-2bb7d86805a7" width="300" height="500" > | <img src="https://github.com/nbcamp-mot/.github/assets/82589401/bb571251-33f9-46ea-9539-b27d2b0cc63e" width="300" height="500"> | <img src="https://github.com/nbcamp-mot/.github/assets/82589401/439b2ed9-d456-46f6-a234-57e7d4cc3bde" width="300"> |
 
-### 프론트엔드
+| 중고 물품 목록                                               | 중고 물품 상세                                               | 동반시설                                                     |
+| :----------------------------------------------------------- | :----------------------------------------------------------- | :----------------------------------------------------------- |
+| <img src="https://github.com/nbcamp-mot/.github/assets/82589401/25036d9d-b031-461c-950a-8c57a3f9dfb5" width="300" > | <img src="https://github.com/nbcamp-mot/.github/assets/82589401/dd619620-d54b-4c6a-a110-f5a101d945a3" width="300" > | <img src="https://github.com/nbcamp-mot/.github/assets/82589401/411c2555-ba83-445e-bff2-a1038fade072" width="300" > |
 
-<img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white"><img src="https://img.shields.io/badge/next%20js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white"><img src="https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white"><img src="https://img.shields.io/badge/React_Query-FF4154?style=for-the-badge&logo=React_Query&logoColor=white">
+| 멍스타그램                                                   | 멍스타그램 상세                                              | 마이 페이지                                                  |
+| :----------------------------------------------------------- | :----------------------------------------------------------- | :----------------------------------------------------------- |
+| <img src="https://github.com/nbcamp-mot/.github/assets/82589401/745f5fd6-e68c-48f5-959a-f91202c80dac" width="300" > | <img src="https://github.com/nbcamp-mot/.github/assets/82589401/a83e9b5f-dd38-4668-9bfe-3dd4ac6d5d1c" width="300" > | <img src="https://github.com/nbcamp-mot/.github/assets/82589401/6a257aac-0ec2-4e87-828c-7db6711ae3f4" width="300" > |
 
+------
 
+## 🛠️ Skills
 
-### 서버리스 DB
+<img src="https://github.com/nbcamp-mot/.github/assets/82589401/eae74260-49e9-4bd9-9740-0255272f2156" width=100%>
 
-<img src="https://img.shields.io/badge/Supabase-181818?style=for-the-badge&logo=supabase&logoColor=white"><img src="https://img.shields.io/badge/axios-671ddf?&style=for-the-badge&logo=axios&logoColor=white">
+- **Next.js** : SSR·SSG 기반 → SEO/초기 로딩 성능 개선
+- **TypeScript** : 정적 타입 체크로 오류 예방 및 생산성 향상
+- **Zustand** : 간단한 API 기반 전역 상태 관리, persist 지원
+- **React Query** : 서버 상태 관리, 데이터 캐싱/업데이트 자동 처리
+- **Sass + CSS Module** : 컴포넌트 단위 스타일 관리 효율화
+- **Supabase** : Auth(로그인/회원가입), Realtime(채팅/알림), Storage(파일/이미지) 관리
+- **공공 API/Kakao API** : 유기견 공고 및 동반시설 데이터 제공, 지도 마커 표시
+- **Git & GitHub** : 협업 및 버전 관리
+- **Vercel** : 서버리스 배포 환경, Next.js와 최적화된 연결
 
+***
 
+## 📂 폴더 구조 (주요)
 
-### 버전 관리
-
-<img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"><img src="https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white">
-
-
-
-### 협업 툴
-
-<img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"><img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white"><img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
-
-
-
-### 배포
-
-<img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white">
-
-
-
-## 기술적 의사결정
-
-| 사용기술       | 선택한 이유                                                  |
-| -------------- | ------------------------------------------------------------ |
-| Next.js        | SSG와 SSR의 지원으로 검색엔진 최적화와 초기로딩 성능 향상, 이미지 최적화 등 |
-| Typescript     | - 런타임 환경에서의 오류를 예방하고 타입에러를 방지  - 자동완성 기능제공으로 휴먼에러를 줄이고 개발생산성 향상 |
-| Zustand        | \- Redux와 유사하나 Redux에 비해 보일러플레이트가 적고 러닝커브가 낮음 - pasist와 같은 부가 기능을 지원함 |
-| Tanstack Query | \- 비동기 작업과 상태를 관리 - 데이터를 가져오는 로직이 심플하고, 데이터 업데이트가 신속하게 반영됨 - Devtool이 내장되어 있어서 디버깅에 용이 |
-| Supabase       | 관계형 데이터베이스를 기반으로 하여 중복되는 데이터를 한 테이블에서 관리할 수 있고 firebase에 비해 코드가 직관적이며 Query를 사용해서 비교적 자유롭게 데이터를 사용할 수 있음 |
-
-
-
-## 주요기능
-
-### MVP
-
-1. **회원가입 / 로그인**
-   - Supabase Auth를 활용한 이메일 회원가입 및 로그인
-   - 소셜 로그인(카카오톡, 구글)
-   - react-hook-form 을 사용한 실시간 유효성 검사
-2. **메인 페이지**
-   - 각 페이지 소개 및 이동버튼
-   - framer-motion 적용
-   - 헤더
-     - 반응형 햄버거버튼
-     - 좋아요, 찜 실시간 알림
-     - 채팅아이콘 클릭시 채팅리스트 오픈
-3. **중고거래 페이지**
-   - 중고물품 리스트
-     - 물품 상세 정보로 이동할 수 있는 링크 
-     - 거래장소, 찜, 채팅개수, 등록한 시간 확인가능
-     - 카테고리, 견종사이즈, 판매여부, 검색 등 다양한 필터링
-     - 페이지네이션
-   - 중고물품 등록하기
-     - 대표이미지, 드래그 앤 드롭
-     - 거래희망장소 지도로 마커 표시
-   - 중고물품 상세페이지
-     - 이미지 슬라이드
-     - 공유하기 (카카오톡, URL) 
-     - 찜 선택 및 개수 확인가능
-     - 채팅하기
-4. **멍스타그램 페이지**
-   - 멍스타그램 리스트
-     - 등록한 유저 프로필, 게시글 태그 확인가능
-   - 멍스타그램 등록하기
-     - 모달창으로 등록가능
-     - 해시태그 등록
-     - 이미지 다중선택
-   - 멍스타그램 상세모달
-     - parallel routes를 활용한 모달로 이전, 다음게시물 바로 이동가능
-     - 이미지 슬라이드
-     - 좋아요 및 개수 확인가능
-5. **반려견 동반시설 페이지**
-   - 카카오맵API로 데이터 마커표시
-   - 위치권한 허용시 현재위치에서 시작
-   - 마커 마우스오버시 간단한 정보확인
-   - 보여지는 화면영역의 변화에 따라 리스트 확인가능한 토글버튼
-   - 보여지는 화면영역의 변화에 따른 리스트 확인가능
-   - 키워드 검색 및 장소명 클릭시 해당 위치로 이동
-6. **유기견 공고 페이지** 
-   - 공공API를 활용하여 전국 유기견 보호소의 유기견의 공고 목록을 표시 
-   - 등록날짜, 지역별로 필터링가능
-   - 페이지네이션
-7. **마이페이지**
-   - 프로필 사진 , 닉네임 변경
-   - 중고거래 등록한상품, 찜한상품 확인가능
-   - 멍스타그램 좋아요한 게시물, 등록한 게시물 확인가능
-
-
-
-## ⚖️ 역할분담
-
-| 담당자 | 작업내용                                                     |
-| ------ | ------------------------------------------------------------ |
-| 염혜원 | 마이페이지 프로필수정 / 실시간 1:1 채팅 / 채팅알림           |
-| 천영륜 | 중고거래 등록페이지 / 마이페이지 / 좋아요 및 찜 / 공유하기 / 멍스타그램 댓글 CRUD |
-| 손지원 | 회원가입 / (소셜)로그인 / 로그인 유무 분기처리 / 유기견공고 필터링 |
-| 손창성 | 중고거래 리스트페이지 / 상세페이지 / 멍스타그램 리스트페이지 / 등록모달 / 상세모달 |
-| 이예지 | 메인페이지 / 동반시설페이지 / 유기견공고 상세페이지 / (좋아요 찜)실시간 알림 |
+```
+src/
+├── apis/              # API 통신 함수 모음
+├── app/               # Next.js app router 페이지 및 컴포넌트
+│   ├── (providers)/   # 전역 상태관리, 모달 등 비라우팅 컴포넌트
+│   ├── auth/          # 로그인, 회원가입 컴포넌트
+│   ├── facilities/    # 동반 시설 관련 페이지
+│   ├── mungstagram/   # 멍스타그램 피드 및 상세
+│   ├── profile/       # 사용자 프로필 및 마이페이지
+│   ├── stray-dogs/    # 유기견 공고 관련 페이지
+│   ├── used-goods/    # 중고물품 관련 페이지
+│   ├── _components/   # 공통 UI 컴포넌트
+│   ├── layout.tsx     # 전역 레이아웃
+│   └── page.tsx       # 메인페이지
+├── assets/            # 폰트, 이미지 등 정적 자원
+├── data/              # 정적 데이터 json
+├── hooks/             # 커스텀 훅 모음
+├── shared/            # 상태관리, 상수, 타입 등 전역 공유 모듈
+├── utils/             # 유틸리티 함수 모음
+└── middleware.ts      # 미들웨어 로직
+```
