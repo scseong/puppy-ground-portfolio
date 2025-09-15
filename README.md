@@ -8,8 +8,6 @@
 
 > 📌 스파르타코딩클럽 내일배움캠프에서 활동하며 진행한 팀프로젝트입니다.
 
-
-
 ### **📅 프로젝트 개요**
 
 - **기간**: 2024.01.04 ~ 2024.02.08 (5주)
@@ -98,23 +96,23 @@ Puppy Ground의 중고 물품 거래 서비스에서는 사용자의 탐색 편�
     ```
 
     ```tsx
-    // src/apis/goods.ts 
+    // src/apis/goods.ts
     export const usedGoodsKeys = {
       all: (params: SearchParams) => ['used-goods', { ...params }] as const
     };
-    
+
     export const getQueryKey = (params: SearchParams) => {
       return usedGoodsKeys.all(params);
     };
-    
+
     export const getQueryFunction = (params: SearchParams) => {
-      return () => getUsedGoods(params); 
+      return () => getUsedGoods(params);
     };
     ```
 
   - 클라이언트의 `UsedGoodsList` 컴포넌트에서 `useQuery`는 이 동적으로 생성된 `queryKey`를 인식하여 캐시된 데이터가 존재하면 네트워크 재요청 없이 즉시 데이터를 반환하고 필요한 경우에만 백그라운드에서 데이터를 업데이트합니다.
 
-  ------
+  ***
 
 **[ 결과 ]**
 
@@ -193,7 +191,7 @@ Next.js 인터셉트/병렬 라우트를 활용하여 페이지 전환 없는 �
 
 - **Next.js**: 다양한 렌더링 방식을 유연하게 활용하고 SEO 최적화를 통해 검색 노출 효과를 높이기 위해 선택
 - **TypeScript**: 팀 협업 환경에서 코드의 안정성을 확보하고 런타임 오류를 사전에 방지하여 안정성 확보와 유지보수성 향상
-- Zustand:  Redux 대비 보일러플레이트가 적고 직관적인 API로 전역 상태를 간단하고 유연하게 관리하기 위해 사용
+- Zustand: Redux 대비 보일러플레이트가 적고 직관적인 API로 전역 상태를 간단하고 유연하게 관리하기 위해 사용
 - React Query (TanStack Query): 서버 상태 관리 및 캐싱 최적화를 통해 중복 요청을 방지하고 UX를 개선
 - Sass + CSS Module: 컴포넌트 단위 스타일 관리로 스타일 충돌을 방지하고 재사용성을 높여 생산성을 확보
 - Supabase: Auth, Realtime, Storage 등 백엔드 기능을 빠르게 구축해 프론트엔드 개발에 집중
