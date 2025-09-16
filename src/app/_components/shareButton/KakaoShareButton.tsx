@@ -39,7 +39,10 @@ const KakaoShareButton = ({ children }: { children: React.ReactNode }) => {
         src="https://developers.kakao.com/sdk/js/kakao.js"
         async
         onLoad={() => {
-          window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_API_KEY);
+          const { Kakao } = window;
+          if (!Kakao.isInitialized()) {
+            Kakao.init(process.env.NEXT_PUBLIC_KAKAO_API_KEY);
+          }
         }}
       />
       <div onClick={clickShare}>{children}</div>
