@@ -20,7 +20,7 @@ const UsedGoodsContainer = async ({ searchParams }: { searchParams: SearchParams
         </Link>
       </div>
       <div className={styles.filtering}>
-        <UsedGoodsFilter />
+        <UsedGoodsFilter initialSearchParams={searchParams} />
         <UsedGoodsSearch />
       </div>
       <div className={styles.subFiltering}>
