@@ -2,7 +2,6 @@
 const nextConfig = {
   reactStrictMode: false,
   images: {
-    domains: ['www.animal.go.kr'],
     dangerouslyAllowSVG: true,
     remotePatterns: [
       {
@@ -17,6 +16,11 @@ const nextConfig = {
       {
         protocol: 'http',
         hostname: 'openapi.animal.go.kr',
+        pathname: '/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'phcdhdnsnzcqiqgptczm.supabase.co',
         pathname: '/**'
       }
     ]

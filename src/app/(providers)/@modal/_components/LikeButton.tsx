@@ -17,7 +17,7 @@ const LikeButton = ({ mungStargramId, title }: { mungStargramId: string; title: 
   const { addAlertMessage, deleteAlertMessageType } = useAlertMessage();
 
   const { isLoading, isError, data } = useQuery({
-    queryKey: ['mung_stagram', mungStargramId],
+    queryKey: ['munstagram', mungStargramId],
     queryFn: () => getPosts(mungStargramId)
   });
 
@@ -42,7 +42,7 @@ const LikeButton = ({ mungStargramId, title }: { mungStargramId: string; title: 
   });
 
   const addMungStagramLikeClient = () => {
-    queryClient.setQueryData(['mung_stagram', mungStargramId], (prevData: any) => {
+    queryClient.setQueryData(['munstagram', mungStargramId], (prevData: any) => {
       return {
         ...prevData,
         mung_stagram_like: [
@@ -64,7 +64,7 @@ const LikeButton = ({ mungStargramId, title }: { mungStargramId: string; title: 
   };
 
   const removeMungStagramLikeClient = () => {
-    queryClient.setQueryData(['mung_stagram', mungStargramId], (prevData: any) => {
+    queryClient.setQueryData(['munstagram', mungStargramId], (prevData: any) => {
       return {
         ...prevData,
         mung_stagram_like: [

@@ -4,23 +4,24 @@ import { useQuery } from '@tanstack/react-query';
 import UsedGoodsItem from './UsedGoodsItem';
 import styles from './usedGoodsList.module.scss';
 import { useQueryParam } from '@/hooks/useQueryParam';
-import { getQueryKey, getQueryFunction } from '@/apis/goods';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import NotFoundImage from '../../../../../public/images/sadpug (1).svg';
 
-const UsedGoodsList = () => {
-  const { queryObject, generateQueryParameter } = useQueryParam();
+interface UsedGoodsListProps {
+  postList: {
+    data?: any[] | null;
+    count?: number | null;
+  };
+}
+
+const UsedGoodsList = ({ postList }: UsedGoodsListProps) => {
+  const { generateQueryParameter } = useQueryParam();
   const [currentPage, setCurrentPage] = useState(1);
   const searchParams = useSearchParams();
   const searchKeyword = searchParams.get('query');
-
-  const { data: postList } = useQuery({
-    queryKey: getQueryKey(queryObject),
-    queryFn: getQueryFunction(queryObject)
-  });
 
   const { data, count } = { ...postList };
   const itemsPerPage = 8;

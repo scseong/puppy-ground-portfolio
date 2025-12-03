@@ -1,59 +1,36 @@
 'use client';
 
-import Link from 'next/link';
-import Image from 'next/image';
-import { useQuery } from '@tanstack/react-query';
+import { useEffect, Fragment } from 'react';
+import { useInfinitePostData } from '@/hooks/useInfinitePosts';
+import { useInView } from 'react-intersection-observer';
+import Loading from '@/app/_components/layout/loading/Loading';
+import MungstaPostCard from '@/app/(providers)/mungstagram/_components/root/MungstaPostCard';
 import styles from './page.module.scss';
-import { getMungstaPosts } from '@/apis/mung-stagram/action';
 
 const MungstaPosts = () => {
-  const { data: posts } = useQuery({
-    queryKey: ['mungstagram'],
-    queryFn: getMungstaPosts
-  });
+  const { ref, inView } = useInView();
+  const { data, error, isPending, fetchNextPage } = useInfinitePostData();
+
+  useEffect(() => {
+    if (inView) fetchNextPage();
+  }, [inView]);
+
+  if (isPending) return <Loading />;
+  if (error) return null;
 
   return (
-    <div className={styles.mungstaList}>
-      {posts?.map((post) => {
-        return (
-          <div className={styles.mungstaItem} key={post.id}>
-            <Link href={`/mungstagram/${post.id}`} scroll={false}>
-              <div className={styles.profile}>
-                <div>
-                  <Image
-                    src={`${post.profiles!.avatar_url}?`}
-                    alt="avatar image"
-                    width="40"
-                    height="40"
-                  />
-                  <span>{post.profiles!.user_name}</span>
-                </div>
-                {/* TODO: 추가 작업 버튼 */}
-                {/* <div>
-                        <IoIosMore />
-                      </div> */}
-              </div>
-              <div className={styles.images}>
-                <Image
-                  src={`${post.photo_url[0]}?`}
-                  alt="게시글 이미지"
-                  width="270"
-                  height="270"
-                  priority
-                />
-              </div>
-              <div className={styles.info}>
-                <h3>{post.title}</h3>
-                <div>
-                  <ul>{post.tags && post.tags.map((tag) => <li key={tag}>#{tag}</li>)}</ul>
-                </div>
-                <p>{post.content}</p>
-              </div>
-            </Link>
-          </div>
-        );
-      })}
-    </div>
+    <>
+      <div className={styles.mungstaList}>
+        {data.pages?.map((page, pageIndex) => (
+          <Fragment key={pageIndex}>
+            {page.map((post: any) => (
+              <MungstaPostCard post={post} key={post.id} />
+            ))}
+          </Fragment>
+        ))}
+      </div>
+      <div ref={ref}></div>
+    </>
   );
 };
 

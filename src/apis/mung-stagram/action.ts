@@ -14,9 +14,31 @@ export const getMungstaPosts = async () => {
   const { data } = await supabase
     .from('mung_stagram')
     .select('*, profiles (user_name, avatar_url)')
-    .order('id', { ascending: false });
+    .order('created_at', { ascending: false });
   return data;
 };
+
+export const fetchMungstaPosts = async ({ from, to }: { from: number; to: number }) => {
+  const { data, error } = await supabase
+    .from('mung_stagram')
+    .select('*, profiles (user_name, avatar_url)')
+    .order('created_at', { ascending: false })
+    .range(from, to);
+
+  if (error) throw error;
+  return data;
+};
+
+export async function fetchMungstaPostById(postId: number) {
+  const { data, error } = await supabase
+    .from('mung_stagram')
+    .select('*, profiles (user_name, avatar_url)')
+    .eq('id', postId)
+    .single();
+
+  if (error) throw error;
+  return data;
+}
 
 export const getMungstaPost = async (id: string) => {
   const { data, error } = await supabase

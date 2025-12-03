@@ -28,6 +28,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.49.3",
     "react-icons": "^5.0.0",
+    "react-intersection-observer": "^10.0.0",
     "react-kakao-maps-sdk": "^1.1.24",
     "react-modal": "^3.16.1",
     "react-responsive": "^9.0.2",

@@ -1,15 +1,13 @@
-import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import { UsedGoodsList, UsedGoodsFilter, UsedGoodsOrder, UsedGoodsSearch } from './_components';
-import { getQueryKey, getQueryFunction, SearchParams } from '@/apis/goods';
+import { getQueryFunction, SearchParams } from '@/apis/goods';
 import styles from './page.module.scss';
 import Link from 'next/link';
 
 export const revalidate = 0;
 
 const UsedGoodsContainer = async ({ searchParams }: { searchParams: SearchParams }) => {
-  const [queryKey, queryFn] = [getQueryKey(searchParams), getQueryFunction(searchParams)];
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery({ queryKey, queryFn });
+  const queryFn = getQueryFunction(searchParams);
+  const goodsData = await queryFn(); // 서버에서 바로 데이터 가져오기
 
   return (
     <main className={styles.main}>
@@ -26,9 +24,7 @@ const UsedGoodsContainer = async ({ searchParams }: { searchParams: SearchParams
       <div className={styles.subFiltering}>
         <UsedGoodsOrder />
       </div>
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <UsedGoodsList />
-      </HydrationBoundary>
+      <UsedGoodsList postList={goodsData} />
     </main>
   );
 };
