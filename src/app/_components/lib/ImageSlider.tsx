@@ -1,6 +1,6 @@
-import Slider from 'react-slick';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useEffect } from 'react';
+import Slider from 'react-slick';
 
 type ImageSliderProp = {
   images: string[];
@@ -26,6 +26,11 @@ const ImageSlider = ({ images, styles, width, height }: ImageSliderProp) => {
   };
 
   const selectedConfig = images.length > 1 ? multiConfig : singleConfig;
+
+  useEffect(() => {
+    import('slick-carousel/slick/slick.css');
+    import('slick-carousel/slick/slick-theme.css');
+  }, []);
 
   return (
     <Slider {...selectedConfig}>

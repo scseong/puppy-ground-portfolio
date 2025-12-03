@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -7,11 +8,14 @@ import ReactModal from 'react-modal';
 import { GoShare, GoChevronLeft, GoChevronRight } from 'react-icons/go';
 import { useQuery } from '@tanstack/react-query';
 import { getPosts, getPrevAndNextPost } from '@/apis/mung-stagram/action';
-import ImageSlider from '@/app/_components/lib/ImageSlider';
 import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
 import { customStyle } from '@/shared/modal';
 import { CommentList, CommentForm, LikeButton } from '../../_components';
 import styles from './page.module.scss';
+
+const ImageSlider = dynamic(() => import('@/app/_components/lib/ImageSlider'), {
+  ssr: false
+});
 
 type PageProps = {
   params: { [slug: string]: string };

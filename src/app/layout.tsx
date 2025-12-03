@@ -1,11 +1,8 @@
 import type { Metadata } from 'next';
-import './globals.css';
-import './variables.css';
-import 'react-toastify/dist/ReactToastify.css';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 import Script from 'next/script';
 import localFont from 'next/font/local';
+import './globals.css';
+import './variables.css';
 
 export const metadata: Metadata = {
   title: 'Puppy Ground',

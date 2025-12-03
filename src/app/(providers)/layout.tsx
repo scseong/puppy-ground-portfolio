@@ -1,9 +1,9 @@
 import ReactQueryProviders from '@/utils/ReactQueryProviders';
 import React, { Suspense } from 'react';
-import { ToastContainer } from 'react-toastify';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Footer, Header } from '../_components/layout';
 import HeaderLoading from '../_components/layout/loading/HeaderLoading';
+import LazyToastContainer from '@/app/_components/layout/loading/LazyToastContainer';
 
 function ProvidersLayout({
   children,
@@ -20,7 +20,9 @@ function ProvidersLayout({
       </Suspense>
       {children}
       {modal}
-      <ToastContainer />
+      <Suspense>
+        <LazyToastContainer />
+      </Suspense>
       <Footer />
     </ReactQueryProviders>
   );

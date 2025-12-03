@@ -3,12 +3,11 @@
 import { getMungstaPost, getComments, deleteMungstaPost } from '@/apis/mung-stagram/action';
 import { useQuery } from '@tanstack/react-query';
 import styles from './mungstaPost.module.scss';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GoShare } from 'react-icons/go';
 import { CiCircleMore } from 'react-icons/ci';
 import Link from 'next/link';
 import Image from 'next/image';
-import ImageSlider from '@/app/_components/lib/ImageSlider';
 import CommentForm from '@/app/(providers)/@modal/_components/CommentForm';
 import { CommentList, LikeButton } from '@/app/(providers)/@modal/_components';
 import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
@@ -17,6 +16,11 @@ import MungstaModal from './MungstaModal';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/useToast';
+import dynamic from 'next/dynamic';
+
+const ImageSlider = dynamic(() => import('@/app/_components/lib/ImageSlider'), {
+  ssr: false
+});
 
 const MungstaPost = ({ postId }: { postId: string }) => {
   const router = useRouter();
