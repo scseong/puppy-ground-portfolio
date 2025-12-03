@@ -187,7 +187,7 @@ Next.js 인터셉트/병렬 라우트를 활용하여 페이지 전환 없는 �
 
 ### 🛠️ 사용 기술 및 라이브러리
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/4a67606d-9ca2-4c59-9f0a-cc3d624def63/d46111bd-ed3d-4f9f-9136-0f0a0913ac83/Untitled.png)
+<img src="https://github.com/nbcamp-mot/puppy-ground/assets/82589401/1686884c-c4d1-415b-be05-eca562a625b1" width="600px">
 
 - **Next.js**: 다양한 렌더링 방식을 유연하게 활용하고 SEO 최적화를 통해 검색 노출 효과를 높이기 위해 선택
 - **TypeScript**: 팀 협업 환경에서 코드의 안정성을 확보하고 런타임 오류를 사전에 방지하여 안정성 확보와 유지보수성 향상
