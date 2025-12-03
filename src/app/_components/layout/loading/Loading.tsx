@@ -6,11 +6,10 @@ import styles from './loading.module.scss';
 const Loading = () => {
   return (
     <div className={styles.container}>
-      <Image src={loadingBar} className={styles.image} alt="loading" />
+      <Image src={loadingBar} className={styles.image} alt="loading" quality={70} priority />
       <p>퍼그가 정보를 가져오고 있습니다</p>
     </div>
   );
 };
 
 export default Loading;
-

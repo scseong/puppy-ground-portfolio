@@ -21,6 +21,8 @@ export default function MungstaPostCard({ post }: { post: Post }) {
               alt="avatar image"
               width="40"
               height="40"
+              quality={60}
+              priority
             />
             <span>{post.profiles!.user_name}</span>
           </div>
@@ -29,8 +31,9 @@ export default function MungstaPostCard({ post }: { post: Post }) {
           <Image
             src={`${post.photo_url[0]}?`}
             alt="게시글 이미지"
-            width="270"
-            height="270"
+            width={270}
+            height={270}
+            quality={80}
             priority
           />
         </div>
