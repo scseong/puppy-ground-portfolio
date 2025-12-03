@@ -22,7 +22,12 @@ import dynamic from 'next/dynamic';
 import localFont from 'next/font/local';
 
 const gmarket = localFont({
-  src: '../../assets/fonts/GmarketSansBold.woff2',
+  src: [
+    {
+      path: '../../assets/fonts/GmarketSansBold.woff2',
+      weight: '700'
+    }
+  ],
   display: 'swap',
   variable: '--logo-font'
 });

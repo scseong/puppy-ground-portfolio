@@ -6,25 +6,18 @@ import { Main } from '@/app/_components/layout';
 import Link from 'next/link';
 import styles from './page.module.scss';
 
-export const revalidate = 0;
+export const revalidate = 60;
 const PAGE_SIZE = 8;
 
 const MungstaMainPage = async () => {
   const queryClient = getQueryClient();
-  await queryClient.prefetchInfiniteQuery({
-    queryKey: ['munstagram', 'list'],
-    queryFn: async ({ pageParam }: { pageParam: number }) => {
-      const from = pageParam * PAGE_SIZE;
-      const to = from + PAGE_SIZE - 1;
-      const posts = await fetchMungstaPosts({ from, to });
-      return posts;
-    },
-    initialPageParam: 0,
-    getNextPageParam: (lastPage: any, allPages: any) => {
-      if (lastPage.length < PAGE_SIZE) return undefined;
-      return allPages.length;
-    },
-    staleTime: Infinity
+  await queryClient.prefetchQuery({
+    queryKey: ['munstagram', 'list', 0],
+    queryFn: () => {
+      const from = 0;
+      const to = PAGE_SIZE - 1;
+      return fetchMungstaPosts({ from, to });
+    }
   });
 
   return (

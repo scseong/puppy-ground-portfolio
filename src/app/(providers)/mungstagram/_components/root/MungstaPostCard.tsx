@@ -22,19 +22,20 @@ export default function MungstaPostCard({ post }: { post: Post }) {
               width="40"
               height="40"
               quality={60}
-              priority
             />
             <span>{post.profiles!.user_name}</span>
           </div>
         </div>
         <div className={styles.images}>
           <Image
-            src={`${post.photo_url[0]}?`}
+            src={`${post.photo_url[0]}`}
             alt="게시글 이미지"
             width={270}
             height={270}
             quality={80}
+            fetchPriority="high"
             priority
+            sizes="(max-width: 1200px) 33vw, 270px"
           />
         </div>
         <div className={styles.info}>
