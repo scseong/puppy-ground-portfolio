@@ -106,6 +106,7 @@ const MungstaPost = ({ postId }: { postId: string }) => {
               draggable={false}
               width={500}
               height={500}
+              priority
             />
           )}
         </div>

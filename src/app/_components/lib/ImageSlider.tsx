@@ -36,7 +36,14 @@ const ImageSlider = ({ images, styles, width, height }: ImageSliderProp) => {
     <Slider {...selectedConfig}>
       {images.map((image, index) => (
         <div key={index}>
-          <Image src={image} alt="image" style={{ ...styles }} width={width} height={height} />
+          <Image
+            src={image}
+            alt="image"
+            style={{ ...styles }}
+            width={width}
+            height={height}
+            priority={index === 0}
+          />
         </div>
       ))}
     </Slider>
