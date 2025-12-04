@@ -40,8 +40,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="ko" className={globalFont.variable}>
-      <link rel="preconnect" href="https://phcdhdnsnzcqiqgptczm.supabase.co" />
-      <link rel="dns-prefetch" href="https://phcdhdnsnzcqiqgptczm.supabase.co" />
       <body suppressHydrationWarning={true}>
         <Script strategy="beforeInteractive" src={KAKAO_SDK_URL} />
         {children}

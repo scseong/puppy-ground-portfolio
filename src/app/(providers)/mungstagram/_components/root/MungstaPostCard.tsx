@@ -12,7 +12,13 @@ type Post = Database['public']['Tables']['mung_stagram']['Row'] & {
   } | null;
 };
 
-export default function MungstaPostCard({ post }: { post: Post }) {
+export default function MungstaPostCard({
+  post,
+  priority = false
+}: {
+  post: Post;
+  priority?: boolean;
+}) {
   const avatarUrl = post.profiles?.avatar_url ?? '/default-avatar.png';
   const userName = post.profiles?.user_name ?? '알 수 없음';
 
@@ -21,19 +27,32 @@ export default function MungstaPostCard({ post }: { post: Post }) {
       <Link href={`/mungstagram/${post.id}`} scroll={false}>
         <div className={styles.profile}>
           <div>
-            <Image src={avatarUrl} alt="avatar" width={40} height={40} quality={80} priority />
+            <Image src={avatarUrl} alt="avatar" width={40} height={40} quality={80} />
             <span>{userName}</span>
           </div>
         </div>
-        <div className={styles.images}>
-          <Image
-            src={post.photo_url[0]}
-            alt="게시글 이미지"
-            fill
-            quality={80}
-            priority
-            fetchPriority="high"
-          />
+        <div className={priority ? styles.imagesPriority : styles.images}>
+          {priority ? (
+            <Image
+              src={post.photo_url[0]}
+              alt="게시글 이미지"
+              width={259}
+              height={259}
+              priority
+              fetchPriority="high"
+              quality={70}
+              sizes="259px"
+            />
+          ) : (
+            <Image
+              src={post.photo_url[0]}
+              alt="게시글 이미지"
+              fill
+              quality={70}
+              sizes="(max-width: 600px) 100vw, 259px"
+              loading="lazy"
+            />
+          )}
         </div>
         <div className={styles.info}>
           <h3>{post.title}</h3>

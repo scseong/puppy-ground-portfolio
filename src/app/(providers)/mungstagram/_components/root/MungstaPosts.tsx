@@ -10,8 +10,8 @@ export default async function MungstaPosts() {
   return (
     <>
       <div className={styles.mungstaList}>
-        {posts.map((post) => (
-          <MungstaPostCard key={post.id} post={post} />
+        {posts.map((post, idx) => (
+          <MungstaPostCard key={post.id} post={post} priority={idx === 0} />
         ))}
       </div>
     </>
