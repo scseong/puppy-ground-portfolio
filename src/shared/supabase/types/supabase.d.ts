@@ -447,7 +447,13 @@ export interface Database {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      get_prev_and_next_dev: {
+        Args: { target_id: number };
+        Returns: {
+          next_id: number;
+          prev_id: number;
+        }[];
+      };
     };
     Enums: {
       [_ in never]: never;

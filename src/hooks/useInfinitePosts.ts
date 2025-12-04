@@ -15,7 +15,7 @@ export function useInfinitePostData() {
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage.length < PAGE_SIZE) return undefined;
-      return allPages.length;
+      return allPages.length + 1;
     },
     staleTime: Infinity,
     enabled: false

@@ -72,13 +72,25 @@ const MungModal = ({ params }: PageProps) => {
     >
       <section className={styles.mungstaDetail}>
         {next && (
-          <Link className={styles.nextLink} href={`/mungstagram/${next}`} replace scroll={false}>
-            <GoChevronRight size="2.8rem" />
+          <Link
+            className={styles.prevLink}
+            href={`/mungstagram/${next}`}
+            replace
+            scroll={false}
+            prefetch
+          >
+            <GoChevronLeft size="2.8rem" />
           </Link>
         )}
         {prev && (
-          <Link className={styles.prevLink} href={`/mungstagram/${prev}`} replace scroll={false}>
-            <GoChevronLeft size="2.8rem" />
+          <Link
+            className={styles.nextLink}
+            href={`/mungstagram/${prev}`}
+            replace
+            scroll={false}
+            prefetch
+          >
+            <GoChevronRight size="2.8rem" />
           </Link>
         )}
         <div className={styles.title}>{post.title}</div>
