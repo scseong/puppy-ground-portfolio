@@ -3,8 +3,7 @@
 import { useEffect, Fragment } from 'react';
 import { useInfinitePostData } from '@/hooks/useInfinitePosts';
 import { useInView } from 'react-intersection-observer';
-import MungstaPostCard from './MungstaPostCard';
-import styles from './page.module.scss';
+import MungstaPostList from '@/app/(providers)/mungstagram/_components/root/MungstaPostList';
 
 const MungstaPostsInfinite = () => {
   const { ref, inView } = useInView();
@@ -20,15 +19,11 @@ const MungstaPostsInfinite = () => {
 
   return (
     <>
-      <div className={styles.mungstaList}>
-        {data?.pages.map((page, i) => (
-          <Fragment key={i}>
-            {page.map((post: any) => (
-              <MungstaPostCard key={post.id} post={post} />
-            ))}
-          </Fragment>
-        ))}
-      </div>
+      {data?.pages.map((page, i) => (
+        <Fragment key={i}>
+          <MungstaPostList posts={page} />
+        </Fragment>
+      ))}
       <div ref={ref} />
     </>
   );

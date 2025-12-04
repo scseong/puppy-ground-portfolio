@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Database } from '@/shared/supabase/types/supabase';
-import styles from './page.module.scss';
+import styles from './mungstaPostCard.module.scss';
 
 type Post = Database['public']['Tables']['mung_stagram']['Row'] & {
   profiles: {
@@ -49,7 +49,7 @@ export default function MungstaPostCard({
               alt="게시글 이미지"
               fill
               quality={70}
-              sizes="(max-width: 600px) 100vw, 259px"
+              sizes="259px"
               loading="lazy"
             />
           )}
