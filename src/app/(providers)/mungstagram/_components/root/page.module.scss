@@ -42,9 +42,10 @@
 
 .images {
   position: relative;
-  width: 270px;
-  height: 270px;
+  width: 100%;
+  padding-top: 100%;
   border-radius: 5px;
+  overflow: hidden;
 
   img {
     width: 100%;
@@ -73,15 +74,14 @@
     font-weight: 500;
   }
 
-  & > div {
+  ul {
     margin-bottom: 1rem;
-    ul {
-      max-height: 72px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      overflow: hidden;
-    }
+    max-height: 72px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    overflow: hidden;
+
     li {
       padding: 0.5rem 0.8rem;
       background-color: #e6e8e8;
@@ -90,10 +90,9 @@
       color: #757575;
     }
   }
-
   p {
     height: 3.6rem;
-    font-size: 1rem;
+    font-size: 1.2rem;
     line-height: 1.2rem;
     overflow: hidden;
     text-overflow: ellipsis;

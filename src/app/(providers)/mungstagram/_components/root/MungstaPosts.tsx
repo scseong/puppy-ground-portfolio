@@ -1,35 +1,19 @@
-'use client';
-
-import { useEffect, Fragment } from 'react';
-import { useInfinitePostData } from '@/hooks/useInfinitePosts';
-import { useInView } from 'react-intersection-observer';
-import MungstaPostCard from '@/app/(providers)/mungstagram/_components/root/MungstaPostCard';
+import MungstaPostCard from './MungstaPostCard';
+import { fetchMungstaPosts } from '@/apis/mung-stagram/action';
 import styles from './page.module.scss';
 
-const MungstaPosts = () => {
-  const { ref, inView } = useInView();
-  const { data, error, fetchNextPage } = useInfinitePostData();
+const PAGE_SIZE = 8;
 
-  useEffect(() => {
-    if (inView) fetchNextPage();
-  }, [inView]);
-
-  if (error) return null;
+export default async function MungstaPosts() {
+  const posts = await fetchMungstaPosts({ from: 0, to: PAGE_SIZE - 1 });
 
   return (
     <>
       <div className={styles.mungstaList}>
-        {data?.pages?.map((page, pageIndex) => (
-          <Fragment key={pageIndex}>
-            {page.map((post: any) => (
-              <MungstaPostCard post={post} key={post.id} />
-            ))}
-          </Fragment>
+        {posts.map((post) => (
+          <MungstaPostCard key={post.id} post={post} />
         ))}
       </div>
-      <div ref={ref}></div>
     </>
   );
-};
-
-export default MungstaPosts;
+}

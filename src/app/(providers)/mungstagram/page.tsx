@@ -1,25 +1,12 @@
-import { fetchMungstaPosts } from '@/apis/mung-stagram/action';
-import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
-import getQueryClient from '@/app/_components/lib/getQueryClient';
+import Link from 'next/link';
 import MungstaPosts from './_components/root/MungstaPosts';
 import { Main } from '@/app/_components/layout';
-import Link from 'next/link';
+import MungstaPostsInfinite from '@/app/(providers)/mungstagram/_components/root/MungstaPostsInfinite';
 import styles from './page.module.scss';
 
 export const revalidate = 60;
-const PAGE_SIZE = 8;
 
 const MungstaMainPage = async () => {
-  const queryClient = getQueryClient();
-  await queryClient.prefetchQuery({
-    queryKey: ['munstagram', 'list', 0],
-    queryFn: () => {
-      const from = 0;
-      const to = PAGE_SIZE - 1;
-      return fetchMungstaPosts({ from, to });
-    }
-  });
-
   return (
     <Main>
       <div className={styles.header}>
@@ -27,9 +14,8 @@ const MungstaMainPage = async () => {
         <Link href="/mungstagram/create">등록하기</Link>
       </div>
       <section className={styles.mungstagram}>
-        <HydrationBoundary state={dehydrate(queryClient)}>
-          <MungstaPosts />
-        </HydrationBoundary>
+        <MungstaPosts />
+        <MungstaPostsInfinite />
       </section>
     </Main>
   );

@@ -1,4 +1,3 @@
-import { createServerSupabase } from '@/shared/supabase/server';
 import { supabase } from '@/shared/supabase/supabase';
 import { TablesInsert, TablesUpdate } from '@/shared/supabase/types/supabase';
 
@@ -12,7 +11,6 @@ export const getPosts = async (id: string) => {
 };
 
 export const getMungstaPosts = async () => {
-  const supabase = createServerSupabase();
   const { data } = await supabase
     .from('mung_stagram')
     .select('*, profiles (user_name, avatar_url)')

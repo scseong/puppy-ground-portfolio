@@ -1,11 +1,9 @@
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchMungstaPosts } from '@/apis/mung-stagram/action';
 
 const PAGE_SIZE = 8;
 
 export function useInfinitePostData() {
-  const queryClient = useQueryClient();
-
   return useInfiniteQuery({
     queryKey: ['mungstagram', 'list'],
     queryFn: async ({ pageParam }: { pageParam: number }) => {
@@ -14,11 +12,12 @@ export function useInfinitePostData() {
       const posts = await fetchMungstaPosts({ from, to });
       return posts;
     },
-    initialPageParam: 0,
+    initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage.length < PAGE_SIZE) return undefined;
       return allPages.length;
     },
-    staleTime: Infinity
+    staleTime: Infinity,
+    enabled: false
   });
 }
