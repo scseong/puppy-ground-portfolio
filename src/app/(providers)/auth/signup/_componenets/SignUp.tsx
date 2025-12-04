@@ -8,7 +8,6 @@ import { useForm } from 'react-hook-form';
 import styles from './page.module.scss';
 import { useToast } from '@/hooks/useToast';
 import useAuth from '@/hooks/useAuth';
-import defaultAvatar from '@/../public/images/my_page_default.svg';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Database } from '@/shared/supabase/types/supabase';
@@ -126,7 +125,7 @@ const SignUp = () => {
     let imgUrl =
       'https://hcrhbxcasvjdyigarqal.supabase.co/storage/v1/object/public/default_profile/my_page_default.webp';
     if (data.image[0]) {
-      const { data: imgData, error } = await supabase.storage
+      const { data: imgData } = await supabase.storage
         .from('profile_avatar')
         .upload(`profile/${Date.now()}_${Math.floor(Math.random() * 1000)}`, data.image[0]);
 

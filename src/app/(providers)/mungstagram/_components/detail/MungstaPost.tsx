@@ -24,7 +24,7 @@ const ImageSlider = dynamic(() => import('@/app/_components/lib/ImageSlider'), {
 
 const MungstaPost = ({ postId }: { postId: string }) => {
   const router = useRouter();
-  const { successTopRight, warnTopRight } = useToast();
+  const { successTopRight } = useToast();
   const [showModal, setShowModal] = useState(false);
   const [mounted, setMounted] = useState<boolean>(false);
   const user = useAuth((state) => state.user);

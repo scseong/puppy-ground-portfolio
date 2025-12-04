@@ -13,7 +13,7 @@ import { getformattedDate } from '@/utils/time';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { MouseEventHandler, useCallback, useEffect, useRef, useState } from 'react';
+import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import { SlideImage, TradeLocationMap } from '../_components';
@@ -38,7 +38,7 @@ const UsedGoodsDetail = ({ params }: { params: { id: string } }) => {
   const { isChatModalOpen, setChatModalOpen, setChatRoomModalOpen } = useChatStore();
 
   const modalRef = useRef<HTMLDivElement | null>(null);
-  const { isLoading, isError, data } = useQuery({
+  const { isLoading, data } = useQuery({
     queryKey: ['used-item', params.id],
     queryFn: () => getUsedGoodDetail(params.id)
   });

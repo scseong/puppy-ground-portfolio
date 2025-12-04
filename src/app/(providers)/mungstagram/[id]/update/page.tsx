@@ -50,15 +50,7 @@ const Mungstaupdate = ({ params }: PageProps) => {
   const MAX_IMAGE_COUNT = 5;
 
   const { successTopRight, errorTopRight, warnTopRight } = useToast();
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    reset,
-    setFocus,
-    formState: { errors }
-  } = useForm<Inputs>({
+  const { register, handleSubmit, watch, setValue, reset, setFocus } = useForm<Inputs>({
     defaultValues: {
       files: [],
       tag: ''

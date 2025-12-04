@@ -27,7 +27,7 @@ const MungModal = ({ params }: PageProps) => {
   const router = useRouter();
   const { id } = params;
 
-  const { data: post, error } = useQuery({
+  const { data: post } = useQuery({
     queryKey: ['post', id],
     queryFn: () => getPosts(id)
   });

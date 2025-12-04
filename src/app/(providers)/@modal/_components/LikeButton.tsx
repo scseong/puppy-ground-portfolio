@@ -16,13 +16,13 @@ const LikeButton = ({ mungStargramId, title }: { mungStargramId: string; title: 
   const { errorTopRight } = useToast();
   const { addAlertMessage, deleteAlertMessageType } = useAlertMessage();
 
-  const { isLoading, isError, data } = useQuery({
+  const { data } = useQuery({
     queryKey: ['munstagram', mungStargramId],
     queryFn: () => getPosts(mungStargramId)
   });
 
   const getMyLike = async (id: string, userId: string) => {
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('mung_stagram_like')
       .select(`*`)
       .eq('user_id', userId)
@@ -83,7 +83,7 @@ const LikeButton = ({ mungStargramId, title }: { mungStargramId: string; title: 
   const likeMutation = useMutation({
     mutationFn: addMungStagramLike,
     onMutate: addMungStagramLikeClient,
-    onError(error) {
+    onError() {
       removeMungStagramLikeClient();
     }
   });
@@ -91,7 +91,7 @@ const LikeButton = ({ mungStargramId, title }: { mungStargramId: string; title: 
   const removeLikeMutation = useMutation({
     mutationFn: removeMungStagramLike,
     onMutate: removeMungStagramLikeClient,
-    onError(error) {
+    onError() {
       addMungStagramLikeClient();
     }
   });

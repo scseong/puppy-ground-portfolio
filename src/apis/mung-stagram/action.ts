@@ -7,6 +7,7 @@ export const getPosts = async (id: string) => {
     .select('*, mung_stagram_like(count), profiles(user_name)')
     .eq('id', id)
     .single();
+  if (error) throw error;
   return data;
 };
 
@@ -46,6 +47,7 @@ export const getMungstaPost = async (id: string) => {
     .select('*, mung_stagram_like(count), profiles(*)')
     .eq('id', id)
     .single();
+  if (error) throw error;
   return data;
 };
 

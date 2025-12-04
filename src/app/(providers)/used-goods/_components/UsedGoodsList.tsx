@@ -1,6 +1,5 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import UsedGoodsItem from './UsedGoodsItem';
 import styles from './usedGoodsList.module.scss';
 import { useQueryParam } from '@/hooks/useQueryParam';

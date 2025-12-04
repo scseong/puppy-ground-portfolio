@@ -15,7 +15,7 @@ export const getChatRoomList = async (id: string) => {
 
 // 채팅 가져오기
 export const getChatContent = async (chatListId: number) => {
-  const { data: chat, error } = await supabase
+  const { data: chat } = await supabase
     .from('chat')
     .select('*, profiles(user_name)')
     .order('created_at', { ascending: true })

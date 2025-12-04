@@ -1,5 +1,4 @@
 import { supabase } from '@/shared/supabase/supabase';
-import { Tables } from '@/shared/supabase/types/supabase';
 
 //user 정보 가져오기
 export const getProfile = async (id: string) => {
@@ -10,6 +9,7 @@ export const getProfile = async (id: string) => {
     .single();
 
   if (!userProfile) return;
+  if (error) throw error;
 
   return userProfile;
 };

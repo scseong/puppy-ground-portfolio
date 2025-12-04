@@ -59,6 +59,6 @@ export const getUsedGoodDetail = async (id: string) => {
     )
     .eq('id', id)
     .single();
-
+  if (error) throw error;
   return data;
 };

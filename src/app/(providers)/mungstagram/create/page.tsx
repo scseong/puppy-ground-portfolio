@@ -126,7 +126,7 @@ const CreateMungsta = () => {
   };
 
   const handleSumbit = async () => {
-    const { inputValue, ...mungstaInput } = inputForm;
+    const { ...mungstaInput } = inputForm;
 
     if (!inputForm.title) {
       return warnTopRight({ message: '제목을 입력해주세요' });

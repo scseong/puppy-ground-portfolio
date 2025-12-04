@@ -16,13 +16,13 @@ const WishButton = ({ usedItemId, title }: { usedItemId: string; title: string }
   const user = useAuth((state) => state.user);
   const { errorTopRight } = useToast();
   const { addAlertMessage, deleteAlertMessageType } = useAlertMessage();
-  const { isLoading, isError, data } = useQuery({
+  const { data } = useQuery({
     queryKey: ['used-item', usedItemId],
     queryFn: () => getUsedGoodDetail(usedItemId)
   });
 
   const getMyWish = async (id: string, userId: string) => {
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('used_item_wish')
       .select(`*`)
       .eq('user_id', userId)
@@ -85,7 +85,7 @@ const WishButton = ({ usedItemId, title }: { usedItemId: string; title: string }
   const wishMutation = useMutation({
     mutationFn: addUsedGoodWish,
     onMutate: addUsedGoodWishClient,
-    onError(error) {
+    onError() {
       removeUsedGoodWishClient();
     }
   });
@@ -93,7 +93,7 @@ const WishButton = ({ usedItemId, title }: { usedItemId: string; title: string }
   const removeWishMutation = useMutation({
     mutationFn: removeUsedGoodWish,
     onMutate: removeUsedGoodWishClient,
-    onError(error) {
+    onError() {
       addUsedGoodWishClient();
     }
   });
