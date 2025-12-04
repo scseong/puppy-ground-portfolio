@@ -4,7 +4,7 @@ import styles from './usedGoodsFilter.module.scss';
 import Select, { SingleValue, MultiValue, SelectInstance } from 'react-select';
 import { useQueryParam } from '@/hooks/useQueryParam';
 import { useRouter } from 'next/navigation';
-import { isEqual } from 'lodash';
+import { isEqual } from 'lodash-es';
 import { multiOptions, singleOptions } from './config/selectConfig';
 import { SearchParams } from '@/apis/goods';
 

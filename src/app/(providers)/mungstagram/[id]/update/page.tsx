@@ -13,7 +13,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { ONE_MEGABYTE } from '@/shared/constant/constant';
 import { getImagePreview, isFileSizeExceeded, isDuplicateImage } from '@/utils/file';
-import { throttle } from 'lodash';
+import { throttle } from 'lodash-es';
 import { MdOutlineCancel } from 'react-icons/md';
 import { getMungstaPost } from '@/apis/mung-stagram/action';
 

@@ -15,7 +15,7 @@ import { customStyle } from '@/shared/modal';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { ONE_MEGABYTE } from '@/shared/constant/constant';
 import { getImagePreview, isFileSizeExceeded, isDuplicateImage } from '@/utils/file';
-import { throttle } from 'lodash';
+import { throttle } from 'lodash-es';
 import { MdOutlineCancel } from 'react-icons/md';
 
 type FileEvent = React.ChangeEvent<HTMLInputElement> & {
