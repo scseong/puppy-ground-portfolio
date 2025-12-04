@@ -6,5 +6,5 @@ const PAGE_SIZE = 8;
 export default async function MungstaPosts() {
   const posts = await fetchMungstaPosts({ from: 0, to: PAGE_SIZE - 1 });
 
-  return <MungstaPostList posts={posts} priorityFirst />;
+  return <MungstaPostList posts={posts} />;
 }

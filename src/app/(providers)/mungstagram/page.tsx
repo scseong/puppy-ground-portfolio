@@ -1,10 +1,15 @@
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import MungstaPosts from './_components/root/MungstaPosts';
 import { Main } from '@/app/_components/layout';
-import MungstaPostsInfinite from '@/app/(providers)/mungstagram/_components/root/MungstaPostsInfinite';
 import styles from './page.module.scss';
 
 export const revalidate = 60;
+
+const MungstaPostsInfinite = dynamic(() => import('./_components/root/MungstaPostsInfinite'), {
+  ssr: false,
+  loading: () => <div style={{ height: 200 }} />
+});
 
 const MungstaMainPage = async () => {
   return (

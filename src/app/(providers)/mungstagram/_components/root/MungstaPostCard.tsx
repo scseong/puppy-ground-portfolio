@@ -36,12 +36,12 @@ export default function MungstaPostCard({
             <Image
               src={post.photo_url[0]}
               alt="게시글 이미지"
-              width={259}
-              height={259}
+              width={276}
+              height={276}
               priority
               fetchPriority="high"
               quality={70}
-              sizes="259px"
+              sizes="276px"
             />
           ) : (
             <Image
@@ -49,7 +49,7 @@ export default function MungstaPostCard({
               alt="게시글 이미지"
               fill
               quality={70}
-              sizes="259px"
+              sizes="276px"
               loading="lazy"
             />
           )}
