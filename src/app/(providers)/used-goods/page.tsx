@@ -1,7 +1,19 @@
+import { Metadata } from 'next';
 import { UsedGoodsList, UsedGoodsFilter, UsedGoodsOrder, UsedGoodsSearch } from './_components';
 import { getQueryFunction, SearchParams } from '@/apis/goods';
 import styles from './page.module.scss';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: '반려견 중고 물품 거래 | Puppy Ground',
+  description:
+    '반려견 의류, 장난감, 간식 등 다양한 중고 반려용품을 한눈에! 우리 동네 반려인들과 신뢰할 수 있는 직거래로 반려 생활의 부담을 덜어보세요.',
+  openGraph: {
+    title: '반려견 중고 물품 거래 | Puppy Ground',
+    description:
+      '반려견 의류, 장난감, 간식 등 다양한 중고 반려용품을 한눈에! 우리 동네 반려인들과 신뢰할 수 있는 직거래로 반려 생활의 부담을 덜어보세요.'
+  }
+};
 
 export const revalidate = 0;
 
