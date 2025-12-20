@@ -11,6 +11,7 @@ import KakaoShareButton from '@/app/_components/shareButton/KakaoShareButton';
 import { customStyle } from '@/shared/modal';
 import { CommentList, CommentForm, LikeButton } from '../../_components';
 import styles from './page.module.scss';
+import useScrollLock from '@/hooks/useScrollLock';
 
 const ImageSlider = dynamic(() => import('@/app/_components/lib/ImageSlider'), {
   ssr: false
@@ -38,6 +39,8 @@ const MungModal = ({ params }: PageProps) => {
   });
   const { prev, next } = prevAndNextPostId ?? {};
 
+  useScrollLock();
+
   const closeModal = () => {
     setOpen(false);
     router.back();
@@ -51,13 +54,6 @@ const MungModal = ({ params }: PageProps) => {
     if (prev) router.prefetch(`/mungstagram/${prev}`);
     if (next) router.prefetch(`/mungstagram/${next}`);
   }, [prev, next, router]);
-
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, []);
 
   if (!post && !isFetching) return null;
 
