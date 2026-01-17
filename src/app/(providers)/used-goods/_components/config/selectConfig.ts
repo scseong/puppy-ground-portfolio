@@ -3,7 +3,7 @@ import { StylesConfig } from 'react-select';
 export const singleOptions: StylesConfig<{ value: string; label: string }, false> = {
   option: (styles, { isSelected }) => ({
     ...styles,
-    color: isSelected ? '#0ac4a9' : '#808080',
+    color: isSelected ? '#0ac4a9' : '#000',
     backgroundColor: 'none',
     cursor: 'pointer',
     fontSize: '0.9rem',
@@ -35,13 +35,17 @@ export const singleOptions: StylesConfig<{ value: string; label: string }, false
     borderRadius: '8px',
     boxShadow: 'none',
     border: '1px solid #979797'
+  }),
+  placeholder: (base) => ({
+    ...base,
+    color: 'var(--placeholder-text-color)'
   })
 };
 
 export const multiOptions: StylesConfig<{ value: string; label: string }, true> = {
   option: (styles, { isSelected }) => ({
     ...styles,
-    color: isSelected ? '#0ac4a9' : '#808080',
+    color: isSelected ? '#0ac4a9' : '#000',
     backgroundColor: 'none',
     cursor: 'pointer',
     fontSize: '0.9rem',
@@ -67,6 +71,10 @@ export const multiOptions: StylesConfig<{ value: string; label: string }, true> 
     '&:focus': {
       border: '#0ac4a9'
     }
+  }),
+  placeholder: (base) => ({
+    ...base,
+    color: 'var(--placeholder-text-color)'
   }),
   noOptionsMessage: (styles) => ({ ...styles, fontSize: '14px' }),
   multiValue: (styles) => ({ ...styles, backgroundColor: 'none' }),

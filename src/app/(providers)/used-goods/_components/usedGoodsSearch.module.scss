@@ -26,7 +26,7 @@
   font-size: 14px;
 
   &:placeholder {
-    color: var(----placeholder-text-color);
+    color: var(--placeholder-text-color);
   }
 
   &:focus {
@@ -34,6 +34,14 @@
     border-width: 1px;
     box-shadow: 0 0 0 1px #0ac4a9;
   }
+}
+
+.hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  clip: rect(0 0 0 0);
+  overflow: hidden;
 }
 
 @media screen and (max-width: 550px) {

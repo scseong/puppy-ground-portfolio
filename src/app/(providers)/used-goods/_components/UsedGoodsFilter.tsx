@@ -99,7 +99,12 @@ const UsedGoodsFilter = ({ initialSearchParams }: { initialSearchParams?: Search
 
   return (
     <div className={styles.wrapper}>
+      <label htmlFor="sub-category" className={styles.srOnly}>
+        카테고리 선택
+      </label>
       <Select
+        inputId="sub-category"
+        aria-labelledby="sub-category"
         className={styles.customSelect}
         value={selectedSub}
         onChange={handleSubSelect}
@@ -109,7 +114,12 @@ const UsedGoodsFilter = ({ initialSearchParams }: { initialSearchParams?: Search
         isSearchable={false}
         ref={subSelectRef}
       />
+      <label htmlFor="main-category" className={styles.srOnly}>
+        견종 사이즈 선택
+      </label>
       <Select
+        inputId="main-category"
+        aria-labelledby="main-category"
         className={styles.customSelect}
         value={selectedMain}
         onChange={handleMainSelect}

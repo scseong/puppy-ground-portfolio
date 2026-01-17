@@ -32,27 +32,17 @@ export default function MungstaPostCard({
           </div>
         </div>
         <div className={priority ? styles.imagesPriority : styles.images}>
-          {priority ? (
-            <Image
-              src={post.photo_url[0]}
-              alt="게시글 이미지"
-              width={276}
-              height={276}
-              priority
-              fetchPriority="high"
-              quality={70}
-              sizes="276px"
-            />
-          ) : (
-            <Image
-              src={post.photo_url[0]}
-              alt="게시글 이미지"
-              fill
-              quality={70}
-              sizes="276px"
-              loading="lazy"
-            />
-          )}
+          <Image
+            src={post.photo_url[0]}
+            alt="게시글 이미지"
+            width={276}
+            height={276}
+            priority={priority}
+            fetchPriority="high"
+            quality={65}
+            sizes="(max-width: 768px) 100vw, 25vw"
+            fill
+          />
         </div>
         <div className={styles.info}>
           <h3>{post.title}</h3>

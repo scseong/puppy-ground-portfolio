@@ -10,7 +10,7 @@ export default function MungstaPostList({ posts }: Props) {
   return (
     <div className={styles.mungstaList}>
       {posts.map((post, idx) => (
-        <MungstaPostCard key={post.id} post={post} priority={idx === 0} />
+        <MungstaPostCard key={post.id} post={post} priority={idx < 4} />
       ))}
     </div>
   );
